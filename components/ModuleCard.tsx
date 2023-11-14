@@ -1,12 +1,24 @@
 import { MoreVertical } from "lucide-react-native";
-import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  FlatList,
+  ListRenderItem,
+} from "react-native";
 import { ModuleChart } from "./ModuleChart";
 
-// export function ModuleCard(testText: String) {
-export function ModuleCard() {
-  // const test = testText;
-  const id = 123;
+export interface IModule {
+  x: number;
+  y: number;
+  id: number;
+  name: string;
+  time: number;
+  color: string;
+}
 
+export function ModuleCard() {
   const testdata = [
     {
       x: 1,
@@ -57,6 +69,17 @@ export function ModuleCard() {
       {/* Statistics */}
       <View style={styles.statisticsContainer}>
         <ModuleChart />
+        {/* <FlatList
+          data={data}
+          renderItem={({ item }: { item: IModule }) => (
+            <View style={styles.headerTextRow}>
+              <View style={styles.moduleIndicator} />
+              <Text>{item.id}</Text>
+            </View>
+          )}
+          keyExtractor={(item: IModule) => item.id}
+          contentContainerStyle={{ columnGap: 8 }}
+        ></FlatList> */}
       </View>
       {/* Results */}
       <View style={styles.headerRow}>
@@ -135,6 +158,7 @@ const styles = StyleSheet.create({
   statisticsContainer: {
     width: "100%",
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "space-around",
+    gap: 16,
   },
 });
