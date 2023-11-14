@@ -18,6 +18,7 @@ public class StudentTimerBackendApplication {
 
         @RequestMapping("/")
         public String helloWorld() {
+            System.out.println("Hello World");
             return "Hello World";
         }
     }
