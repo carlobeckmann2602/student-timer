@@ -74,7 +74,9 @@ export default function Tracking() {
               backgroundColor={Colors.light.primary}
               textColor="#FFFFFF"
               onPress={toggleTracking}
-              Icon={() => <Ionicons name="md-pause" color="white" />}
+              Icon={() => (
+                <Ionicons name="md-pause" color="white" styles={styles.icon} />
+              )}
             />
             <Button
               text="Tracking beenden"
@@ -90,7 +92,9 @@ export default function Tracking() {
               backgroundColor={Colors.light.primary}
               textColor="#FFFFFF"
               onPress={toggleTracking}
-              Icon={() => <Ionicons name="md-play" color="white" />}
+              Icon={() => (
+                <Ionicons name="md-play" color="white" styles={styles.icon} />
+              )}
             />
           </>
         ) : (
@@ -100,7 +104,9 @@ export default function Tracking() {
               backgroundColor={Colors.light.primary}
               textColor="#FFFFFF"
               onPress={toggleTracking}
-              Icon={() => <Ionicons name="md-play" color="white" />}
+              Icon={() => (
+                <Ionicons name="md-play" color="white" styles={styles.icon} />
+              )}
             />
             <Button
               text="Tracking beenden"
@@ -142,5 +148,9 @@ const styles = StyleSheet.create({
   trackerButtons: {
     flexDirection: "row",
     justifyContent: "center",
+  },
+  icon: {
+    position: "absolute",
+    right: 10,
   },
 });
