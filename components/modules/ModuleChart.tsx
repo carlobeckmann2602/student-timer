@@ -1,5 +1,5 @@
 import { VictoryPie } from "victory-native";
-import { View } from "./Themed";
+import { View } from "../Themed";
 import { Text, StyleSheet } from "react-native";
 import Svg from "react-native-svg";
 import { useState } from "react";
