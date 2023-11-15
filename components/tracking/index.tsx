@@ -31,9 +31,7 @@ export default function Tracking() {
       <View>
         <TrackingModeToggle onPress={setIsStopWatch} />
       </View>
-      <View>
-        <Timer trackingIsActive={trackingIsActive} startTime={startTime} />
-      </View>
+      <Timer trackingIsActive={trackingIsActive} startTime={startTime} />
       <View style={styles.inputs}>
         <View style={styles.inputLabelGroup}>
           <Text style={styles.inputLabelText}>Runden</Text>
