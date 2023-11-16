@@ -4,16 +4,7 @@ import { Pressable, useColorScheme } from "react-native";
 
 import Colors from "@/constants/Colors";
 import Header from "@/components/Header";
-
-/**
- * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
- */
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>["name"];
-  color: string;
-}) {
-  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
-}
+import { BarChart2, LayoutList, TimerReset, User2 } from "lucide-react-native";
 
 export default function TabLayout() {
   // const colorScheme = useColorScheme();
@@ -30,17 +21,35 @@ export default function TabLayout() {
         options={{
           title: "Tracking",
           tabBarIcon: ({ color }) => (
-            <TabBarIcon name="clock-o" color={color} />
+            <TimerReset name="clock-o" color={color} />
           ),
           header: () => <Header title="Tracking" />,
         }}
       />
       <Tabs.Screen
-        name="two"
+        name="modules"
         options={{
-          title: "Tab Two",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          header: () => <Header title="Tab Two" />,
+          title: "Module",
+          tabBarIcon: ({ color }) => <LayoutList name="module" color={color} />,
+          header: () => <Header title="Module" />,
+        }}
+      />
+      <Tabs.Screen
+        name="statistics"
+        options={{
+          title: "Statistik",
+          tabBarIcon: ({ color }) => (
+            <BarChart2 name="statistic" color={color} />
+          ),
+          header: () => <Header title="Statistik" />,
+        }}
+      />
+      <Tabs.Screen
+        name="profil"
+        options={{
+          title: "Profil",
+          tabBarIcon: ({ color }) => <User2 name="profil" color={color} />,
+          header: () => <Header title="Module" />,
         }}
       />
     </Tabs>

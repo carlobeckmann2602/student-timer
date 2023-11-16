@@ -1,8 +1,8 @@
 import { ActivityIndicator, StyleSheet } from "react-native";
 
-import { Text, View } from "../../components/Themed";
+import { Text, View } from "@/components/Themed";
 import { FlatList } from "react-native-gesture-handler";
-import { ModuleCard } from "../../components/modules/ModuleCard";
+import { ModuleCard } from "@/components/modules/ModuleCard";
 import { useRouter } from "expo-router";
 
 export default function ModulesScreen() {
