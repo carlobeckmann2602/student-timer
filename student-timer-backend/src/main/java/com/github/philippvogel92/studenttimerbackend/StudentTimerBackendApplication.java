@@ -13,13 +13,4 @@ public class StudentTimerBackendApplication {
         SpringApplication.run(StudentTimerBackendApplication.class, args);
     }
 
-    @RestController
-    public class HelloWorldController {
-
-        @RequestMapping("/")
-        public String helloWorld() {
-            System.out.println("Hello World");
-            return "Hello World";
-        }
-    }
 }
