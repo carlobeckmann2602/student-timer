@@ -1,36 +1,36 @@
-package com.github.philippvogel92.studenttimerbackend.user;
+package com.github.philippvogel92.studenttimerbackend.student;
 
 import jakarta.persistence.*;
 
 @Entity
 @Table
-public class User {
+public class Student {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long userId;
+    private Long studentId;
     private String firstName;
     private String lastName;
     private String studyCourse;
     private String profilPicture;
 
-    public User(String firstName, String lastName, String studyCourse, String profilPicture) {
+    public Student(String firstName, String lastName, String studyCourse, String profilPicture) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.studyCourse = studyCourse;
         this.profilPicture = profilPicture;
     }
 
-    public User() {
+    public Student() {
 
     }
 
     public Long getUserId() {
-        return userId;
+        return studentId;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUserId(Long studentId) {
+        this.studentId = studentId;
     }
 
     public String getFirstName() {
@@ -68,7 +68,7 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "userId=" + userId +
+                "studentId=" + studentId +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", studyCourse='" + studyCourse + '\'' +
