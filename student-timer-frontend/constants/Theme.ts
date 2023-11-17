@@ -9,10 +9,10 @@ const COLORS = {
   icon: "#292D32",
   // CI colors
   primary: "#958AAA",
-  secondary: "#000000",
-  tertiary: "#000000",
+  // secondary: "#000000",
+  // tertiary: "#000000",
   warning: "#D16E6E",
-  success: "#000000",
+  success: "#51C93E",
   rating: "#D0D400",
   // Module units
   mu_lecture: "#F9D477",
