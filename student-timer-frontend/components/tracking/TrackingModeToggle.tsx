@@ -1,7 +1,7 @@
 //@ts-ignore
 import SwitchSelector from "react-native-switch-selector";
 
-import Colors from "@/constants/Colors";
+import Colors from "@/constants/Theme";
 
 export default function TrackingModeToggle(props: {
   onPress: React.Dispatch<React.SetStateAction<any>>;

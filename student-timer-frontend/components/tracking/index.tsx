@@ -4,7 +4,7 @@ import { StyleSheet, TextInput } from "react-native";
 import { Text, View } from "@/components/Themed";
 import Button from "@/components/Button";
 import Ionicons from "@/components/Ionicons";
-import Colors from "@/constants/Colors";
+import Colors from "@/constants/Theme";
 import TrackingModeToggle from "./TrackingModeToggle";
 import Timer from "./Timer";
 

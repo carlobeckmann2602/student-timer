@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, useWindowDimensions } from "react-native";
 
 import { Text, View } from "@/components/Themed";
-import Colors from "@/constants/Colors";
+import Colors from "@/constants/Theme";
 
 const formatTime = ({
   mins,
