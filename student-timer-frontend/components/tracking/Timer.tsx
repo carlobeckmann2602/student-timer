@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, useWindowDimensions } from "react-native";
 
 import { Text, View } from "@/components/Themed";
-import Colors from "@/constants/Theme";
+import { COLORTHEME } from "@/constants/Theme";
 
 const formatTime = ({
   mins,
@@ -59,7 +59,7 @@ export default function Timer(props: {
             borderRadius: 250,
             width: width / 2,
             height: width / 2,
-            borderColor: trackingIsActive ? Colors.light.primary : "#00000",
+            borderColor: trackingIsActive ? COLORTHEME.light.primary : "#00000",
           },
         ]}
       >

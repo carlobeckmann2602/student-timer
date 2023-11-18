@@ -50,11 +50,11 @@ const styles = StyleSheet.create({
   },
   subhead: {
     fontSize: SIZES.small,
-    fontWeight: "bold",
+    fontWeight: "600",
     textAlign: "center",
   },
   p: {
-    fontSize: SIZES.small,
+    fontSize: SIZES.xsmall,
     fontWeight: "normal",
     textAlign: "justify",
   },

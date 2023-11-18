@@ -4,7 +4,7 @@ import { StyleSheet, TextInput } from "react-native";
 import { Text, View } from "@/components/Themed";
 import Button from "@/components/Button";
 import Ionicons from "@/components/Ionicons";
-import Colors from "@/constants/Theme";
+import { COLORTHEME } from "@/constants/Theme";
 import TrackingModeToggle from "./TrackingModeToggle";
 import Timer from "./Timer";
 
@@ -69,7 +69,7 @@ export default function Tracking() {
           <>
             <Button
               text="Pausieren"
-              backgroundColor={Colors.light.primary}
+              backgroundColor={COLORTHEME.light.primary}
               textColor="#FFFFFF"
               onPress={toggleTracking}
               Icon={() => (
@@ -78,7 +78,7 @@ export default function Tracking() {
             />
             <Button
               text="Tracking beenden"
-              backgroundColor={Colors.light.primary}
+              backgroundColor={COLORTHEME.light.primary}
               textColor="#FFFFFF"
               onPress={resetTimer}
             />
@@ -87,7 +87,7 @@ export default function Tracking() {
           <>
             <Button
               text="Tracking starten"
-              backgroundColor={Colors.light.primary}
+              backgroundColor={COLORTHEME.light.primary}
               textColor="#FFFFFF"
               onPress={toggleTracking}
               Icon={() => (
@@ -99,7 +99,7 @@ export default function Tracking() {
           <>
             <Button
               text="Play"
-              backgroundColor={Colors.light.primary}
+              backgroundColor={COLORTHEME.light.primary}
               textColor="#FFFFFF"
               onPress={toggleTracking}
               Icon={() => (
@@ -108,7 +108,7 @@ export default function Tracking() {
             />
             <Button
               text="Tracking beenden"
-              backgroundColor={Colors.light.primary}
+              backgroundColor={COLORTHEME.light.primary}
               textColor="#FFFFFF"
               onPress={resetTimer}
             />
@@ -133,11 +133,11 @@ const styles = StyleSheet.create({
     flexDirection: "column",
   },
   inputLabelText: {
-    color: Colors.light.primary,
+    color: COLORTHEME.light.primary,
   },
   input: {
-    backgroundColor: Colors.light.grey2,
-    color: Colors.light.grey4,
+    backgroundColor: COLORTHEME.light.grey2,
+    color: COLORTHEME.light.grey3,
     borderRadius: 12,
     width: 100,
     height: 40,
