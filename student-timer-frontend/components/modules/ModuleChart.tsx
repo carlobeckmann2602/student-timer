@@ -1,8 +1,9 @@
 import { VictoryPie } from "victory-native";
 import { View } from "../Themed";
-import { Text, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import Svg from "react-native-svg";
 import { useState } from "react";
+import { P } from "../StyledText";
 
 export function ModuleChart() {
   const originalWidth = 100;
@@ -59,12 +60,11 @@ export function ModuleChart() {
           data={inputData}
           radius={originalWidth / 2}
           innerRadius={originalWidth / 2.8}
-          startAngle={50}
           style={{ data: { fill: ({ datum }) => datum.color } }}
         />
         <View style={styles.chartTextContainer}>
-          <Text style={styles.chartTextM}>112,5</Text>
-          <Text style={styles.chartTextS}>von 150 Std.</Text>
+          <P style={{ fontWeight: "bold" }}>112,5</P>
+          <P style={{ fontSize: 10, textAlign: "center" }}>von 150 Std.</P>
         </View>
       </Svg>
     </View>
@@ -73,20 +73,12 @@ export function ModuleChart() {
 
 const styles = StyleSheet.create({
   chartTextContainer: {
-    width: "100%",
-    height: "100%",
+    width: 100,
+    height: 100,
     padding: 20,
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "transparent",
-  },
-  chartTextM: {
-    fontSize: 14,
-    fontWeight: "bold",
-  },
-  chartTextS: {
-    fontSize: 8,
-    fontWeight: "400",
   },
 });
