@@ -1,6 +1,6 @@
 const COLORS = {
   // System colors
-  white: "#F3F3F3",
+  white: "#FFFFFF",
   black: "#101010",
   grey1: "#E8E8E8",
   grey2: "#F6F6F6",

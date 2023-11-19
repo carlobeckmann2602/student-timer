@@ -5,8 +5,9 @@ import { COLORTHEME } from "@/constants/Theme";
 
 export default function TrackingModeToggle(props: {
   onPress: React.Dispatch<React.SetStateAction<any>>;
+  disabled: boolean;
 }) {
-  const { onPress } = props;
+  const { onPress, disabled } = props;
 
   return (
     <SwitchSelector
@@ -26,6 +27,7 @@ export default function TrackingModeToggle(props: {
       fontSize={16}
       textStyle={{ fontWeight: "600" }}
       selectedTextStyle={{ fontWeight: "600" }}
+      disabled={disabled}
     />
   );
 }
