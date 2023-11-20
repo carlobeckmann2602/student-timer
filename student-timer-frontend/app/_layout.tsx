@@ -3,6 +3,7 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
 import { useEffect } from "react";
+import Login from "@/components/login";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -43,14 +44,19 @@ export default function RootLayout() {
 function RootLayoutNav() {
   // const colorScheme = useColorScheme();
 
+  const loggedIn = false;
   return (
     <SafeAreaProvider>
       <ThemeProvider value={DefaultTheme}>
         <SafeAreaView style={{ flex: 1 }}>
-          <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen name="modal" options={{ presentation: "modal" }} />
-          </Stack>
+          {loggedIn ? (
+            <Stack>
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              <Stack.Screen name="modal" options={{ presentation: "modal" }} />
+            </Stack>
+          ) : (
+            <Login />
+          )}
         </SafeAreaView>
       </ThemeProvider>
     </SafeAreaProvider>

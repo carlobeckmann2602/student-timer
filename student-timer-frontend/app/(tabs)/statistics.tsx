@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 
 import { Text, View } from "../../components/Themed";
 
-export default function TabTwoScreen() {
+export default function StatisticsScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Statistik</Text>
