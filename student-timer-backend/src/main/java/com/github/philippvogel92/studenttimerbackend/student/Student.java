@@ -1,5 +1,5 @@
 package com.github.philippvogel92.studenttimerbackend.student;
-
+//DAS IST DAS PROBLEM I THINK
 import jakarta.persistence.*;
 
 @Entity
@@ -14,6 +14,13 @@ public class Student {
     private String studyCourse;
     private String profilPicture;
 
+    public Student(Long studentId, String firstName, String lastName, String studyCourse, String profilPicture) {
+        this.studentId = studentId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.studyCourse = studyCourse;
+        this.profilPicture = profilPicture;
+    }
     public Student(String firstName, String lastName, String studyCourse, String profilPicture) {
         this.firstName = firstName;
         this.lastName = lastName;
