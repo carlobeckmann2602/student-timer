@@ -56,7 +56,11 @@ function RootLayoutNav() {
             />
             <Stack.Screen
               name="(auth)/signup"
-              options={{ presentation: "modal", title: "Sign Up" }}
+              options={{
+                presentation: "modal",
+                title: "Registrieren",
+                headerShown: false,
+              }}
             />
           </Stack>
         </SafeAreaView>

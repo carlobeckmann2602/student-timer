@@ -37,6 +37,7 @@ export default function Login() {
             value={password}
             placeholder="Password"
             keyboardType="visible-password"
+            secureTextEntry={true}
           />
           <View style={styles.buttons}>
             <Button
