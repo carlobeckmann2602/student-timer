@@ -1,12 +1,16 @@
 import React, { useState, Fragment } from 'react';
-import { Octicons, Ionicons } from '@expo/vector-icons';
-import { View, Text, TouchableOpacity, StyleSheet, Image, useWindowDimensions } from 'react-native';
+import { Octicons } from '@expo/vector-icons';
+import { TouchableOpacity, StyleSheet, Image, useWindowDimensions } from 'react-native';
+import { Text, View } from "@/components/Themed";
+import Button from "@/components/Button";
+import Ionicons from "@/components/Ionicons";
+import { COLORTHEME } from "@/constants/Theme";
 import { useNavigation } from '@react-navigation/native';
-import { onboardingData } from './onboardingItems';
+import { onboardingData } from '@/components/onboarding/onboardingItems';
 
 
 export default function OnboardingScreen() {
-    const { width } = useWindowDimensions();
+    const { width, height } = useWindowDimensions();
 
     const [activeIndex, setActiveIndex] = useState(0);
     const navigation = useNavigation();
@@ -18,16 +22,23 @@ export default function OnboardingScreen() {
         });
     };
 
+    const navigateToAuthentication = () => {
+        navigation.reset({
+            index: 0,
+            routes: [{ name: "authentication" as never }]
+        });
+    };
+
+    const onPrevPress = () => {
+        setActiveIndex((prevIndex) => Math.max(prevIndex - 1, 0));
+    };
+
     const onNextPress = () => {
         if (activeIndex < onboardingData.length - 1) {
             setActiveIndex((prevIndex) => prevIndex + 1);
         } else {
             navigateToHome();
         }
-    };
-
-    const onPrevPress = () => {
-        setActiveIndex((prevIndex) => Math.max(prevIndex - 1, 0));
     };
 
     const renderOnboardingItem = ({ title, description, image }: { title: string, description: string, image: any }) => (
@@ -40,7 +51,6 @@ export default function OnboardingScreen() {
 
     return (
         <View style={styles.container}>
-            <Text>Hello, I am your Onboarding!</Text>
             {/* Onboarding-Beschreibungs-Daten */}
             {onboardingData.map((item, index) => (
                 <Fragment key={index}>
@@ -50,23 +60,41 @@ export default function OnboardingScreen() {
 
             {/* Onboarding-Navigation */}
             <View style={styles.navigation}>
-                <TouchableOpacity onPress={onPrevPress}>
-                    <Ionicons name="md-caret-back-outline" size={24} color="#958AAA" />
+                <TouchableOpacity onPress={onPrevPress} disabled={activeIndex === 0} >
+                    <Ionicons
+                        name="md-caret-back-outline"
+                        size={24}
+                        color={activeIndex === 0 ? '#E8E8E8' : '#958AAA'} />
                 </TouchableOpacity>
 
                 {/* Punkte für jeden Onboarding-Screen */}
                 {onboardingData.map((_, index) => (
-                    <Octicons key={index} style={index === activeIndex ? styles.activeDot : styles.dot} name="dot" size={24} />
+                    <Octicons key={index} style={index === activeIndex ? styles.active : styles.inactive} name="dot" size={24} />
                 ))}
 
                 <TouchableOpacity onPress={onNextPress}>
-                    <Ionicons name="md-caret-forward-outline" size={24} color="#958AAA" />
+                    <Ionicons name="md-caret-forward-outline" size={24} color={COLORTHEME.light.primary} />
                 </TouchableOpacity>
             </View>
 
-            <TouchableOpacity style={styles.button_customized} onPress={navigateToHome}>
-                <Text style={styles.buttontext}>Überspringen</Text>
-            </TouchableOpacity>
+
+            <View style={styles.button}>
+                <Button
+                    text="Überspringen"
+                    backgroundColor={COLORTHEME.light.primary}
+                    textColor="#FFFFFF"
+                    onPress={navigateToHome}
+                />
+            </View>
+            <View style={styles.button}>
+                <Button
+                    text="Login"
+                    backgroundColor={COLORTHEME.light.primary}
+                    textColor="#FFFFFF"
+                    onPress={navigateToAuthentication}
+                />
+            </View>
+
         </View>
 
     );
@@ -76,18 +104,6 @@ const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
         justifyContent: 'center',
-    },
-    buttonContainer: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-    },
-    button: {
-        backgroundColor: 'lightgray',
-        borderColor: 'lightseagreen',
-        borderWidth: 2,
-        borderRadius: 10,
-        padding: 10,
-        margin: 5,
     },
     onboardingItem: {
         flex: 1,
@@ -114,22 +130,21 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: '60%',
     },
-    dot: {
+    inactive: {
         fontSize: 24,
         color: '#E8E8E8',
     },
-    activeDot: {
+    active: {
         fontSize: 24,
-        color: '#958AAA',
+        color: COLORTHEME.light.primary,
     },
-    button_customized: {
+    button: {
         width: 175,
         height: 49.84439468383789,
         borderRadius: 50,
-        backgroundColor: "#958AAA",
+        backgroundColor: COLORTHEME.light.primary,
         padding: 10,
         margin: 5,
-
     },
     buttontext: {
         textAlign: "center",
