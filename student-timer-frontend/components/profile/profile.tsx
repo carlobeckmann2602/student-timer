@@ -5,15 +5,17 @@ import Button from "@/components/Button";
 import { COLORTHEME } from "@/constants/Theme";
 import { useNavigation } from '@react-navigation/native';
 
+
 export default function Profile() {
     const navigation = useNavigation();
+    const pic = require('../../assets/images/profile-picture.jpg')
 
     // Daten aus Authentifizierung / Benutzersession ziehen
     const user = {
         firstName: "Maxine",
         lastName: "Hellas",
         studySubject: "Master Medieninformatik",
-        profileImage: "@\assets\images\profile-picture.jpg",
+        profileImage: pic,
     };
 
     const handleEditProfile = () => {
@@ -43,9 +45,9 @@ export default function Profile() {
             {/* Profilbild */}
             <View style={styles.profileImageContainer}>
                 {user.profileImage ? (
-                    <Image source={{ uri: user.profileImage }} style={styles.profileImage} />
+                    <Image source={user.profileImage} style={styles.profileImage} />
                 ) : (
-                    <Ionicons name="person-circle-outline" size={100} color="#000" />
+                    <Ionicons name="person-circle-outline" size={100} color={COLORTHEME.light.primary} />
                 )}
             </View>
 
