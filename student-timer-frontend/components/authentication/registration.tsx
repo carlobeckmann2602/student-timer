@@ -112,7 +112,7 @@ const Register = () => {
             {/* Login-Link */}
             <View>
                 <Text>
-                    <Link to='/authentication'>Bereits registriert? Hier einloggen</Link>
+                    <Link to='/login'>Bereits registriert? Hier einloggen</Link>
                 </Text>
             </View>
         </View>

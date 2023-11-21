@@ -16,7 +16,7 @@ const Login = () => {
         // Hier kannst du die Authentifizierungslogik implementieren
         // Zum Beispiel eine Anfrage an deinen Backend-Server senden
         // und die Antwort überprüfen.
-        navigateToHome;
+        navigateToHome();
         console.log(`Benutzername: ${username}, Passwort: ${password}`);
     };
 
@@ -47,18 +47,10 @@ const Login = () => {
 
             <View style={styles.button}>
                 <Button
-                    text="Login (console)"
+                    text="Login"
                     backgroundColor={COLORTHEME.light.primary}
                     textColor="#FFFFFF"
                     onPress={handleLogin}
-                />
-            </View>
-            <View style={styles.button}>
-                <Button
-                    text="Home"
-                    backgroundColor={COLORTHEME.light.primary}
-                    textColor="#FFFFFF"
-                    onPress={navigateToHome}
                 />
             </View>
 

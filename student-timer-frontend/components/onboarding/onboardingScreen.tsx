@@ -23,7 +23,7 @@ export default function OnboardingScreen() {
     };
 
     const navigateToAuthentication = () => {
-        navigation.navigate('authentication' as never); // toDo: das muss irgendwie besser gehen als mit "as never"
+        navigation.navigate('login' as never); // toDo: das muss irgendwie besser gehen als mit "as never"
     };
 
     const onPrevPress = () => {
