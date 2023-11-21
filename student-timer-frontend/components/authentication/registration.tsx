@@ -8,7 +8,7 @@ import Ionicons from "@/components/Ionicons";
 import { COLORTHEME } from "@/constants/Theme";
 import { TextInput, StyleSheet } from 'react-native';
 
-const Register = () => {
+export default function Register() {
     const [profileImage, setProfileImage] = useState(null);
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -163,5 +163,3 @@ const styles = StyleSheet.create({
         margin: 5,
     },
 });
-
-export default Register;

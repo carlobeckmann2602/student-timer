@@ -7,7 +7,7 @@ import Ionicons from "@/components/Ionicons";
 import { COLORTHEME } from "@/constants/Theme";
 import { TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 
-const Login = () => {
+export default function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigation = useNavigation();
@@ -56,7 +56,7 @@ const Login = () => {
 
             <View>
                 <Text>
-                    <Link to=''>Passwort vergessen?</Link> | <Link to='/registration'>Registrieren</Link>
+                    <Link to='/login'>Passwort vergessen?</Link> | <Link to='/registration'>Registrieren</Link>
                 </Text>
             </View>
 
@@ -97,4 +97,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Login;
+
