@@ -55,13 +55,13 @@ export default function Login() {
           <Separator text="or" />
           <View style={styles.buttons}>
             <Button
-              text="Log In with Google"
+              text="Sign in with Google"
               backgroundColor={COLORTHEME.light.primary}
               textColor={COLORTHEME.light.grey2}
               onPress={onLoginGoogle}
             />
             <Button
-              text="Log In with Apple"
+              text="Sign in with Apple"
               backgroundColor={COLORTHEME.light.primary}
               textColor={COLORTHEME.light.grey2}
               onPress={onLoginApple}
