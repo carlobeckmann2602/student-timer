@@ -8,6 +8,7 @@ import Ionicons from "@/components/Ionicons";
 import { COLORTHEME } from "@/constants/Theme";
 import TrackingModeToggle from "./TrackingModeToggle";
 import Timer from "./Timer";
+import { PauseIcon, PlayIcon } from "lucide-react-native";
 
 export default function Tracking() {
   const [isStopwatch, setIsStopwatch] = useState(true);
@@ -104,9 +105,7 @@ export default function Tracking() {
               backgroundColor={COLORTHEME.light.primary}
               textColor="#FFFFFF"
               onPress={toggleTracking}
-              Icon={() => (
-                <Ionicons name="md-pause" color="white" styles={styles.icon} />
-              )}
+              IconRight={() => <PauseIcon fill="#FFFFFF" color="#FFFFFF" />}
             />
             <Button
               text="Tracking beenden"
@@ -122,9 +121,7 @@ export default function Tracking() {
               backgroundColor={COLORTHEME.light.primary}
               textColor="#FFFFFF"
               onPress={toggleTracking}
-              Icon={() => (
-                <Ionicons name="md-play" color="white" styles={styles.icon} />
-              )}
+              IconRight={() => <PlayIcon fill="#FFFFFF" color="#FFFFFF" />}
             />
           </>
         ) : (
@@ -134,9 +131,7 @@ export default function Tracking() {
               backgroundColor={COLORTHEME.light.primary}
               textColor="#FFFFFF"
               onPress={toggleTracking}
-              Icon={() => (
-                <Ionicons name="md-play" color="white" styles={styles.icon} />
-              )}
+              IconRight={() => <PlayIcon fill="#FFFFFF" color="#FFFFFF" />}
             />
             <Button
               text="Tracking beenden"
@@ -189,10 +184,6 @@ const styles = StyleSheet.create({
   },
   trackerButtons: {
     flexDirection: "row",
-    justifyContent: "center",
-  },
-  icon: {
-    position: "absolute",
-    right: 10,
+    gap: 10,
   },
 });
