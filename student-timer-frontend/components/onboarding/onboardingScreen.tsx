@@ -23,10 +23,7 @@ export default function OnboardingScreen() {
     };
 
     const navigateToAuthentication = () => {
-        navigation.reset({
-            index: 0,
-            routes: [{ name: "authentication" as never }]
-        });
+        navigation.navigate('authentication' as never); // toDo: das muss irgendwie besser gehen als mit "as never"
     };
 
     const onPrevPress = () => {
@@ -37,7 +34,7 @@ export default function OnboardingScreen() {
         if (activeIndex < onboardingData.length - 1) {
             setActiveIndex((prevIndex) => prevIndex + 1);
         } else {
-            navigateToHome();
+            navigateToAuthentication();
         }
     };
 
@@ -77,18 +74,9 @@ export default function OnboardingScreen() {
                 </TouchableOpacity>
             </View>
 
-
             <View style={styles.button}>
                 <Button
                     text="Überspringen"
-                    backgroundColor={COLORTHEME.light.primary}
-                    textColor="#FFFFFF"
-                    onPress={navigateToHome}
-                />
-            </View>
-            <View style={styles.button}>
-                <Button
-                    text="Login"
                     backgroundColor={COLORTHEME.light.primary}
                     textColor="#FFFFFF"
                     onPress={navigateToAuthentication}
@@ -96,7 +84,6 @@ export default function OnboardingScreen() {
             </View>
 
         </View>
-
     );
 };
 

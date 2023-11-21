@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, Link } from '@react-navigation/native';
 import { Text, View } from "@/components/Themed";
 import Button from "@/components/Button";
 import Header from "@/components/Header";
@@ -60,6 +60,12 @@ const Login = () => {
                     textColor="#FFFFFF"
                     onPress={navigateToHome}
                 />
+            </View>
+
+            <View>
+                <Text>
+                    <Link to=''>Passwort vergessen?</Link> | <Link to='/registration'>Registrieren</Link>
+                </Text>
             </View>
 
         </View>
