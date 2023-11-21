@@ -47,21 +47,21 @@ export default function Login() {
             />
           </View>
           <Text>
-            Dont have an account?{" "}
+            Sie haben kein Konto?{" "}
             <Link href="/signup" style={{ textDecorationLine: "underline" }}>
-              Create Account
+              Account erstellen
             </Link>
           </Text>
-          <Separator text="or" />
+          <Separator text="oder" />
           <View style={styles.buttons}>
             <Button
-              text="Sign in with Google"
+              text="Weiter mit Google"
               backgroundColor={COLORTHEME.light.primary}
               textColor={COLORTHEME.light.grey2}
               onPress={onLoginGoogle}
             />
             <Button
-              text="Sign in with Apple"
+              text="Weiter mit Apple"
               backgroundColor={COLORTHEME.light.primary}
               textColor={COLORTHEME.light.grey2}
               onPress={onLoginApple}
