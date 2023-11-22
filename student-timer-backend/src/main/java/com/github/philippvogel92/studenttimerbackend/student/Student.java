@@ -1,5 +1,8 @@
 package com.github.philippvogel92.studenttimerbackend.student;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.github.philippvogel92.studenttimerbackend.module.Module;
 import jakarta.persistence.*;
 
@@ -7,7 +10,6 @@ import java.util.List;
 
 @Entity
 @Table
-@JsonIgnoreProperties({"modules"})
 public class Student {
 
     @Id
@@ -17,7 +19,8 @@ public class Student {
     private String studyCourse;
     private String profilePicture;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "student")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "student", orphanRemoval = true)
+    @JsonIgnore
     private List<Module> modules;
 
     public Student(String name, String studyCourse, String profilePicture) {

@@ -1,5 +1,8 @@
 package com.github.philippvogel92.studenttimerbackend.module;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.github.philippvogel92.studenttimerbackend.student.Student;
 import jakarta.persistence.*;
 import org.hibernate.annotations.OnDelete;
@@ -21,7 +24,7 @@ public class Module {
 
     @ManyToOne
     @JoinColumn(name = "student_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
     private Student student;
 
     public Student getStudent() {
