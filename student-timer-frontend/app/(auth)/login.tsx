@@ -20,8 +20,6 @@ import {
 import * as Apple from "expo-apple-authentication";
 import GoogleButton from "@/components/auth/GoogleButton";
 import AppleButton from "@/components/auth/AppleButton";
-import { SvgXml } from "react-native-svg";
-import { googleIcon } from "@/assets/icons/icons";
 
 WebBrowser.maybeCompleteAuthSession();
 

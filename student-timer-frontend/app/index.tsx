@@ -1,9 +1,12 @@
 import { Redirect } from "expo-router";
 
 export default function Home() {
-  const loggedIn = true;
+  const loggedIn = false;
+  const onboardingDone = false;
 
   if (loggedIn) {
     return <Redirect href={"/(tabs)"} />;
-  } else return <Redirect href={"/(auth)/login"} />;
+  } else if (onboardingDone) {
+    <Redirect href={"/(auth)/login"} />;
+  } else return <Redirect href={"/onboarding/"} />;
 }

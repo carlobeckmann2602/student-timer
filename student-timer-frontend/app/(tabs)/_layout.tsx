@@ -1,6 +1,4 @@
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { Link, Tabs } from "expo-router";
-import { Pressable, useColorScheme } from "react-native";
+import { Tabs } from "expo-router";
 
 import { COLORTHEME } from "@/constants/Theme";
 import Header from "@/components/Header";
@@ -45,10 +43,10 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="profil"
+        name="profile"
         options={{
           title: "Profil",
-          tabBarIcon: ({ color }) => <User2 name="profil" color={color} />,
+          tabBarIcon: ({ color }) => <User2 name="profile" color={color} />,
           header: () => <Header title="Profil" />,
         }}
       />

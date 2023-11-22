@@ -3,7 +3,7 @@ import { Pressable, StyleProp, StyleSheet, ViewStyle } from "react-native";
 
 import { Text, View } from "./Themed";
 
-export default function Button(props: {
+type Props = {
   backgroundColor: string;
   text: string;
   textColor?: string;
@@ -11,7 +11,12 @@ export default function Button(props: {
   onPress?: (val?: any) => void;
   iconRight?: ReactNode;
   iconLeft?: ReactNode;
-}) {
+  style?: StyleProp<ViewStyle>;
+};
+
+export type ButtonProps = Props;
+
+export default function Button(props: ButtonProps) {
   const {
     backgroundColor,
     text,
@@ -20,6 +25,7 @@ export default function Button(props: {
     onPress,
     iconRight,
     iconLeft,
+    style,
   } = props;
   return (
     <Pressable
@@ -31,6 +37,7 @@ export default function Button(props: {
           ? { borderColor: borderColor, borderStyle: "solid", borderWidth: 1 }
           : null,
         styles.button,
+        style,
       ]}
       onPress={onPress}
     >
