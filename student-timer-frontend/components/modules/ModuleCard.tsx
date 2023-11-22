@@ -65,7 +65,7 @@ export function ModuleCard(data: ModuleType) {
   const transformedData: ModuleType = precompute_learning_units(data);
 
   return (
-    <TouchableOpacity onPress={() => router.push(`/module/${data.moduleId}`)}>
+    <TouchableOpacity onPress={() => router.push(`/${data.moduleId}`)}>
       <View style={styles.outerWrapper}>
         {/* Header Row */}
         <View style={styles.headerRow}>
