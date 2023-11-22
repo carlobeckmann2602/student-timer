@@ -1,59 +1,49 @@
 package com.github.philippvogel92.studenttimerbackend.student;
-//DAS IST DAS PROBLEM I THINK
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.github.philippvogel92.studenttimerbackend.module.Module;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table
+@JsonIgnoreProperties({"modules"})
 public class Student {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long studentId;
-    private String firstName;
-    private String lastName;
+    private Long id;
+    private String name;
     private String studyCourse;
-    private String profilPicture;
+    private String profilePicture;
 
-    public Student(Long studentId, String firstName, String lastName, String studyCourse, String profilPicture) {
-        this.studentId = studentId;
-        this.firstName = firstName;
-        this.lastName = lastName;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "student")
+    private List<Module> modules;
+
+    public Student(String name, String studyCourse, String profilePicture) {
+        this.name = name;
         this.studyCourse = studyCourse;
-        this.profilPicture = profilPicture;
+        this.profilePicture = profilePicture;
     }
-    public Student(String firstName, String lastName, String studyCourse, String profilPicture) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.studyCourse = studyCourse;
-        this.profilPicture = profilPicture;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Student() {
 
     }
 
-    public Long getUserId() {
-        return studentId;
+    public Long getId() {
+        return id;
     }
 
-    public void setUserId(Long studentId) {
-        this.studentId = studentId;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getStudyCourse() {
@@ -64,22 +54,29 @@ public class Student {
         this.studyCourse = studyCourse;
     }
 
-    public String getProfilPicture() {
-        return profilPicture;
+    public String getProfilePicture() {
+        return profilePicture;
     }
 
-    public void setProfilPicture(String profilPicture) {
-        this.profilPicture = profilPicture;
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = Student.this.profilePicture;
+    }
+
+    public List<Module> getModules() {
+        return modules;
+    }
+
+    public void setModules(List<Module> modules) {
+        this.modules = modules;
     }
 
     @Override
     public String toString() {
         return "User{" +
-                "studentId=" + studentId +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
+                "id=" + id +
+                ", name='" + name + '\'' +
                 ", studyCourse='" + studyCourse + '\'' +
-                ", profilPicture='" + profilPicture + '\'' +
+                ", profilePicture='" + profilePicture + '\'' +
                 '}';
     }
 }
