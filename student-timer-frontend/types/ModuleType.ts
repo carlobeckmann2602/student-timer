@@ -7,4 +7,9 @@ export type ModuleType = {
   creditpoints: number;
   examDate: Date;
   learningUnits: LearningUnitType[];
+
+  /**
+   * Adds up the workload of each learning unit within the module
+   */
+  timeInvested?: number;
 };

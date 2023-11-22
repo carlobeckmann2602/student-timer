@@ -45,15 +45,20 @@ export function ModuleCard(data: ModuleType) {
   };
 
   const precompute_learning_units = (inputData: ModuleType) => {
+    let timeInvested: number = 0;
+
     for (var unit of inputData.learningUnits) {
       // Add HEX-Colorcode for each module based on corresponding constant
       unit.colorCode = compute_learning_unit_color(unit);
 
-      // Compute invested hours for learning unit since start date
-      let weeks_with_unit: number =
-        compute_date_difference(unit.endDate, new Date()) / 7;
+      // Compute invested hours for the given event time of the unit
+      let weeks_with_unit: number = Math.floor(
+        compute_date_difference(unit.endDate, unit.startDate) / 7
+      );
       unit.y = weeks_with_unit * unit.workloadPerWeek;
+      timeInvested += unit.y;
     }
+
     return inputData;
   };
 
