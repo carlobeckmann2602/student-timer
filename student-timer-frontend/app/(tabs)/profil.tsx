@@ -1,16 +1,30 @@
 import { StyleSheet } from "react-native";
 
 import { Text, View } from "../../components/Themed";
+import Separator from "@/components/Separator";
+import Button from "@/components/Button";
+import { COLORTHEME } from "@/constants/Theme";
+import { useRouter } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default function TabTwoScreen() {
+export default function ProfilScreen() {
+  const router = useRouter();
+  const logout = () => {
+    AsyncStorage.clear();
+    router.push("/login");
+  };
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Profil</Text>
-      <View
-        style={styles.separator}
-        lightColor="#eee"
-        darkColor="rgba(255,255,255,0.1)"
-      />
+      <Separator />
+      <View style={{ height: 50, width: 200 }}>
+        <Button
+          text="Log Out"
+          backgroundColor={COLORTHEME.light.primary}
+          textColor={COLORTHEME.light.grey2}
+          onPress={logout}
+        />
+      </View>
     </View>
   );
 }
@@ -24,10 +38,5 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: "bold",
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
   },
 });

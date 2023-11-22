@@ -3,6 +3,10 @@ import { StyleSheet } from "react-native";
 import { Text, TextProps } from "./Themed";
 import { SIZES } from "@/constants/Theme";
 
+export function Title(props: TextProps) {
+  return <Text {...props} style={[styles.title, props.style]} />;
+}
+
 export function H1(props: TextProps) {
   return <Text {...props} style={[styles.h1, props.style]} />;
 }
@@ -28,6 +32,11 @@ export function P(props: TextProps) {
 }
 
 const styles = StyleSheet.create({
+  title: {
+    fontSize: SIZES.xxxLarge,
+    fontWeight: "600",
+    textAlign: "center",
+  },
   h1: {
     fontSize: SIZES.xxLarge,
     fontWeight: "600",
