@@ -5,5 +5,5 @@ export default function Home() {
 
   if (loggedIn) {
     return <Redirect href={"/(tabs)"} />;
-  } else return <Redirect href={"/login"} />;
+  } else return <Redirect href={"/(auth)/login"} />;
 }

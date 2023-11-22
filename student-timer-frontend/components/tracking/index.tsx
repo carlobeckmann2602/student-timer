@@ -185,5 +185,6 @@ const styles = StyleSheet.create({
   trackerButtons: {
     flexDirection: "row",
     gap: 10,
+    backgroundColor: "transparent",
   },
 });
