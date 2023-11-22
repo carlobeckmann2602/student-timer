@@ -43,6 +43,7 @@ export default function RootLayout() {
 function RootLayoutNav() {
   // const colorScheme = useColorScheme();
 
+  const loggedIn = false;
   return (
     <SafeAreaProvider>
       <ThemeProvider value={DefaultTheme}>
@@ -52,7 +53,18 @@ function RootLayoutNav() {
             <Stack.Screen name="login" options={{ headerShown: false }} />
             <Stack.Screen name="registration" options={{ headerShown: false }} />
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen name="modal" options={{ presentation: "modal" }} />
+            <Stack.Screen
+              name="(auth)/login"
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(auth)/signup"
+              options={{
+                presentation: "modal",
+                title: "Registrieren",
+                headerShown: false,
+              }}
+            />
           </Stack>
         </SafeAreaView>
       </ThemeProvider>
