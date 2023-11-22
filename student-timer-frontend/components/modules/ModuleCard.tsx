@@ -3,11 +3,15 @@ import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { ModuleChart } from "./ModuleChart";
 import { H4, P, Subhead } from "../StyledText";
 import { COLORS, COLORTHEME } from "@/constants/Theme";
-import { ILearning_Unit, IModule } from "@/app/(tabs)/modules";
+import { useRouter } from "expo-router";
+import { ModuleType } from "@/types/ModuleType";
+import { LearningUnitType } from "@/types/LearningUnitType";
 
 type ObjectKey = keyof typeof COLORS;
 
-export function ModuleCard(data: IModule) {
+export function ModuleCard(data: ModuleType) {
+  const router = useRouter();
+
   const compute_date_difference = (date1: Date, date2: Date) => {
     let diff: number = date1.getTime() - date2.getTime();
     return Math.ceil(diff / (1000 * 3600 * 24));
@@ -15,7 +19,7 @@ export function ModuleCard(data: IModule) {
 
   /**
    * Returns the remaining days from now to the exam date as a string
-   * @param exam_date Given parameter value from the IModule
+   * @param exam_date Given parameter value from the ModuleType
    * @returns A string describing the remaining time from today to the exam date
    * - "Abgeschlossen" when exam date is in the past
    * - "X Tage" when exam date takes place within the next 7 days
@@ -35,75 +39,77 @@ export function ModuleCard(data: IModule) {
    * @param unit Learning unit from module
    * @returns String with HEX-Code from Constants for the given learning unit
    */
-  const compute_learning_unit_color = (unit: ILearning_Unit) => {
+  const compute_learning_unit_color = (unit: LearningUnitType) => {
     let unit_color = COLORS[unit.name as ObjectKey];
-    return unit_color !== undefined ? unit_color : data.color_code;
+    return unit_color !== undefined ? unit_color : data.colorCode;
   };
 
-  const precompute_learning_units = (inputData: IModule) => {
-    for (var unit of inputData.learning_units) {
+  const precompute_learning_units = (inputData: ModuleType) => {
+    for (var unit of inputData.learningUnits) {
       // Add HEX-Colorcode for each module based on corresponding constant
-      unit.color_code = compute_learning_unit_color(unit);
+      unit.colorCode = compute_learning_unit_color(unit);
 
       // Compute invested hours for learning unit since start date
       let weeks_with_unit: number =
-        compute_date_difference(unit.end_date, new Date()) / 7;
-      unit.y = weeks_with_unit * unit.workload_per_week;
+        compute_date_difference(unit.endDate, new Date()) / 7;
+      unit.y = weeks_with_unit * unit.workloadPerWeek;
     }
     return inputData;
   };
 
-  const transformedData: IModule = precompute_learning_units(data);
+  const transformedData: ModuleType = precompute_learning_units(data);
 
   return (
-    <View style={styles.outerWrapper}>
-      {/* Header Row */}
-      <View style={styles.headerRow}>
-        <View style={styles.headerTextRow}>
-          <View
-            style={[
-              styles.moduleIndicatorM,
-              { backgroundColor: transformedData.color_code },
-            ]}
-          />
-          <H4>{transformedData.name}</H4>
+    <TouchableOpacity onPress={() => router.push(`/module/${data.moduleId}`)}>
+      <View style={styles.outerWrapper}>
+        {/* Header Row */}
+        <View style={styles.headerRow}>
+          <View style={styles.headerTextRow}>
+            <View
+              style={[
+                styles.moduleIndicatorM,
+                { backgroundColor: transformedData.colorCode },
+              ]}
+            />
+            <H4>{transformedData.name}</H4>
+          </View>
+          <TouchableOpacity>
+            <MoreVertical size={28} fill="black" strokeWidth={1}></MoreVertical>
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity>
-          <MoreVertical size={28} fill="black" strokeWidth={1}></MoreVertical>
-        </TouchableOpacity>
+        {/* Statistics */}
+        <View style={styles.statisticsContainer}>
+          <ModuleChart {...transformedData} />
+          <View style={styles.statisticsUnitContainer}>
+            {transformedData.learningUnits.map((unit) => {
+              return (
+                <View key={unit.unitId} style={styles.headerTextRow}>
+                  <View
+                    style={[
+                      styles.moduleIndicatorS,
+                      { backgroundColor: unit.colorCode },
+                    ]}
+                  />
+                  <P>{unit.name}</P>
+                </View>
+              );
+            })}
+          </View>
+        </View>
+        {/* Results */}
+        <View style={styles.headerRow}>
+          <View style={styles.resultColumn}>
+            <P style={{ textAlign: "center" }}>Zeit bis zur Prüfung</P>
+            <Subhead>{compute_deadline(transformedData.examDate)}</Subhead>
+          </View>
+          <View style={styles.separator}></View>
+          <View style={styles.resultColumn}>
+            <P style={{ textAlign: "center" }}>Selbststudium</P>
+            <Subhead>30,5 von {transformedData.creditpoints * 30} Std.</Subhead>
+          </View>
+        </View>
       </View>
-      {/* Statistics */}
-      <View style={styles.statisticsContainer}>
-        <ModuleChart {...transformedData} />
-        <View style={styles.statisticsUnitContainer}>
-          {transformedData.learning_units.map((unit) => {
-            return (
-              <View key={unit.unit_id} style={styles.headerTextRow}>
-                <View
-                  style={[
-                    styles.moduleIndicatorS,
-                    { backgroundColor: unit.color_code },
-                  ]}
-                />
-                <P>{unit.name}</P>
-              </View>
-            );
-          })}
-        </View>
-      </View>
-      {/* Results */}
-      <View style={styles.headerRow}>
-        <View style={styles.resultColumn}>
-          <P style={{ textAlign: "center" }}>Zeit bis zur Prüfung</P>
-          <Subhead>{compute_deadline(transformedData.exam_date)}</Subhead>
-        </View>
-        <View style={styles.separator}></View>
-        <View style={styles.resultColumn}>
-          <P style={{ textAlign: "center" }}>Selbststudium</P>
-          <Subhead>30,5 von {transformedData.creditpoints * 30} Std.</Subhead>
-        </View>
-      </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 
