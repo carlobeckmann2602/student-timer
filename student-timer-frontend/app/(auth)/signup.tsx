@@ -31,7 +31,7 @@ export default function SignupScreen() {
               />
             </View>
             <View style={styles.inputLabelGroup}>
-              <Text style={styles.inputLabelText}>Lastname</Text>
+              <Text style={styles.inputLabelText}>Nachname</Text>
               <TextInput
                 style={styles.input}
                 onChangeText={setUserSurname}
@@ -41,7 +41,7 @@ export default function SignupScreen() {
           </View>
           <View style={styles.row}>
             <View style={styles.inputLabelGroup}>
-              <Text style={styles.inputLabelText}>Universitäts-E-Mail</Text>
+              <Text style={styles.inputLabelText}>E-Mail</Text>
               <TextInput
                 style={styles.input}
                 onChangeText={setUserUniMail}

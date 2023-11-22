@@ -1,35 +1,42 @@
-import React, { ComponentType } from "react";
+import React, { ReactNode } from "react";
 import { Pressable, StyleProp, StyleSheet, ViewStyle } from "react-native";
 
 import { Text, View } from "./Themed";
-import { LucideIcon } from "lucide-react-native";
 
 export default function Button(props: {
   backgroundColor: string;
   text: string;
   textColor?: string;
+  borderColor?: string;
   onPress?: (val?: any) => void;
-  IconRight?: LucideIcon;
-  IconLeft?: LucideIcon;
+  iconRight?: ReactNode;
+  iconLeft?: ReactNode;
 }) {
-  const { backgroundColor, text, textColor, onPress, IconRight, IconLeft } =
-    props;
+  const {
+    backgroundColor,
+    text,
+    textColor,
+    borderColor,
+    onPress,
+    iconRight,
+    iconLeft,
+  } = props;
   return (
     <Pressable
-      style={[{ backgroundColor: backgroundColor }, styles.button]}
+      style={[
+        {
+          backgroundColor: backgroundColor,
+        },
+        borderColor
+          ? { borderColor: borderColor, borderStyle: "solid", borderWidth: 1 }
+          : null,
+        styles.button,
+      ]}
       onPress={onPress}
     >
-      {IconLeft ? (
-        <View style={styles.icon}>
-          <IconLeft />
-        </View>
-      ) : null}
+      {iconLeft ? <View style={styles.icon}>{iconLeft}</View> : null}
       <Text style={[{ color: textColor }, styles.buttonText]}>{text}</Text>
-      {IconRight ? (
-        <View style={styles.icon}>
-          <IconRight />
-        </View>
-      ) : null}
+      {iconRight ? <View style={styles.icon}>{iconRight}</View> : null}
     </Pressable>
   );
 }
@@ -54,6 +61,7 @@ const styles = StyleSheet.create({
   },
   icon: {
     backgroundColor: "transparent",
-    paddingVertical: 15,
+    paddingVertical: 10,
+    justifyContent: "center",
   },
 });

@@ -18,6 +18,10 @@ import {
 } from "@/constants/OAuthCredentials";
 
 import * as Apple from "expo-apple-authentication";
+import GoogleButton from "@/components/auth/GoogleButton";
+import AppleButton from "@/components/auth/AppleButton";
+import { SvgXml } from "react-native-svg";
+import { googleIcon } from "@/assets/icons/icons";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -112,7 +116,7 @@ export default function Login() {
             style={styles.input}
             onChangeText={setPassword}
             value={password}
-            placeholder="Password"
+            placeholder="Passwort"
             keyboardType="visible-password"
             secureTextEntry={true}
           />
@@ -132,27 +136,22 @@ export default function Login() {
           </Text>
           <Separator text="oder" />
           <View style={styles.buttons}>
-            <Button
-              text="Weiter mit Google"
-              backgroundColor={COLORTHEME.light.primary}
-              textColor={COLORTHEME.light.grey2}
-              onPress={onLoginGoogle}
-            />
-            {appleAuthAvailible ? (
-              <Apple.AppleAuthenticationButton
-                buttonType={Apple.AppleAuthenticationButtonType.SIGN_IN}
-                buttonStyle={Apple.AppleAuthenticationButtonStyle.BLACK}
-                cornerRadius={50}
-                style={styles.appleButton}
-                onPress={onLoginApple}
-              />
-            ) : null}
+            <GoogleButton onPress={onLoginGoogle} />
+            {appleAuthAvailible ? <AppleButton onPress={onLoginApple} /> : null}
           </View>
         </View>
       </View>
     </>
   );
 }
+
+/*<Apple.AppleAuthenticationButton
+                buttonType={Apple.AppleAuthenticationButtonType.CONTINUE}
+                buttonStyle={Apple.AppleAuthenticationButtonStyle.BLACK}
+                cornerRadius={50}
+                style={styles.appleButton}
+                onPress={onLoginApple}
+              />*/
 
 const styles = StyleSheet.create({
   container: {

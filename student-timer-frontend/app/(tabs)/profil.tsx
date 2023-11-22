@@ -5,10 +5,12 @@ import Separator from "@/components/Separator";
 import Button from "@/components/Button";
 import { COLORTHEME } from "@/constants/Theme";
 import { useRouter } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function ProfilScreen() {
   const router = useRouter();
   const logout = () => {
+    AsyncStorage.clear();
     router.push("/login");
   };
   return (

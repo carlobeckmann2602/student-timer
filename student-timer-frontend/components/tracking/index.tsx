@@ -105,7 +105,7 @@ export default function Tracking() {
               backgroundColor={COLORTHEME.light.primary}
               textColor="#FFFFFF"
               onPress={toggleTracking}
-              IconRight={() => <PauseIcon fill="#FFFFFF" color="#FFFFFF" />}
+              iconRight={<PauseIcon fill="#FFFFFF" color="#FFFFFF" />}
             />
             <Button
               text="Tracking beenden"
@@ -121,7 +121,7 @@ export default function Tracking() {
               backgroundColor={COLORTHEME.light.primary}
               textColor="#FFFFFF"
               onPress={toggleTracking}
-              IconRight={() => <PlayIcon fill="#FFFFFF" color="#FFFFFF" />}
+              iconRight={<PlayIcon fill="#FFFFFF" color="#FFFFFF" />}
             />
           </>
         ) : (
@@ -131,7 +131,7 @@ export default function Tracking() {
               backgroundColor={COLORTHEME.light.primary}
               textColor="#FFFFFF"
               onPress={toggleTracking}
-              IconRight={() => <PlayIcon fill="#FFFFFF" color="#FFFFFF" />}
+              iconRight={<PlayIcon fill="#FFFFFF" color="#FFFFFF" />}
             />
             <Button
               text="Tracking beenden"
