@@ -17,18 +17,21 @@ import {
   GoogleWebClientID,
 } from "@/constants/OAuthCredentials";
 
+import * as Apple from "expo-apple-authentication";
+
 WebBrowser.maybeCompleteAuthSession();
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [userInfo, setUserInfo] = useState(null as unknown as {});
 
   const router = useRouter();
 
   const onLogin = () => {
     router.push("/");
   };
+
+  const onLoginGoogle = () => promptAsync();
 
   const [request, response, promptAsync] = Google.useAuthRequest({
     androidClientId: GoogleAndroidClientID,
@@ -44,14 +47,14 @@ export default function Login() {
     const user = await AsyncStorage.getItem("@user");
     if (!user) {
       if (response?.type === "success") {
-        await getUserInfo(response.authentication?.accessToken);
+        await getUserInfoGoogle(response.authentication?.accessToken);
       }
     } else {
-      setUserInfo(JSON.parse(user));
+      router.push("/");
     }
   }
 
-  const getUserInfo = async (token: string | undefined) => {
+  const getUserInfoGoogle = async (token: string | undefined) => {
     if (!token) return;
     try {
       const response = await fetch(
@@ -62,20 +65,35 @@ export default function Login() {
       );
 
       const user = await response.json();
+      console.log(user);
       await AsyncStorage.setItem("@user", JSON.stringify(user));
-      setUserInfo(user);
+      router.push("/");
     } catch (error) {}
   };
 
-  const onLoginApple = () => {
-    console.log("Apple Button");
-    setUserInfo({
-      name: "Test Nutzer",
-      type: "manuell",
-    });
-    console.log(`User ${JSON.stringify(userInfo)}`);
+  const onLoginApple = async () => {
+    try {
+      const user = await Apple.signInAsync({
+        requestedScopes: [
+          Apple.AppleAuthenticationScope.FULL_NAME,
+          Apple.AppleAuthenticationScope.EMAIL,
+        ],
+      });
+      console.log(user);
+      await AsyncStorage.setItem("@user", JSON.stringify(user));
+      router.push("/");
+    } catch (error) {}
   };
-  const onLoginGoogle = () => promptAsync();
+
+  const [appleAuthAvailible, setAppleAuthAvailible] = useState(false);
+
+  useEffect(() => {
+    const checkAppleAvailable = async () => {
+      const isAvailable = await Apple.isAvailableAsync();
+      setAppleAuthAvailible(isAvailable);
+    };
+    checkAppleAvailable();
+  });
 
   return (
     <>
@@ -120,12 +138,15 @@ export default function Login() {
               textColor={COLORTHEME.light.grey2}
               onPress={onLoginGoogle}
             />
-            <Button
-              text="Weiter mit Apple"
-              backgroundColor={COLORTHEME.light.primary}
-              textColor={COLORTHEME.light.grey2}
-              onPress={onLoginApple}
-            />
+            {appleAuthAvailible ? (
+              <Apple.AppleAuthenticationButton
+                buttonType={Apple.AppleAuthenticationButtonType.SIGN_IN}
+                buttonStyle={Apple.AppleAuthenticationButtonStyle.BLACK}
+                cornerRadius={50}
+                style={styles.appleButton}
+                onPress={onLoginApple}
+              />
+            ) : null}
           </View>
         </View>
       </View>
@@ -157,5 +178,11 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     width: 200,
     gap: 15,
+  },
+  appleButton: {
+    width: 200,
+    height: 50,
+    fontSize: 16,
+    fontWeight: "600",
   },
 });
