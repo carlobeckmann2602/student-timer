@@ -50,7 +50,6 @@ export default function Button(props: ButtonProps) {
 
 const styles = StyleSheet.create({
   button: {
-    flexGrow: 1,
     flexBasis: 50,
     flexDirection: "row",
     justifyContent: "space-between",

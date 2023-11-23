@@ -105,12 +105,14 @@ export default function Tracking() {
               textColor="#FFFFFF"
               onPress={toggleTracking}
               iconRight={<PauseIcon fill="#FFFFFF" color="#FFFFFF" />}
+              style={styles.button}
             />
             <Button
               text="Tracking beenden"
               backgroundColor={COLORTHEME.light.primary}
               textColor="#FFFFFF"
               onPress={resetTimer}
+              style={styles.button}
             />
           </>
         ) : startTime === 0 ? (
@@ -121,6 +123,7 @@ export default function Tracking() {
               textColor="#FFFFFF"
               onPress={toggleTracking}
               iconRight={<PlayIcon fill="#FFFFFF" color="#FFFFFF" />}
+              style={styles.button}
             />
           </>
         ) : (
@@ -131,12 +134,14 @@ export default function Tracking() {
               textColor="#FFFFFF"
               onPress={toggleTracking}
               iconRight={<PlayIcon fill="#FFFFFF" color="#FFFFFF" />}
+              style={styles.button}
             />
             <Button
               text="Tracking beenden"
               backgroundColor={COLORTHEME.light.primary}
               textColor="#FFFFFF"
               onPress={resetTimer}
+              style={styles.button}
             />
           </>
         )}
@@ -185,5 +190,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 10,
     backgroundColor: "transparent",
+  },
+  button: {
+    flexGrow: 1,
   },
 });

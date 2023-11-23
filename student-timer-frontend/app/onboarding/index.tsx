@@ -93,7 +93,7 @@ export default function OnboardingScreen() {
         backgroundColor={COLORTHEME.light.primary}
         textColor="#FFFFFF"
         onPress={navigateToAuthentication}
-        style={{ width: 300, marginVertical: 20 }}
+        style={{ width: 300, marginVertical: 20, height: 50 }}
       />
     </View>
   );
