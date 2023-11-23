@@ -21,7 +21,7 @@ export default function OnboardingScreen() {
   const router = useRouter();
 
   const navigateToAuthentication = () => {
-    router.push("/(auth)/login");
+    router.push("/(auth)/signup");
   };
 
   const onPrevPress = () => {
@@ -103,6 +103,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: "center",
     justifyContent: "center",
+    flex: 1,
   },
   onboardingItem: {
     flex: 1,

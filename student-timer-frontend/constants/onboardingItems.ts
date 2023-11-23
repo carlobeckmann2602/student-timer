@@ -1,5 +1,3 @@
-import * as fs from 'fs';
-
 export const onboardingData = [
     {
         title: 'Tracking',

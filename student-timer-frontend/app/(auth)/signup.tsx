@@ -6,15 +6,22 @@ import { COLORTHEME } from "@/constants/Theme";
 import { useState } from "react";
 import Button from "@/components/Button";
 import Header from "@/components/Header";
+import { Link, useRouter } from "expo-router";
+import Separator from "@/components/Separator";
+import OtherLogins from "@/components/auth/OtherLogins";
 
 export default function SignupScreen() {
-  const [userFirstname, setUserFirstname] = useState("");
-  const [userSurname, setUserSurname] = useState("");
+  const [userName, setUserName] = useState("");
+  const [userStudyCourse, setUserStudyCourse] = useState("");
   const [userUniEmail, setUserUniMail] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const [userCheckPassword, setUserCheckPassword] = useState("");
 
-  const onRegister = () => {};
+  const router = useRouter();
+
+  const onRegister = () => {
+    router.push("/(tabs)");
+  };
 
   return (
     <>
@@ -23,19 +30,19 @@ export default function SignupScreen() {
         <View style={styles.outerWrapper}>
           <View style={styles.row}>
             <View style={styles.inputLabelGroup}>
-              <Text style={styles.inputLabelText}>Vorname</Text>
+              <Text style={styles.inputLabelText}>Name</Text>
               <TextInput
                 style={styles.input}
-                onChangeText={setUserFirstname}
-                value={userFirstname}
+                onChangeText={setUserName}
+                value={userName}
               />
             </View>
             <View style={styles.inputLabelGroup}>
-              <Text style={styles.inputLabelText}>Nachname</Text>
+              <Text style={styles.inputLabelText}>Studienfach</Text>
               <TextInput
                 style={styles.input}
-                onChangeText={setUserSurname}
-                value={userSurname}
+                onChangeText={setUserStudyCourse}
+                value={userStudyCourse}
               />
             </View>
           </View>
@@ -79,10 +86,17 @@ export default function SignupScreen() {
             backgroundColor={COLORTHEME.light.primary}
             textColor={COLORTHEME.light.grey2}
             onPress={onRegister}
+            style={{ width: 200 }}
           />
+          <Text>
+            Sie haben bereits ein Konto?{" "}
+            <Link href="/login" style={{ textDecorationLine: "underline" }}>
+              Anmelden
+            </Link>
+          </Text>
         </View>
-        {/* Use a light status bar on iOS to account for the black space above the modal */}
-        <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
+        <Separator text="oder" />
+        <OtherLogins />
       </View>
     </>
   );
@@ -90,12 +104,10 @@ export default function SignupScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    width: "100%",
-    height: "100%",
+    flex: 1,
     alignItems: "center",
-    justifyContent: "center",
-    padding: 16,
-    gap: 24,
+    justifyContent: "space-around",
+    paddingHorizontal: 12,
   },
   outerWrapper: {
     width: "100%",
@@ -131,7 +143,7 @@ const styles = StyleSheet.create({
   },
   buttons: {
     flexDirection: "column",
-    width: 200,
+    alignItems: "center",
     gap: 15,
   },
 });
