@@ -30,7 +30,7 @@ export default function Login() {
   const router = useRouter();
 
   const onLogin = () => {
-    router.push("/");
+    router.push("/(tabs)/");
   };
 
   const onLoginGoogle = () => promptAsync();
