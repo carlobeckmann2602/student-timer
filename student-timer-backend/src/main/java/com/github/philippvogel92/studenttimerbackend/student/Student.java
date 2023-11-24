@@ -1,4 +1,5 @@
 package com.github.philippvogel92.studenttimerbackend.student;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -18,23 +19,19 @@ public class Student {
     private String name;
     private String studyCourse;
     private String profilePicture;
+    private String email;
+    private String password;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "student", orphanRemoval = true)
     @JsonIgnore
     private List<Module> modules;
 
-    public Student(String name, String studyCourse, String profilePicture) {
+    public Student(String name, String studyCourse, String profilePicture, String email, String password) {
         this.name = name;
         this.studyCourse = studyCourse;
         this.profilePicture = profilePicture;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+        this.email = email;
+        this.password = password;
     }
 
     public Student() {
@@ -47,6 +44,14 @@ public class Student {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getStudyCourse() {
@@ -62,7 +67,23 @@ public class Student {
     }
 
     public void setProfilePicture(String profilePicture) {
-        this.profilePicture = Student.this.profilePicture;
+        this.profilePicture = profilePicture;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public List<Module> getModules() {
@@ -75,11 +96,20 @@ public class Student {
 
     @Override
     public String toString() {
-        return "User{" +
+        return "Student{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", studyCourse='" + studyCourse + '\'' +
                 ", profilePicture='" + profilePicture + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", modules=" + modules +
                 '}';
     }
+
+    String encrypt(String password) {
+        //encryption logic
+        return "encrypt";
+    }
+
 }
