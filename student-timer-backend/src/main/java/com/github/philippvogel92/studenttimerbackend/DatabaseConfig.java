@@ -19,18 +19,18 @@ public class DatabaseConfig {
         @Bean
         CommandLineRunner commandLineRunner(StudentRepository repository) {
             return args -> {
-                Student phil = new Student("Philipp", "Master Medieninformatik", "phil.jpg");
-                Student alex = new Student("Alex", "Bachelor Medientechnologie", "alex.jpg");
+                Student student1 = new Student("Philipp", "Master Medieninformatik", "phil.jpg", "phil@test.de", "aionscoain232");
+                Student student2 = new Student("Alex", "Bachelor Medientechnologie", "alex.jpg", "alex@test.de", "vsdfvsd4334");
 
-                Module datenbanksysteme = new Module("Datenbanksysteme 1", "#88A795", 5, LocalDate.of(2024, Month.JUNE, 10), phil );
-                Module mathe = new Module("Mathematik 1", "#66A715", 10, LocalDate.of(2024, Month.JANUARY, 12), phil);
-                Module mediengestaltung = new Module("Mediengestaltung 1", "#22A715", 3, null, phil);
-                Module mediengestaltung2 = new Module("Mediengestaltung 2", "#12A715", 3, LocalDate.of(2024, Month.MARCH, 31), phil);
+                Module module1 = new Module("Datenbanksysteme 1", "#88A795", 5, LocalDate.of(2024, Month.JUNE, 10), student1 );
+                Module module2 = new Module("Mathematik 1", "#66A715", 10, LocalDate.of(2024, Month.JANUARY, 12), student1);
+                Module module3 = new Module("Mediengestaltung 1", "#22A715", 3, null, student1);
+                Module module4 = new Module("Mediengestaltung 2", "#12A715", 3, LocalDate.of(2024, Month.MARCH, 31), student1);
 
-                phil.setModules(List.of(datenbanksysteme,mathe,mediengestaltung,mediengestaltung2));
+                student1.setModules(List.of(module1,module2,module3,module4));
 
                 repository.saveAll(
-                        List.of(phil, alex)
+                        List.of(student1, student2)
                 );
 
             };
