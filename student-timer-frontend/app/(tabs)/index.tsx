@@ -53,6 +53,7 @@ export default function Tracking() {
               onChangeText={setRounds}
               value={rounds}
               keyboardType="numeric"
+              selectTextOnFocus
               editable={!trackingIsActive && startTime === 0}
             />
           </View>
@@ -64,6 +65,7 @@ export default function Tracking() {
             onChangeText={setRoundLen}
             value={roundLen}
             keyboardType="numeric"
+            selectTextOnFocus
             editable={!trackingIsActive && startTime === 0}
           />
         </View>
@@ -74,6 +76,7 @@ export default function Tracking() {
             onChangeText={setPauseLen}
             value={pauseLen}
             keyboardType="numeric"
+            selectTextOnFocus
             editable={!trackingIsActive && startTime === 0}
           />
         </View>
