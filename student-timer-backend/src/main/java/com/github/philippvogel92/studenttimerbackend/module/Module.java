@@ -2,6 +2,7 @@ package com.github.philippvogel92.studenttimerbackend.module;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.github.philippvogel92.studenttimerbackend.learningSession.LearningSession;
 import com.github.philippvogel92.studenttimerbackend.learningUnit.LearningUnit;
 import com.github.philippvogel92.studenttimerbackend.student.Student;
 import jakarta.persistence.*;
@@ -29,6 +30,10 @@ public class Module {
     @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "module", fetch = FetchType.LAZY)
     @JsonManagedReference
     private List<LearningUnit> learningUnit;
+
+    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "module", fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<LearningSession> learningSessions;
 
     public Module(String name, String colorCode, Integer creditPoints, LocalDate examDate, Student student) {
         this.name = name;
@@ -99,11 +104,19 @@ public class Module {
         this.examDate = examDate;
     }
 
-    public List<LearningUnit> getLearningUnit() {
+    public List<LearningUnit> getLearningUnits() {
         return learningUnit;
     }
 
-    public void setLearningUnit(List<LearningUnit> learningUnit) {
+    public void setLearningUnits(List<LearningUnit> learningUnit) {
         this.learningUnit = learningUnit;
+    }
+
+    public List<LearningSession> getLearningSessions() {
+        return learningSessions;
+    }
+
+    public void setLearningSessions(List<LearningSession> learningSessions) {
+        this.learningSessions = learningSessions;
     }
 }

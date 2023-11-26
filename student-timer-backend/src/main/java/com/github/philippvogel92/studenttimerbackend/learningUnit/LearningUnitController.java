@@ -68,7 +68,7 @@ public class LearningUnitController {
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = LearningUnit.class))}),
     })
-    @PostMapping(path = "/learningUnit")
+    @PostMapping(path = "/learningUnits")
     public LearningUnit addLearningUnit(@PathVariable("moduleId") Long moduleId,
                                         LearningUnitCreateDTO learningUnitCreateDTO) {
         return learningUnitService.addLearningUnit(moduleId, learningUnitCreateDTO);

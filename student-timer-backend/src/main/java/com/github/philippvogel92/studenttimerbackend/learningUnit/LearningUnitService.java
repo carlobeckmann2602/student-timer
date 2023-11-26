@@ -30,7 +30,7 @@ public class LearningUnitService {
     public List<LearningUnit> getAllLearningUnitsForModule(Long moduleId) {
         Module module =
                 moduleRepository.findById(moduleId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Module not found"));
-        return module.getLearningUnit();
+        return module.getLearningUnits();
     }
 
     public LearningUnit getLearningUnit(Long moduleId, Long learningUnitId) {
