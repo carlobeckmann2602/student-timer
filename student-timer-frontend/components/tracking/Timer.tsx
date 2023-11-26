@@ -8,25 +8,25 @@ import { COLORTHEME } from "@/constants/Theme";
 
 const msToTimeObject = (
   timeInMs: number
-): { mins: number; secs: number; ms: number } => {
-  const mins = Math.floor(timeInMs / (1000 * 60));
+): { hours: number; mins: number; secs: number } => {
+  const hours = Math.floor(timeInMs / (1000 * 60 * 60));
+  const mins = Math.floor((timeInMs % (1000 * 60 * 60)) / (1000 * 60));
   const secs = Math.floor((timeInMs % (1000 * 60)) / 1000);
-  const ms = timeInMs % 1000;
-  return { mins, secs, ms };
+  return { hours, mins, secs };
 };
 
 const formatTime = ({
+  hours,
   mins,
   secs,
-  ms,
 }: {
+  hours: number;
   mins: number;
   secs: number;
-  ms: number;
 }): string => {
-  return `${mins.toString().padStart(2, "0")}:${secs
+  return `${hours.toString().padStart(2, "0")}:${mins
     .toString()
-    .padStart(2, "0")}:${ms.toString().padStart(3, "0").slice(0, 2)}`;
+    .padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
 };
 
 const getData = (percent: number) => [
@@ -50,25 +50,28 @@ export default function Timer(props: {
     pauseLen,
     roundLen,
   } = props;
-  const [currentTime, setCurrentTime] = useState({ mins: 0, secs: 0, ms: 0 });
-  const [pauseTime, setPauseTime] = useState({
+  const [currentTime, setCurrentTime] = useState(0);
+  const [displayTime, setDisplayTime] = useState({
+    hours: 0,
     mins: 0,
     secs: 0,
-    ms: 0,
+  });
+  const [displayPauseTime, setDisplayPauseTime] = useState({
+    hours: 0,
+    mins: 0,
+    secs: 0,
   });
   const [isPause, setIsPause] = useState(false);
   const [progress, setProgress] = useState({ percent: 0, data: getData(0) });
 
-  const resetCurrentTime = () => {
+  const resetTime = () => {
     if (isStopwatch) {
-      setCurrentTime({ mins: 0, secs: 0, ms: 0 });
+      setCurrentTime(0);
+      setDisplayTime({ hours: 0, mins: 0, secs: 0 });
     } else {
       let totalTime = rounds * roundLen + (rounds - 1) * pauseLen;
-      setCurrentTime({
-        mins: Math.floor(totalTime / (1000 * 60)),
-        secs: Math.floor((totalTime % (1000 * 60)) / 1000),
-        ms: totalTime % 1000,
-      });
+      setCurrentTime(totalTime);
+      setDisplayTime(msToTimeObject(totalTime));
     }
   };
 
@@ -76,25 +79,22 @@ export default function Timer(props: {
     let interval: any;
     if (trackingIsActive) {
       interval = setInterval(() => {
-        let elapsedTime, currentTimeMs, percent, pauseTime;
-        currentTimeMs =
-          currentTime.mins * 1000 * 60 +
-          currentTime.secs * 1000 +
-          currentTime.ms;
+        let elapsedTime, pauseTime, percent;
         if (isStopwatch) {
-          elapsedTime = Date.now() - startTime + currentTimeMs;
+          elapsedTime = Date.now() - startTime + currentTime;
           percent = (elapsedTime / (roundLen + pauseLen)) * 100;
         } else {
-          elapsedTime = currentTimeMs - (Date.now() - startTime);
-          if (elapsedTime <= 0) {
-            setCurrentTime({ mins: 0, secs: 0, ms: 0 });
-            setPauseTime({ mins: 0, secs: 0, ms: 0 });
-            clearInterval(interval);
-            return;
-          }
+          elapsedTime = currentTime - (Date.now() - startTime);
           percent =
             100 -
             (elapsedTime / (rounds * roundLen + (rounds - 1) * pauseLen)) * 100;
+          if (elapsedTime <= 0) {
+            setCurrentTime(0);
+            setDisplayTime({ hours: 0, mins: 0, secs: 0 });
+            setDisplayPauseTime({ hours: 0, mins: 0, secs: 0 });
+            clearInterval(interval);
+            return;
+          }
         }
         const timeInCurrentRound = elapsedTime % (roundLen + pauseLen);
         setIsPause(timeInCurrentRound > roundLen);
@@ -107,23 +107,21 @@ export default function Timer(props: {
             ? roundLen + pauseLen - timeInCurrentRound
             : pauseLen - (pauseLen - (timeInCurrentRound - roundLen));
         }
-        setCurrentTime(msToTimeObject(elapsedTime));
-        setPauseTime(msToTimeObject(pauseTime));
+        setCurrentTime(elapsedTime);
+        setDisplayTime(msToTimeObject(elapsedTime));
+        setDisplayPauseTime(msToTimeObject(pauseTime));
         setProgress({ percent, data: getData(percent) });
-      }, 10);
+      }, 100);
     } else if (startTime === 0) {
-      resetCurrentTime();
-      setPauseTime({ mins: 0, secs: 0, ms: 0 });
+      resetTime();
+      setDisplayPauseTime({ hours: 0, mins: 0, secs: 0 });
       setIsPause(false);
       setProgress({ percent: 0, data: getData(0) });
     }
     return () => clearInterval(interval);
   }, [trackingIsActive, startTime]);
 
-  useEffect(
-    () => resetCurrentTime(),
-    [isStopwatch, rounds, roundLen, pauseLen]
-  );
+  useEffect(() => resetTime(), [isStopwatch, rounds, roundLen, pauseLen]);
 
   return (
     <View style={styles.container}>
@@ -132,7 +130,7 @@ export default function Timer(props: {
           width={400}
           height={400}
           standalone={false}
-          animate={{ duration: 1000 }}
+          animate={false}
           innerRadius={120}
           labels={() => null}
           data={progress.data}
@@ -143,7 +141,7 @@ export default function Timer(props: {
           verticalAnchor="middle"
           x={200}
           y={200}
-          text={formatTime(currentTime)}
+          text={formatTime(displayTime)}
           style={styles.timerText}
         />
         {(trackingIsActive || startTime !== 0) && (
@@ -153,7 +151,7 @@ export default function Timer(props: {
             x={200}
             y={250}
             text={`Pause ${isPause ? "vorbei " : ""}in ${formatTime(
-              pauseTime
+              displayPauseTime
             )}`}
             style={styles.pauseText}
           />
