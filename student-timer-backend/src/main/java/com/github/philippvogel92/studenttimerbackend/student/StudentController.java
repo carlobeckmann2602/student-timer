@@ -57,8 +57,8 @@ public class StudentController {
                     content = @Content),
     })
     @PostMapping
-    public Student createStudent(@Valid @RequestBody StudentCreateDTO studentCreateDTO) {
-        return studentService.createStudent(studentCreateDTO);
+    public Student addStudent(@Valid @RequestBody StudentCreateDTO studentCreateDTO) {
+        return studentService.addStudent(studentCreateDTO);
     }
 
     // *************************** PUT-METHODS ***************************
@@ -76,7 +76,6 @@ public class StudentController {
     @PutMapping(path = "{studentId}")
     public Student updateStudent(@PathVariable("studentId") Long studentId,
                                  @Valid @RequestBody StudentUpdateDTO studentUpdateDTO) {
-
         return studentService.updateStudent(studentId, studentUpdateDTO);
     }
 

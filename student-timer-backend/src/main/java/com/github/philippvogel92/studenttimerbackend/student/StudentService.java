@@ -76,7 +76,7 @@ public class StudentService {
         return student;
     }
 
-    public Student createStudent(StudentCreateDTO studentCreateDTO) {
+    public Student addStudent(StudentCreateDTO studentCreateDTO) {
         String email = studentCreateDTO.getEmail();
         String name = studentCreateDTO.getName();
         String profilePicture = studentCreateDTO.getProfilePicture();

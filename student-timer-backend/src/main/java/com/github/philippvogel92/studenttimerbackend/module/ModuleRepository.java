@@ -9,10 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface ModuleRepository extends JpaRepository<Module,Long> {
+public interface ModuleRepository extends JpaRepository<Module, Long> {
 
-/*
-    @Query("SELECT m FROM Module m WHERE m.student.id = ?1")
-*/
     List<Module> findByStudentId(Long studentId);
 }

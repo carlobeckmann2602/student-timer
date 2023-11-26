@@ -40,15 +40,16 @@ public class Module {
         this.colorCode = colorCode;
         this.creditPoints = creditPoints;
         this.examDate = examDate;
-        this.student =student;
+        this.student = student;
     }
 
-    public Module(Long id, String name, String colorCode, Integer creditPoints, LocalDate examDate) {
+    public Module(Long id, String name, String colorCode, Integer creditPoints, LocalDate examDate, Student student) {
         this.id = id;
         this.name = name;
         this.colorCode = colorCode;
         this.creditPoints = creditPoints;
         this.examDate = examDate;
+        this.student = student;
     }
 
     public Module() {
