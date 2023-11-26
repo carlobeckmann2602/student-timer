@@ -1,14 +1,13 @@
 package com.github.philippvogel92.studenttimerbackend.module;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.github.philippvogel92.studenttimerbackend.learningUnit.LearningUnit;
 import com.github.philippvogel92.studenttimerbackend.student.Student;
 import jakarta.persistence.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table
@@ -27,13 +26,9 @@ public class Module {
     @JsonIgnore
     private Student student;
 
-    public Student getStudent() {
-        return student;
-    }
-
-    public void setStudent(Student student) {
-        this.student = student;
-    }
+    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "module", fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<LearningUnit> learningUnit;
 
     public Module(String name, String colorCode, Integer creditPoints, LocalDate examDate, Student student) {
         this.name = name;
@@ -54,6 +49,14 @@ public class Module {
 
     public Module() {
 
+    }
+
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
     }
 
     public Long getId() {
@@ -96,16 +99,11 @@ public class Module {
         this.examDate = examDate;
     }
 
-    @Override
-    public String toString() {
-        return "Module{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", colorCode='" + colorCode + '\'' +
-                ", creditPoints=" + creditPoints +
-                ", examDate=" + examDate +
-                ", student=" + student +
-                '}';
+    public List<LearningUnit> getLearningUnit() {
+        return learningUnit;
     }
 
+    public void setLearningUnit(List<LearningUnit> learningUnit) {
+        this.learningUnit = learningUnit;
+    }
 }

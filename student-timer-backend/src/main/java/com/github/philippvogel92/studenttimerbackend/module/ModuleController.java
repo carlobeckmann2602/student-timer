@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @ApiResponses(value = {
-        @ApiResponse(responseCode = "400", description = "Invalid id supplied",
+        @ApiResponse(responseCode = "400", description = "Invalid request",
                 content = @Content),
 })
 @RestController
@@ -64,8 +64,6 @@ public class ModuleController {
             @ApiResponse(responseCode = "200", description = "Module created",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = Module.class))}),
-            @ApiResponse(responseCode = "400", description = "Invalid request body supplied",
-                    content = @Content),
     })
     @PostMapping(path = "/modules")
     public Module addModule(@PathVariable("studentId") Long studentId, ModuleCreateDTO moduleCreateDTO) {
@@ -78,8 +76,6 @@ public class ModuleController {
             @ApiResponse(responseCode = "200", description = "Module updated",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = Module.class))}),
-            @ApiResponse(responseCode = "400", description = "Invalid student id or request body supplied",
-                    content = @Content),
             @ApiResponse(responseCode = "404", description = "Student not found",
                     content = @Content)
     })
