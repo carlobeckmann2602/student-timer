@@ -1,53 +1,49 @@
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Link, Tabs } from 'expo-router';
-import { Pressable, useColorScheme } from 'react-native';
+import { Tabs } from "expo-router";
 
-import Colors from '../../constants/Colors';
-
-/**
- * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
- */
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
-  color: string;
-}) {
-  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
-}
+import { COLORTHEME } from "@/constants/Theme";
+import Header from "@/components/Header";
+import { BarChart2, LayoutList, TimerReset, User2 } from "lucide-react-native";
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
+  // const colorScheme = useColorScheme();
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-      }}>
+        tabBarActiveTintColor: COLORTHEME.light.primary,
+        tabBarInactiveTintColor: COLORTHEME.light.tabIconDefault,
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome
-                    name="info-circle"
-                    size={25}
-                    color={Colors[colorScheme ?? 'light'].text}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
-          ),
+          title: "Tracking",
+          tabBarIcon: ({ color }) => <TimerReset name="clock-o" color={color} />,
+          header: () => <Header title="Tracking" />,
         }}
       />
       <Tabs.Screen
-        name="two"
+        name="modules"
         options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: "Module",
+          tabBarIcon: ({ color }) => <LayoutList name="module" color={color} />,
+          header: () => <Header title="Module" />,
+        }}
+      />
+      <Tabs.Screen
+        name="statistics"
+        options={{
+          title: "Statistik",
+          tabBarIcon: ({ color }) => <BarChart2 name="statistic" color={color} />,
+          header: () => <Header title="Statistik" />,
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: "Profil",
+          tabBarIcon: ({ color }) => <User2 name="profile" color={color} />,
+          header: () => <Header title="Profil" />,
         }}
       />
     </Tabs>
