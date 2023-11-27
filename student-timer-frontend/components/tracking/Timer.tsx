@@ -4,7 +4,7 @@ import { VictoryPie, VictoryLabel } from "victory-native";
 import { Svg } from "react-native-svg";
 
 import { View } from "@/components/Themed";
-import { COLORTHEME } from "@/constants/Theme";
+import { COLORTHEME, COLORS } from "@/constants/Theme";
 
 const msToTimeObject = (
   timeInMs: number
@@ -28,11 +28,6 @@ const formatTime = ({
     .toString()
     .padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
 };
-
-const getData = (percent: number) => [
-  { x: 1, y: percent, color: COLORTHEME.light.primary },
-  { x: 2, y: 100 - percent, color: COLORTHEME.light.grey3 },
-];
 
 export default function Timer(props: {
   isStopwatch: boolean;
@@ -62,42 +57,102 @@ export default function Timer(props: {
     secs: 0,
   });
   const [isPause, setIsPause] = useState(false);
-  const [progress, setProgress] = useState({ percent: 0, data: getData(0) });
+  const [progress, setProgress] = useState({ data: [{}] });
 
-  const resetTime = () => {
+  const getProgressData = (curTime: number, curPauseTime?: number) => {
+    if (isStopwatch) {
+      let percent =
+        ((curTime % (roundLen + pauseLen)) / (roundLen + pauseLen)) * 100;
+      curPauseTime =
+        ((curPauseTime === undefined ? pauseLen : curPauseTime) /
+          (roundLen + pauseLen)) *
+        100;
+      return [
+        { y: percent, color: COLORTHEME.light.primary },
+        { y: 100 - percent - curPauseTime, color: COLORTHEME.light.grey3 },
+        { y: curPauseTime, color: COLORS.progressBarPauseColor },
+      ];
+    } else {
+      let totalTime = rounds * (roundLen + pauseLen) - pauseLen;
+      let elapsedTime = totalTime - curTime;
+      let currentRound = Math.ceil(elapsedTime / (roundLen + pauseLen)) || 1;
+      let percent = 100 - (curTime / totalTime) * 100;
+      curPauseTime =
+        ((curPauseTime === undefined ? pauseLen : curPauseTime) / totalTime) *
+        100;
+      let data = [{ y: percent, color: COLORTHEME.light.primary }];
+      for (let i = 1; i <= rounds; i++) {
+        if (i < currentRound) {
+          data.push({ y: 0, color: COLORTHEME.light.grey3 });
+          data.push({ y: 0, color: COLORS.progressBarPauseColor });
+        } else if (i === currentRound) {
+          let timeInCurrentRound = elapsedTime % (roundLen + pauseLen);
+          data.push({
+            y:
+              timeInCurrentRound < roundLen
+                ? ((roundLen - timeInCurrentRound) / totalTime) * 100
+                : 0,
+            color: COLORTHEME.light.grey3,
+          });
+          if (i !== rounds) {
+            data.push({
+              y: curPauseTime,
+              color: COLORS.progressBarPauseColor,
+            });
+          }
+        } else {
+          data.push({
+            y: (roundLen / totalTime) * 100,
+            color: COLORTHEME.light.grey3,
+          });
+          if (i !== rounds) {
+            data.push({
+              y: (pauseLen / totalTime) * 100,
+              color: COLORS.progressBarPauseColor,
+            });
+          }
+        }
+      }
+      return data;
+    }
+  };
+
+  const resetTimer = () => {
     if (isStopwatch) {
       setCurrentTime(0);
       setDisplayTime({ hours: 0, mins: 0, secs: 0 });
+      setProgress({ data: getProgressData(0) });
     } else {
       let totalTime = rounds * roundLen + (rounds - 1) * pauseLen;
       setCurrentTime(totalTime);
       setDisplayTime(msToTimeObject(totalTime));
+      setProgress({ data: getProgressData(totalTime) });
     }
+    setDisplayPauseTime({ hours: 0, mins: 0, secs: 0 });
+    setIsPause(false);
   };
 
   useEffect(() => {
     let interval: any;
     if (trackingIsActive) {
       interval = setInterval(() => {
-        let elapsedTime, pauseTime, percent;
+        let elapsedTime, pauseTime;
         if (isStopwatch) {
           elapsedTime = Date.now() - startTime + currentTime;
-          percent = (elapsedTime / (roundLen + pauseLen)) * 100;
         } else {
           elapsedTime = currentTime - (Date.now() - startTime);
-          percent =
-            100 -
-            (elapsedTime / (rounds * roundLen + (rounds - 1) * pauseLen)) * 100;
           if (elapsedTime <= 0) {
             setCurrentTime(0);
             setDisplayTime({ hours: 0, mins: 0, secs: 0 });
             setDisplayPauseTime({ hours: 0, mins: 0, secs: 0 });
+            setProgress({ data: getProgressData(0) });
             clearInterval(interval);
             return;
           }
         }
         const timeInCurrentRound = elapsedTime % (roundLen + pauseLen);
         setIsPause(timeInCurrentRound > roundLen);
+        let curPauseTime = undefined;
         if (timeInCurrentRound < roundLen) {
           pauseTime = isStopwatch
             ? roundLen - timeInCurrentRound
@@ -106,22 +161,20 @@ export default function Timer(props: {
           pauseTime = isStopwatch
             ? roundLen + pauseLen - timeInCurrentRound
             : pauseLen - (pauseLen - (timeInCurrentRound - roundLen));
+          curPauseTime = pauseTime;
         }
         setCurrentTime(elapsedTime);
         setDisplayTime(msToTimeObject(elapsedTime));
         setDisplayPauseTime(msToTimeObject(pauseTime));
-        setProgress({ percent, data: getData(percent) });
+        setProgress({ data: getProgressData(elapsedTime, curPauseTime) });
       }, 100);
     } else if (startTime === 0) {
-      resetTime();
-      setDisplayPauseTime({ hours: 0, mins: 0, secs: 0 });
-      setIsPause(false);
-      setProgress({ percent: 0, data: getData(0) });
+      resetTimer();
     }
     return () => clearInterval(interval);
   }, [trackingIsActive, startTime]);
 
-  useEffect(() => resetTime(), [isStopwatch, rounds, roundLen, pauseLen]);
+  useEffect(() => resetTimer(), [isStopwatch, rounds, roundLen, pauseLen]);
 
   return (
     <View style={styles.container}>
@@ -130,7 +183,9 @@ export default function Timer(props: {
           width={400}
           height={400}
           standalone={false}
-          animate={false}
+          animate={
+            trackingIsActive ? false : { duration: 1000, easing: "circle" }
+          }
           innerRadius={120}
           labels={() => null}
           data={progress.data}

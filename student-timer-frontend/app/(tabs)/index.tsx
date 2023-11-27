@@ -50,7 +50,9 @@ export default function Tracking() {
             <Text style={styles.inputLabelText}>Runden</Text>
             <TextInput
               style={styles.input}
-              onChangeText={setRounds}
+              onChangeText={(val) =>
+                val <= "1" ? setRounds("2") : setRounds(val)
+              }
               value={rounds}
               keyboardType="numeric"
               selectTextOnFocus
