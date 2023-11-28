@@ -6,6 +6,7 @@ import { COLORTHEME } from "@/constants/Theme";
 import { useState } from "react";
 import Button from "@/components/Button";
 import Header from "@/components/Header";
+import InputField from "@/components/InputField";
 import { Link, useRouter } from "expo-router";
 import Separator from "@/components/Separator";
 import OtherLogins from "@/components/auth/OtherLogins";
@@ -30,17 +31,15 @@ export default function SignupScreen() {
         <View style={styles.outerWrapper}>
           <View style={styles.row}>
             <View style={styles.inputLabelGroup}>
-              <Text style={styles.inputLabelText}>Name</Text>
-              <TextInput
-                style={styles.input}
-                onChangeText={setUserName}
+              <InputField
+                label="Name"
                 value={userName}
+                onChangeText={setUserName}
               />
             </View>
             <View style={styles.inputLabelGroup}>
-              <Text style={styles.inputLabelText}>Studienfach</Text>
-              <TextInput
-                style={styles.input}
+              <InputField
+                label="Studienfach"
                 onChangeText={setUserStudyCourse}
                 value={userStudyCourse}
               />
@@ -48,9 +47,8 @@ export default function SignupScreen() {
           </View>
           <View style={styles.row}>
             <View style={styles.inputLabelGroup}>
-              <Text style={styles.inputLabelText}>E-Mail</Text>
-              <TextInput
-                style={styles.input}
+              <InputField
+                label="E-Mail"
                 onChangeText={setUserUniMail}
                 value={userUniEmail}
                 keyboardType="email-address"
@@ -59,9 +57,8 @@ export default function SignupScreen() {
           </View>
           <View style={styles.row}>
             <View style={styles.inputLabelGroup}>
-              <Text style={styles.inputLabelText}>Passwort</Text>
-              <TextInput
-                style={styles.input}
+              <InputField
+                label="Passwort"
                 onChangeText={setUserPassword}
                 value={userPassword}
                 keyboardType="visible-password"
@@ -69,9 +66,8 @@ export default function SignupScreen() {
               />
             </View>
             <View style={styles.inputLabelGroup}>
-              <Text style={styles.inputLabelText}>Passwort wiederholen</Text>
-              <TextInput
-                style={styles.input}
+              <InputField
+                label="Passwort wiederholen"
                 onChangeText={setUserCheckPassword}
                 value={userCheckPassword}
                 keyboardType="visible-password"
