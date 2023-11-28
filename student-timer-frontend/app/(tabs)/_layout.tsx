@@ -1,6 +1,4 @@
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { Link, Tabs } from "expo-router";
-import { Pressable, useColorScheme } from "react-native";
+import { Tabs } from "expo-router";
 
 import { COLORTHEME } from "@/constants/Theme";
 import Header from "@/components/Header";
@@ -20,9 +18,7 @@ export default function TabLayout() {
         name="index"
         options={{
           title: "Tracking",
-          tabBarIcon: ({ color }) => (
-            <TimerReset name="clock-o" color={color} />
-          ),
+          tabBarIcon: ({ color }) => <TimerReset name="clock-o" color={color} />,
           header: () => <Header title="Tracking" />,
         }}
       />
@@ -38,18 +34,16 @@ export default function TabLayout() {
         name="statistics"
         options={{
           title: "Statistik",
-          tabBarIcon: ({ color }) => (
-            <BarChart2 name="statistic" color={color} />
-          ),
+          tabBarIcon: ({ color }) => <BarChart2 name="statistic" color={color} />,
           header: () => <Header title="Statistik" />,
         }}
       />
       <Tabs.Screen
-        name="profil"
+        name="profile"
         options={{
           title: "Profil",
-          tabBarIcon: ({ color }) => <User2 name="profil" color={color} />,
-          header: () => <Header title="Module" />,
+          tabBarIcon: ({ color }) => <User2 name="profile" color={color} />,
+          header: () => <Header title="Profil" />,
         }}
       />
     </Tabs>

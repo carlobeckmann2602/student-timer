@@ -1,36 +1,73 @@
-import React, { ComponentType } from "react";
-import { Pressable, StyleSheet } from "react-native";
+import React, { ReactNode } from "react";
+import { Pressable, StyleProp, StyleSheet, ViewStyle } from "react-native";
 
-import { Text } from "./Themed";
+import { Text, View } from "./Themed";
 
-export default function Button(props: {
+type Props = {
   backgroundColor: string;
   text: string;
   textColor?: string;
+  borderColor?: string;
   onPress?: (val?: any) => void;
-  Icon?: ComponentType;
-}) {
-  const { backgroundColor, text, textColor, onPress, Icon } = props;
+  iconRight?: ReactNode;
+  iconLeft?: ReactNode;
+  style?: StyleProp<ViewStyle>;
+};
+
+export type ButtonProps = Props;
+
+export default function Button(props: ButtonProps) {
+  const {
+    backgroundColor,
+    text,
+    textColor,
+    borderColor,
+    onPress,
+    iconRight,
+    iconLeft,
+    style,
+  } = props;
   return (
-    <Pressable style={[{ backgroundColor }, styles.button]} onPress={onPress}>
+    <Pressable
+      style={[
+        {
+          backgroundColor: backgroundColor,
+        },
+        borderColor
+          ? { borderColor: borderColor, borderStyle: "solid", borderWidth: 1 }
+          : null,
+        styles.button,
+        style,
+      ]}
+      onPress={onPress}
+    >
+      {iconLeft ? <View style={styles.icon}>{iconLeft}</View> : null}
       <Text style={[{ color: textColor }, styles.buttonText]}>{text}</Text>
-      {Icon ? <Icon /> : null}
+      {iconRight ? <View style={styles.icon}>{iconRight}</View> : null}
     </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
   button: {
-    flex: 1,
+    flexBasis: 50,
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "space-between",
     alignItems: "center",
     borderRadius: 50,
     height: 50,
-    marginHorizontal: 5,
+    paddingHorizontal: 15,
+    gap: 10,
   },
   buttonText: {
+    flexGrow: 1,
+    textAlign: "center",
     fontSize: 16,
     fontWeight: "600",
+  },
+  icon: {
+    backgroundColor: "transparent",
+    paddingVertical: 10,
+    justifyContent: "center",
   },
 });
