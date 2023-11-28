@@ -4,9 +4,15 @@ import { ModuleType } from "@/types/ModuleType";
 
 type ObjectKey = keyof typeof COLORS;
 
-export const computeDateDifference = (date1: Date, date2: Date) => {
+export const computeDateDifference = (
+  date1: Date,
+  date2: Date,
+  amountWeeks: boolean = false
+) => {
   let diff: number = date1.getTime() - date2.getTime();
-  return Math.ceil(diff / (1000 * 3600 * 24));
+  return amountWeeks
+    ? Math.ceil(diff / (1000 * 3600 * 24) / 7)
+    : Math.ceil(diff / (1000 * 3600 * 24));
 };
 
 /**

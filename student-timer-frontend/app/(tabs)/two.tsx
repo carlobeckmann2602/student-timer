@@ -1,13 +1,15 @@
 import { StyleSheet, TouchableOpacity } from "react-native";
 
 import { View } from "@/components/Themed";
-import { FlatList } from "react-native-gesture-handler";
-import { ModuleCard } from "@/components/modules/ModuleCard";
 import { useRouter } from "expo-router";
 import { ModuleType } from "@/types/ModuleType";
-import { H1, H3, P, Subhead } from "@/components/StyledText";
+import { H1, H2, P, Subhead } from "@/components/StyledText";
 import { ModuleChart } from "@/components/modules/ModuleChart";
-import { precomputeLearningUnits } from "@/lib/moduleTypeHelper";
+import {
+  computeDateDifference,
+  precomputeLearningUnits,
+} from "@/lib/moduleTypeHelper";
+import { LearningUnitType } from "@/types/LearningUnitType";
 
 export default function ModulesScreen() {
   const router = useRouter();
@@ -211,27 +213,34 @@ export default function ModulesScreen() {
   const transformedData: ModuleType = precomputeLearningUnits(mockData[0]);
   const detailModule = transformedData;
 
+  const computeUnitString = (unit: LearningUnitType) => {
+    let weekAmount = computeDateDifference(unit.endDate, unit.startDate, true);
+    return `${unit.workloadPerWeek} h, ${weekAmount} Wochen`;
+  };
+
   return (
     <View style={styles.outerWrapper}>
-      <H1>{detailModule.name}</H1>
+      <H1 style={{ color: detailModule.colorCode }}>{detailModule.name}</H1>
       <ModuleChart inputData={detailModule} width={200} height={200} />
       <View style={styles.unitWrapper}>
-        <H3>Einheiten</H3>
+        <H2 style={{ textAlign: "left" }}>Einheiten</H2>
         <View>
           {detailModule.learningUnits.map((unit) => {
             return (
-              <View key={unit.unitId} style={styles.unitRow}>
-                <View
-                  style={[
-                    styles.moduleIndicatorM,
-                    { backgroundColor: unit.colorCode },
-                  ]}
-                />
-                <View style={styles.unitRowTitle}>
-                  <Subhead>{unit.name}</Subhead>
-                  <P>3:00h, 13 Wochen</P>
+              <View style={styles.unitRowWraupper}>
+                <View key={unit.unitId} style={styles.unitRow}>
+                  <View
+                    style={[
+                      styles.moduleIndicatorM,
+                      { backgroundColor: unit.colorCode },
+                    ]}
+                  />
+                  <View style={styles.unitRowTitle}>
+                    <Subhead>{unit.name}</Subhead>
+                    <P>{computeUnitString(unit)}</P>
+                  </View>
+                  <Subhead>{unit.y} Std.</Subhead>
                 </View>
-                <Subhead>39 Std.</Subhead>
               </View>
             );
           })}
@@ -248,27 +257,27 @@ const styles = StyleSheet.create({
     alignContent: "center",
     justifyContent: "space-between",
     padding: 16,
-    backgroundColor: "red",
   },
   chartWrapper: {
     width: "100%",
     height: 300,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "green",
   },
   unitWrapper: {
     flex: 1,
     flexDirection: "column",
     justifyContent: "flex-start",
-    alignItems: "flex-start",
+  },
+  unitRowWraupper: {
+    flexDirection: "column",
+    justifyContent: "flex-start",
   },
   unitRow: {
     width: "100%",
     flexDirection: "row",
     justifyContent: "space-evenly",
     alignItems: "center",
-    backgroundColor: "green",
   },
   moduleIndicatorM: {
     width: 24,
@@ -279,5 +288,6 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "flex-start",
     flex: 1,
+    padding: 12,
   },
 });
