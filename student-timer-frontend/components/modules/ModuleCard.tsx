@@ -2,67 +2,18 @@ import { MoreVertical } from "lucide-react-native";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { ModuleChart } from "./ModuleChart";
 import { H4, P, Subhead } from "../StyledText";
-import { COLORS, COLORTHEME } from "@/constants/Theme";
+import { COLORTHEME } from "@/constants/Theme";
 import { useRouter } from "expo-router";
 import { ModuleType } from "@/types/ModuleType";
-import { LearningUnitType } from "@/types/LearningUnitType";
-
-type ObjectKey = keyof typeof COLORS;
+import {
+  computeDeadline,
+  precomputeLearningUnits,
+} from "@/lib/moduleTypeHelper";
 
 export function ModuleCard(data: ModuleType) {
   const router = useRouter();
 
-  const compute_date_difference = (date1: Date, date2: Date) => {
-    let diff: number = date1.getTime() - date2.getTime();
-    return Math.ceil(diff / (1000 * 3600 * 24));
-  };
-
-  /**
-   * Returns the remaining days from now to the exam date as a string
-   * @param exam_date Given parameter value from the ModuleType
-   * @returns A string describing the remaining time from today to the exam date
-   * - "Abgeschlossen" when exam date is in the past
-   * - "X Tage" when exam date takes place within the next 7 days
-   * - "X Woche(n)" otherwise
-   */
-  const compute_deadline = (exam_date: Date) => {
-    let remaining_days: number = compute_date_difference(exam_date, new Date());
-    if (remaining_days < 0) return "Abgeschlossen";
-
-    return remaining_days > 6
-      ? `${Math.floor(remaining_days / 7)} Woche(n)`
-      : `${remaining_days} Tag(e)`;
-  };
-
-  /**
-   * Returns the dedicated HEX-Code for a given learning unit
-   * @param unit Learning unit from module
-   * @returns String with HEX-Code from Constants for the given learning unit
-   */
-  const compute_learning_unit_color = (unit: LearningUnitType) => {
-    let unit_color = COLORS[unit.name as ObjectKey];
-    return unit_color !== undefined ? unit_color : data.colorCode;
-  };
-
-  const precompute_learning_units = (inputData: ModuleType) => {
-    let timeInvested: number = 0;
-
-    for (var unit of inputData.learningUnits) {
-      // Add HEX-Colorcode for each module based on corresponding constant
-      unit.colorCode = compute_learning_unit_color(unit);
-
-      // Compute invested hours for the given event time of the unit
-      let weeks_with_unit: number = Math.floor(
-        compute_date_difference(unit.endDate, unit.startDate) / 7
-      );
-      unit.y = weeks_with_unit * unit.workloadPerWeek;
-      timeInvested += unit.y;
-    }
-
-    return inputData;
-  };
-
-  const transformedData: ModuleType = precompute_learning_units(data);
+  const transformedData: ModuleType = precomputeLearningUnits(data);
 
   return (
     // <TouchableOpacity
@@ -119,7 +70,7 @@ export function ModuleCard(data: ModuleType) {
         <View style={styles.headerRow}>
           <View style={styles.resultColumn}>
             <P style={{ textAlign: "center" }}>Zeit bis zur Prüfung</P>
-            <Subhead>{compute_deadline(transformedData.examDate)}</Subhead>
+            <Subhead>{computeDeadline(transformedData.examDate)}</Subhead>
           </View>
           <View style={styles.separator}></View>
           <View style={styles.resultColumn}>
