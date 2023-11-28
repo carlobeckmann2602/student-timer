@@ -4,9 +4,9 @@ import { StyleSheet } from "react-native";
 import Svg from "react-native-svg";
 import { useState } from "react";
 import { P } from "../StyledText";
-import { IModule } from "@/app/(tabs)/modules";
+import { ModuleType } from "@/types/ModuleType";
 
-export function ModuleChart(inputData: IModule) {
+export function ModuleChart(inputData: ModuleType) {
   const originalWidth = 100;
   const originalHeight = 100;
 
@@ -30,10 +30,10 @@ export function ModuleChart(inputData: IModule) {
             width={originalWidth}
             height={originalHeight}
             padding={{ top: 0, bottom: 0 }}
-            data={inputData.learning_units}
+            data={inputData.learningUnits}
             radius={originalWidth / 2}
             innerRadius={originalWidth / 2.8}
-            style={{ data: { fill: ({ datum }) => datum.color_code } }}
+            style={{ data: { fill: ({ datum }) => datum.colorCode } }}
           />
           <View style={styles.chartTextContainer}>
             <P style={{ fontWeight: "bold" }}>112,5</P>
