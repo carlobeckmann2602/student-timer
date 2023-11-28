@@ -5,7 +5,9 @@ import { FlatList } from "react-native-gesture-handler";
 import { ModuleCard } from "@/components/modules/ModuleCard";
 import { useRouter } from "expo-router";
 import { ModuleType } from "@/types/ModuleType";
-import { H1 } from "@/components/StyledText";
+import { H1, H3, P, Subhead } from "@/components/StyledText";
+import { ModuleChart } from "@/components/modules/ModuleChart";
+import { precomputeLearningUnits } from "@/lib/moduleTypeHelper";
 
 export default function ModulesScreen() {
   const router = useRouter();
@@ -205,6 +207,8 @@ export default function ModulesScreen() {
   const navigateToModuleDetail = () => {
     router.push("/(tabs)/modules/detail/");
   };
+
+  const transformedData: ModuleType = precomputeLearningUnits(mockData[0]);
 
   return (
     <View style={styles.container}>

@@ -5,9 +5,15 @@ import Svg from "react-native-svg";
 import { ModuleType } from "@/types/ModuleType";
 import { SIZES } from "@/constants/Theme";
 
-export function ModuleChart(inputData: ModuleType) {
-  const originalWidth = 100;
-  const originalHeight = 100;
+export function ModuleChart(
+  inputData: ModuleType
+  // height: number = 100,
+  // width: number = 100)
+) {
+  const originalWidth = 200;
+  const originalHeight = 200;
+  // const originalWidth = height;
+  // const originalHeight = width;
 
   return (
     <View
@@ -15,14 +21,14 @@ export function ModuleChart(inputData: ModuleType) {
         flex: 1,
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "transparent",
+        backgroundColor: "blue",
       }}
     >
       <View
         style={{
           width: originalWidth,
           height: originalHeight,
-          backgroundColor: "transparent",
+          backgroundColor: "yellow",
         }}
       >
         <Svg viewBox={`0 0 ${originalWidth} ${originalHeight}`}>
