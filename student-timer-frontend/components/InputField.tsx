@@ -3,7 +3,7 @@ import { TextInput, StyleSheet } from 'react-native';
 import { Text, View } from "@/components/Themed";
 import { COLORTHEME } from "@/constants/Theme";
 
-interface InputFieldProps {
+type InputFieldProps = {
     label?: string;
     value: string;
     onChangeText: (text: string) => void;
@@ -11,24 +11,21 @@ interface InputFieldProps {
     secureTextEntry?: boolean;
 }
 
-const InputField: React.FC<InputFieldProps> = ({
-    label,
-    value,
-    onChangeText,
-    keyboardType = 'default',
-    secureTextEntry = false,
-}) => (
-    <View style={styles.inputLabelGroup}>
-        <Text style={styles.inputLabelText}>{label}</Text>
-        <TextInput
-            style={styles.input}
-            onChangeText={onChangeText}
-            value={value}
-            /*keyboardType={keyboardType}*/
-            secureTextEntry={secureTextEntry}
-        />
-    </View>
-);
+export default function InputField(props: InputFieldProps) {
+    const { label, value, onChangeText, keyboardType, secureTextEntry } = props;
+    return (
+        <View style={styles.inputLabelGroup}>
+            <Text style={styles.inputLabelText}>{label}</Text>
+            <TextInput
+                style={styles.input}
+                onChangeText={onChangeText}
+                value={value}
+                /*keyboardType={keyboardType}*/
+                secureTextEntry={secureTextEntry}
+            />
+        </View>
+    );
+}
 
 const styles = StyleSheet.create({
     container: {
@@ -75,5 +72,3 @@ const styles = StyleSheet.create({
         gap: 15,
     },
 });
-
-export default InputField;

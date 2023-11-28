@@ -30,50 +30,40 @@ export default function SignupScreen() {
       <View style={styles.container}>
         <View style={styles.outerWrapper}>
           <View style={styles.row}>
-            <View style={styles.inputLabelGroup}>
-              <InputField
-                label="Name"
-                value={userName}
-                onChangeText={setUserName}
-              />
-            </View>
-            <View style={styles.inputLabelGroup}>
-              <InputField
-                label="Studienfach"
-                onChangeText={setUserStudyCourse}
-                value={userStudyCourse}
-              />
-            </View>
+            <InputField
+              label="Name"
+              value={userName}
+              onChangeText={setUserName}
+            />
+            <InputField
+              label="Studienfach"
+              onChangeText={setUserStudyCourse}
+              value={userStudyCourse}
+            />
           </View>
           <View style={styles.row}>
-            <View style={styles.inputLabelGroup}>
-              <InputField
-                label="E-Mail"
-                onChangeText={setUserUniMail}
-                value={userUniEmail}
-                keyboardType="email-address"
-              />
-            </View>
+            <InputField
+              label="E-Mail"
+              onChangeText={setUserUniMail}
+              value={userUniEmail}
+              keyboardType="email-address"
+            />
           </View>
           <View style={styles.row}>
-            <View style={styles.inputLabelGroup}>
-              <InputField
-                label="Passwort"
-                onChangeText={setUserPassword}
-                value={userPassword}
-                keyboardType="visible-password"
-                secureTextEntry={true}
-              />
-            </View>
-            <View style={styles.inputLabelGroup}>
-              <InputField
-                label="Passwort wiederholen"
-                onChangeText={setUserCheckPassword}
-                value={userCheckPassword}
-                keyboardType="visible-password"
-                secureTextEntry={true}
-              />
-            </View>
+            <InputField
+              label="Passwort"
+              onChangeText={setUserPassword}
+              value={userPassword}
+              keyboardType="visible-password"
+              secureTextEntry={true}
+            />
+            <InputField
+              label="Passwort wiederholen"
+              onChangeText={setUserCheckPassword}
+              value={userCheckPassword}
+              keyboardType="visible-password"
+              secureTextEntry={true}
+            />
           </View>
         </View>
         <View style={styles.buttons}>
