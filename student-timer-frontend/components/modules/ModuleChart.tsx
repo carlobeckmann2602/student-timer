@@ -5,15 +5,16 @@ import Svg from "react-native-svg";
 import { ModuleType } from "@/types/ModuleType";
 import { SIZES } from "@/constants/Theme";
 
-export function ModuleChart(
-  inputData: ModuleType
-  // height: number = 100,
-  // width: number = 100)
-) {
-  const originalWidth = 200;
-  const originalHeight = 200;
-  // const originalWidth = height;
-  // const originalHeight = width;
+type ModuleChartProps = {
+  inputData: ModuleType;
+  width: number;
+  height: number;
+};
+
+export function ModuleChart(moduleChartProp: ModuleChartProps) {
+  const inputData = moduleChartProp.inputData;
+  const originalWidth = moduleChartProp.width;
+  const originalHeight = moduleChartProp.height;
 
   return (
     <View
@@ -21,14 +22,14 @@ export function ModuleChart(
         flex: 1,
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "blue",
+        backgroundColor: "transparent",
       }}
     >
       <View
         style={{
           width: originalWidth,
           height: originalHeight,
-          backgroundColor: "yellow",
+          backgroundColor: "transparent",
         }}
       >
         <Svg viewBox={`0 0 ${originalWidth} ${originalHeight}`}>
@@ -41,22 +42,27 @@ export function ModuleChart(
             radius={originalWidth / 2}
             innerRadius={originalWidth / 2.8}
             style={{ data: { fill: ({ datum }) => datum.colorCode } }}
+            labels={() => ""}
           />
           <VictoryLabel
             textAnchor="middle"
             verticalAnchor="middle"
-            x={50}
-            y={44}
+            x={originalWidth / 2}
+            y={originalHeight * 0.44}
             text={"112,5"}
-            style={styles.chartTextL}
+            style={[
+              originalHeight <= 100 ? styles.chartTextL : styles.chartTextXL,
+            ]}
           />
           <VictoryLabel
             textAnchor="middle"
             verticalAnchor="middle"
-            x={50}
-            y={62}
+            x={originalWidth / 2}
+            y={originalHeight * 0.62}
             text={`von ${inputData.creditpoints * 30} Std.`}
-            style={styles.chartTextS}
+            style={[
+              originalHeight <= 100 ? styles.chartTextS : styles.chartTextL,
+            ]}
           />
         </Svg>
       </View>
@@ -65,6 +71,12 @@ export function ModuleChart(
 }
 
 const styles = StyleSheet.create({
+  chartTextXL: {
+    fontFamily: "Roboto",
+    fontSize: SIZES.xxLarge,
+    fontWeight: "600",
+    textAlign: "center",
+  },
   chartTextL: {
     fontFamily: "Roboto",
     fontSize: SIZES.small,

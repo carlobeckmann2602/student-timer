@@ -214,9 +214,7 @@ export default function ModulesScreen() {
   return (
     <View style={styles.outerWrapper}>
       <H1>{detailModule.name}</H1>
-      {/* <View style={styles.chartWrapper}></View> */}
-      <ModuleChart {...detailModule} />
-
+      <ModuleChart inputData={detailModule} width={200} height={200} />
       <View style={styles.unitWrapper}>
         <H3>Einheiten</H3>
         <View>

@@ -49,7 +49,7 @@ export function ModuleCard(data: ModuleType) {
         </View>
         {/* Statistics */}
         <View style={styles.statisticsContainer}>
-          <ModuleChart {...transformedData} />
+          <ModuleChart inputData={transformedData} width={100} height={100} />
           <View style={styles.statisticsUnitContainer}>
             {transformedData.learningUnits.map((unit) => {
               return (
