@@ -1,10 +1,9 @@
-import { VictoryPie } from "victory-native";
+import { VictoryLabel, VictoryPie } from "victory-native";
 import { View } from "../Themed";
 import { StyleSheet } from "react-native";
 import Svg from "react-native-svg";
-import { useState } from "react";
-import { P } from "../StyledText";
 import { ModuleType } from "@/types/ModuleType";
+import { SIZES } from "@/constants/Theme";
 
 export function ModuleChart(inputData: ModuleType) {
   const originalWidth = 100;
@@ -16,12 +15,14 @@ export function ModuleChart(inputData: ModuleType) {
         flex: 1,
         alignItems: "center",
         justifyContent: "center",
+        backgroundColor: "transparent",
       }}
     >
       <View
         style={{
           width: originalWidth,
           height: originalHeight,
+          backgroundColor: "transparent",
         }}
       >
         <Svg viewBox={`0 0 ${originalWidth} ${originalHeight}`}>
@@ -35,12 +36,22 @@ export function ModuleChart(inputData: ModuleType) {
             innerRadius={originalWidth / 2.8}
             style={{ data: { fill: ({ datum }) => datum.colorCode } }}
           />
-          <View style={styles.chartTextContainer}>
-            <P style={{ fontWeight: "bold" }}>112,5</P>
-            <P style={{ fontSize: 10, textAlign: "center" }}>
-              von {inputData.creditpoints * 30} Std.
-            </P>
-          </View>
+          <VictoryLabel
+            textAnchor="middle"
+            verticalAnchor="middle"
+            x={50}
+            y={44}
+            text={"112,5"}
+            style={styles.chartTextL}
+          />
+          <VictoryLabel
+            textAnchor="middle"
+            verticalAnchor="middle"
+            x={50}
+            y={62}
+            text={`von ${inputData.creditpoints * 30} Std.`}
+            style={styles.chartTextS}
+          />
         </Svg>
       </View>
     </View>
@@ -48,13 +59,16 @@ export function ModuleChart(inputData: ModuleType) {
 }
 
 const styles = StyleSheet.create({
-  chartTextContainer: {
-    width: 100,
-    height: 100,
-    padding: 20,
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "transparent",
+  chartTextL: {
+    fontFamily: "Roboto",
+    fontSize: SIZES.small,
+    fontWeight: "600",
+    textAlign: "center",
+  },
+  chartTextS: {
+    fontFamily: "Roboto",
+    fontSize: SIZES.xxsmall,
+    fontWeight: "normal",
+    textAlign: "center",
   },
 });
