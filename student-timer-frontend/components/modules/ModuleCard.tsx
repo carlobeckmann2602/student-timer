@@ -8,7 +8,7 @@ import { ModuleType } from "@/types/ModuleType";
 import {
   computeDeadline,
   precomputeLearningUnits,
-} from "@/lib/moduleTypeHelper";
+} from "@/libs/moduleTypeHelper";
 
 export function ModuleCard(data: ModuleType) {
   const router = useRouter();
@@ -16,18 +16,10 @@ export function ModuleCard(data: ModuleType) {
   const transformedData: ModuleType = precomputeLearningUnits(data);
 
   return (
-    // <TouchableOpacity
-    //   onPress={() =>
-    //     router.push({
-    //       pathname: "modules/detail",
-    //       params: { id: transformedData.moduleId },
-    //     } as never)
-    //   }
-    // >
     <TouchableOpacity
       onPress={() =>
         router.push({
-          pathname: "/modules/detail",
+          pathname: `modules/${transformedData.moduleId}`,
         } as never)
       }
     >

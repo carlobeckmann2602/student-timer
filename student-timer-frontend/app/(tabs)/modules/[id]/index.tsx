@@ -1,10 +1,16 @@
 import { StyleSheet } from "react-native";
 
 import { View } from "@/components/Themed";
-import { FlatList } from "react-native-gesture-handler";
-import { ModuleCard } from "@/components/modules/ModuleCard";
 import { useRouter } from "expo-router";
 import { ModuleType } from "@/types/ModuleType";
+import { H1, H2, P, Subhead } from "@/components/StyledText";
+import { ModuleChart } from "@/components/modules/ModuleChart";
+import {
+  computeDateDifference,
+  precomputeLearningUnits,
+} from "@/libs/moduleTypeHelper";
+import { LearningUnitType } from "@/types/LearningUnitType";
+import { COLORTHEME } from "@/constants/Theme";
 
 export default function ModulesScreen() {
   const router = useRouter();
@@ -201,24 +207,101 @@ export default function ModulesScreen() {
     },
   ];
 
+  const transformedData: ModuleType = precomputeLearningUnits(mockData[0]);
+  const detailModule = transformedData;
+
+  const computeUnitString = (unit: LearningUnitType) => {
+    let weekAmount = computeDateDifference(unit.endDate, unit.startDate, true);
+    return `${unit.workloadPerWeek} h, ${weekAmount} Wochen`;
+  };
+
   return (
-    <View style={styles.container}>
-      <FlatList
-        data={mockData}
-        renderItem={({ item }) => <ModuleCard {...item} />}
-        keyExtractor={(item: ModuleType) => item.moduleId}
-        contentContainerStyle={styles.flatListContainer}
-      ></FlatList>
+    <View style={styles.outerWrapper}>
+      <H1 style={{ color: detailModule.colorCode }}>{detailModule.name}</H1>
+      <ModuleChart inputData={detailModule} width={200} height={200} />
+      <View style={styles.unitWrapper}>
+        <H2 style={{ textAlign: "left" }}>Einheiten</H2>
+        <View>
+          {detailModule.learningUnits.map((unit) => {
+            return (
+              <View key={unit.unitId} style={styles.unitRowWraupper}>
+                <View style={styles.unitRow}>
+                  <View
+                    style={[
+                      styles.moduleIndicatorM,
+                      { backgroundColor: unit.colorCode },
+                    ]}
+                  />
+                  <View style={styles.unitRowTitle}>
+                    <Subhead>{unit.name}</Subhead>
+                    <P>{computeUnitString(unit)}</P>
+                  </View>
+                  <Subhead>{unit.y} Std.</Subhead>
+                </View>
+              </View>
+            );
+          })}
+        </View>
+        <View style={styles.resultRow}>
+          <View
+            style={styles.separator}
+            lightColor={COLORTHEME.light.text}
+            darkColor={COLORTHEME.dark.text}
+          />
+          <Subhead>Gesamt: {transformedData.timeInvested} Std.</Subhead>
+        </View>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  outerWrapper: {
     flex: 1,
+    flexDirection: "column",
+    alignContent: "center",
+    justifyContent: "space-between",
     padding: 16,
   },
-  flatListContainer: {
-    gap: 24,
+  chartWrapper: {
+    width: "100%",
+    height: 300,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  unitWrapper: {
+    flex: 1,
+    flexDirection: "column",
+    justifyContent: "flex-start",
+  },
+  unitRowWraupper: {
+    flexDirection: "column",
+    justifyContent: "flex-start",
+  },
+  unitRow: {
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    alignItems: "center",
+  },
+  moduleIndicatorM: {
+    width: 24,
+    height: 24,
+    borderRadius: 1000,
+  },
+  unitRowTitle: {
+    flexDirection: "column",
+    alignItems: "flex-start",
+    flex: 1,
+    padding: 12,
+  },
+  resultRow: {
+    flexDirection: "column",
+    alignItems: "flex-end",
+  },
+  separator: {
+    marginVertical: 12,
+    height: 1,
+    width: "20%",
   },
 });

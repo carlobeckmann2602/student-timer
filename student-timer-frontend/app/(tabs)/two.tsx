@@ -8,7 +8,7 @@ import { ModuleChart } from "@/components/modules/ModuleChart";
 import {
   computeDateDifference,
   precomputeLearningUnits,
-} from "@/lib/moduleTypeHelper";
+} from "@/libs/moduleTypeHelper";
 import { LearningUnitType } from "@/types/LearningUnitType";
 import Separator from "@/components/Separator";
 import { COLORTHEME } from "@/constants/Theme";
