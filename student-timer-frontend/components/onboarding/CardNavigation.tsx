@@ -4,19 +4,20 @@ import { View, TouchableOpacity } from "react-native";
 import {Octicons } from "@expo/vector-icons";
 import {ChevronLeftCircle, ChevronRightCircle} from "lucide-react-native";
 import {COLORTHEME} from "../../constants/Theme";
-import {onboardingData} from "../../constants/onboardingItems";
 
 export default function CardNavigation({
+   onboardingData,
    activeIndex,
    onPrevPress,
    onNextPress,
 }: {
+    onboardingData: { title: string; description: string; image: any }[];
     activeIndex: number;
     onPrevPress: () => void;
     onNextPress: () => void;
 }) {
     return (
-        <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "80%" }}>
+        <View style={styles.navigation}>
             <TouchableOpacity onPress={onPrevPress} disabled={activeIndex === 0}>
                 <ChevronLeftCircle
                     color={activeIndex === 0 ? COLORTHEME.light.grey1 : COLORTHEME.light.primary}
@@ -39,6 +40,17 @@ export default function CardNavigation({
 }
 
 const styles = {
+    navigation: {
+        backgroundColor: 'white',
+        borderRadius: 50,
+        borderColor: COLORTHEME.light.grey1,
+        borderStyle: 'solid',
+        borderWidth: 2,
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        width: "80%",
+    },
     inactive: {
         fontSize: 24,
         color: COLORTHEME.light.grey1,
