@@ -59,5 +59,7 @@ export const precomputeLearningUnits = (inputData: ModuleType) => {
     unit.y = weeks_with_unit * unit.workloadPerWeek;
     timeInvested += unit.y;
   }
+
+  inputData.timeInvested = timeInvested;
   return inputData;
 };

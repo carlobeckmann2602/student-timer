@@ -10,6 +10,8 @@ import {
   precomputeLearningUnits,
 } from "@/lib/moduleTypeHelper";
 import { LearningUnitType } from "@/types/LearningUnitType";
+import Separator from "@/components/Separator";
+import { COLORTHEME } from "@/constants/Theme";
 
 export default function ModulesScreen() {
   const router = useRouter();
@@ -227,8 +229,8 @@ export default function ModulesScreen() {
         <View>
           {detailModule.learningUnits.map((unit) => {
             return (
-              <View style={styles.unitRowWraupper}>
-                <View key={unit.unitId} style={styles.unitRow}>
+              <View key={unit.unitId} style={styles.unitRowWraupper}>
+                <View style={styles.unitRow}>
                   <View
                     style={[
                       styles.moduleIndicatorM,
@@ -244,6 +246,14 @@ export default function ModulesScreen() {
               </View>
             );
           })}
+        </View>
+        <View style={styles.resultRow}>
+          <View
+            style={styles.separator}
+            lightColor={COLORTHEME.light.text}
+            darkColor={COLORTHEME.dark.text}
+          />
+          <Subhead>Gesamt: {transformedData.timeInvested} Std.</Subhead>
         </View>
       </View>
     </View>
@@ -289,5 +299,14 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     flex: 1,
     padding: 12,
+  },
+  resultRow: {
+    flexDirection: "column",
+    alignItems: "flex-end",
+  },
+  separator: {
+    marginVertical: 12,
+    height: 1,
+    width: "20%",
   },
 });
