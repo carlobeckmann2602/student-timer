@@ -112,6 +112,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     flex: 1,
+    padding: 15
   },
   onboardingItem: {
     flex: 1,
@@ -119,7 +120,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   title: {
-    fontSize: 30,
+    fontSize: 26,
     fontWeight: "bold",
   },
   description: {
@@ -141,7 +142,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    width: "60%",
+    width: "80%",
   },
   inactive: {
     fontSize: 24,
