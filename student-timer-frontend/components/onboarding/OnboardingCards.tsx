@@ -1,9 +1,19 @@
 import React from "react";
 import { Text, View, Image, StyleSheet, ImageSourcePropType } from "react-native";
-import {onboardingData} from "@/constants/onboardingItems";
 
-export default function OnboardingCards({ activeIndex }: { activeIndex: number }) {
-    const renderOnboardingItem = ({ title, description, image }: onboardingData) => {
+interface OnboardingItem {
+    title: string;
+    description: string;
+    image: ImageSourcePropType;
+}
+
+interface OnboardingCardsProps {
+    onboardingData: OnboardingItem[];
+    activeIndex: number;
+}
+
+export default function OnboardingCards({ onboardingData, activeIndex }: OnboardingCardsProps) {
+    const renderOnboardingItem = ({ title, description, image }: OnboardingItem) => {
         return (
             <View style={styles.onboardingItem}>
                 <Text style={styles.title}>{title}</Text>

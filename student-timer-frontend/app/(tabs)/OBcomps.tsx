@@ -4,8 +4,8 @@ import { View } from "@/components/Themed";
 import Button from "@/components/Button";
 import { COLORTHEME } from "@/constants/Theme";
 import {onboardingData} from "../../constants/onboardingItems";
-import OnboardingCards from "../../components/onboarding/onboardingCards";
-import CardNavigation from "../../components/onboarding/cardNavigation";
+import OnboardingCards from "../../components/onboarding/OnboardingCards";
+import CardNavigation from "../../components/onboarding/CardNavigation";
 import Header from "../../components/Header";
 import {router} from "expo-router";
 import {StyleSheet} from "react-native";
@@ -33,8 +33,12 @@ export default function OnboardingScreen() {
         <View>
           <Header title="StudentTimer" />
         </View>
-        <OnboardingCards activeIndex={activeIndex} />
+        <OnboardingCards
+            onboardingData={onboardingData}
+            activeIndex={activeIndex}
+        />
         <CardNavigation
+            onboardingData={onboardingData}
             activeIndex={activeIndex}
             onPrevPress={onPrevPress}
             onNextPress={onNextPress}
