@@ -5,6 +5,7 @@ import { COLORTHEME } from "@/constants/Theme";
 import { User2 } from "lucide-react-native";
 import { useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { deleteStoredItem } from "@/libs/deviceStorage";
 
 export default function Profile() {
   const router = useRouter();
@@ -30,7 +31,7 @@ export default function Profile() {
 
   const handleLogout = () => {
     // Logik für den Logout, Abmeldung von Authentifizierungsdienst
-    AsyncStorage.clear();
+    deleteStoredItem("user");
     router.push("/(auth)/login");
   };
 

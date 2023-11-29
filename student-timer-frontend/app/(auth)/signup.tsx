@@ -18,10 +18,68 @@ export default function SignupScreen() {
   const [userPassword, setUserPassword] = useState("");
   const [userCheckPassword, setUserCheckPassword] = useState("");
 
+  const [nameError, setNameError] = useState("");
+  const [studyCourseError, setStudyCourseError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [error, setError] = useState("");
+
   const router = useRouter();
 
+  const validateInput = () => {
+    var nameValid = false;
+    if (userName.length == 0) {
+      setNameError("Name ist erforderlich");
+    } else {
+      setNameError("");
+      nameValid = true;
+    }
+
+    var studyCourseValid = false;
+    if (userStudyCourse.length == 0) {
+      setStudyCourseError("Studienfach ist erforderlich");
+    } else {
+      setStudyCourseError("");
+      studyCourseValid = true;
+    }
+
+    var emailValid = false;
+    if (userUniEmail.length == 0) {
+      setEmailError("E-Mail ist erforderlich");
+    } else if (userUniEmail.length < 6) {
+      setEmailError("E-Mail sollte mindestens 6 Zeichen lang sein");
+    } else if (userUniEmail.indexOf(" ") >= 0) {
+      setEmailError("E-Mail kann keine Leerzeichen enthalten");
+    } else {
+      setEmailError("");
+      emailValid = true;
+    }
+
+    var passwordValid = false;
+    if (userPassword.length == 0) {
+      setPasswordError("Passwort ist erforderlich");
+    } else if (userPassword.length < 6) {
+      setPasswordError("Das Passwort sollte mindestens 6 Zeichen lang sein");
+    } else if (userPassword.indexOf(" ") >= 0) {
+      setPasswordError("Passwort kann keine Leerzeichen enthalten");
+    } else if (userPassword != userCheckPassword) {
+      setPasswordError("Passwörter stimmen nicht überein");
+    } else {
+      setPasswordError("");
+      passwordValid = true;
+    }
+
+    if (emailValid && passwordValid) {
+      return true;
+    }
+
+    return false;
+  };
+
   const onRegister = () => {
-    router.push("/(tabs)");
+    if (validateInput()) {
+      router.push("/(tabs)");
+    }
   };
 
   return (
@@ -34,11 +92,15 @@ export default function SignupScreen() {
               label="Name"
               value={userName}
               onChangeText={setUserName}
+              message={nameError}
+              messageColor="red"
             />
             <InputField
               label="Studienfach"
               onChangeText={setUserStudyCourse}
               value={userStudyCourse}
+              message={studyCourseError}
+              messageColor="red"
             />
           </View>
           <View style={styles.row}>
@@ -47,6 +109,8 @@ export default function SignupScreen() {
               onChangeText={setUserUniMail}
               value={userUniEmail}
               keyboardType="email-address"
+              message={emailError}
+              messageColor="red"
             />
           </View>
           <View style={styles.row}>
@@ -56,6 +120,8 @@ export default function SignupScreen() {
               value={userPassword}
               keyboardType="visible-password"
               secureTextEntry={true}
+              message={passwordError}
+              messageColor="red"
             />
             <InputField
               label="Passwort wiederholen"
@@ -74,6 +140,8 @@ export default function SignupScreen() {
             onPress={onRegister}
             style={{ width: 200 }}
           />
+
+          {error && <Text style={styles.errorMessage}>{error}</Text>}
           <Text>
             Sie haben bereits ein Konto?{" "}
             <Link href="/login" style={{ textDecorationLine: "underline" }}>
@@ -102,7 +170,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "space-between",
     padding: 24,
-    gap: 16,
+    gap: 5,
   },
   row: {
     flexGrow: 1,
@@ -131,5 +199,11 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "center",
     gap: 15,
+  },
+  errorMessage: {
+    color: "red",
+    fontSize: 14,
+    textAlign: "center",
+    width: "100%",
   },
 });

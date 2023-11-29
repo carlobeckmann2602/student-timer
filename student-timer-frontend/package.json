@@ -41,7 +41,8 @@
     "react-native-svg-transformer": "^1.1.0",
     "react-native-switch-selector": "^2.3.0",
     "react-native-web": "~0.19.6",
-    "victory-native": "^36.6.12"
+    "victory-native": "^36.6.12",
+    "expo-secure-store": "~12.3.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
