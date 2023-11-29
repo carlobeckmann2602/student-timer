@@ -17,3 +17,11 @@ export async function getStoredItem(key: string) {
     return await AsyncStorage.getItem(key);
   }
 }
+
+export async function deleteStoredItem(key: string) {
+  if (Platform.OS !== "web") {
+    return await SecureStore.deleteItemAsync(key);
+  } else {
+    return await AsyncStorage.removeItem(key);
+  }
+}
