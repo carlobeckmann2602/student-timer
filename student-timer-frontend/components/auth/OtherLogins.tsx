@@ -1,7 +1,5 @@
 import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import * as SecureStore from "expo-secure-store";
 import {
   GoogleAndroidClientID,
   GoogleIOSClientID,
@@ -12,28 +10,13 @@ import * as Apple from "expo-apple-authentication";
 import GoogleButton from "@/components/auth/GoogleButton";
 import AppleButton from "@/components/auth/AppleButton";
 
-import { Platform, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { View } from "@/components/Themed";
+import { getStoredItem, saveItem } from "@/libs/deviceStorage";
 
 WebBrowser.maybeCompleteAuthSession();
-
-async function saveItem(key: string, value: string) {
-  if (Platform.OS !== "web") {
-    await SecureStore.setItemAsync(key, value);
-  } else {
-    await AsyncStorage.setItem(key, value);
-  }
-}
-
-async function getStoredItem(key: string) {
-  if (Platform.OS !== "web") {
-    return await SecureStore.getItemAsync(key);
-  } else {
-    return await AsyncStorage.getItem(key);
-  }
-}
 
 export default function OtherLogins() {
   const router = useRouter();
@@ -51,7 +34,7 @@ export default function OtherLogins() {
   }, [response]);
 
   async function handleSignInWithGoogle() {
-    const user = await getStoredItem("@user");
+    const user = await getStoredItem("user");
     if (!user) {
       if (response?.type === "success") {
         await getUserInfoGoogle(response.authentication?.accessToken);
@@ -73,7 +56,7 @@ export default function OtherLogins() {
 
       const user = await response.json();
       console.log(user);
-      await saveItem("@user", JSON.stringify(user));
+      await saveItem("user", JSON.stringify(user));
       router.push("/(tabs)/");
     } catch (error) {}
   };
@@ -87,7 +70,7 @@ export default function OtherLogins() {
         ],
       });
       console.log(user);
-      await saveItem("@user", JSON.stringify(user));
+      await saveItem("user", JSON.stringify(user));
       router.push("/(tabs)/");
     } catch (error) {}
   };
