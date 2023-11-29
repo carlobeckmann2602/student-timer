@@ -13,9 +13,10 @@ import { COLORTHEME } from "@/constants/Theme";
 import { onboardingData } from "@/constants/onboardingItems";
 import {ChevronLeftCircle, ChevronRightCicle, ChevronRightCircle} from "lucide-react-native";
 import { useRouter } from "expo-router";
+import Header from "../../components/Header";
 
 export default function OnboardingScreen() {
-  const { width } = useWindowDimensions();
+  const { width, height } = useWindowDimensions();
 
   const [activeIndex, setActiveIndex] = useState(0);
   const router = useRouter();
@@ -57,6 +58,9 @@ export default function OnboardingScreen() {
 
   return (
       <View style={styles.container}>
+        <View>
+          <Header title="StudentTimer"></Header>
+        </View>
         {/* Onboarding-Beschreibungs-Daten */}
         <View style={styles.onboardingItem}>
           {onboardingData.map((item, index) => (
@@ -115,11 +119,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   title: {
-    fontSize: 24,
+    fontSize: 30,
     fontWeight: "bold",
   },
   description: {
-    fontSize: 16,
+    fontSize: 24,
     textAlign: "center",
     marginVertical: 10,
   },
@@ -149,7 +153,7 @@ const styles = StyleSheet.create({
   },
   button: {
     width: 175,
-    height: 49.84439468383789,
+    height: 50,
     borderRadius: 50,
     backgroundColor: COLORTHEME.light.primary,
     padding: 10,
