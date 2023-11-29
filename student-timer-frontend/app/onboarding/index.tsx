@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from "react";
+import React, {useState, Fragment, useRef} from "react";
 import { Octicons } from "@expo/vector-icons";
 import {
   TouchableOpacity,
@@ -11,11 +11,11 @@ import { Text, View } from "@/components/Themed";
 import Button from "@/components/Button";
 import { COLORTHEME } from "@/constants/Theme";
 import { onboardingData } from "@/constants/onboardingItems";
-import { ChevronLeft, ChevronRight } from "lucide-react-native";
+import {ChevronLeftCircle, ChevronRightCicle, ChevronRightCircle} from "lucide-react-native";
 import { useRouter } from "expo-router";
 
 export default function OnboardingScreen() {
-  const { width, height } = useWindowDimensions();
+  const { width } = useWindowDimensions();
 
   const [activeIndex, setActiveIndex] = useState(0);
   const router = useRouter();
@@ -47,46 +47,50 @@ export default function OnboardingScreen() {
   }) => {
     console.log(image);
     return (
-      <View style={styles.onboardingItem}>
-        <Text style={styles.title}>{title}</Text>
-        <Text style={styles.description}>{description}</Text>
-        <Image source={image} />
-      </View>
+        <View style={styles.onboardingItem}>
+          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.description}>{description}</Text>
+          <Image source={image} style={styles.image}/>
+        </View>
     );
   };
 
   return (
-    <View style={styles.container}>
-      {/* Onboarding-Beschreibungs-Daten */}
-      {onboardingData.map((item, index) => (
-        <Fragment key={index}>
-          {index === activeIndex && renderOnboardingItem(item)}
-        </Fragment>
-      ))}
+      <View style={styles.container}>
+        {/* Onboarding-Beschreibungs-Daten */}
+        <View style={styles.onboardingItem}>
+          {onboardingData.map((item, index) => (
+              <View key={index} >
+                {index === activeIndex && renderOnboardingItem(item)}
+              </View>
+          ))}
+        </View>
+        {/* Onboarding-Navigation */}
+        <View style={styles.navigation}>
+          <TouchableOpacity onPress={onPrevPress} disabled={activeIndex === 0}>
+            <ChevronLeftCircle
+                color={activeIndex === 0 ? COLORTHEME.light.grey1 : COLORTHEME.light.primary}
+                size={50}
+            />
+          </TouchableOpacity>
 
-      {/* Onboarding-Navigation */}
-      <View style={styles.navigation}>
-        <TouchableOpacity onPress={onPrevPress} disabled={activeIndex === 0}>
-          <ChevronLeft
-            color={activeIndex === 0 ? "#E8E8E8" : "#958AAA"}
-            size={24}
-          />
-        </TouchableOpacity>
+          {/* Punkte für jeden Onboarding-Screen */}
+          {onboardingData.map((_, index) => (
+              <Octicons
+                  key={index}
+                  style={index === activeIndex ? styles.active : styles.inactive}
+                  name="dot-fill"
+                  size={50}
+              />
+          ))}
 
-        {/* Punkte für jeden Onboarding-Screen */}
-        {onboardingData.map((_, index) => (
-          <Octicons
-            key={index}
-            style={index === activeIndex ? styles.active : styles.inactive}
-            name="dot"
-            size={24}
-          />
-        ))}
-
-        <TouchableOpacity onPress={onNextPress}>
-          <ChevronRight color={COLORTHEME.light.primary} size={24} />
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity onPress={onNextPress}>
+            <ChevronRightCircle
+                color={COLORTHEME.light.primary}
+                size={50}
+            />
+          </TouchableOpacity>
+        </View>
 
       <Button
         text="Überspringen"
@@ -125,6 +129,11 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
   },
   navigation: {
+    backgroundColor: 'white',
+    borderRadius: 50,
+    borderColor: COLORTHEME.light.grey1,
+    borderStyle: 'solid',
+    borderWidth: 2,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -132,7 +141,7 @@ const styles = StyleSheet.create({
   },
   inactive: {
     fontSize: 24,
-    color: "#E8E8E8",
+    color: COLORTHEME.light.grey1,
   },
   active: {
     fontSize: 24,
