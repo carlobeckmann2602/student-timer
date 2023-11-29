@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.github.philippvogel92.studenttimerbackend.auth.Auth;
 import com.github.philippvogel92.studenttimerbackend.module.Module;
 import jakarta.persistence.*;
 
@@ -20,11 +21,17 @@ public class Student {
     private String studyCourse;
     private String profilePicture;
     private String email;
+    @JsonIgnore
     private String password;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "student", orphanRemoval = true)
     @JsonIgnore
     private List<Module> modules;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "student", orphanRemoval = true)
+    @JsonIgnore
+    private List<Auth> authToken;
+
 
     public Student(String name, String studyCourse, String profilePicture, String email, String password) {
         this.name = name;
@@ -94,22 +101,11 @@ public class Student {
         this.modules = modules;
     }
 
-    @Override
-    public String toString() {
-        return "Student{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", studyCourse='" + studyCourse + '\'' +
-                ", profilePicture='" + profilePicture + '\'' +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
-                ", modules=" + modules +
-                '}';
+    public List<Auth> getAuthToken() {
+        return authToken;
     }
 
-    String encrypt(String password) {
-        //encryption logic
-        return "encrypt";
+    public void setAuthToken(List<Auth> authToken) {
+        this.authToken = authToken;
     }
-
 }
