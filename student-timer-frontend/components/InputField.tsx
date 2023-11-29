@@ -41,11 +41,9 @@ export default function InputField(props: InputFieldProps) {
         secureTextEntry={secureTextEntry}
         placeholder={placeholder}
       />
-      {props.message && (
-        <Text style={[{ color: props.messageColor }, styles.messageText]}>
-          {props.message}
-        </Text>
-      )}
+      <Text style={[{ color: props.messageColor }, styles.messageText]}>
+        {props.message}
+      </Text>
     </View>
   );
 }

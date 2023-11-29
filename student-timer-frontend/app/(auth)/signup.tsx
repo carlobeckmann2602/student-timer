@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "space-between",
     padding: 24,
-    gap: 16,
+    gap: 5,
   },
   row: {
     flexGrow: 1,
