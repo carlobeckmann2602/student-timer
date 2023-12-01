@@ -19,6 +19,9 @@ public class LearningUnit {
     private LocalDate endDate;
     private Integer workloadPerWeek;
 
+    @Transient
+    private Integer totalLearningTime;
+
     @ManyToOne
     @JoinColumn(name = "module_id")
     @JsonBackReference
@@ -82,5 +85,13 @@ public class LearningUnit {
 
     public void setModule(Module module) {
         this.module = module;
+    }
+
+    public Integer getTotalLearningTime() {
+        return totalLearningTime;
+    }
+
+    public void setTotalLearningTime(Integer totalLearningTime) {
+        this.totalLearningTime = totalLearningTime;
     }
 }

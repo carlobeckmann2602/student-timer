@@ -35,6 +35,9 @@ public class Module {
     @JsonManagedReference
     private List<LearningSession> learningSessions;
 
+    @Transient
+    private Integer totalLearningTime;
+
     public Module(String name, String colorCode, Integer creditPoints, LocalDate examDate, Student student) {
         this.name = name;
         this.colorCode = colorCode;
