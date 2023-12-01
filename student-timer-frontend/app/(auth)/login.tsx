@@ -10,15 +10,54 @@ import { View, Text } from "@/components/Themed";
 import Button from "@/components/Button";
 import Separator from "@/components/Separator";
 import OtherLogins from "@/components/auth/OtherLogins";
+import InputField from "@/components/InputField";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [error, setError] = useState("");
+
   const router = useRouter();
 
+  const validateInput = () => {
+    var emailValid = false;
+    if (email.length == 0) {
+      setEmailError("E-Mail ist erforderlich");
+    } else if (email.length < 6) {
+      setEmailError("E-Mail sollte mindestens 6 Zeichen lang sein");
+    } else if (email.indexOf(" ") >= 0) {
+      setEmailError("E-Mail kann keine Leerzeichen enthalten");
+    } else {
+      setEmailError("");
+      emailValid = true;
+    }
+
+    var passwordValid = false;
+    if (password.length == 0) {
+      setPasswordError("Passwort ist erforderlich");
+    } else if (password.length < 6) {
+      setPasswordError("Das Passwort sollte mindestens 6 Zeichen lang sein");
+    } else if (password.indexOf(" ") >= 0) {
+      setPasswordError("Passwort kann keine Leerzeichen enthalten");
+    } else {
+      setPasswordError("");
+      passwordValid = true;
+    }
+
+    if (emailValid && passwordValid) {
+      return true;
+    }
+
+    return false;
+  };
+
   const onLogin = () => {
-    router.push("/(tabs)/");
+    if (validateInput()) {
+      router.push("/(tabs)/");
+    }
   };
 
   return (
@@ -27,20 +66,24 @@ export default function Login() {
       <View style={styles.container}>
         <Title>Student Time Tracker</Title>
         <View style={styles.inputs}>
-          <TextInput
-            style={styles.input}
-            onChangeText={setEmail}
+          <InputField
             value={email}
-            placeholder="Email"
+            onChangeText={setEmail}
+            placeholder="E-Mail"
             keyboardType="email-address"
+            message={emailError}
+            messageColor="red"
+            style={{ width: "100%" }}
           />
-          <TextInput
-            style={styles.input}
-            onChangeText={setPassword}
+          <InputField
             value={password}
+            onChangeText={setPassword}
             placeholder="Passwort"
             keyboardType="visible-password"
             secureTextEntry={true}
+            message={passwordError}
+            messageColor="red"
+            style={{ width: "100%" }}
           />
           <View style={styles.buttons}>
             <Button
@@ -49,6 +92,7 @@ export default function Login() {
               textColor={COLORTHEME.light.grey2}
               onPress={onLogin}
             />
+            {error && <Text style={styles.errorMessage}>{error}</Text>}
           </View>
           <Text>
             Sie haben kein Konto?{" "}
@@ -74,19 +118,17 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "space-between",
     alignItems: "center",
-    gap: 20,
-  },
-  input: {
-    backgroundColor: COLORTHEME.light.grey2,
-    color: COLORTHEME.light.grey3,
-    width: 350,
-    height: 50,
-    borderRadius: 12,
-    paddingHorizontal: 10,
+    gap: 25,
   },
   buttons: {
     flexDirection: "column",
     width: 200,
-    gap: 15,
+    gap: 10,
+  },
+  errorMessage: {
+    color: "red",
+    fontSize: 14,
+    textAlign: "center",
+    width: "100%",
   },
 });

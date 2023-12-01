@@ -1,6 +1,5 @@
 import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   GoogleAndroidClientID,
   GoogleIOSClientID,
@@ -15,6 +14,7 @@ import { StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { View } from "@/components/Themed";
+import { getStoredItem, saveItem } from "@/libs/deviceStorage";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -34,7 +34,7 @@ export default function OtherLogins() {
   }, [response]);
 
   async function handleSignInWithGoogle() {
-    const user = await AsyncStorage.getItem("@user");
+    const user = await getStoredItem("user");
     if (!user) {
       if (response?.type === "success") {
         await getUserInfoGoogle(response.authentication?.accessToken);
@@ -56,8 +56,8 @@ export default function OtherLogins() {
 
       const user = await response.json();
       console.log(user);
-      await AsyncStorage.setItem("@user", JSON.stringify(user));
-      router.push("/");
+      await saveItem("user", JSON.stringify(user));
+      router.push("/(tabs)/");
     } catch (error) {}
   };
 
@@ -70,8 +70,8 @@ export default function OtherLogins() {
         ],
       });
       console.log(user);
-      await AsyncStorage.setItem("@user", JSON.stringify(user));
-      router.push("/");
+      await saveItem("user", JSON.stringify(user));
+      router.push("/(tabs)/");
     } catch (error) {}
   };
 
