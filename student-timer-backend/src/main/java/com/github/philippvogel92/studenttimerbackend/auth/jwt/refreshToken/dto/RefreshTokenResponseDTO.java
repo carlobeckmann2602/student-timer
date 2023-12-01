@@ -1,14 +1,12 @@
-package com.github.philippvogel92.studenttimerbackend.auth.dto;
+package com.github.philippvogel92.studenttimerbackend.auth.jwt.refreshToken.dto;
 
-import jakarta.validation.constraints.NotBlank;
+public class RefreshTokenResponseDTO {
 
-public class AuthResponseDTO {
-    @NotBlank
     private String accessToken;
-    @NotBlank
     private String refreshToken;
+    private String tokenType = "Bearer";
 
-    public AuthResponseDTO(String accessToken, String refreshToken) {
+    public RefreshTokenResponseDTO(String accessToken, String refreshToken) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
     }
@@ -27,5 +25,13 @@ public class AuthResponseDTO {
 
     public void setRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
+    }
+
+    public String getTokenType() {
+        return tokenType;
+    }
+
+    public void setTokenType(String tokenType) {
+        this.tokenType = tokenType;
     }
 }

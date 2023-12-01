@@ -1,10 +1,7 @@
 package com.github.philippvogel92.studenttimerbackend.student;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.github.philippvogel92.studenttimerbackend.auth.Auth;
+import com.github.philippvogel92.studenttimerbackend.auth.jwt.refreshToken.RefreshToken;
 import com.github.philippvogel92.studenttimerbackend.module.Module;
 import jakarta.persistence.*;
 
@@ -28,9 +25,9 @@ public class Student {
     @JsonIgnore
     private List<Module> modules;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "student", orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "student", orphanRemoval = true)
     @JsonIgnore
-    private List<Auth> authToken;
+    private RefreshToken refreshToken;
 
 
     public Student(String name, String studyCourse, String profilePicture, String email, String password) {
@@ -101,11 +98,11 @@ public class Student {
         this.modules = modules;
     }
 
-    public List<Auth> getAuthToken() {
-        return authToken;
+    public RefreshToken getRefreshToken() {
+        return refreshToken;
     }
 
-    public void setAuthToken(List<Auth> authToken) {
-        this.authToken = authToken;
+    public void setRefreshToken(RefreshToken refreshToken) {
+        this.refreshToken = refreshToken;
     }
 }

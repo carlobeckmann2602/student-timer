@@ -1,35 +1,37 @@
-package com.github.philippvogel92.studenttimerbackend.auth;
+package com.github.philippvogel92.studenttimerbackend.auth.jwt.refreshToken;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.philippvogel92.studenttimerbackend.student.Student;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.Date;
 
 @Entity
 @Table
-public class Auth {
+public class RefreshToken {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @Column(columnDefinition = "TEXT")
-    private String refreshToken;
+    @Column(columnDefinition = "TEXT", unique = true)
+    private String token;
+    @NotNull
     private Date expiresAt;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "student_id")
-    @JsonBackReference
+    @JsonIgnore
     Student student;
 
-    public Auth(String refreshToken, Date expiresAt, Student student) {
-        this.refreshToken = refreshToken;
+    public RefreshToken(String token, Date expiresAt, Student student) {
+        this.token = token;
         this.expiresAt = expiresAt;
         this.student = student;
     }
 
-    public Auth() {
+    public RefreshToken() {
 
     }
 
@@ -41,12 +43,12 @@ public class Auth {
         this.id = id;
     }
 
-    public String getRefreshToken() {
-        return refreshToken;
+    public String getToken() {
+        return token;
     }
 
-    public void setRefreshToken(String refreshToken) {
-        this.refreshToken = refreshToken;
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public Date getExpiresAt() {

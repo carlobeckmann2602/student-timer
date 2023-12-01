@@ -8,5 +8,4 @@ import java.util.List;
 
 @Repository
 public interface LearningUnitRepository extends JpaRepository<LearningUnit, Long> {
-    List<LearningUnit> findByModuleId(Long moduleId);
 }
