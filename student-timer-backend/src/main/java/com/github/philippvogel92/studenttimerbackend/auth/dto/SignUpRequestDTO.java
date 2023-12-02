@@ -1,9 +1,9 @@
-package com.github.philippvogel92.studenttimerbackend.student.dto;
+package com.github.philippvogel92.studenttimerbackend.auth.dto;
 
 
 import jakarta.validation.constraints.*;
 
-public class StudentCreateDTO {
+public class SignUpRequestDTO {
     @NotBlank(message = "Name cannot be null or empty")
     private String name;
     @NotBlank(message = "StudyCourse cannot be null or empty")

@@ -25,7 +25,7 @@ public class DatabaseConfig {
     CommandLineRunner commandLineRunner(StudentRepository repository) {
         return args -> {
             Student student1 = new Student("Philipp", "Master Medieninformatik", "phil.jpg", "phil@test.de",
-                    "aionscoain232");
+                    "string");
             Student student2 = new Student("Alex", "Bachelor Medientechnologie", "alex.jpg", "alex@test.de",
                     "vsdfvsd4334");
 
