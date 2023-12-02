@@ -9,7 +9,7 @@ import Picker from "react-native-picker-select";
 
 import { Text, View } from "@/components/Themed";
 import Button from "@/components/Button";
-import { COLORTHEME } from "@/constants/Theme";
+import { COLORS, COLORTHEME } from "@/constants/Theme";
 import TrackingModeToggle from "@/components/tracking/TrackingModeToggle";
 import Timer from "@/components/tracking/Timer";
 import { PauseIcon, PlayIcon } from "lucide-react-native";
@@ -34,7 +34,10 @@ export default function Tracking() {
   };
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
       <View>
         <TrackingModeToggle
           onPress={setIsStopwatch}
@@ -49,10 +52,7 @@ export default function Tracking() {
         pauseLen={Number(pauseLen) * 1000 * 60}
         roundLen={Number(roundLen) * 1000 * 60}
       />
-      <KeyboardAvoidingView
-        style={styles.inputs}
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-      >
+      <View style={styles.inputs}>
         {!isStopwatch && (
           <View style={styles.inputLabelGroup}>
             <Text style={styles.inputLabelText}>Runden</Text>
@@ -90,7 +90,7 @@ export default function Tracking() {
             editable={!trackingIsActive && startTime === 0}
           />
         </View>
-      </KeyboardAvoidingView>
+      </View>
       <View>
         <Text style={styles.inputLabelText}>Modul</Text>
         <View>
@@ -167,7 +167,7 @@ export default function Tracking() {
           </>
         )}
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -176,6 +176,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "space-around",
     paddingHorizontal: 12,
+    backgroundColor: COLORS.white,
   },
   inputs: {
     flexDirection: "row",
