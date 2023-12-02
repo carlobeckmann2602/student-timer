@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
 
 import { View } from "@/components/Themed";
 import { useRouter } from "expo-router";
@@ -217,51 +217,65 @@ export default function ModulesScreen() {
 
   return (
     <View style={styles.outerWrapper}>
-      <H1 style={{ color: detailModule.colorCode }}>{detailModule.name}</H1>
-      <ModuleChart inputData={detailModule} width={200} height={200} />
-      <View style={styles.unitWrapper}>
-        <H2 style={{ textAlign: "left" }}>Einheiten</H2>
-        <View>
-          {detailModule.learningUnits.map((unit) => {
-            return (
-              <View key={unit.unitId} style={styles.unitRowWraupper}>
-                <View style={styles.unitRow}>
-                  <View
-                    style={[
-                      styles.moduleIndicatorM,
-                      { backgroundColor: unit.colorCode },
-                    ]}
-                  />
-                  <View style={styles.unitRowTitle}>
-                    <Subhead>{unit.name}</Subhead>
-                    <P>{computeUnitString(unit)}</P>
+      <H1
+        style={{
+          color: detailModule.colorCode,
+          paddingTop: 12,
+          paddingBottom: 12,
+        }}
+      >
+        {detailModule.name}
+      </H1>
+      <ScrollView contentContainerStyle={styles.scrollViewContainerStyle}>
+        <ModuleChart inputData={detailModule} width={200} height={200} />
+        <View style={styles.unitWrapper}>
+          <H2 style={{ textAlign: "left" }}>Einheiten</H2>
+          <View>
+            {detailModule.learningUnits.map((unit) => {
+              return (
+                <View key={unit.unitId} style={styles.unitRowWraupper}>
+                  <View style={styles.unitRow}>
+                    <View
+                      style={[
+                        styles.moduleIndicatorM,
+                        { backgroundColor: unit.colorCode },
+                      ]}
+                    />
+                    <View style={styles.unitRowTitle}>
+                      <Subhead>{unit.name}</Subhead>
+                      <P>{computeUnitString(unit)}</P>
+                    </View>
+                    <Subhead>{unit.y} Std.</Subhead>
                   </View>
-                  <Subhead>{unit.y} Std.</Subhead>
                 </View>
-              </View>
-            );
-          })}
+              );
+            })}
+          </View>
+          <View style={styles.resultRow}>
+            <View
+              style={styles.separator}
+              lightColor={COLORTHEME.light.text}
+              darkColor={COLORTHEME.dark.text}
+            />
+            <Subhead>Gesamt: {transformedData.timeInvested} Std.</Subhead>
+          </View>
         </View>
-        <View style={styles.resultRow}>
-          <View
-            style={styles.separator}
-            lightColor={COLORTHEME.light.text}
-            darkColor={COLORTHEME.dark.text}
-          />
-          <Subhead>Gesamt: {transformedData.timeInvested} Std.</Subhead>
-        </View>
-      </View>
+      </ScrollView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   outerWrapper: {
-    flex: 1,
+    paddingVertical: 30,
+    height: "100%",
+  },
+  scrollViewContainerStyle: {
     flexDirection: "column",
-    alignContent: "center",
+    alignItems: "center",
     justifyContent: "space-between",
-    padding: 16,
+    padding: 24,
+    gap: 16,
   },
   chartWrapper: {
     width: "100%",
