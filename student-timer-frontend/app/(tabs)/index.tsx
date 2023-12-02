@@ -5,7 +5,7 @@ import {
   StyleSheet,
   TextInput,
 } from "react-native";
-import { Picker } from "@react-native-picker/picker";
+import Picker from "react-native-picker-select";
 
 import { Text, View } from "@/components/Themed";
 import Button from "@/components/Button";
@@ -93,20 +93,28 @@ export default function Tracking() {
       </KeyboardAvoidingView>
       <View>
         <Text style={styles.inputLabelText}>Modul</Text>
-        <View style={styles.dropdownContainer}>
+        <View>
           <Picker
-            style={styles.dropdown}
-            selectedValue={selectedModule}
-            onValueChange={(module) =>
-              setSelectedModule(Number(module.toString()))
-            }
-            enabled={!trackingIsActive && startTime === 0}
-          >
-            <Picker.Item label="Datenbanksysteme 1" value={1} />
-            <Picker.Item label="Datenbanksysteme 2" value={2} />
-            <Picker.Item label="Mediengestaltung 1" value={3} />
-            <Picker.Item label="Mediengestaltung 2" value={4} />
-          </Picker>
+            style={{
+              viewContainer: styles.picker,
+              inputWeb: styles.picker,
+            }}
+            placeholder={{}}
+            items={[
+              { label: "Mediengestaltung 1", value: 0 },
+              { label: "Mediengestaltung 2", value: 1 },
+              { label: "Mediengestaltung 3", value: 2 },
+              { label: "Mediengestaltung 4", value: 3 },
+              { label: "Mediengestaltung 5", value: 4 },
+              { label: "Mediengestaltung 6", value: 5 },
+              { label: "Mediengestaltung 7", value: 6 },
+              { label: "Mediengestaltung 8", value: 7 },
+              { label: "Mediengestaltung 9", value: 8 },
+              { label: "Mediengestaltung 10", value: 9 },
+            ]}
+            onValueChange={(module: number) => setSelectedModule(module)}
+            disabled={trackingIsActive || startTime !== 0}
+          />
         </View>
       </View>
       <View style={styles.trackerButtons}>
@@ -187,17 +195,12 @@ const styles = StyleSheet.create({
     height: 40,
     paddingHorizontal: 10,
   },
-  dropdownContainer: {
+  picker: {
     backgroundColor: COLORTHEME.light.grey2,
-    borderRadius: 12,
-    justifyContent: "center",
-    height: 40,
-  },
-  dropdown: {
     border: 0,
     borderRadius: 12,
-    backgroundColor: "inherit",
-    height: "100%",
+    height: 40,
+    justifyContent: "center",
   },
   trackerButtons: {
     flexDirection: "row",
