@@ -1,5 +1,10 @@
 import React, { useState } from "react";
-import { StyleSheet, TextInput } from "react-native";
+import {
+  Platform,
+  KeyboardAvoidingView,
+  StyleSheet,
+  TextInput,
+} from "react-native";
 import { Picker } from "@react-native-picker/picker";
 
 import { Text, View } from "@/components/Themed";
@@ -31,7 +36,10 @@ export default function Tracking() {
   return (
     <View style={styles.container}>
       <View>
-        <TrackingModeToggle onPress={setIsStopwatch} disabled={trackingIsActive || startTime !== 0} />
+        <TrackingModeToggle
+          onPress={setIsStopwatch}
+          disabled={trackingIsActive || startTime !== 0}
+        />
       </View>
       <Timer
         isStopwatch={isStopwatch}
@@ -41,7 +49,10 @@ export default function Tracking() {
         pauseLen={Number(pauseLen) * 1000 * 60}
         roundLen={Number(roundLen) * 1000 * 60}
       />
-      <View style={styles.inputs}>
+      <KeyboardAvoidingView
+        style={styles.inputs}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
         {!isStopwatch && (
           <View style={styles.inputLabelGroup}>
             <Text style={styles.inputLabelText}>Runden</Text>
@@ -79,14 +90,16 @@ export default function Tracking() {
             editable={!trackingIsActive && startTime === 0}
           />
         </View>
-      </View>
+      </KeyboardAvoidingView>
       <View>
         <Text style={styles.inputLabelText}>Modul</Text>
         <View style={styles.dropdownContainer}>
           <Picker
             style={styles.dropdown}
             selectedValue={selectedModule}
-            onValueChange={(module) => setSelectedModule(Number(module.toString()))}
+            onValueChange={(module) =>
+              setSelectedModule(Number(module.toString()))
+            }
             enabled={!trackingIsActive && startTime === 0}
           >
             <Picker.Item label="Datenbanksysteme 1" value={1} />
