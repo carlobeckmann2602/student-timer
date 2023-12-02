@@ -31,10 +31,7 @@ export default function Tracking() {
   return (
     <View style={styles.container}>
       <View>
-        <TrackingModeToggle
-          onPress={setIsStopwatch}
-          disabled={trackingIsActive || startTime !== 0}
-        />
+        <TrackingModeToggle onPress={setIsStopwatch} disabled={trackingIsActive || startTime !== 0} />
       </View>
       <Timer
         isStopwatch={isStopwatch}
@@ -89,9 +86,7 @@ export default function Tracking() {
           <Picker
             style={styles.dropdown}
             selectedValue={selectedModule}
-            onValueChange={(module) =>
-              setSelectedModule(Number(module.toString()))
-            }
+            onValueChange={(module) => setSelectedModule(Number(module.toString()))}
             enabled={!trackingIsActive && startTime === 0}
           >
             <Picker.Item label="Datenbanksysteme 1" value={1} />

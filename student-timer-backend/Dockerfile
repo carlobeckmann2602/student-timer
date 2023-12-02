@@ -2,7 +2,7 @@
 FROM maven:3-openjdk-17 as build
 WORKDIR /app
 COPY . /app
-RUN mvn -e clean package
+RUN mvn clean package
 
 # Stage 2: Run the JAR
 FROM openjdk:17
