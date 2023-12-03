@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Platform, KeyboardAvoidingView, StyleSheet } from "react-native";
 import Picker from "react-native-picker-select";
+import { router } from "expo-router";
 
 import { Text, View } from "@/components/Themed";
 import Button from "@/components/Button";
@@ -125,7 +126,10 @@ export default function Tracking() {
               text="Tracking beenden"
               backgroundColor={COLORTHEME.light.primary}
               textColor="#FFFFFF"
-              onPress={resetTimer}
+              onPress={() => {
+                router.push({ pathname: "/success" });
+                resetTimer();
+              }}
               style={styles.button}
             />
           </>
@@ -154,7 +158,10 @@ export default function Tracking() {
               text="Tracking beenden"
               backgroundColor={COLORTHEME.light.primary}
               textColor="#FFFFFF"
-              onPress={resetTimer}
+              onPress={() => {
+                router.push({ pathname: "/success" });
+                resetTimer();
+              }}
               style={styles.button}
             />
           </>
