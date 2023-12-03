@@ -220,20 +220,11 @@ const styles = StyleSheet.create({
   container: {
     alignItems: "center",
   },
-  clock: {
-    borderWidth: 10,
-    alignItems: "center",
-    justifyContent: "center",
-    maxWidth: 500,
-    maxHeight: 500,
-    minWidth: 300,
-    minHeight: 300,
-  },
   timerText: {
     fontSize: 50,
     fontWeight: "bold",
   },
   pauseText: {
-    fontSize: 20,
+    fontSize: 18,
   },
 });
