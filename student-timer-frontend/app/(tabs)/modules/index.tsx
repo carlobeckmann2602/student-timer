@@ -5,6 +5,8 @@ import { FlatList } from "react-native-gesture-handler";
 import { ModuleCard } from "@/components/modules/ModuleCard";
 import { useRouter } from "expo-router";
 import { ModuleType } from "@/types/ModuleType";
+import Button from "@/components/Button";
+import { COLORTHEME } from "@/constants/Theme";
 
 export default function ModulesScreen() {
   const router = useRouter();
@@ -201,6 +203,8 @@ export default function ModulesScreen() {
     },
   ];
 
+  const onNewModulePress = () => router.push("/(tabs)/modules/new");
+
   return (
     <View style={styles.container}>
       <FlatList
@@ -209,6 +213,12 @@ export default function ModulesScreen() {
         keyExtractor={(item: ModuleType) => item.moduleId}
         contentContainerStyle={styles.flatListContainer}
       ></FlatList>
+      <Button
+        text={"Neues Modul anlegen"}
+        backgroundColor={COLORTHEME.light.primary}
+        textColor={COLORTHEME.light.grey2}
+        onPress={onNewModulePress}
+      ></Button>
     </View>
   );
 }

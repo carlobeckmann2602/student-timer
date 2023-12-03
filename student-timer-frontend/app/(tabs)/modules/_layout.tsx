@@ -12,6 +12,7 @@ export default function ModulesLayout() {
           animation: "default",
         }}
       />
+      <Stack.Screen name="new/index" options={{ headerShown: false }} />
     </Stack>
   );
 }
