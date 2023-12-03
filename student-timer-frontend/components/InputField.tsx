@@ -4,6 +4,8 @@ import {
   StyleSheet,
   KeyboardTypeOptions,
   ViewStyle,
+  TextInputProps,
+  Platform,
 } from "react-native";
 import { Text, View } from "@/components/Themed";
 import { COLORTHEME } from "@/constants/Theme";
@@ -18,32 +20,26 @@ type InputFieldProps = {
   message?: string;
   messageColor?: string;
   style?: ViewStyle;
+  inputUnit?: string;
 };
 
-export default function InputField(props: InputFieldProps) {
-  const {
-    label,
-    value,
-    onChangeText,
-    keyboardType,
-    secureTextEntry,
-    placeholder,
-    style,
-  } = props;
+export default function InputField(props: InputFieldProps & TextInputProps) {
+  const { label, style, inputUnit, message, messageColor } = props;
   return (
     <View style={[style, styles.inputLabelGroup]}>
       {label && <Text style={styles.inputLabelText}>{label}</Text>}
-      <TextInput
-        style={styles.input}
-        onChangeText={onChangeText}
-        value={value}
-        keyboardType={keyboardType}
-        secureTextEntry={secureTextEntry}
-        placeholder={placeholder}
-      />
-      <Text style={[{ color: props.messageColor }, styles.messageText]}>
-        {props.message}
-      </Text>
+      <View style={styles.inputUnitContainer}>
+        <View style={styles.inputContainer}>
+          <TextInput {...props} style={styles.input} />
+        </View>
+        {inputUnit && <Text style={styles.unit}>{inputUnit}</Text>}
+      </View>
+
+      {message && (
+        <Text style={[{ color: messageColor }, styles.messageText]}>
+          {message}
+        </Text>
+      )}
     </View>
   );
 }
@@ -60,12 +56,29 @@ const styles = StyleSheet.create({
   inputLabelText: {
     color: COLORTHEME.light.primary,
   },
-  input: {
+  inputUnitContainer: {
+    flexDirection: "row",
+    alignItems: "center",
     backgroundColor: COLORTHEME.light.grey2,
-    color: COLORTHEME.light.grey3,
     borderRadius: 12,
-    height: 50,
+    height: 40,
     paddingHorizontal: 10,
+  },
+  inputContainer: {
+    flex: 1,
+    backgroundColor: "transparent",
+  },
+  input: {
+    color: COLORTHEME.light.grey3,
+    ...Platform.select({
+      web: {
+        outlineStyle: "none",
+      },
+    }),
+  },
+  unit: {
+    color: COLORTHEME.light.grey3,
+    marginLeft: 10,
   },
   buttons: {
     flexDirection: "column",

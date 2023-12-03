@@ -1,14 +1,10 @@
 import React, { useState } from "react";
-import {
-  Platform,
-  KeyboardAvoidingView,
-  StyleSheet,
-  TextInput,
-} from "react-native";
+import { Platform, KeyboardAvoidingView, StyleSheet } from "react-native";
 import Picker from "react-native-picker-select";
 
 import { Text, View } from "@/components/Themed";
 import Button from "@/components/Button";
+import InputField from "@/components/InputField";
 import { COLORS, COLORTHEME } from "@/constants/Theme";
 import TrackingModeToggle from "@/components/tracking/TrackingModeToggle";
 import Timer from "@/components/tracking/Timer";
@@ -23,6 +19,7 @@ export default function Tracking() {
   const [startTime, setStartTime] = useState(0);
   const [selectedModule, setSelectedModule] = useState(3);
 
+  const inputsEditable = !trackingIsActive && startTime === 0;
   const toggleTracking = () => {
     trackingIsActive ? "" : setStartTime(Date.now());
     setTrackingIsActive(!trackingIsActive);
@@ -54,44 +51,38 @@ export default function Tracking() {
       />
       <View style={styles.inputs}>
         {!isStopwatch && (
-          <View style={styles.inputLabelGroup}>
-            <Text style={styles.inputLabelText}>Runden</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={(val) =>
-                val <= "1" ? setRounds("2") : setRounds(val)
-              }
-              value={rounds}
-              keyboardType="numeric"
-              selectTextOnFocus
-              editable={!trackingIsActive && startTime === 0}
-            />
-          </View>
+          <InputField
+            style={styles.input}
+            label="Runden"
+            value={rounds}
+            onChangeText={setRounds}
+            keyboardType="numeric"
+            selectTextOnFocus
+            editable={inputsEditable}
+          />
         )}
-        <View style={styles.inputLabelGroup}>
-          <Text style={styles.inputLabelText}>Rundenlänge</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={setRoundLen}
-            value={roundLen}
-            keyboardType="numeric"
-            selectTextOnFocus
-            editable={!trackingIsActive && startTime === 0}
-          />
-        </View>
-        <View style={styles.inputLabelGroup}>
-          <Text style={styles.inputLabelText}>Pause</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={setPauseLen}
-            value={pauseLen}
-            keyboardType="numeric"
-            selectTextOnFocus
-            editable={!trackingIsActive && startTime === 0}
-          />
-        </View>
+        <InputField
+          style={styles.input}
+          label="Rundenlänge"
+          value={roundLen}
+          onChangeText={setRoundLen}
+          keyboardType="numeric"
+          inputUnit="min"
+          selectTextOnFocus
+          editable={inputsEditable}
+        />
+        <InputField
+          style={styles.input}
+          label="Pausenlänge"
+          value={pauseLen}
+          onChangeText={setPauseLen}
+          keyboardType="numeric"
+          inputUnit="min"
+          selectTextOnFocus
+          editable={inputsEditable}
+        />
       </View>
-      <View>
+      <View style={styles.pickerContainer}>
         <Text style={styles.inputLabelText}>Modul</Text>
         <View>
           <Picker
@@ -113,7 +104,7 @@ export default function Tracking() {
               { label: "Mediengestaltung 10", value: 9 },
             ]}
             onValueChange={(module: number) => setSelectedModule(module)}
-            disabled={trackingIsActive || startTime !== 0}
+            disabled={!inputsEditable}
           />
         </View>
       </View>
@@ -182,19 +173,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
   },
-  inputLabelGroup: {
-    flexDirection: "column",
-  },
   inputLabelText: {
     color: COLORTHEME.light.primary,
   },
   input: {
-    backgroundColor: COLORTHEME.light.grey2,
-    color: COLORTHEME.light.grey3,
-    borderRadius: 12,
-    width: 100,
-    height: 40,
-    paddingHorizontal: 10,
+    maxWidth: 100,
+  },
+  pickerContainer: {
+    gap: 5,
   },
   picker: {
     backgroundColor: COLORTHEME.light.grey2,
