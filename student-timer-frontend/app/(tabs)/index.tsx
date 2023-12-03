@@ -89,6 +89,8 @@ export default function Tracking() {
             style={{
               viewContainer: styles.picker,
               inputWeb: styles.picker,
+              inputAndroid: { color: COLORTHEME.light.grey3 },
+              inputIOS: { color: COLORTHEME.light.grey3 },
             }}
             placeholder={{}}
             items={[
@@ -184,6 +186,7 @@ const styles = StyleSheet.create({
   },
   picker: {
     backgroundColor: COLORTHEME.light.grey2,
+    color: COLORTHEME.light.grey3,
     border: 0,
     borderRadius: 12,
     height: 40,
