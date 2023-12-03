@@ -15,11 +15,11 @@ const COLORS = {
   success: "#51C93E",
   rating: "#D0D400",
   // Module units
-  mu_lecture: "#F9D477",
-  mu_practica: "#6FB9E2",
-  mu_coaching: "#D16E6E",
-  mu_seminar: "#58CEB9",
-  mu_meeting: "#95E988",
+  Vorlesung: "#F9D477",
+  Praktikum: "#6FB9E2",
+  Nachhilfe: "#D16E6E",
+  Seminar: "#58CEB9",
+  Projekttreffen: "#95E988",
   // selectable course colors
   course1: "#88A795",
   course2: "#AB5761",
@@ -33,6 +33,7 @@ const COLORS = {
 };
 
 const SIZES = {
+  xxsmall: 10,
   xsmall: 14,
   small: 17,
   medium: 18,

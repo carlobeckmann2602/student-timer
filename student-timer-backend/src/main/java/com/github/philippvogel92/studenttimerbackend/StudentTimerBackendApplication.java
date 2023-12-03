@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
 @SpringBootApplication
-@OpenAPIDefinition(info=
+@OpenAPIDefinition(info =
 @Info(title = "Student Timer API", version = "1.0", description = "Student Timer API with Spring Boot"))
 public class StudentTimerBackendApplication {
 

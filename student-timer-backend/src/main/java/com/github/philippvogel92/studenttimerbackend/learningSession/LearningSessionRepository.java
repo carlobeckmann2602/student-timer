@@ -8,5 +8,4 @@ import java.util.List;
 
 @Repository
 public interface LearningSessionRepository extends JpaRepository<LearningSession, Long> {
-    List<LearningSession> findByModuleId(Long moduleId);
 }
