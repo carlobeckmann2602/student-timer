@@ -13,6 +13,7 @@ import { COLORTHEME } from "@/constants/Theme";
 import { onboardingData } from "@/constants/onboardingItems";
 import { ChevronLeft, ChevronRight } from "lucide-react-native";
 import { useRouter } from "expo-router";
+import { saveItem } from "@/libs/deviceStorage";
 
 export default function OnboardingScreen() {
   const { width, height } = useWindowDimensions();
@@ -21,6 +22,7 @@ export default function OnboardingScreen() {
   const router = useRouter();
 
   const navigateToAuthentication = () => {
+    //saveItem("onbarding", JSON.stringify(true));
     router.push("/(auth)/signup");
   };
 
@@ -45,7 +47,6 @@ export default function OnboardingScreen() {
     description: string;
     image: ImageSourcePropType;
   }) => {
-    console.log(image);
     return (
       <View style={styles.onboardingItem}>
         <Text style={styles.title}>{title}</Text>
