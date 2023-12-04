@@ -41,7 +41,7 @@ public class AccessTokenService {
         try {
             return verifier.verify(jwt);
         } catch (JWTVerificationException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Token is invalid");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Token is invalid");
         }
     }
 }

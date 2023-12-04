@@ -4,6 +4,7 @@ import com.github.philippvogel92.studenttimerbackend.auth.jwt.JwtTokenFilter;
 import com.github.philippvogel92.studenttimerbackend.auth.jwt.accessToken.AccessTokenService;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
+import jakarta.servlet.DispatcherType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,7 +34,8 @@ public class AuthConfiguration {
         http
                 .csrf(CsrfConfigurer::disable)
                 .cors(CorsConfigurer::disable)
-                .authorizeHttpRequests(requests -> requests
+                .authorizeHttpRequests(authorize -> authorize
+                        .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
                         .requestMatchers("/documentation/**", "/documentation/docs", "/v3/api-docs", "/swagger" +
                                 "-resources/**", "/swagger" +
                                 "-ui/**", "/webjars/**", "/auth/**", "api/auth/**")

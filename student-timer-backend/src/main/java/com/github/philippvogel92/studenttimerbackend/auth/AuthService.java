@@ -37,10 +37,10 @@ public class AuthService {
         String password = loginRequestDTO.getPassword();
 
         Student student =
-                studentRepository.findStudentByEmail(email).orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN, "Credentials are wrong"));
+                studentRepository.findStudentByEmail(email).orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Credentials are wrong"));
 
         if (!Objects.equals(password, student.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Credentials are wrong");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Credentials are wrong");
         }
 
         String accessToken = accessTokenService.createAccessToken(student.getId(), email);

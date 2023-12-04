@@ -73,7 +73,7 @@ public class AuthController {
             @ApiResponse(responseCode = "200", description = "Token is valid",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(type = "studentId"))}),
-            @ApiResponse(responseCode = "400", description = "Token is invalid or wrong request body",
+            @ApiResponse(responseCode = "401", description = "Token is invalid",
                     content = @Content),
     })
     @PostMapping(path = "/verifyAccessToken")
@@ -87,7 +87,7 @@ public class AuthController {
             @ApiResponse(responseCode = "200", description = "Token is valid",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(name = "studentId", type = "string"))}),
-            @ApiResponse(responseCode = "400", description = "Token is invalid or wrong request body",
+            @ApiResponse(responseCode = "401", description = "Token is invalid or wrong request body",
                     content = @Content),
     })
     @PostMapping(path = "/verifyRefreshToken")
