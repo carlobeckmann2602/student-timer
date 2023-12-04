@@ -1,10 +1,9 @@
-// OnboardingScreen.tsx bzw. index.tsx
 import React, { useState } from "react";
-import { View, Text } from "@/components/Themed";
-import {onboardingData} from "../../constants/onboardingItems";
-import OnboardingCards from "../../components/onboarding/OnboardingCards";
-import CardNavigation from "../../components/onboarding/CardNavigation";
-import Header from "../../components/Header";
+import { View, ScrollView, Text } from "@/components/Themed";
+import {onboardingData} from "@/constants/onboardingItems";
+import OnboardingCards from "@/components/onboarding/OnboardingCards";
+import CardNavigation from "@/components/onboarding/CardNavigation";
+import Header from "@/components/Header";
 import {Link, router} from "expo-router";
 import {StyleSheet} from "react-native";
 
@@ -27,7 +26,7 @@ export default function OnboardingScreen() {
     };
 
     return (
-        <View style={styles.container}>
+        <ScrollView contentContainerStyle={styles.container}>
             <View>
                 <Header title="StudentTimer" />
             </View>
@@ -46,16 +45,15 @@ export default function OnboardingScreen() {
                   Überspringen
               </Link>
             </Text>
-      </View>
+      </ScrollView>
   );
 }
 
-//toDo styling für iPhone SE anpassen
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 15,
-  },
+    container: {
+        flexGrow: 1,
+        justifyContent: "flex-start",
+        alignItems: "center",
+        padding: 15,
+    },
 });
