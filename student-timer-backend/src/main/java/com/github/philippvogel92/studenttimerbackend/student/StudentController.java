@@ -1,7 +1,6 @@
 package com.github.philippvogel92.studenttimerbackend.student;
 
 
-import com.github.philippvogel92.studenttimerbackend.auth.AuthService;
 import com.github.philippvogel92.studenttimerbackend.student.dto.StudentUpdateDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -13,7 +12,6 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @ApiResponses(value = {
         @ApiResponse(responseCode = "401", description = "Not authorized for this resource",

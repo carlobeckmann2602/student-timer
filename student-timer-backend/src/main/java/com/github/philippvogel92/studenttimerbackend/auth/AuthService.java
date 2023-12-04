@@ -82,11 +82,5 @@ public class AuthService {
 
     }
 
-    public void checkIfUserIsAuthorized(Long studentId) {
-        String currentUserId = SecurityContextHolder.getContext().getAuthentication().getName();
-        if (!currentUserId.equals(studentId.toString())) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Forbidden");
-        }
-    }
 
 }

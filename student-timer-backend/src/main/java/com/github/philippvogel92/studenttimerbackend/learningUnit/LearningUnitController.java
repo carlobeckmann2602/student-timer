@@ -1,9 +1,6 @@
 package com.github.philippvogel92.studenttimerbackend.learningUnit;
 
 import com.github.philippvogel92.studenttimerbackend.learningUnit.dto.LearningUnitCreateDTO;
-import com.github.philippvogel92.studenttimerbackend.module.Module;
-import com.github.philippvogel92.studenttimerbackend.module.ModuleService;
-import com.github.philippvogel92.studenttimerbackend.module.dto.ModuleCreateDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;

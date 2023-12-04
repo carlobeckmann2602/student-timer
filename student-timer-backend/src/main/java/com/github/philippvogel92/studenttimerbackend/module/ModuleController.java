@@ -1,6 +1,5 @@
 package com.github.philippvogel92.studenttimerbackend.module;
 
-import com.github.philippvogel92.studenttimerbackend.auth.AuthService;
 import com.github.philippvogel92.studenttimerbackend.module.dto.ModuleCreateDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;

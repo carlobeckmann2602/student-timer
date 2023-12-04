@@ -1,13 +1,11 @@
 package com.github.philippvogel92.studenttimerbackend.auth.jwt;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.philippvogel92.studenttimerbackend.auth.jwt.accessToken.AccessTokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -16,12 +14,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
-import static org.springframework.http.HttpStatus.FORBIDDEN;
+
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Component
 public class JwtTokenFilter extends OncePerRequestFilter {
