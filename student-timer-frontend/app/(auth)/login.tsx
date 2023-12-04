@@ -63,7 +63,7 @@ export default function Login() {
       if (result && result.error) {
         setError(result.msg);
       } else {
-        router.push("/(tabs)/");
+        router.push("/(tabs)/(tracking)");
       }
     }
   };

@@ -57,7 +57,7 @@ export default function OtherLogins() {
       const user = await response.json();
       console.log(user);
       await saveItem("user", JSON.stringify(user));
-      router.push("/(tabs)/");
+      router.push("/(tabs)/(tracking)");
     } catch (error) {}
   };
 
@@ -71,7 +71,7 @@ export default function OtherLogins() {
       });
       console.log(user);
       await saveItem("user", JSON.stringify(user));
-      router.push("/(tabs)/");
+      router.push("/(tabs)/(tracking)");
     } catch (error) {}
   };
 
