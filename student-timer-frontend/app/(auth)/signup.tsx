@@ -10,11 +10,12 @@ import InputField from "@/components/InputField";
 import { Link, useRouter } from "expo-router";
 import Separator from "@/components/Separator";
 import OtherLogins from "@/components/auth/OtherLogins";
+import { useAuth } from "@/context/AuthContext";
 
 export default function SignupScreen() {
   const [userName, setUserName] = useState("");
   const [userStudyCourse, setUserStudyCourse] = useState("");
-  const [userUniEmail, setUserUniMail] = useState("");
+  const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const [userCheckPassword, setUserCheckPassword] = useState("");
 
@@ -23,6 +24,8 @@ export default function SignupScreen() {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [error, setError] = useState("");
+
+  const { onRegister } = useAuth();
 
   const router = useRouter();
 
@@ -44,11 +47,11 @@ export default function SignupScreen() {
     }
 
     var emailValid = false;
-    if (userUniEmail.length == 0) {
+    if (userEmail.length == 0) {
       setEmailError("E-Mail ist erforderlich");
-    } else if (userUniEmail.length < 6) {
+    } else if (userEmail.length < 6) {
       setEmailError("E-Mail sollte mindestens 6 Zeichen lang sein");
-    } else if (userUniEmail.indexOf(" ") >= 0) {
+    } else if (userEmail.indexOf(" ") >= 0) {
       setEmailError("E-Mail kann keine Leerzeichen enthalten");
     } else {
       setEmailError("");
@@ -76,9 +79,21 @@ export default function SignupScreen() {
     return false;
   };
 
-  const onRegister = () => {
+  const register = async () => {
     if (validateInput()) {
-      router.push("/(tabs)");
+      const result = await onRegister!(
+        userName,
+        userStudyCourse,
+        "empty",
+        userEmail,
+        userPassword,
+        userCheckPassword
+      );
+      if (result && result.error) {
+        setError(result.msg);
+      } else {
+        router.push("/(tabs)");
+      }
     }
   };
 
@@ -106,8 +121,8 @@ export default function SignupScreen() {
           <View style={styles.row}>
             <InputField
               label="E-Mail"
-              onChangeText={setUserUniMail}
-              value={userUniEmail}
+              onChangeText={setUserEmail}
+              value={userEmail}
               keyboardType="email-address"
               message={emailError}
               messageColor="red"
@@ -137,7 +152,7 @@ export default function SignupScreen() {
             text="Registrieren"
             backgroundColor={COLORTHEME.light.primary}
             textColor={COLORTHEME.light.grey2}
-            onPress={onRegister}
+            onPress={register}
             style={{ width: 200 }}
           />
 

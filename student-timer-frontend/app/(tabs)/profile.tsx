@@ -6,16 +6,17 @@ import { User2 } from "lucide-react-native";
 import { useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { deleteStoredItem } from "@/libs/deviceStorage";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Profile() {
-  const router = useRouter();
+  const { onLogout, authState } = useAuth();
+
   const pic = require("../../assets/images/profile-picture.jpg");
 
   // Daten aus Authentifizierung / Benutzersession ziehen
   const user = {
-    firstName: "Maxine",
-    lastName: "Hellas",
-    studySubject: "Master Medieninformatik",
+    name: authState?.user.name,
+    studySubject: authState?.user.studyCourse,
     profileImage: pic,
   };
 
@@ -27,12 +28,6 @@ export default function Profile() {
   const handleExportData = () => {
     // Hier implementiere die Logik für den Datenexport
     console.log("Daten exportieren");
-  };
-
-  const handleLogout = () => {
-    // Logik für den Logout, Abmeldung von Authentifizierungsdienst
-    deleteStoredItem("user");
-    router.push("/(auth)/login");
   };
 
   return (
@@ -47,9 +42,7 @@ export default function Profile() {
       </View>
 
       {/* Benutzerinformationen */}
-      <Text style={styles.title}>
-        {user.firstName} {user.lastName}
-      </Text>
+      <Text style={styles.title}>{user.name}</Text>
       <Text>{user.studySubject}</Text>
 
       {/* Aktionen */}
@@ -70,7 +63,7 @@ export default function Profile() {
           text="Logout"
           backgroundColor={COLORTHEME.light.primary}
           textColor="#FFFFFF"
-          onPress={handleLogout}
+          onPress={onLogout}
         />
       </View>
     </View>
