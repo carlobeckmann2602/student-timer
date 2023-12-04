@@ -15,10 +15,12 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
-        name="index"
+        name="(tracking)"
         options={{
           title: "Tracking",
-          tabBarIcon: ({ color }) => <TimerReset name="clock-o" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <TimerReset name="clock-o" color={color} />
+          ),
           header: () => <Header title="Tracking" />,
         }}
       />
@@ -34,7 +36,9 @@ export default function TabLayout() {
         name="statistics"
         options={{
           title: "Statistik",
-          tabBarIcon: ({ color }) => <BarChart2 name="statistic" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <BarChart2 name="statistic" color={color} />
+          ),
           header: () => <Header title="Statistik" />,
         }}
       />
