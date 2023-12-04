@@ -33,7 +33,6 @@ public class AccessTokenService {
                 .sign(jwtConfig.getAccessTokenAlgorithm());
     }
 
-
     public DecodedJWT verifyAccessToken(String jwt) {
         JWTVerifier verifier = JWT.require(jwtConfig.getAccessTokenAlgorithm())
                 .withIssuer(jwtConfig.getTokenIssuer())
