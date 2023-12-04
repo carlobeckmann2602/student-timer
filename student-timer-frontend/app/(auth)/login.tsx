@@ -100,8 +100,8 @@ export default function Login() {
               textColor={COLORTHEME.light.grey2}
               onPress={login}
             />
-            {error && <Text style={styles.errorMessage}>{error}</Text>}
           </View>
+          {error && <Text style={styles.errorMessage}>{error}</Text>}
           <Text>
             Sie haben kein Konto?{" "}
             <Link href="/signup" style={{ textDecorationLine: "underline" }}>
