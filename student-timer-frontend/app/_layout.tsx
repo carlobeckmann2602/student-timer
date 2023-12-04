@@ -4,6 +4,7 @@ import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
 import { useEffect } from "react";
 import { AuthProvider } from "@/context/AuthContext";
+import { AxiosProvider } from "@/context/AxiosContext";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -50,23 +51,26 @@ function RootLayoutNav() {
       <ThemeProvider value={DefaultTheme}>
         <SafeAreaView style={{ flex: 1 }}>
           <AuthProvider>
-            <Stack>
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-              <Stack.Screen
-                name="(auth)/login"
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="(auth)/signup"
-                options={{
-                  headerShown: false,
-                }}
-              />
-              <Stack.Screen
-                name="onboarding/index"
-                options={{ headerShown: false }}
-              />
-            </Stack>
+            <AxiosProvider>
+              <Stack>
+                <Stack.Screen name="index" options={{ headerShown: false }} />
+                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                <Stack.Screen
+                  name="(auth)/login"
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="(auth)/signup"
+                  options={{
+                    headerShown: false,
+                  }}
+                />
+                <Stack.Screen
+                  name="onboarding/index"
+                  options={{ headerShown: false }}
+                />
+              </Stack>
+            </AxiosProvider>
           </AuthProvider>
         </SafeAreaView>
       </ThemeProvider>

@@ -92,7 +92,7 @@ export default function SignupScreen() {
       if (result && result.error) {
         setError(result.msg);
       } else {
-        router.push("/(tabs)");
+        router.push("/(tabs)/(tracking)");
       }
     }
   };
