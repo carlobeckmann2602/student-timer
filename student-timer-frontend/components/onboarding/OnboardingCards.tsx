@@ -11,7 +11,7 @@ interface OnboardingCardsProps {
     onboardingData: OnboardingItem[];
     activeIndex: number;
 }
-
+//toDo: swipen integrieren
 export default function OnboardingCards({ onboardingData, activeIndex }: OnboardingCardsProps) {
     const renderOnboardingItem = ({ title, description, image }: OnboardingItem) => {
         return (
@@ -25,7 +25,7 @@ export default function OnboardingCards({ onboardingData, activeIndex }: Onboard
 
     return (
         <View style={styles.container}>
-            {onboardingData.map((item, index) => (
+            {onboardingData.map((item, index) => ( //toDo for-schleife
                 <View key={index}>{index === activeIndex && renderOnboardingItem(item)}</View>
             ))}
         </View>
@@ -53,8 +53,8 @@ const styles = StyleSheet.create({
         marginVertical: 10,
     },
     image: {
-        width: 200,
-        height: 200,
+        width: "100%",
+        height: 250, //toDo styling für mobile klein anpassen
         resizeMode: "contain",
     },
 });

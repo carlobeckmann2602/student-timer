@@ -1,4 +1,3 @@
-// CardNavigation.tsx
 import React from "react";
 import { View, TouchableOpacity } from "react-native";
 import {Octicons } from "@expo/vector-icons";
@@ -6,12 +5,12 @@ import {ChevronLeftCircle, ChevronRightCircle} from "lucide-react-native";
 import {COLORTHEME} from "../../constants/Theme";
 
 export default function CardNavigation({
-   onboardingData,
+   cardAmount,
    activeIndex,
    onPrevPress,
    onNextPress,
 }: {
-    onboardingData: { title: string; description: string; image: any }[];
+    cardAmount: number;
     activeIndex: number;
     onPrevPress: () => void;
     onNextPress: () => void;
@@ -24,7 +23,7 @@ export default function CardNavigation({
                     size={50}
                 />
             </TouchableOpacity>
-            {onboardingData.map((_, index) => (
+            {[...Array(cardAmount)].map((_, index) => (
                 <Octicons
                     key={index}
                     style={index === activeIndex ? styles.active : styles.inactive}
@@ -41,15 +40,11 @@ export default function CardNavigation({
 
 const styles = {
     navigation: {
-        backgroundColor: 'white',
-        borderRadius: 50,
-        borderColor: COLORTHEME.light.grey1,
-        borderStyle: 'solid',
-        borderWidth: 2,
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
-        width: "80%",
+        width: "90%",
+        maxWidth: 600,
     },
     inactive: {
         fontSize: 24,

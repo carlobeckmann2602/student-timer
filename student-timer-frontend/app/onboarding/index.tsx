@@ -38,7 +38,7 @@ export default function OnboardingScreen() {
             activeIndex={activeIndex}
         />
         <CardNavigation
-            onboardingData={onboardingData}
+            cardAmount={onboardingData.length}
             activeIndex={activeIndex}
             onPrevPress={onPrevPress}
             onNextPress={onNextPress}
@@ -54,6 +54,7 @@ export default function OnboardingScreen() {
   );
 }
 
+//toDo styling für iPhone SE anpassenfpo
 const styles = StyleSheet.create({
   container: {
     flex: 1,

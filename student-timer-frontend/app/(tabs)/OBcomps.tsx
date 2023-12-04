@@ -38,7 +38,7 @@ export default function OnboardingScreen() {
             activeIndex={activeIndex}
         />
         <CardNavigation
-            onboardingData={onboardingData}
+            cardAmount={onboardingData.length}
             activeIndex={activeIndex}
             onPrevPress={onPrevPress}
             onNextPress={onNextPress}
