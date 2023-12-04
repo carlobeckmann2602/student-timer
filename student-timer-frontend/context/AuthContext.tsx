@@ -5,30 +5,12 @@ import {
   deleteStoredItem,
   getStoredItem,
 } from "@/libs/deviceStorage";
-import { API_URL } from "@/constants/Api";
+import { API_URL, TOKEN_KEY } from "@/constants/Api";
 import { useRouter } from "expo-router";
-
-type Token = {
-  accessToken: string | null;
-  refreshToken: string | null;
-};
-
-type User = {
-  id: number | null;
-  name: string | null;
-  studyCourse: string | null;
-  profilePicture: string | null;
-  email: string | null;
-};
-
-type AuthState = {
-  token: Token;
-  authenticated: boolean | null;
-  user: User;
-};
+import { AuthStateType, TokenType, UserType } from "@/types/AuthType";
 
 type AuthProps = {
-  authState?: AuthState;
+  authState?: AuthStateType;
   onRegister?: (
     name: string,
     studyCourse: string,
@@ -39,9 +21,9 @@ type AuthProps = {
   ) => Promise<any>;
   onLogin?: (email: string, password: string) => Promise<any>;
   onLogout?: () => Promise<any>;
+  onNewToken?: (token: TokenType) => Promise<any>;
 };
 
-const TOKEN_KEY = "jwt-token";
 const USER_KEY = "user";
 const AuthContext = createContext<AuthProps>({});
 
@@ -50,8 +32,8 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }: any) => {
-  const [authState, setAuthState] = useState<AuthState>({
-    token: { accessToken: null, refreshToken: null },
+  const [authState, setAuthState] = useState<AuthStateType>({
+    token: { accessToken: null, refreshToken: null, tokenType: null },
     authenticated: null,
     user: {
       id: null,
@@ -64,18 +46,18 @@ export const AuthProvider = ({ children }: any) => {
 
   useEffect(() => {
     const loadToken = async () => {
-      let token = {} as Token;
+      let token = {} as TokenType;
       const tokenString = await getStoredItem(TOKEN_KEY);
       if (tokenString) token = JSON.parse(tokenString);
 
-      let user = {} as User;
+      let user = {} as UserType;
       const userString = await getStoredItem(USER_KEY);
       if (userString) user = JSON.parse(userString);
 
       if (token.accessToken && user.id) {
-        axios.defaults.headers.common[
+        /* axios.defaults.headers.common[
           "Authorization"
-        ] = `Bearer ${token.refreshToken}`;
+        ] = `Bearer ${token.refreshToken}`; */
         setAuthState({ token: token, authenticated: true, user: user });
       }
     };
@@ -106,16 +88,16 @@ export const AuthProvider = ({ children }: any) => {
         studyCourse: result.data.studyCourse,
         profilePicture: result.data.profilePicture,
         email: result.data.email,
-      } as User;
+      } as UserType;
 
       const token = {
         accessToken: result.data.accessToken,
         refreshToken: result.data.refreshToken,
-      } as Token;
+      } as TokenType;
 
-      axios.defaults.headers.common[
+      /* axios.defaults.headers.common[
         "Authorization"
-      ] = `Bearer ${token.accessToken}`;
+      ] = `Bearer ${token.accessToken}`; */
 
       setAuthState({
         token: token,
@@ -143,17 +125,22 @@ export const AuthProvider = ({ children }: any) => {
       const token = {
         accessToken: result.data.accessToken,
         refreshToken: result.data.refreshToken,
-      } as Token;
+      } as TokenType;
 
-      axios.defaults.headers.common[
+      /* axios.defaults.headers.common[
         "Authorization"
-      ] = `Bearer ${token.accessToken}`;
+      ] = `Bearer ${token.accessToken}`; */
 
       const resultUser = await axios.get(
-        `${API_URL}/students/${result.data.studentId}`
+        `${API_URL}/students/${result.data.studentId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token.accessToken}`,
+          },
+        }
       );
 
-      const user = resultUser.data as User;
+      const user = resultUser.data as UserType;
 
       setAuthState({
         token: token,
@@ -177,10 +164,10 @@ export const AuthProvider = ({ children }: any) => {
     await deleteStoredItem(TOKEN_KEY);
     await deleteStoredItem(USER_KEY);
 
-    axios.defaults.headers.common["Authorization"] = "";
+    //axios.defaults.headers.common["Authorization"] = "";
 
     setAuthState({
-      token: { accessToken: null, refreshToken: null },
+      token: { accessToken: null, refreshToken: null, tokenType: null },
       authenticated: false,
       user: {
         id: null,
@@ -194,10 +181,20 @@ export const AuthProvider = ({ children }: any) => {
     router.push("/(auth)/login");
   };
 
+  const newToken = async (token: TokenType) => {
+    setAuthState({
+      token: token,
+      authenticated: true,
+      user: authState.user,
+    });
+    await saveItem(TOKEN_KEY, JSON.stringify(token));
+  };
+
   const value = {
     onRegister: register,
     onLogin: login,
     onLogout: logout,
+    onNewToken: newToken,
     authState,
   };
 
