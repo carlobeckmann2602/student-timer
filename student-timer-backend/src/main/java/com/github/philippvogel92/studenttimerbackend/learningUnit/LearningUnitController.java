@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @ApiResponses(value = {
-        @ApiResponse(responseCode = "400", description = "Invalid request",
+        @ApiResponse(responseCode = "401", description = "Not authorized for this resource",
                 content = @Content),
 })
 @RestController

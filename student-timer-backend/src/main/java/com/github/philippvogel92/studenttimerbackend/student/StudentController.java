@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @ApiResponses(value = {
-        @ApiResponse(responseCode = "403", description = "Not authorized",
+        @ApiResponse(responseCode = "401", description = "Not authorized for this resource",
                 content = @Content)
 })
 @RestController
@@ -31,7 +31,7 @@ public class StudentController {
 
     // *************************** GET-METHODS ***************************
 
-    
+
     @Operation(summary = "Get a student by their id", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Found the student",
