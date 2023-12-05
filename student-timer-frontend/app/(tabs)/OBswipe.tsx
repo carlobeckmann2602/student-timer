@@ -1,4 +1,4 @@
-import React, {useState, Fragment, useRef} from "react";
+import React, {useState, useRef} from "react";
 import { Octicons } from "@expo/vector-icons";
 import {
   StyleSheet,
@@ -11,15 +11,23 @@ import { Text, View } from "@/components/Themed";
 import Button from "@/components/Button";
 import { COLORTHEME } from "@/constants/Theme";
 import { onboardingData } from "@/constants/onboardingItems";
-import { ChevronLeftCircle, Circle, ChevronRightCircle } from "lucide-react-native";
+import { ChevronLeftCircle, ChevronRightCircle } from "lucide-react-native";
 import { useRouter } from "expo-router";
+import {Platform} from "react-native";
+import Header from "@/components/Header";
+
 
 export default function OnboardingScreen() {
+
+  const isSwipeEnabled = () => {
+    return Platform.OS === 'android' || Platform.OS === 'ios';
+  };
+
   const { width } = useWindowDimensions();
 
   const [activeIndex, setActiveIndex] = useState(0);
   const router = useRouter();
-  const scrollViewRef = useRef<ScrollView>(null);
+  const scrollViewRef = useRef<ScrollView | null>(null);
 
 
   const navigateToAuthentication = () => {
@@ -29,14 +37,18 @@ export default function OnboardingScreen() {
   const onPrevPress = () => {
     if (activeIndex > 0) {
       setActiveIndex((prevIndex) => prevIndex - 1);
-      scrollViewRef.current?.scrollTo({ x: width * (activeIndex - 1), animated: true });
+      if(isSwipeEnabled()){
+        scrollViewRef.current?.scrollTo({ x: width * (activeIndex - 1), animated: true });
+      }
     }
   };
 
   const onNextPress = () => {
     if (activeIndex < onboardingData.length - 1) {
       setActiveIndex((prevIndex) => prevIndex + 1);
-      scrollViewRef.current?.scrollTo({ x: width * (activeIndex + 1), animated: true });
+      if(isSwipeEnabled()){
+        scrollViewRef.current?.scrollTo({ x: width * (activeIndex + 1), animated: true });
+      }
     } else {
       navigateToAuthentication();
     }
@@ -63,23 +75,50 @@ export default function OnboardingScreen() {
 
   return (
       <View style={styles.container}>
+        <View>
+          <Header title="StudentTimer" />
+        </View>
         {/* Onboarding-Beschreibungs-Daten */}
-        <ScrollView
-            ref={scrollViewRef}
-            horizontal
-            pagingEnabled
-            showsHorizontalScrollIndicator={false}
-            onMomentumScrollEnd={(event) => {
-              const newIndex = Math.round(event.nativeEvent.contentOffset.x / width);
-              setActiveIndex(newIndex);
-            }}
-        >
-          {onboardingData.map((item, index) => (
-              <View key={index} style={{width}}>
-                {index === activeIndex && renderOnboardingItem(item)}
-              </View>
-          ))}
-          </ScrollView>
+        {Platform.OS === 'web' ? (
+            <View
+                ref={scrollViewRef}
+                horizontal
+                pagingEnabled={isSwipeEnabled()}
+                showsHorizontalScrollIndicator={false}
+                onMomentumScrollEnd={(event) => {
+                  if (isSwipeEnabled()) {
+                    const newIndex = Math.round(event.nativeEvent.contentOffset.x / width);
+                    setActiveIndex(newIndex);
+                  }
+                }}
+            >
+              {onboardingData.map((item, index) => (
+                  <View key={index} style={{width}}>
+                    {index === activeIndex && renderOnboardingItem(item)}
+                  </View>
+              ))}
+            </View>
+        ):(
+            <ScrollView
+                ref={scrollViewRef}
+                horizontal
+                pagingEnabled={isSwipeEnabled()}
+                showsHorizontalScrollIndicator={false}
+                onMomentumScrollEnd={(event) => {
+                  if (isSwipeEnabled()) {
+                    const newIndex = Math.round(event.nativeEvent.contentOffset.x / width);
+                    setActiveIndex(newIndex);
+                  }
+                }}
+            >
+              {onboardingData.map((item, index) => (
+                  <View key={index} style={{width}}>
+                    {index === activeIndex && renderOnboardingItem(item)}
+                  </View>
+              ))}
+            </ScrollView>
+        )}
+
 
         {/* Onboarding-Navigation */}
         <View style={styles.navigation}>
@@ -98,11 +137,6 @@ export default function OnboardingScreen() {
                   name="dot-fill"
                   size={50}
               />
-              /* <Circle
-                key={index}
-                style={index === activeIndex ? styles.active : styles.inactive}
-                size={50}
-              />*/
           ))}
 
           <TouchableOpacity onPress={onNextPress}>
