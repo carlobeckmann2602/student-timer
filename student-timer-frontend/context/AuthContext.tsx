@@ -55,10 +55,19 @@ export const AuthProvider = ({ children }: any) => {
       if (userString) user = JSON.parse(userString);
 
       if (token.accessToken && user.id) {
-        /* axios.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${token.refreshToken}`; */
         setAuthState({ token: token, authenticated: true, user: user });
+      } else {
+        setAuthState({
+          token: { accessToken: null, refreshToken: null, tokenType: null },
+          authenticated: false,
+          user: {
+            id: null,
+            name: null,
+            studyCourse: null,
+            profilePicture: null,
+            email: null,
+          },
+        });
       }
     };
     loadToken();
@@ -95,10 +104,6 @@ export const AuthProvider = ({ children }: any) => {
         refreshToken: result.data.refreshToken,
       } as TokenType;
 
-      /* axios.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${token.accessToken}`; */
-
       setAuthState({
         token: token,
         authenticated: true,
@@ -111,7 +116,7 @@ export const AuthProvider = ({ children }: any) => {
 
       return result;
     } catch (e) {
-      return { error: true, msg: (e as any).response.data.msg };
+      return { error: true, msg: (e as any).response.data.message };
     }
   };
 
@@ -126,10 +131,6 @@ export const AuthProvider = ({ children }: any) => {
         accessToken: result.data.accessToken,
         refreshToken: result.data.refreshToken,
       } as TokenType;
-
-      /* axios.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${token.accessToken}`; */
 
       const resultUser = await axios.get(
         `${API_URL}/students/${result.data.studentId}`,
@@ -154,7 +155,7 @@ export const AuthProvider = ({ children }: any) => {
 
       return result;
     } catch (e) {
-      return { error: true, msg: (e as any).response.data.msg };
+      return { error: true, msg: (e as any).response.data.message };
     }
   };
 
@@ -163,8 +164,6 @@ export const AuthProvider = ({ children }: any) => {
   const logout = async () => {
     await deleteStoredItem(TOKEN_KEY);
     await deleteStoredItem(USER_KEY);
-
-    //axios.defaults.headers.common["Authorization"] = "";
 
     setAuthState({
       token: { accessToken: null, refreshToken: null, tokenType: null },
