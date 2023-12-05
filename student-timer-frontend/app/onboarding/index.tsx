@@ -1,62 +1,100 @@
-import React, { useRef, useState} from "react";
-import { View, ScrollView, Text } from "../../components/Themed";
-import { onboardingData } from "@/constants/onboardingItems";
-import CardNavigation from "@/components/onboarding/CardNavigation";
-import Header from "@/components/Header";
-import { Link, router} from "expo-router";
-import { StyleSheet, useWindowDimensions} from "react-native";
+import React, {useState, useRef} from "react";
+import {Link, useRouter} from "expo-router";
+import { StyleSheet, useWindowDimensions, Platform } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
+import Header from "../../components/Header";
+import { Text, View } from "../../components/Themed";
+import { onboardingData } from "../../constants/onboardingItems";
 import OnboardingContainer from "../../components/onboarding/OnboardingContainer";
+import OnboardingCard from "../../components/onboarding/OnboardingCard";
+import CardNavigation from "../../components/onboarding/CardNavigation";
 
 export default function OnboardingScreen() {
-    const [activeIndex, setActiveIndex] = useState(0);
 
-    const navigateToAuthentication = () => {
-        router.push("/signup");
-    };
+  const { width } = useWindowDimensions();
+  const [activeIndex, setActiveIndex] = useState(0);
+  const router = useRouter();
+  const scrollViewRef = useRef<ScrollView | null>(null);
 
-    const onPrevPress = () => {
-        if (activeIndex > 0) {
-            setActiveIndex((prevIndex) => prevIndex - 1);
-        }
-    };
+  const isSwipeEnabled = () => {
+    return Platform.OS === 'android' || Platform.OS === 'ios';
+  };
 
-    const onNextPress = () => {
-        if (activeIndex < onboardingData.length - 1) {
-            setActiveIndex((prevIndex) => prevIndex + 1);
-        } else {
-            navigateToAuthentication();
-        }
-    };
+  const navigateToAuthentication = () => {
+    router.push("/(auth)/signup");
+  };
 
-    return (
-        <ScrollView contentContainerStyle={styles.container}>
-            <View>
-                <Header title="StudentTimer" />
-            </View>
-            <OnboardingContainer
-                onboardingData={onboardingData}
-                activeIndex={activeIndex}
-            />
-            <CardNavigation
-                cardAmount={onboardingData.length}
-                activeIndex={activeIndex}
-                onPrevPress={onPrevPress}
-                onNextPress={onNextPress}
-            />
-            <Text style={{marginTop: 15}}>
-              <Link href="/signup" alt="Überspringen zur Registrierung" style={{ textDecorationLine: "underline"}}>
-                  Überspringen
-              </Link>
-            </Text>
+  const onPrevPress = () => {
+    if (activeIndex > 0) {
+      setActiveIndex((prevIndex) => prevIndex - 1);
+      if(isSwipeEnabled()){
+        scrollViewRef.current?.scrollTo({ x: width * (activeIndex - 1), animated: true });
+      }
+    }
+  };
+
+  const onNextPress = () => {
+    if (activeIndex < onboardingData.length - 1) {
+      setActiveIndex((prevIndex) => prevIndex + 1);
+      if(isSwipeEnabled()){
+        scrollViewRef.current?.scrollTo({ x: width * (activeIndex + 1), animated: true });
+      }
+    } else {
+      navigateToAuthentication();
+    }
+  };
+
+  return (
+      <ScrollView contentContainerStyle={styles.container}>
+          <View>
+            <Header title="StudentTimer" />
+          </View>
+          {/* Onboarding-Cards web und smart */}
+          {Platform.OS === 'web' ? (
+              <OnboardingContainer
+                  onboardingData={onboardingData}
+                  activeIndex={activeIndex}
+              />
+          ):(
+              <ScrollView
+                  ref={scrollViewRef}
+                  horizontal
+                  pagingEnabled={isSwipeEnabled()}
+                  showsHorizontalScrollIndicator={false}
+                  onMomentumScrollEnd={(event) => {
+                    if (isSwipeEnabled()) {
+                      const newIndex = Math.round(event.nativeEvent.contentOffset.x / width);
+                      setActiveIndex(newIndex);
+                    }
+                  }}
+              >
+                {onboardingData.map((item, index) => (
+                    <View key={index} style={{ width }}>
+                      {index === activeIndex && <OnboardingCard onboardingItem={item} />}
+                    </View>
+                ))}
+              </ScrollView>
+          )}
+          <CardNavigation
+              cardAmount={onboardingData.length}
+              activeIndex={activeIndex}
+              onPrevPress={onPrevPress}
+              onNextPress={onNextPress}
+          />
+          <Text style={{marginTop: 15, marginBottom: 15}}>
+            <Link href="/signup" alt="Überspringen zur Registrierung" style={{ textDecorationLine: "underline"}}>
+              Überspringen
+            </Link>
+          </Text>
       </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flexGrow: 1,
-        justifyContent: "flex-start",
-        alignItems: "center",
-        padding: 15,
-    },
+  container: {
+    flexGrow: 1,
+    justifyContent: "flex-start",
+    alignItems: "center",
+    backgroundColor: "white" //toDo ScrollView in Themed.tsx reparieren und stattdessen importieren
+  },
 });

@@ -3,11 +3,11 @@ import { View } from "@/components/Themed";
 import Button from "@/components/Button";
 import { COLORTHEME } from "@/constants/Theme";
 import {onboardingData} from "../../constants/onboardingItems";
-import CardNavigation from "../../components/onboarding/CardNavigation";
-import Header from "../../components/Header";
+import CardNavigation from "./CardNavigation";
+import Header from "../Header";
 import {router} from "expo-router";
 import {StyleSheet} from "react-native";
-import OnboardingContainer from "../../components/onboarding/OnboardingContainer";
+import OnboardingContainer from "./OnboardingContainer";
 
 export default function OnboardingScreen() {
     const [activeIndex, setActiveIndex] = useState(0);
