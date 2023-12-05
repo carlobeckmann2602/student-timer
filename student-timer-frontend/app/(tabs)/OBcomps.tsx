@@ -1,14 +1,13 @@
-// OnboardingScreen.tsx bzw. index.tsx
 import React, { useState } from "react";
 import { View } from "@/components/Themed";
 import Button from "@/components/Button";
 import { COLORTHEME } from "@/constants/Theme";
 import {onboardingData} from "../../constants/onboardingItems";
-import OnboardingCards from "../../components/onboarding/OnboardingCards";
 import CardNavigation from "../../components/onboarding/CardNavigation";
 import Header from "../../components/Header";
 import {router} from "expo-router";
 import {StyleSheet} from "react-native";
+import OnboardingContainer from "../../components/onboarding/OnboardingContainer";
 
 export default function OnboardingScreen() {
     const [activeIndex, setActiveIndex] = useState(0);
@@ -33,7 +32,7 @@ export default function OnboardingScreen() {
         <View>
           <Header title="StudentTimer" />
         </View>
-        <OnboardingCards
+        <OnboardingContainer
             onboardingData={onboardingData}
             activeIndex={activeIndex}
         />
