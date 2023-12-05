@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import { View, ScrollView, Text } from "@/components/Themed";
-import {onboardingData} from "@/constants/onboardingItems";
-import OnboardingCards from "@/components/onboarding/OnboardingCards";
+import React, { useRef, useState} from "react";
+import { View, ScrollView, Text } from "../../components/Themed";
+import { onboardingData } from "@/constants/onboardingItems";
 import CardNavigation from "@/components/onboarding/CardNavigation";
 import Header from "@/components/Header";
-import {Link, router} from "expo-router";
-import {StyleSheet} from "react-native";
+import { Link, router} from "expo-router";
+import { StyleSheet, useWindowDimensions} from "react-native";
+import OnboardingContainer from "../../components/onboarding/OnboardingContainer";
 
 export default function OnboardingScreen() {
     const [activeIndex, setActiveIndex] = useState(0);
@@ -15,13 +15,16 @@ export default function OnboardingScreen() {
     };
 
     const onPrevPress = () => {
-        setActiveIndex((prevIndex) => Math.max(prevIndex - 1, 0));
+        if (activeIndex > 0) {
+            setActiveIndex((prevIndex) => prevIndex - 1);
+        }
     };
+
     const onNextPress = () => {
         if (activeIndex < onboardingData.length - 1) {
-        setActiveIndex((prevIndex) => prevIndex + 1);
+            setActiveIndex((prevIndex) => prevIndex + 1);
         } else {
-        navigateToAuthentication();
+            navigateToAuthentication();
         }
     };
 
@@ -30,7 +33,7 @@ export default function OnboardingScreen() {
             <View>
                 <Header title="StudentTimer" />
             </View>
-            <OnboardingCards
+            <OnboardingContainer
                 onboardingData={onboardingData}
                 activeIndex={activeIndex}
             />
