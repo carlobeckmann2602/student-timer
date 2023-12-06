@@ -3,31 +3,36 @@ package com.github.philippvogel92.studenttimerbackend;
 import com.github.philippvogel92.studenttimerbackend.learningSession.LearningSession;
 import com.github.philippvogel92.studenttimerbackend.learningUnit.LearningUnit;
 import com.github.philippvogel92.studenttimerbackend.module.Module;
-import com.github.philippvogel92.studenttimerbackend.module.ModuleRepository;
 import com.github.philippvogel92.studenttimerbackend.student.Student;
 import com.github.philippvogel92.studenttimerbackend.student.StudentRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 
 @Configuration
 public class DatabaseConfig {
+    private final PasswordEncoder passwordEncoder;
+
+    @Autowired
+    public DatabaseConfig(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Bean
     CommandLineRunner commandLineRunner(StudentRepository repository) {
         return args -> {
             Student student1 = new Student("Philipp", "Master Medieninformatik", "phil.jpg", "phil@test.de",
-                    "string");
+                    passwordEncoder.encode("string"));
             Student student2 = new Student("Alex", "Bachelor Medientechnologie", "alex.jpg", "alex@test.de",
-                    "vsdfvsd4334");
+                    passwordEncoder.encode("vsdfvsd4334"));
 
             Module module1 = new Module("Datenbanksysteme 1", "#88A795", 5, LocalDate.of(2024, Month.JUNE, 10),
                     student1);
