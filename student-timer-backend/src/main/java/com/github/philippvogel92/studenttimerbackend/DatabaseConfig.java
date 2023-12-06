@@ -42,22 +42,22 @@ public class DatabaseConfig {
                     student1);
 
             LearningUnit learningUnit1 = new LearningUnit("Vorlesung", LocalDate.of(2023, Month.FEBRUARY, 10),
-                    LocalDate.of(2023, Month.SEPTEMBER, 2), 4, module1);
+                    LocalDate.of(2023, Month.SEPTEMBER, 2), 4.3, module1);
             LearningUnit learningUnit2 = new LearningUnit("Praktikum", LocalDate.of(2023, Month.JANUARY, 2),
-                    LocalDate.of(2023, Month.OCTOBER, 1), 2, module1);
+                    LocalDate.of(2023, Month.OCTOBER, 1), 2.3, module1);
             LearningUnit learningUnit3 = new LearningUnit("Nachhilfe", LocalDate.of(2023, Month.FEBRUARY, 6),
-                    LocalDate.of(2023, Month.SEPTEMBER, 22), 6, module1);
+                    LocalDate.of(2023, Month.SEPTEMBER, 22), 6.3, module1);
             LearningUnit learningUnit4 = new LearningUnit("Selbststudium", LocalDate.of(2023, Month.MARCH, 3),
-                    LocalDate.of(2023, Month.DECEMBER, 4), 10, module1);
+                    LocalDate.of(2023, Month.DECEMBER, 4), 10.3, module1);
 
             LearningUnit learningUnit5 = new LearningUnit("Vorlesung", LocalDate.of(2023, Month.FEBRUARY, 11),
-                    LocalDate.of(2023, Month.SEPTEMBER, 2), 5, module2);
+                    LocalDate.of(2023, Month.SEPTEMBER, 2), 5.3, module2);
             LearningUnit learningUnit6 = new LearningUnit("Praktikum", LocalDate.of(2023, Month.JANUARY, 2),
-                    LocalDate.of(2023, Month.OCTOBER, 2), 3, module2);
+                    LocalDate.of(2023, Month.OCTOBER, 2), 3.3, module2);
             LearningUnit learningUnit7 = new LearningUnit("Nachhilfe", LocalDate.of(2023, Month.FEBRUARY, 6),
-                    LocalDate.of(2023, Month.SEPTEMBER, 22), 7, module2);
+                    LocalDate.of(2023, Month.SEPTEMBER, 22), 7.3, module2);
             LearningUnit learningUnit8 = new LearningUnit("Selbststudium", LocalDate.of(2023, Month.MARCH, 3),
-                    LocalDate.of(2023, Month.DECEMBER, 4), 9, module2);
+                    LocalDate.of(2023, Month.DECEMBER, 4), 9.3, module2);
 
             module1.setLearningUnits(List.of(learningUnit1, learningUnit2, learningUnit3, learningUnit4));
             module2.setLearningUnits(List.of(learningUnit5, learningUnit6, learningUnit7, learningUnit8));
