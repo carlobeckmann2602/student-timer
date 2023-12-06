@@ -10,7 +10,7 @@ import com.github.philippvogel92.studenttimerbackend.student.Student;
 import com.github.philippvogel92.studenttimerbackend.student.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -23,13 +23,15 @@ public class AuthService {
     private final StudentRepository studentRepository;
     private final RefreshTokenService refreshTokenService;
     private final AccessTokenService accessTokenService;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public AuthService(StudentRepository studentRepository, RefreshTokenService refreshTokenService,
-                       AccessTokenService accessTokenService) {
+                       AccessTokenService accessTokenService, PasswordEncoder passwordEncoder) {
         this.studentRepository = studentRepository;
         this.refreshTokenService = refreshTokenService;
         this.accessTokenService = accessTokenService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public LoginResponseDTO login(LoginRequestDTO loginRequestDTO) {
@@ -37,10 +39,10 @@ public class AuthService {
         String password = loginRequestDTO.getPassword();
 
         Student student =
-                studentRepository.findStudentByEmail(email).orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN, "Credentials are wrong"));
+                studentRepository.findStudentByEmail(email).orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Credentials are wrong"));
 
-        if (!Objects.equals(password, student.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Credentials are wrong");
+        if (!passwordEncoder.matches(password, student.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Credentials are wrong");
         }
 
         String accessToken = accessTokenService.createAccessToken(student.getId(), email);
@@ -68,8 +70,12 @@ public class AuthService {
         if (!Objects.equals(password, password2)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The passwords aren't matching");
         }
+
+        //encrypt pw
+        String encryptedPassword = passwordEncoder.encode(password);
+
         //safe student in db
-        Student student = new Student(name, studyCourse, profilePicture, email, password);
+        Student student = new Student(name, studyCourse, profilePicture, email, encryptedPassword);
         Student studentInDatabase = studentRepository.save(student);
 
         //create access and refresh tokens
@@ -82,11 +88,5 @@ public class AuthService {
 
     }
 
-    public void checkIfUserIsAuthorized(Long studentId) {
-        String currentUserId = SecurityContextHolder.getContext().getAuthentication().getName();
-        if (!currentUserId.equals(studentId.toString())) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Forbidden");
-        }
-    }
 
 }

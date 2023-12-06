@@ -11,6 +11,7 @@ import Button from "@/components/Button";
 import Separator from "@/components/Separator";
 import OtherLogins from "@/components/auth/OtherLogins";
 import InputField from "@/components/InputField";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -19,6 +20,8 @@ export default function Login() {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [error, setError] = useState("");
+
+  const { onLogin } = useAuth();
 
   const router = useRouter();
 
@@ -54,9 +57,14 @@ export default function Login() {
     return false;
   };
 
-  const onLogin = () => {
+  const login = async () => {
     if (validateInput()) {
-      router.push("/(tabs)/");
+      const result = await onLogin!(email, password);
+      if (result && result.error) {
+        setError(result.msg);
+      } else {
+        router.push("/(tabs)/(tracking)");
+      }
     }
   };
 
@@ -90,10 +98,10 @@ export default function Login() {
               text="Log In"
               backgroundColor={COLORTHEME.light.primary}
               textColor={COLORTHEME.light.grey2}
-              onPress={onLogin}
+              onPress={login}
             />
-            {error && <Text style={styles.errorMessage}>{error}</Text>}
           </View>
+          {error && <Text style={styles.errorMessage}>{error}</Text>}
           <Text>
             Sie haben kein Konto?{" "}
             <Link href="/signup" style={{ textDecorationLine: "underline" }}>

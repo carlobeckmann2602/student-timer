@@ -64,7 +64,7 @@ public class RefreshTokenService {
         try {
             return verifier.verify(jwt);
         } catch (JWTVerificationException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Token is invalid");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Token is invalid");
         }
     }
 
@@ -72,7 +72,7 @@ public class RefreshTokenService {
     public RefreshTokenResponseDTO createNewAccessToken(String refreshToken) {
         //Check if token is in db
         RefreshToken refreshTokenFromDatabase =
-                refreshTokenRepository.findByToken(refreshToken).orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN, "Refresh Token not in database"));
+                refreshTokenRepository.findByToken(refreshToken).orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Refresh Token not in database"));
 
         //Verify if token is expired
         DecodedJWT decodedAndVerifiedRefreshToken = verifyRefreshToken(refreshTokenFromDatabase.getToken());

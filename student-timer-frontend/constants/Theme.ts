@@ -28,6 +28,8 @@ const COLORS = {
   course5: "#073B3A",
   course6: "#243119",
   course7: "#FA7921",
+  // timer colors
+  progressBarPauseColor: "#F5F56A",
 };
 
 const SIZES = {
