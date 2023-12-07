@@ -8,7 +8,7 @@ import {
   statusCodes,
 } from "@react-native-google-signin/google-signin";
 
-import * as Apple from "expo-apple-authentication";
+import * as AppleAuthentication from "expo-apple-authentication";
 import GoogleButton from "@/components/auth/GoogleButton";
 import AppleButton from "@/components/auth/AppleButton";
 
@@ -24,7 +24,7 @@ export default function OtherLogins() {
   const router = useRouter();
   const { onLogin } = useAuth();
 
-  useEffect(() => {
+  /* useEffect(() => {
     GoogleSignin.configure({
       webClientId: GoogleWebClientID,
       offlineAccess: true,
@@ -59,33 +59,35 @@ export default function OtherLogins() {
         console.log("Some Other Error Happened");
       }
     }
-  };
+  }; */
 
   const onLoginApple = async () => {
     try {
-      const user = await Apple.signInAsync({
+      const user = await AppleAuthentication.signInAsync({
         requestedScopes: [
-          Apple.AppleAuthenticationScope.FULL_NAME,
-          Apple.AppleAuthenticationScope.EMAIL,
+          AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+          AppleAuthentication.AppleAuthenticationScope.EMAIL,
         ],
       });
       console.log(`Apple User: ${JSON.stringify(user, null, 2)}`);
-      router.push("/(tabs)/(tracking)");
-    } catch (error) {}
+    } catch (error: any) {
+      console.error(error.message);
+    }
   };
 
   const [appleAuthAvailible, setAppleAuthAvailible] = useState(false);
 
   useEffect(() => {
     const checkAppleAvailable = async () => {
-      const isAvailable = await Apple.isAvailableAsync();
+      const isAvailable = await AppleAuthentication.isAvailableAsync();
       setAppleAuthAvailible(isAvailable);
     };
     checkAppleAvailable();
   });
+
   return (
     <View style={styles.buttons}>
-      <GoogleButton onPress={onLoginGoogle} />
+      {/* <GoogleButton onPress={onLoginGoogle} /> */}
       {appleAuthAvailible ? <AppleButton onPress={onLoginApple} /> : null}
     </View>
   );
