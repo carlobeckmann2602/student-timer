@@ -59,7 +59,7 @@ export default function Login() {
 
   const login = async () => {
     if (validateInput()) {
-      const result = await onLogin!(email, password);
+      const result = await onLogin!(email, password, "email");
       if (result && result.error) {
         setError(result.msg);
       } else {

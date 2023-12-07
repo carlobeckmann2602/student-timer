@@ -20,11 +20,10 @@ public class GoogleTokenVerifier {
     public GoogleTokenVerifier() {
         this.verifier = new GoogleIdTokenVerifier.Builder(new ApacheHttpTransport(), new GsonFactory())
                 // Specify the CLIENT_ID of the app that accesses the backend:
-                .setAudience(Collections.singletonList("698641812741-oobavbktgq9n5ursb8qd88kou1vc6pkn.apps" +
-                        ".googleusercontent.com"))
+                .setAudience(Collections
+                        .singletonList("698641812741-vp91l41gmncosha4m973idpbmp13vk8v.apps.googleusercontent.com"))
                 .build();
     }
-
 
     public GoogleIdToken.Payload verify(String idTokenString) {
         try {

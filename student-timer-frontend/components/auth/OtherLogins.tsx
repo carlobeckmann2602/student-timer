@@ -1,10 +1,12 @@
-import * as WebBrowser from "expo-web-browser";
-import * as Google from "expo-auth-session/providers/google";
 import {
-  GoogleAndroidClientID,
   GoogleIOSClientID,
   GoogleWebClientID,
 } from "@/constants/OAuthCredentials";
+
+import {
+  GoogleSignin,
+  statusCodes,
+} from "@react-native-google-signin/google-signin";
 
 import * as Apple from "expo-apple-authentication";
 import GoogleButton from "@/components/auth/GoogleButton";
@@ -14,51 +16,49 @@ import { StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { View } from "@/components/Themed";
-import { getStoredItem, saveItem } from "@/libs/deviceStorage";
+import { useAuth } from "@/context/AuthContext";
 
-WebBrowser.maybeCompleteAuthSession();
+//WebBrowser.maybeCompleteAuthSession();
 
 export default function OtherLogins() {
   const router = useRouter();
-
-  const onLoginGoogle = () => promptAsync();
-
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    androidClientId: GoogleAndroidClientID,
-    iosClientId: GoogleIOSClientID,
-    webClientId: GoogleWebClientID,
-  });
+  const { onLogin } = useAuth();
 
   useEffect(() => {
-    handleSignInWithGoogle();
-  }, [response]);
+    GoogleSignin.configure({
+      webClientId: GoogleWebClientID,
+      offlineAccess: true,
+      iosClientId: GoogleIOSClientID,
+    });
+  }, []);
 
-  async function handleSignInWithGoogle() {
-    const user = await getStoredItem("user");
-    if (!user) {
-      if (response?.type === "success") {
-        await getUserInfoGoogle(response.authentication?.accessToken);
-      }
-    } else {
-      router.push("/");
-    }
-  }
-
-  const getUserInfoGoogle = async (token: string | undefined) => {
-    if (!token) return;
+  const onLoginGoogle = async () => {
     try {
-      const response = await fetch(
-        "https://www.googleapis.com/userinfo/v2/me",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+      console.log(userInfo);
+      const result = await onLogin!(
+        userInfo.user.email,
+        userInfo.idToken ? userInfo.idToken : "",
+        "google"
       );
-
-      const user = await response.json();
-      console.log(user);
-      await saveItem("user", JSON.stringify(user));
-      router.push("/(tabs)/(tracking)");
-    } catch (error) {}
+      if (result && result.error) {
+        console.error(result.error);
+      } else {
+        router.push("/(tabs)/(tracking)");
+      }
+    } catch (error: any) {
+      console.log("Message", error.message);
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        console.log("User Cancelled the Login Flow");
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        console.log("Signing In");
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        console.log("Play Services Not Available or Outdated");
+      } else {
+        console.log("Some Other Error Happened");
+      }
+    }
   };
 
   const onLoginApple = async () => {
@@ -69,8 +69,7 @@ export default function OtherLogins() {
           Apple.AppleAuthenticationScope.EMAIL,
         ],
       });
-      console.log(user);
-      await saveItem("user", JSON.stringify(user));
+      console.log(`Apple User: ${JSON.stringify(user, null, 2)}`);
       router.push("/(tabs)/(tracking)");
     } catch (error) {}
   };
