@@ -5,6 +5,7 @@ import { SplashScreen, Stack } from "expo-router";
 import { useEffect } from "react";
 import { AuthProvider } from "@/context/AuthContext";
 import { AxiosProvider } from "@/context/AxiosContext";
+import { ModuleProvider } from "@/context/ModuleContext";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -52,24 +53,29 @@ function RootLayoutNav() {
         <SafeAreaView style={{ flex: 1 }}>
           <AuthProvider>
             <AxiosProvider>
-              <Stack>
-                <Stack.Screen name="index" options={{ headerShown: false }} />
-                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-                <Stack.Screen
-                  name="(auth)/login"
-                  options={{ headerShown: false }}
-                />
-                <Stack.Screen
-                  name="(auth)/signup"
-                  options={{
-                    headerShown: false,
-                  }}
-                />
-                <Stack.Screen
-                  name="onboarding/index"
-                  options={{ headerShown: false }}
-                />
-              </Stack>
+              <ModuleProvider>
+                <Stack>
+                  <Stack.Screen name="index" options={{ headerShown: false }} />
+                  <Stack.Screen
+                    name="(tabs)"
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="(auth)/login"
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="(auth)/signup"
+                    options={{
+                      headerShown: false,
+                    }}
+                  />
+                  <Stack.Screen
+                    name="onboarding/index"
+                    options={{ headerShown: false }}
+                  />
+                </Stack>
+              </ModuleProvider>
             </AxiosProvider>
           </AuthProvider>
         </SafeAreaView>
