@@ -39,6 +39,7 @@ public class AuthConfiguration {
 
         http
                 .csrf(CsrfConfigurer::disable) //deactivated in development to allow easy communication with swagger ui
+                .cors(CorsConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
                         .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
                         .requestMatchers("/documentation/**", "/documentation/docs", "/v3/api-docs", "/swagger" +
