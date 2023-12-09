@@ -1,7 +1,7 @@
 import React from "react";
 import { View, StyleSheet, ImageSourcePropType } from "react-native";
-import OnboardingCard from "./OnboardingCard";
-import { OnboardingItem } from "../../constants/onboardingItems";
+import OnboardingCard from "@/components/onboarding/OnboardingCard";
+import { OnboardingItem } from "@/constants/onboardingItems";
 
 type OnboardingContainerProps = {
     onboardingData: OnboardingItem[];
@@ -10,7 +10,7 @@ type OnboardingContainerProps = {
 
 export default function OnboardingContainer({ onboardingData, activeIndex }: OnboardingContainerProps) {
     return (
-        <View style={styles.container}>
+        <View style={styles.card}>
             {onboardingData.map((item, index) => (
                 <View key={index}>
                     {index === activeIndex && <OnboardingCard onboardingItem={item} />}
@@ -21,7 +21,7 @@ export default function OnboardingContainer({ onboardingData, activeIndex }: Onb
 }
 
 const styles = StyleSheet.create({
-    container: {
+    card: {
         flex: 1,
         justifyContent: "center",
         alignItems: "center",

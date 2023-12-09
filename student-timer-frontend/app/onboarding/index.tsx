@@ -2,17 +2,21 @@ import React, { useState, useRef } from "react";
 import { Link, useRouter } from "expo-router";
 import { StyleSheet, useWindowDimensions, Platform } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import Header from "../../components/Header";
-import { Text, View } from "../../components/Themed";
-import { onboardingData } from "../../constants/onboardingItems";
-import OnboardingContainer from "../../components/onboarding/OnboardingContainer";
-import OnboardingCard from "../../components/onboarding/OnboardingCard";
-import CardNavigation from "../../components/onboarding/CardNavigation";
+import Header from "@/components/Header";
+import Button from "@/components/Button";
+import { Text, View } from "@/components/Themed";
+import { onboardingData } from "@/constants/onboardingItems";
+import OnboardingContainer from "@/components/onboarding/OnboardingContainer";
+import OnboardingCard from "@/components/onboarding/OnboardingCard";
+import CardNavigation from "@/components/onboarding/CardNavigation";
+
+import { COLORTHEME } from "../../constants/Theme";
 
 export default function OnboardingScreen() {
 
   const { width } = useWindowDimensions();
   const [activeIndex, setActiveIndex] = useState(0);
+  const [reachedLastItem, setReachedLastItem] = useState(false);
   const router = useRouter();
   const scrollViewRef = useRef<ScrollView | null>(null);
 
@@ -62,9 +66,12 @@ export default function OnboardingScreen() {
           pagingEnabled={isSwipeEnabled()}
           showsHorizontalScrollIndicator={false}
           onMomentumScrollEnd={(event) => {
-            if (isSwipeEnabled()) {
-              const newIndex = Math.round(event.nativeEvent.contentOffset.x / width);
-              setActiveIndex(newIndex);
+            const newIndex = Math.round(event.nativeEvent.contentOffset.x / width);
+            setActiveIndex(newIndex);
+            if (newIndex === onboardingData.length - 1) {
+              setReachedLastItem(true);
+            } else {
+              setReachedLastItem(false);
             }
           }}
         >
@@ -78,14 +85,25 @@ export default function OnboardingScreen() {
       <CardNavigation
         cardAmount={onboardingData.length}
         activeIndex={activeIndex}
+        reachedLastItem={reachedLastItem}
         onPrevPress={onPrevPress}
         onNextPress={onNextPress}
       />
-      <Text style={{ marginTop: 15, marginBottom: 15 }}>
-        <Link href="/signup" style={{ textDecorationLine: "underline" }}>
-          Überspringen
-        </Link>
-      </Text>
+      {reachedLastItem ? (
+        <Button
+          text="zur Registrierung"
+          backgroundColor={COLORTHEME.light.primary}
+          textColor="#FFFFFF"
+          onPress={navigateToAuthentication}
+          style={{ width: 300, marginVertical: 20, height: 50 }}
+        />
+      ) : (
+        <Text style={{ marginVertical: 20, height: 50 }}>
+          <Link href="/signup" style={{ textDecorationLine: "underline" }}>
+            Überspringen
+          </Link>
+        </Text>
+      )}
     </ScrollView>
   );
 }

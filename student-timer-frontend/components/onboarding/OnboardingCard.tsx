@@ -1,6 +1,6 @@
 import React from "react";
 import { Text, View, Image, StyleSheet, ImageSourcePropType } from "react-native";
-import { OnboardingItem } from "../../constants/onboardingItems";
+import { OnboardingItem } from "@/constants/onboardingItems";
 
 type OnboardingCardProps = {
     onboardingItem: OnboardingItem;
@@ -22,6 +22,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
+        padding: 5
     },
     title: {
         fontSize: 26,
