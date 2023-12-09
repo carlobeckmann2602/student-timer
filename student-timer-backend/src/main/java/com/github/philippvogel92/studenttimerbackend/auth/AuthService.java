@@ -1,12 +1,9 @@
 package com.github.philippvogel92.studenttimerbackend.auth;
 
-import com.github.philippvogel92.studenttimerbackend.auth.dto.SignUpRequestDTO;
-import com.github.philippvogel92.studenttimerbackend.auth.dto.SignUpResponseDTO;
+import com.github.philippvogel92.studenttimerbackend.auth.dto.*;
 import com.github.philippvogel92.studenttimerbackend.auth.jwt.accessToken.AccessTokenService;
-import com.github.philippvogel92.studenttimerbackend.auth.dto.LoginRequestDTO;
-import com.github.philippvogel92.studenttimerbackend.auth.dto.LoginResponseDTO;
 import com.github.philippvogel92.studenttimerbackend.auth.jwt.refreshToken.RefreshTokenService;
-import com.github.philippvogel92.studenttimerbackend.auth.oAuth2.GoogleTokenVerifier;
+import com.github.philippvogel92.studenttimerbackend.auth.OAuth2.GoogleTokenVerifier;
 import com.github.philippvogel92.studenttimerbackend.student.Student;
 import com.github.philippvogel92.studenttimerbackend.student.StudentRepository;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
@@ -16,7 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.swing.text.html.Option;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -43,50 +39,52 @@ public class AuthService {
     public LoginResponseDTO login(LoginRequestDTO loginRequestDTO) {
         String email = loginRequestDTO.getEmail();
         String password = loginRequestDTO.getPassword();
-        String provider = loginRequestDTO.getProvider();
 
-        if (provider.equals("google")) {
-            GoogleIdToken.Payload payload = googleTokenVerifier.verify(password);
-            Optional<Student> studentOptional =
-                    studentRepository.findStudentByEmail(email);
+        Student student =
+                studentRepository.findStudentByEmail(email).orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Credentials are wrong"));
 
-            //login
-            if (studentOptional.isPresent()) {
-                Student student = studentOptional.get();
-                String accessToken = accessTokenService.createAccessToken(student.getId(), email);
-                String refreshToken = refreshTokenService.createRefreshToken(student);
-                return new LoginResponseDTO(accessToken, refreshToken, student.getId(), student.getEmail());
-            } else {
-                String name = (String) payload.get("name");
-                String profilePicture = (String) payload.get("picture");
-                Student student = new Student(name, null, profilePicture, email, password);
-
-                Student studentInDatabase = studentRepository.save(student);
-
-                //create access and refresh tokens
-                String accessToken = accessTokenService.createAccessToken(studentInDatabase.getId(), email);
-                String refreshToken = refreshTokenService.createRefreshToken(studentInDatabase);
-
-                return new LoginResponseDTO(accessToken, refreshToken,
-                        studentInDatabase.getId(), studentInDatabase.getEmail());
-
-            }
-        } else {
-
-            Student student =
-                    studentRepository.findStudentByEmail(email).orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Credentials are wrong"));
-            
-            if (!passwordEncoder.matches(password, student.getPassword())) {
-                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Credentials are wrong");
-            }
-
-            String accessToken = accessTokenService.createAccessToken(student.getId(), email);
-            String refreshToken = refreshTokenService.createRefreshToken(student);
-
-            return new LoginResponseDTO(accessToken, refreshToken, student.getId(), student.getEmail());
+        if (!passwordEncoder.matches(password, student.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Credentials are wrong");
         }
+
+        String accessToken = accessTokenService.createAccessToken(student.getId(), email);
+        String refreshToken = refreshTokenService.createRefreshToken(student);
+
+        return new LoginResponseDTO(accessToken, refreshToken, student.getId(), student.getEmail());
+
     }
 
+    public LoginResponseDTO loginWithGoogle(LoginOAuth2RequestDTO loginOAuth2RequestDTO) {
+        String googleIdToken = loginOAuth2RequestDTO.getTokenId();
+
+        GoogleIdToken.Payload payload = googleTokenVerifier.verify(googleIdToken);
+        String email = payload.getEmail();
+
+        Optional<Student> studentOptional =
+                studentRepository.findStudentByEmail(email);
+
+        if (studentOptional.isPresent()) {
+            //login
+            Student student = studentOptional.get();
+            String accessToken = accessTokenService.createAccessToken(student.getId(), email);
+            String refreshToken = refreshTokenService.createRefreshToken(student);
+            return new LoginResponseDTO(accessToken, refreshToken, student.getId(), student.getEmail());
+        } else {
+            //registration
+            String name = (String) payload.get("name");
+            String profilePicture = (String) payload.get("picture");
+            Student student = new Student(name, null, profilePicture, email, null);
+
+            Student studentInDatabase = studentRepository.save(student);
+
+            //create access and refresh tokens
+            String accessToken = accessTokenService.createAccessToken(studentInDatabase.getId(), email);
+            String refreshToken = refreshTokenService.createRefreshToken(studentInDatabase);
+
+            return new LoginResponseDTO(accessToken, refreshToken,
+                    studentInDatabase.getId(), studentInDatabase.getEmail());
+        }
+    }
 
     public SignUpResponseDTO signUp(SignUpRequestDTO signUpRequestDTO) {
         String email = signUpRequestDTO.getEmail();

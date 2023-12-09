@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.philippvogel92.studenttimerbackend.auth.jwt.refreshToken.RefreshToken;
 import com.github.philippvogel92.studenttimerbackend.module.Module;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
 
 import java.util.List;
 
@@ -19,7 +20,6 @@ public class Student {
     private String profilePicture;
     private String email;
     @JsonIgnore
-    @Column(columnDefinition = "TEXT")
     private String password;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "student", orphanRemoval = true)
