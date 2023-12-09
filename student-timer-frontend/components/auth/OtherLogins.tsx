@@ -1,12 +1,14 @@
-import * as WebBrowser from "expo-web-browser";
-import * as Google from "expo-auth-session/providers/google";
 import {
-  GoogleAndroidClientID,
   GoogleIOSClientID,
   GoogleWebClientID,
 } from "@/constants/OAuthCredentials";
 
-import * as Apple from "expo-apple-authentication";
+import {
+  GoogleSignin,
+  statusCodes,
+} from "@react-native-google-signin/google-signin";
+
+import * as AppleAuthentication from "expo-apple-authentication";
 import GoogleButton from "@/components/auth/GoogleButton";
 import AppleButton from "@/components/auth/AppleButton";
 
@@ -14,79 +16,78 @@ import { StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { View } from "@/components/Themed";
-import { getStoredItem, saveItem } from "@/libs/deviceStorage";
+import { useAuth } from "@/context/AuthContext";
 
-WebBrowser.maybeCompleteAuthSession();
+//WebBrowser.maybeCompleteAuthSession();
 
 export default function OtherLogins() {
   const router = useRouter();
+  const { onLogin } = useAuth();
 
-  const onLoginGoogle = () => promptAsync();
+  /* useEffect(() => {
+    GoogleSignin.configure({
+      webClientId: GoogleWebClientID,
+      offlineAccess: true,
+      iosClientId: GoogleIOSClientID,
+    });
+  }, []);
 
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    androidClientId: GoogleAndroidClientID,
-    iosClientId: GoogleIOSClientID,
-    webClientId: GoogleWebClientID,
-  });
-
-  useEffect(() => {
-    handleSignInWithGoogle();
-  }, [response]);
-
-  async function handleSignInWithGoogle() {
-    const user = await getStoredItem("user");
-    if (!user) {
-      if (response?.type === "success") {
-        await getUserInfoGoogle(response.authentication?.accessToken);
-      }
-    } else {
-      router.push("/");
-    }
-  }
-
-  const getUserInfoGoogle = async (token: string | undefined) => {
-    if (!token) return;
+  const onLoginGoogle = async () => {
     try {
-      const response = await fetch(
-        "https://www.googleapis.com/userinfo/v2/me",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+      console.log(userInfo);
+      const result = await onLogin!(
+        userInfo.user.email,
+        userInfo.idToken ? userInfo.idToken : "",
+        "google"
       );
-
-      const user = await response.json();
-      console.log(user);
-      await saveItem("user", JSON.stringify(user));
-      router.push("/(tabs)/(tracking)");
-    } catch (error) {}
-  };
+      if (result && result.error) {
+        console.error(result.error);
+      } else {
+        router.push("/(tabs)/(tracking)");
+      }
+    } catch (error: any) {
+      console.log("Message", error.message);
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        console.log("User Cancelled the Login Flow");
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        console.log("Signing In");
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        console.log("Play Services Not Available or Outdated");
+      } else {
+        console.log("Some Other Error Happened");
+      }
+    }
+  }; */
 
   const onLoginApple = async () => {
     try {
-      const user = await Apple.signInAsync({
+      const user = await AppleAuthentication.signInAsync({
         requestedScopes: [
-          Apple.AppleAuthenticationScope.FULL_NAME,
-          Apple.AppleAuthenticationScope.EMAIL,
+          AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+          AppleAuthentication.AppleAuthenticationScope.EMAIL,
         ],
       });
-      console.log(user);
-      await saveItem("user", JSON.stringify(user));
-      router.push("/(tabs)/(tracking)");
-    } catch (error) {}
+      console.log(`Apple User: ${JSON.stringify(user, null, 2)}`);
+    } catch (error: any) {
+      console.error(error.message);
+    }
   };
 
   const [appleAuthAvailible, setAppleAuthAvailible] = useState(false);
 
   useEffect(() => {
     const checkAppleAvailable = async () => {
-      const isAvailable = await Apple.isAvailableAsync();
+      const isAvailable = await AppleAuthentication.isAvailableAsync();
       setAppleAuthAvailible(isAvailable);
     };
     checkAppleAvailable();
   });
+
   return (
     <View style={styles.buttons}>
-      <GoogleButton onPress={onLoginGoogle} />
+      {/* <GoogleButton onPress={onLoginGoogle} /> */}
       {appleAuthAvailible ? <AppleButton onPress={onLoginApple} /> : null}
     </View>
   );
