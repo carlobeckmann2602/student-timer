@@ -19,7 +19,7 @@ type AuthProps = {
     password: string,
     password2: string
   ) => Promise<any>;
-  onLogin?: (email: string, password: string) => Promise<any>;
+  onLogin?: (email: string, password: string, provider: string) => Promise<any>;
   onLogout?: () => Promise<any>;
   onNewToken?: (token: TokenType) => Promise<any>;
 };
@@ -120,11 +120,12 @@ export const AuthProvider = ({ children }: any) => {
     }
   };
 
-  const login = async (email: string, password: string) => {
+  const login = async (email: string, password: string, provider: string) => {
     try {
       const result = await axios.post(`${API_URL}/auth/login`, {
         email,
         password,
+        provider,
       });
 
       const token = {

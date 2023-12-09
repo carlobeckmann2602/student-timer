@@ -15,6 +15,7 @@
   "dependencies": {
     "@expo/vector-icons": "^13.0.0",
     "@react-native-async-storage/async-storage": "1.18.2",
+    "@react-native-google-signin/google-signin": "^10.1.1",
     "@react-native-community/datetimepicker": "7.2.0",
     "@react-native-picker/picker": "2.4.10",
     "@react-navigation/native": "^6.0.2",
@@ -31,7 +32,6 @@
     "expo-splash-screen": "~0.20.5",
     "expo-status-bar": "~1.6.0",
     "expo-system-ui": "~2.4.0",
-    "expo-web-browser": "~12.3.2",
     "lucide": "^0.292.0",
     "lucide-react-native": "^0.292.0",
     "react": "18.2.0",
