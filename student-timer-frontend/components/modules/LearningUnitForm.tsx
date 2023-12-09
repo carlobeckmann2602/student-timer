@@ -1,14 +1,21 @@
 import { View, StyleSheet } from "react-native";
 import { COLORTHEME } from "@/constants/Theme";
 import { useRouter } from "expo-router";
-import { ModuleType } from "@/types/ModuleType";
 import InputField from "../InputField";
 import { useState } from "react";
-import RNDateTimePicker from "@react-native-community/datetimepicker";
 import DateTimePicker from "../DateTimePicker";
+import { LearningUnitType } from "@/types/LearningUnitType";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { LabelS } from "../StyledText";
 
-// export function LearningUnitForm(data: ModuleType) {
-export function LearningUnitForm() {
+type LearningUnitFormProps = {
+  inputData: LearningUnitType;
+  onDelete: (unitId: number) => void;
+};
+
+export function LearningUnitForm(props: LearningUnitFormProps) {
+  const { inputData, onDelete } = props;
+
   const router = useRouter();
 
   const [examDate, setExamDate] = useState("");
@@ -72,6 +79,15 @@ export function LearningUnitForm() {
           message={examDateError}
           messageColor="red"
         />
+      </View>
+      <View style={styles.row}>
+        <TouchableOpacity onPress={() => onDelete(inputData.unitId)}>
+          <LabelS
+            style={[styles.errorMessage, { textDecorationLine: "underline" }]}
+          >
+            Entfernen
+          </LabelS>
+        </TouchableOpacity>
       </View>
     </View>
   );

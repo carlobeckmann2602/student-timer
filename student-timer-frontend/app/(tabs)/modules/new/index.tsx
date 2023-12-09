@@ -4,31 +4,43 @@ import { H1, H2, H3 } from "@/components/StyledText";
 import { View, Text } from "@/components/Themed";
 import { LearningUnitForm } from "@/components/modules/LearningUnitForm";
 import { COLORTHEME } from "@/constants/Theme";
+import { LearningUnitType } from "@/types/LearningUnitType";
+import { ModuleType } from "@/types/ModuleType";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { ScrollView, StyleSheet } from "react-native";
+import { FlatList } from "react-native-gesture-handler";
 
 export default function NewModule() {
-  const [userName, setUserName] = useState("");
+  const [moduleName, setModuleName] = useState("");
   const [examDate, setExamDate] = useState("");
   const [creditPoints, setCreditPoints] = useState("");
-  const [userPassword, setUserPassword] = useState("");
-  const [userCheckPassword, setUserCheckPassword] = useState("");
+  const [colorCode, setColorCode] = useState("");
 
-  const [nameError, setNameError] = useState("");
+  const [learningUnits, setLearningUnits] = useState<LearningUnitType[]>([
+    {
+      unitId: 123,
+      name: "test",
+      workloadPerWeek: -1,
+      startDate: new Date(),
+      endDate: new Date(),
+    },
+  ]);
+
+  const [moduleNameError, setModuleNameError] = useState("");
   const [examDateError, setStudyCourseError] = useState("");
   const [creditPointError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
+  const [colorCodeError, setColorCodeError] = useState("");
   const [error, setError] = useState("");
 
   const router = useRouter();
 
   const validateInput = () => {
     var nameValid = false;
-    if (userName.length == 0) {
-      setNameError("Name ist erforderlich");
+    if (moduleName.length == 0) {
+      setModuleNameError("Name ist erforderlich");
     } else {
-      setNameError("");
+      setModuleNameError("");
       nameValid = true;
     }
 
@@ -53,16 +65,12 @@ export default function NewModule() {
     }
 
     var passwordValid = false;
-    if (userPassword.length == 0) {
-      setPasswordError("Passwort ist erforderlich");
-    } else if (userPassword.length < 6) {
-      setPasswordError("Das Passwort sollte mindestens 6 Zeichen lang sein");
-    } else if (userPassword.indexOf(" ") >= 0) {
-      setPasswordError("Passwort kann keine Leerzeichen enthalten");
-    } else if (userPassword != userCheckPassword) {
-      setPasswordError("Passwörter stimmen nicht überein");
+    if (colorCode.length == 0) {
+      setColorCodeError("Passwort ist erforderlich");
+    } else if (colorCode.length < 6) {
+      setColorCodeError("Das Passwort sollte mindestens 6 Zeichen lang sein");
     } else {
-      setPasswordError("");
+      setColorCodeError("");
       passwordValid = true;
     }
 
@@ -74,9 +82,65 @@ export default function NewModule() {
   };
 
   const onRegister = () => {
-    if (validateInput()) {
-      router.push("/(tabs)");
+    router.push(`/modules/new/learningUnits`);
+    // if (validateInput()) {
+    //   router.replace(`/(tabs)/modules/${newModule.moduleId}`);
+    // }
+  };
+
+  // const newLearningUnits: LearningUnitType[] = [
+  //   {
+  //     unitId: 123,
+  //     name: "test",
+  //     workloadPerWeek: -1,
+  //     startDate: new Date(),
+  //     endDate: new Date(),
+  //   },
+  //   {
+  //     unitId: 456,
+  //     name: "test",
+  //     workloadPerWeek: -1,
+  //     startDate: new Date(),
+  //     endDate: new Date(),
+  //   },
+  //   {
+  //     unitId: 789,
+  //     name: "test",
+  //     workloadPerWeek: -1,
+  //     startDate: new Date(),
+  //     endDate: new Date(),
+  //   },
+  // ];
+
+  const onDeleteLearningUnit = (unitId: number) => {
+    const index = learningUnits.findIndex((item) => item.unitId === unitId);
+    if (index > -1) {
+      learningUnits.splice(index, 1);
     }
+  };
+
+  const onAddLearningUnit = () => {
+    console.log(learningUnits);
+
+    setLearningUnits((prevLearningUnits) => {
+      const test = {
+        unitId: Math.floor(Math.random() * 10000),
+        name: "testNew",
+        workloadPerWeek: -1,
+        startDate: new Date(),
+        endDate: new Date(),
+      };
+      return [...prevLearningUnits, test];
+    });
+  };
+
+  const newModule: ModuleType = {
+    moduleId: "",
+    name: moduleName,
+    colorCode: "",
+    creditpoints: -1,
+    examDate: new Date(),
+    learningUnits: learningUnits,
   };
 
   return (
@@ -90,9 +154,9 @@ export default function NewModule() {
           <View style={styles.row}>
             <InputField
               label="Name"
-              onChangeText={setCreditPoints}
-              value={creditPoints}
-              message={creditPointError}
+              onChangeText={setModuleName}
+              value={moduleName}
+              message={moduleNameError}
               messageColor="red"
             />
           </View>
@@ -116,9 +180,9 @@ export default function NewModule() {
             />
             <InputField
               label="Farbauswahl"
-              onChangeText={setExamDate}
-              value={examDate}
-              message={examDateError}
+              onChangeText={setColorCode}
+              value={colorCode}
+              message={colorCodeError}
               messageColor="red"
             />
           </View>
@@ -126,13 +190,29 @@ export default function NewModule() {
       </View>
       <View style={styles.section}>
         <H3 style={styles.cardHeader}>Lerneinheiten</H3>
-        <LearningUnitForm />
-        <LearningUnitForm />
-        <LearningUnitForm />
+        <FlatList
+          data={learningUnits}
+          renderItem={({ item }) => (
+            <LearningUnitForm
+              inputData={item}
+              onDelete={onDeleteLearningUnit}
+            />
+          )}
+          keyExtractor={(item: LearningUnitType) => item.unitId.toString()}
+          // extraData={learningUnits}
+          contentContainerStyle={styles.flatListContainer}
+        ></FlatList>
+        <Button
+          text="Lerneinheit hinzufügen"
+          backgroundColor={COLORTHEME.light.primary}
+          textColor={COLORTHEME.light.grey2}
+          onPress={onAddLearningUnit}
+          style={{ width: 200 }}
+        />
       </View>
       <View style={styles.buttons}>
         <Button
-          text="Fertig"
+          text="Weiter"
           backgroundColor={COLORTHEME.light.primary}
           textColor={COLORTHEME.light.grey2}
           onPress={onRegister}
@@ -160,6 +240,9 @@ const styles = StyleSheet.create({
     width: "100%",
     gap: 12,
     backgroundColor: "transparent",
+  },
+  flatListContainer: {
+    gap: 12,
   },
   outerWrapper: {
     width: "100%",

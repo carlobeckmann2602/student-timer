@@ -13,6 +13,10 @@ export default function ModulesLayout() {
         }}
       />
       <Stack.Screen name="new/index" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="new/learningsUnits"
+        options={{ headerShown: false }}
+      />
     </Stack>
   );
 }
