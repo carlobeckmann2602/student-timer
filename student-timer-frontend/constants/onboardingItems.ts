@@ -1,3 +1,10 @@
+import { ImageSourcePropType } from 'react-native';
+export type OnboardingItem = {
+    title: string;
+    description: string;
+    image: ImageSourcePropType;
+}
+
 export const onboardingData = [
     {
         title: 'Tracking',

@@ -1,14 +1,14 @@
 import React from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, ImageSourcePropType } from "react-native";
 import OnboardingCard from "./OnboardingCard";
+import { OnboardingItem } from "../../constants/onboardingItems";
 
-interface OnboardingContainerProps {
-    onboardingData: OnboardingCard[];
+type OnboardingContainerProps = {
+    onboardingData: OnboardingItem[];
     activeIndex: number;
 }
 
-export default function OnboardingContainer({ onboardingData, activeIndex }: OnboardingContainerProps){
-
+export default function OnboardingContainer({ onboardingData, activeIndex }: OnboardingContainerProps) {
     return (
         <View style={styles.container}>
             {onboardingData.map((item, index) => (

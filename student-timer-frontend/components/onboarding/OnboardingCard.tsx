@@ -1,13 +1,8 @@
 import React from "react";
 import { Text, View, Image, StyleSheet, ImageSourcePropType } from "react-native";
+import { OnboardingItem } from "../../constants/onboardingItems";
 
-interface OnboardingItem {
-    title: string;
-    description: string;
-    image: ImageSourcePropType;
-}
-
-interface OnboardingCardProps {
+type OnboardingCardProps = {
     onboardingItem: OnboardingItem;
 }
 
