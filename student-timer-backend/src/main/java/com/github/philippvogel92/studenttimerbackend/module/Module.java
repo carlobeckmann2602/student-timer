@@ -29,11 +29,14 @@ public class Module {
 
     @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "module", fetch = FetchType.LAZY)
     @JsonManagedReference
-    private List<LearningUnit> learningUnit;
+    private List<LearningUnit> learningUnits;
 
     @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "module", fetch = FetchType.LAZY)
     @JsonManagedReference
     private List<LearningSession> learningSessions;
+
+    @Transient
+    private Integer totalLearningTime;
 
     public Module(String name, String colorCode, Integer creditPoints, LocalDate examDate, Student student) {
         this.name = name;
@@ -105,11 +108,11 @@ public class Module {
     }
 
     public List<LearningUnit> getLearningUnits() {
-        return learningUnit;
+        return learningUnits;
     }
 
     public void setLearningUnits(List<LearningUnit> learningUnit) {
-        this.learningUnit = learningUnit;
+        this.learningUnits = learningUnit;
     }
 
     public List<LearningSession> getLearningSessions() {

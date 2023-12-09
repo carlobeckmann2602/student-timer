@@ -6,6 +6,9 @@ import com.github.philippvogel92.studenttimerbackend.module.Module;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.time.Period;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 @Entity
 @Table
@@ -17,19 +20,24 @@ public class LearningUnit {
     private String name;
     private LocalDate startDate;
     private LocalDate endDate;
-    private Integer workloadPerWeek;
+    private Double workloadPerWeek;
 
     @ManyToOne
     @JoinColumn(name = "module_id")
     @JsonBackReference
     private Module module;
 
-    public LearningUnit(String name, LocalDate startDate, LocalDate endDate, Integer workloadPerWeek, Module module) {
+
+    @Transient
+    private Double totalLearningTime;
+
+    public LearningUnit(String name, LocalDate startDate, LocalDate endDate, Double workloadPerWeek, Module module) {
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
         this.workloadPerWeek = workloadPerWeek;
         this.module = module;
+        this.totalLearningTime = getTotalLearningTime();
     }
 
     public LearningUnit() {
@@ -68,11 +76,11 @@ public class LearningUnit {
         this.endDate = endDate;
     }
 
-    public Integer getWorkloadPerWeek() {
+    public Double getWorkloadPerWeek() {
         return workloadPerWeek;
     }
 
-    public void setWorkloadPerWeek(Integer workloadPerWeek) {
+    public void setWorkloadPerWeek(Double workloadPerWeek) {
         this.workloadPerWeek = workloadPerWeek;
     }
 
@@ -83,4 +91,9 @@ public class LearningUnit {
     public void setModule(Module module) {
         this.module = module;
     }
+
+    public Double getTotalLearningTime() {
+        return (double) Math.round(Period.between(this.startDate, this.endDate).getDays() / 7d * this.workloadPerWeek);
+    }
+
 }

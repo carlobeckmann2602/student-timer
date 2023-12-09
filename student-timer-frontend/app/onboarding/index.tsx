@@ -4,13 +4,13 @@ import { StyleSheet, useWindowDimensions, Platform } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import Header from "@/components/Header";
 import Button from "@/components/Button";
+import { COLORTHEME } from "@/constants/Theme";
 import { Text, View } from "@/components/Themed";
 import { onboardingData } from "@/constants/onboardingItems";
 import OnboardingContainer from "@/components/onboarding/OnboardingContainer";
 import OnboardingCard from "@/components/onboarding/OnboardingCard";
 import CardNavigation from "@/components/onboarding/CardNavigation";
-
-import { COLORTHEME } from "../../constants/Theme";
+import { saveItem } from "@/libs/deviceStorage";
 
 export default function OnboardingScreen() {
 
@@ -25,6 +25,7 @@ export default function OnboardingScreen() {
   };
 
   const navigateToAuthentication = () => {
+    //saveItem("onbarding", JSON.stringify(true));
     router.push("/(auth)/signup");
   };
 

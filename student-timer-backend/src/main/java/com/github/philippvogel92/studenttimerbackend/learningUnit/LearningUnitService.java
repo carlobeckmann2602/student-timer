@@ -48,7 +48,7 @@ public class LearningUnitService {
         String name = learningUnitCreateDTO.getName();
         LocalDate startDate = learningUnitCreateDTO.getStartDate();
         LocalDate endDate = learningUnitCreateDTO.getEndDate();
-        Integer workloadPerWeek = learningUnitCreateDTO.getWorkloadPerWeek();
+        Double workloadPerWeek = learningUnitCreateDTO.getWorkloadPerWeek();
 
         LearningUnit learningUnit = new LearningUnit(name, startDate, endDate, workloadPerWeek, module);
 

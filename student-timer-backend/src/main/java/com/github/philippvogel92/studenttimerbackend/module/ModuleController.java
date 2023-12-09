@@ -1,13 +1,13 @@
 package com.github.philippvogel92.studenttimerbackend.module;
 
 import com.github.philippvogel92.studenttimerbackend.module.dto.ModuleCreateDTO;
-import com.github.philippvogel92.studenttimerbackend.student.Student;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @ApiResponses(value = {
-        @ApiResponse(responseCode = "400", description = "Invalid request",
+        @ApiResponse(responseCode = "401", description = "Not authorized for this resource",
                 content = @Content),
 })
 @RestController
@@ -30,7 +30,8 @@ public class ModuleController {
 
     // *************************** GET-METHODS ***************************
 
-    @Operation(summary = "Get a list of all modules of a student by studentId")
+    @Operation(summary = "Get a list of all modules of a student by studentId", security = @SecurityRequirement(name
+            = "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Found the modules for the student id",
                     content = {@Content(mediaType = "application/json",
@@ -43,7 +44,8 @@ public class ModuleController {
         return moduleService.getAllModulesForStudent(studentId);
     }
 
-    @Operation(summary = "Get a module of a student by studentId and moduleId")
+    @Operation(summary = "Get a module of a student by studentId and moduleId", security = @SecurityRequirement(name
+            = "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Found the module",
                     content = {@Content(mediaType = "application/json",
@@ -59,7 +61,7 @@ public class ModuleController {
 
     // *************************** POST-METHODS ***************************
 
-    @Operation(summary = "Create a new module")
+    @Operation(summary = "Create a new module", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Module created",
                     content = {@Content(mediaType = "application/json",
@@ -71,7 +73,7 @@ public class ModuleController {
     }
     // *************************** PUT-METHODS ***************************
 
-    @Operation(summary = "Updates a module")
+    @Operation(summary = "Updates a module", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Module updated",
                     content = {@Content(mediaType = "application/json",
@@ -87,7 +89,8 @@ public class ModuleController {
 
     // *************************** DELETE-METHODS ***************************
 
-    @Operation(summary = "Delete a module of a student by studentId and moduleId")
+    @Operation(summary = "Delete a module of a student by studentId and moduleId", security =
+    @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Module deleted",
                     content = @Content),

@@ -31,6 +31,10 @@ export function P(props: TextProps) {
   return <Text {...props} style={[styles.p, props.style]} />;
 }
 
+export function LabelS(props: TextProps) {
+  return <Text {...props} style={[styles.labelS, props.style]} />;
+}
+
 const styles = StyleSheet.create({
   title: {
     fontSize: SIZES.xxxLarge,
@@ -66,5 +70,10 @@ const styles = StyleSheet.create({
     fontSize: SIZES.xsmall,
     fontWeight: "normal",
     textAlign: "justify",
+  },
+  labelS: {
+    fontSize: SIZES.xxsmall,
+    fontWeight: "normal",
+    textAlign: "center",
   },
 });

@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,11 +15,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @ApiResponses(value = {
-        @ApiResponse(responseCode = "400", description = "Invalid request",
+        @ApiResponse(responseCode = "401", description = "Not authorized for this resource",
                 content = @Content),
 })
 @RestController
-@RequestMapping(path = "/modules/{moduleId}")
+@RequestMapping(path = "/students/{studentId}/modules/{moduleId}")
 public class LearningSessionController {
     private final LearningSessionService learningSessionService;
 
@@ -29,7 +30,8 @@ public class LearningSessionController {
 
     // *************************** GET-METHODS ***************************
 
-    @Operation(summary = "Get a list of all learning sessions of a module by moduleId")
+    @Operation(summary = "Get a list of all learning sessions of a module", security = @SecurityRequirement(name =
+            "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Found the learning sessions for the module id",
                     content = {@Content(mediaType = "application/json",
@@ -38,11 +40,12 @@ public class LearningSessionController {
             )
     })
     @GetMapping(path = "/learningSessions")
-    public List<LearningSession> getAllLearningSessionsForModule(@PathVariable("moduleId") Long moduleId) {
+    public List<LearningSession> getAllLearningSessionsForModule(@PathVariable("studentId") Long studentId,
+                                                                 @PathVariable("moduleId") Long moduleId) {
         return learningSessionService.getAllLearningSessionsForModule(moduleId);
     }
 
-    @Operation(summary = "Get a learning session of a module by learningSessionId")
+    @Operation(summary = "Get a learning session of a module", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Found the learning session",
                     content = {@Content(mediaType = "application/json",
@@ -52,27 +55,29 @@ public class LearningSessionController {
                     content = @Content)
     })
     @GetMapping(path = "/learningSessions/{learningSessionId}")
-    public LearningSession getLearningSession(@PathVariable("moduleId") Long moduleId,
+    public LearningSession getLearningSession(@PathVariable("studentId") Long studentId,
+                                              @PathVariable("moduleId") Long moduleId,
                                               @PathVariable("learningSessionId") Long learningSessionId) {
         return learningSessionService.getLearningSession(moduleId, learningSessionId);
     }
 
     // *************************** POST-METHODS ***************************
 
-    @Operation(summary = "Create a new learning session")
+    @Operation(summary = "Create a new learning session", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Learning session created",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = LearningSession.class))}),
     })
     @PostMapping(path = "/learningSessions")
-    public LearningSession addLearningSession(@PathVariable("moduleId") Long moduleId,
+    public LearningSession addLearningSession(@PathVariable("studentId") Long studentId,
+                                              @PathVariable("moduleId") Long moduleId,
                                               LearningSessionCreateDTO learningSessionCreateDTO) {
         return learningSessionService.addLearningSession(moduleId, learningSessionCreateDTO);
     }
     // *************************** PUT-METHODS ***************************
 
-    @Operation(summary = "Updates a learning session")
+    @Operation(summary = "Updates a learning session", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Learning session updated",
                     content = {@Content(mediaType = "application/json",
@@ -81,7 +86,8 @@ public class LearningSessionController {
                     content = @Content)
     })
     @PutMapping(path = "/learningSessions/{learningSessionId}")
-    public LearningSession updateLearningSession(@PathVariable("moduleId") Long moduleId,
+    public LearningSession updateLearningSession(@PathVariable("studentId") Long studentId,
+                                                 @PathVariable("moduleId") Long moduleId,
                                                  @PathVariable("learningSessionId") Long learningSessionId,
                                                  @Valid @RequestBody LearningSessionCreateDTO learningSessionCreateDTO) {
         return learningSessionService.updateLearningSession(moduleId, learningSessionId, learningSessionCreateDTO);
@@ -89,7 +95,7 @@ public class LearningSessionController {
 
     // *************************** DELETE-METHODS ***************************
 
-    @Operation(summary = "Delete a learning session of a module by moduleId and learningSessionId")
+    @Operation(summary = "Delete a learning session of a module", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Learning session deleted",
                     content = @Content),
@@ -99,7 +105,8 @@ public class LearningSessionController {
                     content = @Content)
     })
     @DeleteMapping(path = "/learningSessions/{learningSessionId}")
-    public void deleteLearningSession(@PathVariable("moduleId") Long moduleId,
+    public void deleteLearningSession(@PathVariable("studentId") Long studentId,
+                                      @PathVariable("moduleId") Long moduleId,
                                       @PathVariable("learningSessionId") Long learningSessionId) {
         learningSessionService.deleteLearningSession(moduleId, learningSessionId);
     }

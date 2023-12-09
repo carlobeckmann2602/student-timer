@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import { StyleSheet, TextInput } from "react-native";
-import { Picker } from "@react-native-picker/picker";
+import { Platform, KeyboardAvoidingView, StyleSheet } from "react-native";
+import Picker from "react-native-picker-select";
+import { router } from "expo-router";
 
 import { Text, View } from "@/components/Themed";
 import Button from "@/components/Button";
-import { COLORTHEME } from "@/constants/Theme";
+import InputField from "@/components/InputField";
+import { COLORS, COLORTHEME } from "@/constants/Theme";
 import TrackingModeToggle from "@/components/tracking/TrackingModeToggle";
 import Timer from "@/components/tracking/Timer";
 import { PauseIcon, PlayIcon } from "lucide-react-native";
@@ -18,6 +20,7 @@ export default function Tracking() {
   const [startTime, setStartTime] = useState(0);
   const [selectedModule, setSelectedModule] = useState(3);
 
+  const inputsEditable = !trackingIsActive && startTime === 0;
   const toggleTracking = () => {
     trackingIsActive ? "" : setStartTime(Date.now());
     setTrackingIsActive(!trackingIsActive);
@@ -29,9 +32,15 @@ export default function Tracking() {
   };
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
       <View>
-        <TrackingModeToggle onPress={setIsStopwatch} disabled={trackingIsActive || startTime !== 0} />
+        <TrackingModeToggle
+          onPress={setIsStopwatch}
+          disabled={trackingIsActive || startTime !== 0}
+        />
       </View>
       <Timer
         isStopwatch={isStopwatch}
@@ -43,52 +52,63 @@ export default function Tracking() {
       />
       <View style={styles.inputs}>
         {!isStopwatch && (
-          <View style={styles.inputLabelGroup}>
-            <Text style={styles.inputLabelText}>Runden</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={setRounds}
-              value={rounds}
-              keyboardType="numeric"
-              editable={!trackingIsActive && startTime === 0}
-            />
-          </View>
+          <InputField
+            style={styles.input}
+            label="Runden"
+            value={rounds}
+            onChangeText={setRounds}
+            keyboardType="numeric"
+            selectTextOnFocus
+            editable={inputsEditable}
+          />
         )}
-        <View style={styles.inputLabelGroup}>
-          <Text style={styles.inputLabelText}>Rundenlänge</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={setRoundLen}
-            value={roundLen}
-            keyboardType="numeric"
-            editable={!trackingIsActive && startTime === 0}
-          />
-        </View>
-        <View style={styles.inputLabelGroup}>
-          <Text style={styles.inputLabelText}>Pause</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={setPauseLen}
-            value={pauseLen}
-            keyboardType="numeric"
-            editable={!trackingIsActive && startTime === 0}
-          />
-        </View>
+        <InputField
+          style={styles.input}
+          label="Rundenlänge"
+          value={roundLen}
+          onChangeText={setRoundLen}
+          keyboardType="numeric"
+          inputUnit="min"
+          selectTextOnFocus
+          editable={inputsEditable}
+        />
+        <InputField
+          style={styles.input}
+          label="Pausenlänge"
+          value={pauseLen}
+          onChangeText={setPauseLen}
+          keyboardType="numeric"
+          inputUnit="min"
+          selectTextOnFocus
+          editable={inputsEditable}
+        />
       </View>
-      <View>
+      <View style={styles.pickerContainer}>
         <Text style={styles.inputLabelText}>Modul</Text>
-        <View style={styles.dropdownContainer}>
+        <View>
           <Picker
-            style={styles.dropdown}
-            selectedValue={selectedModule}
-            onValueChange={(module) => setSelectedModule(Number(module.toString()))}
-            enabled={!trackingIsActive && startTime === 0}
-          >
-            <Picker.Item label="Datenbanksysteme 1" value={1} />
-            <Picker.Item label="Datenbanksysteme 2" value={2} />
-            <Picker.Item label="Mediengestaltung 1" value={3} />
-            <Picker.Item label="Mediengestaltung 2" value={4} />
-          </Picker>
+            style={{
+              viewContainer: styles.picker,
+              inputWeb: styles.picker,
+              inputAndroid: { color: COLORTHEME.light.grey3 },
+              inputIOS: { color: COLORTHEME.light.grey3 },
+            }}
+            placeholder={{}}
+            items={[
+              { label: "Mediengestaltung 1", value: 0 },
+              { label: "Mediengestaltung 2", value: 1 },
+              { label: "Mediengestaltung 3", value: 2 },
+              { label: "Mediengestaltung 4", value: 3 },
+              { label: "Mediengestaltung 5", value: 4 },
+              { label: "Mediengestaltung 6", value: 5 },
+              { label: "Mediengestaltung 7", value: 6 },
+              { label: "Mediengestaltung 8", value: 7 },
+              { label: "Mediengestaltung 9", value: 8 },
+              { label: "Mediengestaltung 10", value: 9 },
+            ]}
+            onValueChange={(module: number) => setSelectedModule(module)}
+            disabled={!inputsEditable}
+          />
         </View>
       </View>
       <View style={styles.trackerButtons}>
@@ -106,7 +126,10 @@ export default function Tracking() {
               text="Tracking beenden"
               backgroundColor={COLORTHEME.light.primary}
               textColor="#FFFFFF"
-              onPress={resetTimer}
+              onPress={() => {
+                router.push({ pathname: "/success" });
+                resetTimer();
+              }}
               style={styles.button}
             />
           </>
@@ -135,13 +158,16 @@ export default function Tracking() {
               text="Tracking beenden"
               backgroundColor={COLORTHEME.light.primary}
               textColor="#FFFFFF"
-              onPress={resetTimer}
+              onPress={() => {
+                router.push({ pathname: "/success" });
+                resetTimer();
+              }}
               style={styles.button}
             />
           </>
         )}
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -150,36 +176,28 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "space-around",
     paddingHorizontal: 12,
+    backgroundColor: COLORS.white,
   },
   inputs: {
     flexDirection: "row",
     justifyContent: "space-between",
   },
-  inputLabelGroup: {
-    flexDirection: "column",
-  },
   inputLabelText: {
     color: COLORTHEME.light.primary,
   },
   input: {
+    maxWidth: 100,
+  },
+  pickerContainer: {
+    gap: 5,
+  },
+  picker: {
     backgroundColor: COLORTHEME.light.grey2,
     color: COLORTHEME.light.grey3,
-    borderRadius: 12,
-    width: 100,
-    height: 40,
-    paddingHorizontal: 10,
-  },
-  dropdownContainer: {
-    backgroundColor: COLORTHEME.light.grey2,
-    borderRadius: 12,
-    justifyContent: "center",
-    height: 40,
-  },
-  dropdown: {
     border: 0,
     borderRadius: 12,
-    backgroundColor: "inherit",
-    height: "100%",
+    height: 40,
+    justifyContent: "center",
   },
   trackerButtons: {
     flexDirection: "row",

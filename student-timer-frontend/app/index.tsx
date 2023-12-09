@@ -1,12 +1,30 @@
-import { Redirect } from "expo-router";
+import Spinner from "@/components/Spinner";
+import { useAuth } from "@/context/AuthContext";
+import { getStoredItem } from "@/libs/deviceStorage";
+import { Redirect, useRouter } from "expo-router";
+import { useEffect, useState } from "react";
 
 export default function Home() {
-  const loggedIn = false;
-  const onboardingDone = false;
+  const { authState } = useAuth();
+  const router = useRouter();
 
-  if (loggedIn) {
-    return <Redirect href={"/(tabs)"} />;
-  } else if (onboardingDone) {
-    <Redirect href={"/(auth)/login"} />;
+  const [onboardingDone, setOnboardingDone] = useState(false);
+
+  useEffect(() => {
+    const loadOnboarding = async () => {
+      const onboardingDoneString = await getStoredItem("onbarding");
+      if (onboardingDoneString)
+        setOnboardingDone(JSON.parse(onboardingDoneString));
+      if (onboardingDone) router.push("/(auth)/login");
+    };
+    loadOnboarding();
+  }, []);
+
+  if (authState?.authenticated == null) {
+    return <Spinner />;
+  }
+
+  if (authState?.authenticated) {
+    return <Redirect href={"/(tabs)/(tracking)"} />;
   } else return <Redirect href={"/onboarding/"} />;
 }

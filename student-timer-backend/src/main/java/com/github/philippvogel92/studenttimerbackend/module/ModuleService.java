@@ -38,6 +38,7 @@ public class ModuleService {
         if (!Objects.equals(module.getStudent().getId(), studentId)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Module does not belong to the student");
         }
+        
         return module;
     }
 

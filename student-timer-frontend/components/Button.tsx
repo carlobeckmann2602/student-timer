@@ -12,6 +12,7 @@ type Props = {
   iconRight?: ReactNode;
   iconLeft?: ReactNode;
   style?: StyleProp<ViewStyle>;
+  disabled?: boolean;
 };
 
 export type ButtonProps = Props;
@@ -26,6 +27,7 @@ export default function Button(props: ButtonProps) {
     iconRight,
     iconLeft,
     style,
+    disabled,
   } = props;
   return (
     <Pressable
@@ -40,6 +42,7 @@ export default function Button(props: ButtonProps) {
         style,
       ]}
       onPress={onPress}
+      disabled={disabled}
     >
       {iconLeft ? <View style={styles.icon}>{iconLeft}</View> : null}
       <Text style={[{ color: textColor }, styles.buttonText]}>{text}</Text>

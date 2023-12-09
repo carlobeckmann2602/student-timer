@@ -12,30 +12,29 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.studenttimer.studenttimetracker",
-      "usesAppleSignIn": true
+      "usesAppleSignIn": true,
+      "config": {
+        "usesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.studenttimer.studenttimetracker"
+      "package": "com.studenttimer.studenttimetracker",
+      "softwareKeyboardLayoutMode": "pan"
     },
     "web": {
       "bundler": "metro",
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
-    "plugins": [
-      "expo-router",
-      "expo-apple-authentication"
-    ],
+    "plugins": ["expo-router", "expo-apple-authentication", "@react-native-google-signin/google-signin"],
     "experiments": {
       "typedRoutes": true
     }

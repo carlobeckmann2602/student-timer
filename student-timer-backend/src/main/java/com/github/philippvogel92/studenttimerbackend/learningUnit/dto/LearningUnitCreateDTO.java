@@ -13,7 +13,7 @@ public class LearningUnitCreateDTO {
     @NotNull(message = "End Date cannot be null")
     private LocalDate endDate;
     @NotNull(message = "Workload cannot be null")
-    private Integer workloadPerWeek;
+    private Double workloadPerWeek;
 
     public String getName() {
         return name;
@@ -39,11 +39,11 @@ public class LearningUnitCreateDTO {
         this.endDate = endDate;
     }
 
-    public Integer getWorkloadPerWeek() {
+    public Double getWorkloadPerWeek() {
         return workloadPerWeek;
     }
 
-    public void setWorkloadPerWeek(Integer workloadPerWeek) {
+    public void setWorkloadPerWeek(Double workloadPerWeek) {
         this.workloadPerWeek = workloadPerWeek;
     }
 }
