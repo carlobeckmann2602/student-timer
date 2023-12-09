@@ -1,5 +1,5 @@
-import React, {useState, useRef} from "react";
-import {Link, useRouter} from "expo-router";
+import React, { useState, useRef } from "react";
+import { Link, useRouter } from "expo-router";
 import { StyleSheet, useWindowDimensions, Platform } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import Header from "../../components/Header";
@@ -27,7 +27,7 @@ export default function OnboardingScreen() {
   const onPrevPress = () => {
     if (activeIndex > 0) {
       setActiveIndex((prevIndex) => prevIndex - 1);
-      if(isSwipeEnabled()){
+      if (isSwipeEnabled()) {
         scrollViewRef.current?.scrollTo({ x: width * (activeIndex - 1), animated: true });
       }
     }
@@ -36,7 +36,7 @@ export default function OnboardingScreen() {
   const onNextPress = () => {
     if (activeIndex < onboardingData.length - 1) {
       setActiveIndex((prevIndex) => prevIndex + 1);
-      if(isSwipeEnabled()){
+      if (isSwipeEnabled()) {
         scrollViewRef.current?.scrollTo({ x: width * (activeIndex + 1), animated: true });
       }
     } else {
@@ -45,48 +45,48 @@ export default function OnboardingScreen() {
   };
 
   return (
-      <ScrollView contentContainerStyle={styles.container}>
-          <View>
-            <Header title="StudentTimer" />
-          </View>
-          {/* Onboarding-Cards web und smart */}
-          {Platform.OS === 'web' ? (
-              <OnboardingContainer
-                  onboardingData={onboardingData}
-                  activeIndex={activeIndex}
-              />
-          ):(
-              <ScrollView
-                  ref={scrollViewRef}
-                  horizontal
-                  pagingEnabled={isSwipeEnabled()}
-                  showsHorizontalScrollIndicator={false}
-                  onMomentumScrollEnd={(event) => {
-                    if (isSwipeEnabled()) {
-                      const newIndex = Math.round(event.nativeEvent.contentOffset.x / width);
-                      setActiveIndex(newIndex);
-                    }
-                  }}
-              >
-                {onboardingData.map((item, index) => (
-                    <View key={index} style={{ width }}>
-                      {index === activeIndex && <OnboardingCard onboardingItem={item} />}
-                    </View>
-                ))}
-              </ScrollView>
-          )}
-          <CardNavigation
-              cardAmount={onboardingData.length}
-              activeIndex={activeIndex}
-              onPrevPress={onPrevPress}
-              onNextPress={onNextPress}
-          />
-          <Text style={{marginTop: 15, marginBottom: 15}}>
-            <Link href="/signup" alt="Überspringen zur Registrierung" style={{ textDecorationLine: "underline"}}>
-              Überspringen
-            </Link>
-          </Text>
-      </ScrollView>
+    <ScrollView contentContainerStyle={styles.container}>
+      <View>
+        <Header title="StudentTimer" />
+      </View>
+      {/* Onboarding-Cards web und smart */}
+      {Platform.OS === 'web' ? (
+        <OnboardingContainer
+          onboardingData={onboardingData}
+          activeIndex={activeIndex}
+        />
+      ) : (
+        <ScrollView
+          ref={scrollViewRef}
+          horizontal
+          pagingEnabled={isSwipeEnabled()}
+          showsHorizontalScrollIndicator={false}
+          onMomentumScrollEnd={(event) => {
+            if (isSwipeEnabled()) {
+              const newIndex = Math.round(event.nativeEvent.contentOffset.x / width);
+              setActiveIndex(newIndex);
+            }
+          }}
+        >
+          {onboardingData.map((item, index) => (
+            <View key={index} style={{ width }}>
+              {index === activeIndex && <OnboardingCard onboardingItem={item} />}
+            </View>
+          ))}
+        </ScrollView>
+      )}
+      <CardNavigation
+        cardAmount={onboardingData.length}
+        activeIndex={activeIndex}
+        onPrevPress={onPrevPress}
+        onNextPress={onNextPress}
+      />
+      <Text style={{ marginTop: 15, marginBottom: 15 }}>
+        <Link href="/signup" style={{ textDecorationLine: "underline" }}>
+          Überspringen
+        </Link>
+      </Text>
+    </ScrollView>
   );
 }
 
