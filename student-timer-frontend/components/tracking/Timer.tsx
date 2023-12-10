@@ -5,47 +5,30 @@ import { Svg } from "react-native-svg";
 
 import { View } from "@/components/Themed";
 import { COLORTHEME, COLORS } from "@/constants/Theme";
-
-const msToTimeObject = (
-  timeInMs: number
-): { hours: number; mins: number; secs: number } => {
-  const hours = Math.floor(timeInMs / (1000 * 60 * 60));
-  const mins = Math.floor((timeInMs % (1000 * 60 * 60)) / (1000 * 60));
-  const secs = Math.floor((timeInMs % (1000 * 60)) / 1000);
-  return { hours, mins, secs };
-};
-
-const formatTime = ({
-  hours,
-  mins,
-  secs,
-}: {
-  hours: number;
-  mins: number;
-  secs: number;
-}): string => {
-  return `${hours.toString().padStart(2, "0")}:${mins
-    .toString()
-    .padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
-};
+import { msToTimeObject, formatTime } from "@/libs/timeHelper";
 
 export default function Timer(props: {
   isStopwatch: boolean;
   trackingIsActive: boolean;
   startTime: number;
+  currentTime: number;
+  setCurrentTime: React.Dispatch<React.SetStateAction<number>>;
   rounds: number;
   pauseLen: number;
   roundLen: number;
+  setTimerIsDone: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const {
     isStopwatch,
     trackingIsActive,
     startTime,
+    currentTime,
+    setCurrentTime,
     rounds,
     pauseLen,
     roundLen,
+    setTimerIsDone,
   } = props;
-  const [currentTime, setCurrentTime] = useState(0);
   const [displayTime, setDisplayTime] = useState({
     hours: 0,
     mins: 0,
@@ -147,6 +130,7 @@ export default function Timer(props: {
             setDisplayPauseTime({ hours: 0, mins: 0, secs: 0 });
             setProgress({ data: getProgressData(0) });
             clearInterval(interval);
+            setTimerIsDone(true);
             return;
           }
         }
