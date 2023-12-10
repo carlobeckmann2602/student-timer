@@ -37,38 +37,21 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
         />
       </View>
       <View style={styles.row}>
-        <InputField
-          label="Startdatum"
-          onChangeText={setCreditPoints}
-          value={creditPoints}
-          keyboardType="number-pad"
-          message={creditPointError}
-          messageColor="red"
-        />
-        <InputField
-          label="Enddatum"
-          onChangeText={setExamDate}
-          value={examDate}
-          message={examDateError}
-          messageColor="red"
-        />
-      </View>
-      <View style={styles.row}>
         <DateTimePicker
           label="Startdatum"
           value={startDate}
-          onChangeDate={(event, selectedDate) => {
+          onChangeDate={(selectedDate) => {
             const currentDate = selectedDate;
-            console.log(selectedDate);
             if (currentDate) setStartDate(currentDate);
           }}
-        ></DateTimePicker>
-        <InputField
+        />
+        <DateTimePicker
           label="Enddatum"
-          onChangeText={setExamDate}
-          value={examDate}
-          message={examDateError}
-          messageColor="red"
+          value={startDate}
+          onChangeDate={(selectedDate) => {
+            const currentDate = selectedDate;
+            if (currentDate) setStartDate(currentDate);
+          }}
         />
       </View>
       <View style={styles.row}>
@@ -78,6 +61,7 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
           value={examDate}
           message={examDateError}
           messageColor="red"
+          inputMode="numeric"
         />
       </View>
       <View style={styles.row}>
