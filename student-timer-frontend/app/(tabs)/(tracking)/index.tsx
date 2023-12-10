@@ -124,6 +124,7 @@ export default function Tracking() {
         pauseLen={Number(pauseLen) * 1000 * 60}
         roundLen={Number(roundLen) * 1000 * 60}
         setTimerIsDone={setTimerIsDone}
+        moduleColor={selectedModule.colorCode}
       />
       <View style={styles.inputs}>
         {!isStopwatch && (
@@ -183,7 +184,6 @@ export default function Tracking() {
             onValueChange={(_: number, index: number) =>
               setSelectedModule(modules![index])
             }
-            disabled={!inputsEditable}
           />
         </View>
       </View>

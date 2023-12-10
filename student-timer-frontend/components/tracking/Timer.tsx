@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { StyleSheet } from "react-native";
 import { VictoryPie, VictoryLabel } from "victory-native";
 import { Svg } from "react-native-svg";
@@ -17,6 +17,7 @@ export default function Timer(props: {
   pauseLen: number;
   roundLen: number;
   setTimerIsDone: React.Dispatch<React.SetStateAction<boolean>>;
+  moduleColor: string;
 }) {
   const {
     isStopwatch,
@@ -28,6 +29,7 @@ export default function Timer(props: {
     pauseLen,
     roundLen,
     setTimerIsDone,
+    moduleColor,
   } = props;
   const [displayTime, setDisplayTime] = useState({
     hours: 0,
@@ -41,6 +43,19 @@ export default function Timer(props: {
   });
   const [isPause, setIsPause] = useState(false);
   const [progress, setProgress] = useState({ data: [{}] });
+  const moduleColorRef = useRef(moduleColor);
+
+  useEffect(() => {
+    moduleColorRef.current = moduleColor;
+    let currentPauseTime = undefined;
+    if (isPause) {
+      const timeInCurrentRound = currentTime % (roundLen + pauseLen);
+      currentPauseTime = isStopwatch
+        ? roundLen + pauseLen - timeInCurrentRound
+        : pauseLen - (pauseLen - (timeInCurrentRound - roundLen));
+    }
+    setProgress({ data: getProgressData(currentTime, currentPauseTime) });
+  }, [moduleColor]);
 
   const getProgressData = (curTime: number, curPauseTime?: number) => {
     if (isStopwatch) {
@@ -51,7 +66,7 @@ export default function Timer(props: {
           (roundLen + pauseLen)) *
         100;
       return [
-        { y: percent, color: COLORTHEME.light.primary },
+        { y: percent, color: moduleColorRef.current },
         { y: 100 - percent - curPauseTime, color: COLORTHEME.light.grey3 },
         { y: curPauseTime, color: COLORS.progressBarPauseColor },
       ];
@@ -63,7 +78,7 @@ export default function Timer(props: {
       curPauseTime =
         ((curPauseTime === undefined ? pauseLen : curPauseTime) / totalTime) *
         100;
-      let data = [{ y: percent, color: COLORTHEME.light.primary }];
+      let data = [{ y: percent, color: moduleColorRef.current }];
       for (let i = 1; i <= rounds; i++) {
         if (i < currentRound) {
           data.push({ y: 0, color: COLORTHEME.light.grey3 });
@@ -168,7 +183,9 @@ export default function Timer(props: {
           height={400}
           standalone={false}
           animate={
-            trackingIsActive ? false : { duration: 1000, easing: "circle" }
+            trackingIsActive || startTime !== 0
+              ? false
+              : { duration: 1000, easing: "circle" }
           }
           innerRadius={120}
           labels={() => null}
