@@ -28,28 +28,28 @@ export default function ModulesScreen() {
       examDate: new Date(2023, 10, 25),
       learningUnits: [
         {
-          unitId: 10,
+          id: 10,
           name: "Vorlesung",
           workloadPerWeek: 40,
           startDate: new Date(2023, 9, 1),
           endDate: new Date(2024, 2, 1),
         },
         {
-          unitId: 11,
+          id: 11,
           name: "Praktikum",
           workloadPerWeek: 10,
           startDate: new Date(2023, 9, 1),
           endDate: new Date(2024, 2, 1),
         },
         {
-          unitId: 12,
+          id: 12,
           name: "Nachhilfe",
           workloadPerWeek: 40,
           startDate: new Date(2023, 9, 1),
           endDate: new Date(2024, 2, 1),
         },
         {
-          unitId: 13,
+          id: 13,
           name: "Selbststudium",
           workloadPerWeek: 40,
           startDate: new Date(2023, 9, 1),
@@ -65,28 +65,28 @@ export default function ModulesScreen() {
       examDate: new Date(2024, 11, 11),
       learningUnits: [
         {
-          unitId: 20,
+          id: 20,
           name: "Vorlesung",
           workloadPerWeek: 10,
           startDate: new Date(2023, 9, 1),
           endDate: new Date(2024, 2, 1),
         },
         {
-          unitId: 21,
+          id: 21,
           name: "Praktikum",
           workloadPerWeek: 5,
           startDate: new Date(2023, 9, 1),
           endDate: new Date(2024, 2, 1),
         },
         {
-          unitId: 22,
+          id: 22,
           name: "Nachhilfe",
           workloadPerWeek: 13,
           startDate: new Date(2023, 9, 1),
           endDate: new Date(2024, 2, 1),
         },
         {
-          unitId: 23,
+          id: 23,
           name: "Selbststudium",
           workloadPerWeek: 40,
           startDate: new Date(2023, 9, 1),
@@ -102,21 +102,21 @@ export default function ModulesScreen() {
       examDate: new Date(2024, 11, 11),
       learningUnits: [
         {
-          unitId: 30,
+          id: 30,
           name: "Vorlesung",
           workloadPerWeek: 40,
           startDate: new Date(2023, 9, 1),
           endDate: new Date(2024, 2, 1),
         },
         {
-          unitId: 31,
+          id: 31,
           name: "Nachhilfe",
           workloadPerWeek: 3,
           startDate: new Date(2023, 9, 1),
           endDate: new Date(2024, 2, 1),
         },
         {
-          unitId: 32,
+          id: 32,
           name: "Selbststudium",
           workloadPerWeek: 40,
           startDate: new Date(2023, 9, 1),
@@ -132,14 +132,14 @@ export default function ModulesScreen() {
       examDate: new Date(2024, 11, 11),
       learningUnits: [
         {
-          unitId: 40,
+          id: 40,
           name: "Vorlesung",
           workloadPerWeek: 40,
           startDate: new Date(2023, 9, 1),
           endDate: new Date(2024, 2, 1),
         },
         {
-          unitId: 41,
+          id: 41,
           name: "Selbststudium",
           workloadPerWeek: 40,
           startDate: new Date(2023, 9, 1),
@@ -155,49 +155,49 @@ export default function ModulesScreen() {
       examDate: new Date(2024, 11, 11),
       learningUnits: [
         {
-          unitId: 50,
+          id: 50,
           name: "Vorlesung",
           workloadPerWeek: 40,
           startDate: new Date(2023, 9, 1),
           endDate: new Date(2024, 2, 1),
         },
         {
-          unitId: 51,
+          id: 51,
           name: "Praktikum",
           workloadPerWeek: 10,
           startDate: new Date(2023, 9, 1),
           endDate: new Date(2024, 2, 1),
         },
         {
-          unitId: 52,
+          id: 52,
           name: "Nachhilfe",
           workloadPerWeek: 40,
           startDate: new Date(2023, 9, 1),
           endDate: new Date(2024, 2, 1),
         },
         {
-          unitId: 53,
+          id: 53,
           name: "Selbststudium",
           workloadPerWeek: 40,
           startDate: new Date(2023, 9, 1),
           endDate: new Date(2024, 2, 1),
         },
         {
-          unitId: 54,
+          id: 54,
           name: "Selbststudium",
           workloadPerWeek: 40,
           startDate: new Date(2023, 9, 1),
           endDate: new Date(2024, 2, 1),
         },
         {
-          unitId: 55,
+          id: 55,
           name: "Selbststudium",
           workloadPerWeek: 40,
           startDate: new Date(2023, 9, 1),
           endDate: new Date(2024, 2, 1),
         },
         {
-          unitId: 56,
+          id: 56,
           name: "Selbststudium",
           workloadPerWeek: 40,
           startDate: new Date(2023, 9, 1),
@@ -233,7 +233,7 @@ export default function ModulesScreen() {
           <View>
             {detailModule.learningUnits.map((unit) => {
               return (
-                <View key={unit.unitId} style={styles.unitRowWraupper}>
+                <View key={unit.id} style={styles.unitRowWraupper}>
                   <View style={styles.unitRow}>
                     <View
                       style={[

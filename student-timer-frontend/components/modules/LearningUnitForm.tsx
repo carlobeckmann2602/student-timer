@@ -10,7 +10,7 @@ import { LabelS } from "../StyledText";
 
 type LearningUnitFormProps = {
   inputData: LearningUnitType;
-  onDelete: (unitId: number) => void;
+  onDelete: (id: number) => void;
 };
 
 export function LearningUnitForm(props: LearningUnitFormProps) {
@@ -65,7 +65,7 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
         />
       </View>
       <View style={styles.row}>
-        <TouchableOpacity onPress={() => onDelete(inputData.unitId)}>
+        <TouchableOpacity onPress={() => onDelete(inputData.id)}>
           <LabelS
             style={[styles.errorMessage, { textDecorationLine: "underline" }]}
           >

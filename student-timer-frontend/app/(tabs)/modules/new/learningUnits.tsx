@@ -11,28 +11,28 @@ import { FlatList, ScrollView } from "react-native-gesture-handler";
 export default function NewModuleLearningUnits() {
   const [learningUnits, setLearningUnits] = useState<LearningUnitType[]>([
     {
-      unitId: 123,
+      id: 123,
       name: "test",
       workloadPerWeek: -1,
       startDate: new Date(),
       endDate: new Date(),
     },
     {
-      unitId: 456,
+      id: 456,
       name: "test",
       workloadPerWeek: -1,
       startDate: new Date(),
       endDate: new Date(),
     },
     {
-      unitId: 789,
+      id: 789,
       name: "test",
       workloadPerWeek: -1,
       startDate: new Date(),
       endDate: new Date(),
     },
     {
-      unitId: 1,
+      id: 1,
       name: "test",
       workloadPerWeek: -1,
       startDate: new Date(),
@@ -45,21 +45,21 @@ export default function NewModuleLearningUnits() {
 
   // const newLearningUnits: LearningUnitType[] = [
   //   {
-  //     unitId: 123,
+  //     id: 123,
   //     name: "test",
   //     workloadPerWeek: -1,
   //     startDate: new Date(),
   //     endDate: new Date(),
   //   },
   //   {
-  //     unitId: 456,
+  //     id: 456,
   //     name: "test",
   //     workloadPerWeek: -1,
   //     startDate: new Date(),
   //     endDate: new Date(),
   //   },
   //   {
-  //     unitId: 789,
+  //     id: 789,
   //     name: "test",
   //     workloadPerWeek: -1,
   //     startDate: new Date(),
@@ -67,16 +67,16 @@ export default function NewModuleLearningUnits() {
   //   },
   // ];
 
-  const onDeleteLearningUnit = (unitId: number) => {
+  const onDeleteLearningUnit = (id: number) => {
     setLearningUnits(() => {
-      return learningUnits.filter((item) => item.unitId != unitId);
+      return learningUnits.filter((item) => item.id != id);
     });
   };
 
   const onAddLearningUnit = () => {
     setLearningUnits((prevLearningUnits) => {
       const newlearningUnit = {
-        unitId: Math.random(),
+        id: Math.random(),
         name: "testNew",
         workloadPerWeek: -1,
         startDate: new Date(),
@@ -110,7 +110,7 @@ export default function NewModuleLearningUnits() {
               onDelete={onDeleteLearningUnit}
             />
           )}
-          keyExtractor={(item: LearningUnitType) => item.unitId.toString()}
+          keyExtractor={(item: LearningUnitType) => item.id.toString()}
           contentContainerStyle={{ gap: 12 }}
           style={{ width: "100%" }}
         ></FlatList> */}
@@ -118,7 +118,7 @@ export default function NewModuleLearningUnits() {
           <LearningUnitForm
             inputData={unit}
             onDelete={onDeleteLearningUnit}
-            key={unit.unitId}
+            key={unit.id}
           />
         ))}
         <View style={styles.buttons}>

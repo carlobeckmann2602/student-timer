@@ -45,7 +45,7 @@ export function ModuleCard(data: ModuleType) {
           <View style={styles.statisticsUnitContainer}>
             {transformedData.learningUnits.map((unit) => {
               return (
-                <View key={unit.unitId} style={styles.headerTextRow}>
+                <View key={unit.id} style={styles.headerTextRow}>
                   <View
                     style={[
                       styles.moduleIndicatorS,

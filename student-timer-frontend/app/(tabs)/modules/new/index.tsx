@@ -21,7 +21,7 @@ export default function NewModule() {
 
   const [learningUnits, setLearningUnits] = useState<LearningUnitType[]>([
     {
-      unitId: 123,
+      id: 123,
       name: "test",
       workloadPerWeek: -1,
       startDate: new Date(),
@@ -78,21 +78,21 @@ export default function NewModule() {
 
   // const newLearningUnits: LearningUnitType[] = [
   //   {
-  //     unitId: 123,
+  //     id: 123,
   //     name: "test",
   //     workloadPerWeek: -1,
   //     startDate: new Date(),
   //     endDate: new Date(),
   //   },
   //   {
-  //     unitId: 456,
+  //     id: 456,
   //     name: "test",
   //     workloadPerWeek: -1,
   //     startDate: new Date(),
   //     endDate: new Date(),
   //   },
   //   {
-  //     unitId: 789,
+  //     id: 789,
   //     name: "test",
   //     workloadPerWeek: -1,
   //     startDate: new Date(),
