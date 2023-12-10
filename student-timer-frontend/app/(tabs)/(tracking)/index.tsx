@@ -184,6 +184,8 @@ export default function Tracking() {
             onValueChange={(_: number, index: number) =>
               setSelectedModule(modules![index])
             }
+            //@ts-ignore
+            InputAccessoryView={() => null}
           />
         </View>
       </View>
