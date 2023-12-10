@@ -26,7 +26,7 @@ type InputFieldProps = {
 export default function InputField(props: InputFieldProps & TextInputProps) {
   const { label, style, inputUnit, message, messageColor } = props;
   return (
-    <View style={[style, styles.inputLabelGroup]}>
+    <View style={[styles.inputLabelGroup, style]}>
       {label && <Text style={styles.inputLabelText}>{label}</Text>}
       <View style={styles.inputUnitContainer}>
         <View style={styles.inputContainer}>
