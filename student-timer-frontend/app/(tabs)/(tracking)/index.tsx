@@ -98,7 +98,7 @@ export default function Tracking() {
       params: {
         focusTime,
         pauseTime,
-        moduleId: selectedModule.id,
+        id: selectedModule.id,
       },
     });
   };

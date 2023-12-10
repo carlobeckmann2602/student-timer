@@ -17,10 +17,10 @@ export default function ModulesScreen() {
 
   const mockData: ModuleType[] = [
     {
-      moduleId: "1",
+      id: 1,
       name: "Datenbanksysteme 2",
       colorCode: "#88A795",
-      creditpoints: 5,
+      creditPoints: 5,
       examDate: new Date(2023, 10, 25),
       learningUnits: [
         {
@@ -54,10 +54,10 @@ export default function ModulesScreen() {
       ],
     },
     {
-      moduleId: "2",
+      id: 2,
       name: "Mathe 1",
       colorCode: "#AB5761",
-      creditpoints: 7,
+      creditPoints: 7,
       examDate: new Date(2024, 11, 11),
       learningUnits: [
         {
@@ -91,10 +91,10 @@ export default function ModulesScreen() {
       ],
     },
     {
-      moduleId: "3",
+      id: 3,
       name: "Advanced Software Engineering",
       colorCode: "#5D7CB9",
-      creditpoints: 5,
+      creditPoints: 5,
       examDate: new Date(2024, 11, 11),
       learningUnits: [
         {
@@ -121,10 +121,10 @@ export default function ModulesScreen() {
       ],
     },
     {
-      moduleId: "4",
+      id: 4,
       name: "Theoretische Informatik",
       colorCode: "#073B3A",
-      creditpoints: 5,
+      creditPoints: 5,
       examDate: new Date(2024, 11, 11),
       learningUnits: [
         {
@@ -144,10 +144,10 @@ export default function ModulesScreen() {
       ],
     },
     {
-      moduleId: "5",
+      id: 5,
       name: "Projektcontainer",
       colorCode: "#FBC2B5",
-      creditpoints: 10,
+      creditPoints: 10,
       examDate: new Date(2024, 11, 11),
       learningUnits: [
         {
@@ -210,7 +210,7 @@ export default function ModulesScreen() {
       <FlatList
         data={mockData}
         renderItem={({ item }) => <ModuleCard {...item} />}
-        keyExtractor={(item: ModuleType) => item.moduleId}
+        keyExtractor={(item: ModuleType) => item.id.toString()}
         contentContainerStyle={styles.flatListContainer}
       ></FlatList>
       <Button

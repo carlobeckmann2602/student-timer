@@ -101,10 +101,10 @@ export default function NewModule() {
   // ];
 
   const newModule: ModuleType = {
-    moduleId: "",
+    id: Math.random(),
     name: moduleName,
     colorCode: "",
-    creditpoints: -1,
+    creditPoints: -1,
     examDate: new Date(),
     learningUnits: learningUnits,
   };

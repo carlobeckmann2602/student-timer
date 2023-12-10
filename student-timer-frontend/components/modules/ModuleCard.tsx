@@ -19,7 +19,7 @@ export function ModuleCard(data: ModuleType) {
     <TouchableOpacity
       onPress={() =>
         router.push({
-          pathname: `modules/${transformedData.moduleId}`,
+          pathname: `modules/${transformedData.id}`,
         } as never)
       }
     >
@@ -67,7 +67,7 @@ export function ModuleCard(data: ModuleType) {
           <View style={styles.separator}></View>
           <View style={styles.resultColumn}>
             <P style={{ textAlign: "center" }}>Selbststudium</P>
-            <Subhead>30,5 von {transformedData.creditpoints * 30} Std.</Subhead>
+            <Subhead>30,5 von {transformedData.creditPoints * 30} Std.</Subhead>
           </View>
         </View>
       </View>

@@ -23,14 +23,12 @@ export default function Success() {
   const { modules } = useModules();
   const [starAmount, setStarAmount] = useState(0);
   const [description, setDescription] = useState("");
-  const { focusTime, pauseTime, moduleId } = useLocalSearchParams<{
+  const { focusTime, pauseTime, id } = useLocalSearchParams<{
     focusTime: string;
     pauseTime: string;
-    moduleId: string;
+    id: string;
   }>();
-  const selectedModule = modules?.find(
-    (module) => module.id === Number(moduleId)
-  );
+  const selectedModule = modules?.find((module) => module.id === Number(id));
 
   return (
     <KeyboardAvoidingView
