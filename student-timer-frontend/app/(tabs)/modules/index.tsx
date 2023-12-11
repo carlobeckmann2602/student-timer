@@ -22,6 +22,7 @@ export default function ModulesScreen() {
       colorCode: "#88A795",
       creditPoints: 5,
       examDate: new Date(2023, 10, 25),
+      learningSessions: [],
       learningUnits: [
         {
           id: 10,
@@ -59,6 +60,7 @@ export default function ModulesScreen() {
       colorCode: "#AB5761",
       creditPoints: 7,
       examDate: new Date(2024, 11, 11),
+      learningSessions: [],
       learningUnits: [
         {
           id: 20,
@@ -96,6 +98,7 @@ export default function ModulesScreen() {
       colorCode: "#5D7CB9",
       creditPoints: 5,
       examDate: new Date(2024, 11, 11),
+      learningSessions: [],
       learningUnits: [
         {
           id: 30,
@@ -126,6 +129,7 @@ export default function ModulesScreen() {
       colorCode: "#073B3A",
       creditPoints: 5,
       examDate: new Date(2024, 11, 11),
+      learningSessions: [],
       learningUnits: [
         {
           id: 40,
@@ -149,6 +153,7 @@ export default function ModulesScreen() {
       colorCode: "#FBC2B5",
       creditPoints: 10,
       examDate: new Date(2024, 11, 11),
+      learningSessions: [],
       learningUnits: [
         {
           id: 50,

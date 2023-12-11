@@ -45,7 +45,6 @@ export default function NewModule() {
     var examDateValid = false;
     var timeDifference = examDate.getTime() - minimumDate.getTime();
     var dayDifference = Math.ceil(timeDifference / (1000 * 3600 * 24));
-    console.log(dayDifference);
     if (dayDifference < 0) {
       setExamDateError("Das Prüfungsdatum muss in der Zukunft liegen");
     } else {
@@ -107,6 +106,7 @@ export default function NewModule() {
     creditPoints: -1,
     examDate: new Date(),
     learningUnits: learningUnits,
+    learningSessions: [],
   };
 
   return (
