@@ -26,6 +26,7 @@ export default function NewModule() {
       workloadPerWeek: -1,
       startDate: new Date(),
       endDate: new Date(),
+      totalLearningTime: 0,
     },
   ]);
 

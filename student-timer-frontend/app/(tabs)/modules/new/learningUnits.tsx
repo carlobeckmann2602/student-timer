@@ -9,36 +9,37 @@ import { KeyboardAvoidingView, Platform, StyleSheet } from "react-native";
 import { FlatList, ScrollView } from "react-native-gesture-handler";
 
 export default function NewModuleLearningUnits() {
-  const [learningUnits, setLearningUnits] = useState<LearningUnitType[]>([
-    {
-      id: 123,
-      name: "test",
-      workloadPerWeek: -1,
-      startDate: new Date(),
-      endDate: new Date(),
-    },
-    {
-      id: 456,
-      name: "test",
-      workloadPerWeek: -1,
-      startDate: new Date(),
-      endDate: new Date(),
-    },
-    {
-      id: 789,
-      name: "test",
-      workloadPerWeek: -1,
-      startDate: new Date(),
-      endDate: new Date(),
-    },
-    {
-      id: 1,
-      name: "test",
-      workloadPerWeek: -1,
-      startDate: new Date(),
-      endDate: new Date(),
-    },
-  ]);
+  const [learningUnits, setLearningUnits] = useState<LearningUnitType[]>([]);
+  // const [learningUnits, setLearningUnits] = useState<LearningUnitType[]>([
+  //   {
+  //     id: 123,
+  //     name: "test",
+  //     workloadPerWeek: -1,
+  //     startDate: new Date(),
+  //     endDate: new Date(),
+  //   },
+  //   {
+  //     id: 456,
+  //     name: "test",
+  //     workloadPerWeek: -1,
+  //     startDate: new Date(),
+  //     endDate: new Date(),
+  //   },
+  //   {
+  //     id: 789,
+  //     name: "test",
+  //     workloadPerWeek: -1,
+  //     startDate: new Date(),
+  //     endDate: new Date(),
+  //   },
+  //   {
+  //     id: 1,
+  //     name: "test",
+  //     workloadPerWeek: -1,
+  //     startDate: new Date(),
+  //     endDate: new Date(),
+  //   },
+  // ]);
   const [error, setError] = useState("");
 
   const router = useRouter();
@@ -81,6 +82,7 @@ export default function NewModuleLearningUnits() {
         workloadPerWeek: -1,
         startDate: new Date(),
         endDate: new Date(),
+        totalLearningTime: 0,
       };
       return [...prevLearningUnits, newlearningUnit];
     });

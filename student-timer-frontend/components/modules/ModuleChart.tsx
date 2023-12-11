@@ -38,7 +38,10 @@ export function ModuleChart(moduleChartProp: ModuleChartProps) {
             width={originalWidth}
             height={originalHeight}
             padding={{ top: 0, bottom: 0 }}
-            data={inputData.learningUnits}
+            data={inputData.learningUnits.map((item) => ({
+              ...item,
+              y: item.totalLearningTime,
+            }))}
             radius={originalWidth / 2}
             innerRadius={originalWidth / 2.8}
             style={{ data: { fill: ({ datum }) => datum.colorCode } }}
@@ -59,7 +62,7 @@ export function ModuleChart(moduleChartProp: ModuleChartProps) {
             verticalAnchor="middle"
             x={originalWidth / 2}
             y={originalHeight * 0.62}
-            text={`von ${inputData.creditpoints * 30} Std.`}
+            text={`von ${inputData.creditPoints * 30} Std.`}
             style={[
               originalHeight <= 100 ? styles.chartTextS : styles.chartTextL,
             ]}
