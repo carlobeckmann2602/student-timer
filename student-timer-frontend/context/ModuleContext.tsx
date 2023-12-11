@@ -62,8 +62,6 @@ const convertInputTypes = (module: ModuleType) => {
   module.learningSessions.forEach((session) => {
     session.createdAt = new Date(session.createdAt);
   });
-
-  console.log(module.learningUnits);
 };
 
 export const computeLearningUnitColor = (

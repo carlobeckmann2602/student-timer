@@ -108,6 +108,9 @@ export default function NewModule() {
     examDate: new Date(),
     learningUnits: learningUnits,
     learningSessions: [],
+    totalLearningSessionTime: 0,
+    totalLearningUnitTime: 0,
+    totalModuleTime: 0,
   };
 
   return (

@@ -10,8 +10,8 @@ export type ModuleType = {
   learningUnits: LearningUnitType[];
   learningSessions: LearningSessionType[];
 
-  /**
-   * Adds up the workload of each learning unit within the module
-   */
-  timeInvested?: number;
+  totalModuleTime: number;
+  // totalLearningTime: number;
+  totalLearningSessionTime: number;
+  totalLearningUnitTime: number;
 };

@@ -4,17 +4,33 @@ import { StyleSheet } from "react-native";
 import Svg from "react-native-svg";
 import { ModuleType } from "@/types/ModuleType";
 import { SIZES } from "@/constants/Theme";
+import { LearningUnitType } from "@/types/LearningUnitType";
 
 type ModuleChartProps = {
-  inputData: ModuleType;
+  inputData: LearningUnitType[];
+  totalAmount: number;
+  totalAmountDone: number;
+
   width: number;
   height: number;
 };
 
 export function ModuleChart(moduleChartProp: ModuleChartProps) {
-  const inputData = moduleChartProp.inputData;
-  const originalWidth = moduleChartProp.width;
-  const originalHeight = moduleChartProp.height;
+  const { inputData, totalAmount, totalAmountDone, width, height } =
+    moduleChartProp;
+
+  const inputDataExtended = [
+    ...inputData,
+    {
+      id: -1,
+      name: "",
+      workloadPerWeek: 0,
+      startDate: new Date(),
+      endDate: new Date(),
+      totalLearningTime: totalAmount - totalAmountDone,
+      colorCode: "transparent",
+    } as LearningUnitType,
+  ];
 
   return (
     <View
@@ -27,45 +43,41 @@ export function ModuleChart(moduleChartProp: ModuleChartProps) {
     >
       <View
         style={{
-          width: originalWidth,
-          height: originalHeight,
+          width: width,
+          height: height,
           backgroundColor: "transparent",
         }}
       >
-        <Svg viewBox={`0 0 ${originalWidth} ${originalHeight}`}>
+        <Svg viewBox={`0 0 ${width} ${height}`}>
           <VictoryPie
             standalone={false}
-            width={originalWidth}
-            height={originalHeight}
+            width={width}
+            height={height}
             padding={{ top: 0, bottom: 0 }}
-            data={inputData.learningUnits.map((item) => ({
+            data={inputDataExtended.map((item: LearningUnitType) => ({
               ...item,
               y: item.totalLearningTime,
             }))}
-            radius={originalWidth / 2}
-            innerRadius={originalWidth / 2.8}
+            radius={width / 2}
+            innerRadius={width / 2.8}
             style={{ data: { fill: ({ datum }) => datum.colorCode } }}
             labels={() => ""}
           />
           <VictoryLabel
             textAnchor="middle"
             verticalAnchor="middle"
-            x={originalWidth / 2}
-            y={originalHeight * 0.44}
-            text={"112,5"}
-            style={[
-              originalHeight <= 100 ? styles.chartTextL : styles.chartTextXL,
-            ]}
+            x={width / 2}
+            y={height * 0.44}
+            text={totalAmountDone}
+            style={[height <= 100 ? styles.chartTextL : styles.chartTextXL]}
           />
           <VictoryLabel
             textAnchor="middle"
             verticalAnchor="middle"
-            x={originalWidth / 2}
-            y={originalHeight * 0.62}
-            text={`von ${inputData.creditPoints * 30} Std.`}
-            style={[
-              originalHeight <= 100 ? styles.chartTextS : styles.chartTextL,
-            ]}
+            x={width / 2}
+            y={height * 0.62}
+            text={`von ${totalAmount} Std.`}
+            style={[height <= 100 ? styles.chartTextS : styles.chartTextL]}
           />
         </Svg>
       </View>

@@ -35,8 +35,29 @@ public class Module {
     @JsonManagedReference
     private List<LearningSession> learningSessions;
 
+    /**
+     * Defines the total amount of learning hours expected for this module (based on the given creditpoints)
+     */
     @Transient
-    private Integer totalLearningTime;
+    private Double totalModuleTime;
+
+    /**
+     * Defines the total amount of learning hours done by learning sessions
+     */
+    @Transient
+    private Double totalLearningSessionTime;
+
+    /**
+     * Defines the total amount of learning hours done by the given learning units
+     */
+    @Transient
+    private Double totalLearningUnitTime;
+
+    /**
+     * Defines the total amount of learning hours done by learning units and learning sessions
+     */
+    // @Transient
+    // private Double totalLearningTime;
 
     public Module(String name, String colorCode, Integer creditPoints, LocalDate examDate, Student student) {
         this.name = name;
@@ -44,6 +65,10 @@ public class Module {
         this.creditPoints = creditPoints;
         this.examDate = examDate;
         this.student = student;
+        this.totalModuleTime = this.getTotalModuleTime();
+        this.totalLearningSessionTime = this.getTotalLearningSessionTime();
+        this.totalLearningUnitTime = this.getTotalLearningUnitTime();
+        // this.totalLearningTime = this.getTotalLearningTime();
     }
 
     public Module(Long id, String name, String colorCode, Integer creditPoints, LocalDate examDate, Student student) {
@@ -53,6 +78,10 @@ public class Module {
         this.creditPoints = creditPoints;
         this.examDate = examDate;
         this.student = student;
+        this.totalModuleTime = this.getTotalModuleTime();
+        this.totalLearningSessionTime = this.getTotalLearningSessionTime();
+        this.totalLearningUnitTime = this.getTotalLearningUnitTime();
+        // this.totalLearningTime = this.getTotalLearningTime();
     }
 
     public Module() {
@@ -121,5 +150,37 @@ public class Module {
 
     public void setLearningSessions(List<LearningSession> learningSessions) {
         this.learningSessions = learningSessions;
+    }
+
+    public Double getTotalModuleTime() {
+        return this.creditPoints * 30d;
+    }
+
+    // public Double getTotalLearningTime() {
+    //     return this.getTotalLearningSessionTime() + this.getTotalLearningUnitTime();
+    // }
+
+    public Double getTotalLearningSessionTime() {
+        Double totalDuration = 0.0;
+
+        if(this.learningSessions != null && !this.learningSessions.isEmpty())
+        {
+            for(LearningSession currentSession : this.learningSessions)
+                totalDuration += currentSession.getTotalDuration();
+        }
+
+        return totalDuration;
+    }
+
+    public Double getTotalLearningUnitTime() {
+        Double totalDuration = 0.0;
+
+        if(this.learningUnits != null && !this.learningUnits.isEmpty())
+        {
+            for(LearningUnit currentUnit : this.learningUnits)
+                totalDuration += currentUnit.getTotalLearningTime();
+        }
+
+        return totalDuration;
     }
 }
