@@ -71,8 +71,9 @@ export function ModuleCard(data: ModuleType) {
           <View style={styles.resultColumn}>
             <P style={{ textAlign: "center" }}>Selbststudium</P>
             <Subhead>
-              {`${data.totalLearningSessionTime} von 
-              ${data.totalModuleTime - data.totalLearningUnitTime} Std.`}
+              {`${data.totalLearningSessionTime} von ${
+                data.totalModuleTime - data.totalLearningUnitTime
+              } Std.`}
             </Subhead>
           </View>
         </View>

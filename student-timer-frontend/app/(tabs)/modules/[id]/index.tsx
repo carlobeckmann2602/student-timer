@@ -1,7 +1,7 @@
 import { ScrollView, StyleSheet } from "react-native";
 
 import { View } from "@/components/Themed";
-import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { ModuleType } from "@/types/ModuleType";
 import { H1, H2, P, Subhead } from "@/components/StyledText";
 import { ModuleChart } from "@/components/modules/ModuleChart";
@@ -18,42 +18,40 @@ export default function ModulesDetailScreen() {
   }>();
 
   const router = useRouter();
-  const { modules, fetchModules } = useModules();
+  const { modules } = useModules();
 
   // TODO?
   const isLoading = false;
   const error = false;
 
-  const [moduleError, setModuleError] = useState(false);
-  const [detailModule, setDetailModule] = useState<ModuleType>({
-    id: -1,
-    name: "Placeholder",
-    colorCode: "",
-    creditPoints: 0,
-    examDate: new Date(),
-    learningUnits: [],
-    learningSessions: [],
-    totalLearningSessionTime: 0,
-    totalLearningUnitTime: 0,
-    totalModuleTime: 0,
-  } as ModuleType);
+  const fetchDetailModule = () => {
+    if (modules && modules.length > 0) {
+      var filteredModule: ModuleType | undefined = modules.find(
+        (module) => module.id.toString() === id
+      );
+      if (filteredModule) {
+        // setModuleError(false);
+        return filteredModule;
+      }
+    }
 
-  useFocusEffect(
-    React.useCallback(() => {
-      (async () => {
-        fetchModules && (await fetchModules());
-        if (modules?.length && modules.length > 0) {
-          var filteredModule: ModuleType | undefined = modules.find(
-            (module) => module.id.toString() === id
-          );
-          if (filteredModule) {
-            setDetailModule(filteredModule);
-            setModuleError(false);
-          }
-        } else setModuleError(true);
-      })();
-    }, [])
-  );
+    // setModuleError(true);
+    return {
+      id: -1,
+      name: "Placeholder",
+      colorCode: "",
+      creditPoints: 0,
+      examDate: new Date(),
+      learningUnits: [],
+      learningSessions: [],
+      totalLearningSessionTime: 0,
+      totalLearningUnitTime: 0,
+      totalModuleTime: 0,
+    } as ModuleType;
+  };
+
+  const [moduleError, setModuleError] = useState(false);
+  const [detailModule] = useState<ModuleType>(fetchDetailModule());
 
   const computeUnitString = (unit: LearningUnitType) => {
     let weekAmount = computeDateDifference(unit.endDate, unit.startDate, true);
@@ -93,7 +91,7 @@ export default function ModulesDetailScreen() {
               <View>
                 {detailModule?.learningUnits.map((unit) => {
                   return (
-                    <View key={unit.id} style={styles.unitRowWraupper}>
+                    <View key={unit.id} style={styles.unitRowWrapper}>
                       <View style={styles.unitRow}>
                         <View
                           style={[
@@ -118,10 +116,10 @@ export default function ModulesDetailScreen() {
                   darkColor={COLORTHEME.dark.text}
                 />
                 <Subhead>
-                  Gesamt:
-                  {detailModule?.totalLearningUnitTime +
-                    detailModule?.totalLearningUnitTime}
-                  Std.
+                  {`Gesamt: ${
+                    detailModule?.totalLearningUnitTime +
+                    detailModule?.totalLearningUnitTime
+                  } Std.`}
                 </Subhead>
               </View>
             </View>
@@ -155,7 +153,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "flex-start",
   },
-  unitRowWraupper: {
+  unitRowWrapper: {
     flexDirection: "column",
     justifyContent: "flex-start",
   },
