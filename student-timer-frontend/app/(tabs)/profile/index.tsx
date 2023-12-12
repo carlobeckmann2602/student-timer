@@ -3,7 +3,7 @@ import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import Button from "@/components/Button";
 import { COLORTHEME } from "@/constants/Theme";
 import { User2 } from "lucide-react-native";
-import { useRouter } from "expo-router";
+import {router, useRouter} from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { deleteStoredItem } from "@/libs/deviceStorage";
 import { useAuth } from "@/context/AuthContext";
@@ -11,17 +11,26 @@ import { useAuth } from "@/context/AuthContext";
 export default function Profile() {
   const { onLogout, authState } = useAuth();
 
-  const pic = require("../../assets/images/profile-picture.jpg");
+  const pic = require("../../../assets/images/profile-picture.jpg");
 
-  // Daten aus Authentifizierung / Benutzersession ziehen
+  // toDo: wieder einkommentieren, wenn DB-Anbindung läuft
+  //  Daten aus Authentifizierung / Benutzersession ziehen
+  /*
   const user = {
     name: authState?.user.name,
     studySubject: authState?.user.studyCourse,
     profileImage: pic,
   };
+   */
+
+  const user = {
+    name: "Maxine Hellas",
+    studySubject: "Master Medieninformatik",
+    profileImage: pic,
+  };
 
   const handleEditProfile = () => {
-    // Hier implementiere die Logik für die Profilbearbeitung
+    router.push("/profile/edit/");
     console.log("Profil bearbeiten");
   };
 
