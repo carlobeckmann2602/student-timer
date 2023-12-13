@@ -19,7 +19,14 @@ type AuthProps = {
     password: string,
     password2: string
   ) => Promise<any>;
-  onLogin?: (email: string, password: string, provider: string) => Promise<any>;
+  onLogin?: (
+    email: string,
+    password?: string,
+    idToken?: string,
+    userSecret?: string,
+    name?: string,
+    provider?: string
+  ) => Promise<any>;
   onLogout?: () => Promise<any>;
   onNewToken?: (token: TokenType) => Promise<any>;
 };
@@ -120,13 +127,45 @@ export const AuthProvider = ({ children }: any) => {
     }
   };
 
-  const login = async (email: string, password: string, provider: string) => {
+  const login = async (
+    email: string,
+    password?: string,
+    idToken?: string,
+    userSecret?: string,
+    name?: string,
+    provider?: string
+  ) => {
     try {
-      const result = await axios.post(`${API_URL}/auth/login`, {
-        email,
-        password,
-        provider,
-      });
+      console.log(`Provider: ${provider}`);
+      let result = null;
+      switch (provider) {
+        case "GOOGLE":
+          console.log(`GOOGLE: ${email}, ${idToken}`);
+          result = await axios.post(`${API_URL}/auth/login/oauth2`, {
+            email,
+            tokenId: idToken,
+            provider,
+          });
+          console.log(`GOOGLE: ${JSON.stringify(result, null, 2)}`);
+          break;
+
+        case "APPLE":
+          result = await axios.post(`${API_URL}/auth/login/oauth2`, {
+            email,
+            tokenId: idToken,
+            userSecret,
+            name,
+            provider,
+          });
+          break;
+
+        default:
+          result = await axios.post(`${API_URL}/auth/login`, {
+            email,
+            password,
+          });
+          break;
+      }
 
       const token = {
         accessToken: result.data.accessToken,
