@@ -80,7 +80,7 @@ export default function ModulesDetailScreen() {
               inputData={detailModule.learningUnits}
               totalAmount={detailModule.totalModuleTime}
               totalAmountDone={
-                detailModule.totalLearningUnitTime +
+                detailModule.totalLearningSessionTime +
                 detailModule.totalLearningUnitTime
               }
               width={200}
