@@ -99,6 +99,8 @@ const styles = StyleSheet.create({
     width: 120,
     height: 120,
     borderRadius: 60,
+    borderColor: COLORTHEME.light.primary,
+    borderWidth: 5,
   },
   title: {
     fontSize: 24,
