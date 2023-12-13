@@ -68,7 +68,8 @@ public class ModuleController {
                             schema = @Schema(implementation = Module.class))}),
     })
     @PostMapping(path = "/modules")
-    public Module addModule(@PathVariable("studentId") Long studentId, ModuleCreateDTO moduleCreateDTO) {
+    public Module addModule(@PathVariable("studentId") Long studentId,
+                            @Valid @RequestBody ModuleCreateDTO moduleCreateDTO) {
         return moduleService.addModule(studentId, moduleCreateDTO);
     }
     // *************************** PUT-METHODS ***************************
