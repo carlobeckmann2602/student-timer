@@ -15,10 +15,8 @@ import java.util.Collections;
 public class GoogleTokenVerifier {
 
     private final GoogleIdTokenVerifier verifier;
-    @Value("${googleClientId}")
-    private String googleClientId;
 
-    public GoogleTokenVerifier() {
+    public GoogleTokenVerifier(@Value("${googleClientId}") String googleClientId) {
         this.verifier = new GoogleIdTokenVerifier.Builder(new ApacheHttpTransport(), new GsonFactory())
                 // Specify the CLIENT_ID of the app that accesses the backend:
                 .setAudience(Collections.singletonList(googleClientId))
