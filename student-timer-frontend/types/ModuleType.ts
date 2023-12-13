@@ -1,10 +1,10 @@
 import { LearningUnitType } from "./LearningUnitType";
 
 export type ModuleType = {
-  moduleId: string;
+  id: number;
   name: string;
   colorCode: string;
-  creditpoints: number;
+  creditPoints: number;
   examDate: Date;
   learningUnits: LearningUnitType[];
 

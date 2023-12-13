@@ -72,7 +72,7 @@ public class LearningUnitController {
     @PostMapping(path = "/learningUnits")
     public LearningUnit addLearningUnit(@PathVariable("studentId") Long studentId,
                                         @PathVariable("moduleId") Long moduleId,
-                                        LearningUnitCreateDTO learningUnitCreateDTO) {
+                                        @Valid @RequestBody LearningUnitCreateDTO learningUnitCreateDTO) {
         return learningUnitService.addLearningUnit(moduleId, learningUnitCreateDTO);
     }
     // *************************** PUT-METHODS ***************************

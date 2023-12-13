@@ -1,5 +1,5 @@
 export type LearningUnitType = {
-  unitId: string;
+  id: number;
   name: string;
   workloadPerWeek: number;
   startDate: Date;

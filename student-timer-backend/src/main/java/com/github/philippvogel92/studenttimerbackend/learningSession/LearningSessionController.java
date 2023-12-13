@@ -72,7 +72,7 @@ public class LearningSessionController {
     @PostMapping(path = "/learningSessions")
     public LearningSession addLearningSession(@PathVariable("studentId") Long studentId,
                                               @PathVariable("moduleId") Long moduleId,
-                                              LearningSessionCreateDTO learningSessionCreateDTO) {
+                                              @Valid @RequestBody LearningSessionCreateDTO learningSessionCreateDTO) {
         return learningSessionService.addLearningSession(moduleId, learningSessionCreateDTO);
     }
     // *************************** PUT-METHODS ***************************

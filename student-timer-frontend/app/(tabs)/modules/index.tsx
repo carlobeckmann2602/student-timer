@@ -5,6 +5,8 @@ import { FlatList } from "react-native-gesture-handler";
 import { ModuleCard } from "@/components/modules/ModuleCard";
 import { useRouter } from "expo-router";
 import { ModuleType } from "@/types/ModuleType";
+import Button from "@/components/Button";
+import { COLORTHEME } from "@/constants/Theme";
 
 export default function ModulesScreen() {
   const router = useRouter();
@@ -15,35 +17,35 @@ export default function ModulesScreen() {
 
   const mockData: ModuleType[] = [
     {
-      moduleId: "1",
+      id: 1,
       name: "Datenbanksysteme 2",
       colorCode: "#88A795",
-      creditpoints: 5,
+      creditPoints: 5,
       examDate: new Date(2023, 10, 25),
       learningUnits: [
         {
-          unitId: "10",
+          id: 10,
           name: "Vorlesung",
           workloadPerWeek: 40,
           startDate: new Date(2023, 9, 1),
           endDate: new Date(2024, 2, 1),
         },
         {
-          unitId: "11",
+          id: 11,
           name: "Praktikum",
           workloadPerWeek: 10,
           startDate: new Date(2023, 9, 1),
           endDate: new Date(2024, 2, 1),
         },
         {
-          unitId: "12",
+          id: 12,
           name: "Nachhilfe",
           workloadPerWeek: 40,
           startDate: new Date(2023, 9, 1),
           endDate: new Date(2024, 2, 1),
         },
         {
-          unitId: "13",
+          id: 13,
           name: "Selbststudium",
           workloadPerWeek: 40,
           startDate: new Date(2023, 9, 1),
@@ -52,35 +54,35 @@ export default function ModulesScreen() {
       ],
     },
     {
-      moduleId: "2",
+      id: 2,
       name: "Mathe 1",
       colorCode: "#AB5761",
-      creditpoints: 7,
+      creditPoints: 7,
       examDate: new Date(2024, 11, 11),
       learningUnits: [
         {
-          unitId: "20",
+          id: 20,
           name: "Vorlesung",
           workloadPerWeek: 10,
           startDate: new Date(2023, 9, 1),
           endDate: new Date(2024, 2, 1),
         },
         {
-          unitId: "21",
+          id: 21,
           name: "Praktikum",
           workloadPerWeek: 5,
           startDate: new Date(2023, 9, 1),
           endDate: new Date(2024, 2, 1),
         },
         {
-          unitId: "22",
+          id: 22,
           name: "Nachhilfe",
           workloadPerWeek: 13,
           startDate: new Date(2023, 9, 1),
           endDate: new Date(2024, 2, 1),
         },
         {
-          unitId: "23",
+          id: 23,
           name: "Selbststudium",
           workloadPerWeek: 40,
           startDate: new Date(2023, 9, 1),
@@ -89,28 +91,28 @@ export default function ModulesScreen() {
       ],
     },
     {
-      moduleId: "3",
+      id: 3,
       name: "Advanced Software Engineering",
       colorCode: "#5D7CB9",
-      creditpoints: 5,
+      creditPoints: 5,
       examDate: new Date(2024, 11, 11),
       learningUnits: [
         {
-          unitId: "20",
+          id: 30,
           name: "Vorlesung",
           workloadPerWeek: 40,
           startDate: new Date(2023, 9, 1),
           endDate: new Date(2024, 2, 1),
         },
         {
-          unitId: "22",
+          id: 31,
           name: "Nachhilfe",
           workloadPerWeek: 3,
           startDate: new Date(2023, 9, 1),
           endDate: new Date(2024, 2, 1),
         },
         {
-          unitId: "23",
+          id: 32,
           name: "Selbststudium",
           workloadPerWeek: 40,
           startDate: new Date(2023, 9, 1),
@@ -119,21 +121,21 @@ export default function ModulesScreen() {
       ],
     },
     {
-      moduleId: "4",
+      id: 4,
       name: "Theoretische Informatik",
       colorCode: "#073B3A",
-      creditpoints: 5,
+      creditPoints: 5,
       examDate: new Date(2024, 11, 11),
       learningUnits: [
         {
-          unitId: "20",
+          id: 40,
           name: "Vorlesung",
           workloadPerWeek: 40,
           startDate: new Date(2023, 9, 1),
           endDate: new Date(2024, 2, 1),
         },
         {
-          unitId: "23",
+          id: 41,
           name: "Selbststudium",
           workloadPerWeek: 40,
           startDate: new Date(2023, 9, 1),
@@ -142,56 +144,56 @@ export default function ModulesScreen() {
       ],
     },
     {
-      moduleId: "5",
+      id: 5,
       name: "Projektcontainer",
       colorCode: "#FBC2B5",
-      creditpoints: 10,
+      creditPoints: 10,
       examDate: new Date(2024, 11, 11),
       learningUnits: [
         {
-          unitId: "20",
+          id: 50,
           name: "Vorlesung",
           workloadPerWeek: 40,
           startDate: new Date(2023, 9, 1),
           endDate: new Date(2024, 2, 1),
         },
         {
-          unitId: "21",
+          id: 51,
           name: "Praktikum",
           workloadPerWeek: 10,
           startDate: new Date(2023, 9, 1),
           endDate: new Date(2024, 2, 1),
         },
         {
-          unitId: "22",
+          id: 52,
           name: "Nachhilfe",
           workloadPerWeek: 40,
           startDate: new Date(2023, 9, 1),
           endDate: new Date(2024, 2, 1),
         },
         {
-          unitId: "23",
+          id: 53,
           name: "Selbststudium",
           workloadPerWeek: 40,
           startDate: new Date(2023, 9, 1),
           endDate: new Date(2024, 2, 1),
         },
         {
-          unitId: "203",
+          id: 54,
           name: "Selbststudium",
           workloadPerWeek: 40,
           startDate: new Date(2023, 9, 1),
           endDate: new Date(2024, 2, 1),
         },
         {
-          unitId: "2453",
+          id: 55,
           name: "Selbststudium",
           workloadPerWeek: 40,
           startDate: new Date(2023, 9, 1),
           endDate: new Date(2024, 2, 1),
         },
         {
-          unitId: "23456",
+          id: 56,
           name: "Selbststudium",
           workloadPerWeek: 40,
           startDate: new Date(2023, 9, 1),
@@ -201,14 +203,22 @@ export default function ModulesScreen() {
     },
   ];
 
+  const onNewModulePress = () => router.push("/modules/new");
+
   return (
     <View style={styles.container}>
       <FlatList
         data={mockData}
         renderItem={({ item }) => <ModuleCard {...item} />}
-        keyExtractor={(item: ModuleType) => item.moduleId}
+        keyExtractor={(item: ModuleType) => item.id.toString()}
         contentContainerStyle={styles.flatListContainer}
       ></FlatList>
+      <Button
+        text={"Neues Modul anlegen"}
+        backgroundColor={COLORTHEME.light.primary}
+        textColor={COLORTHEME.light.grey2}
+        onPress={onNewModulePress}
+      ></Button>
     </View>
   );
 }

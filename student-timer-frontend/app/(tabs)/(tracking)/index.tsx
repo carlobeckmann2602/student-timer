@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Platform, KeyboardAvoidingView, StyleSheet } from "react-native";
-import Picker from "react-native-picker-select";
-import { router } from "expo-router";
+import { useFocusEffect } from "@react-navigation/native";
+import Picker, { Item } from "react-native-picker-select";
+import { router, useLocalSearchParams } from "expo-router";
 
 import { Text, View } from "@/components/Themed";
 import Button from "@/components/Button";
@@ -10,17 +11,54 @@ import { COLORS, COLORTHEME } from "@/constants/Theme";
 import TrackingModeToggle from "@/components/tracking/TrackingModeToggle";
 import Timer from "@/components/tracking/Timer";
 import { PauseIcon, PlayIcon } from "lucide-react-native";
+import { useModules } from "@/context/ModuleContext";
+import { ModuleType } from "@/types/ModuleType";
 
 export default function Tracking() {
+  const { modules, fetchModules } = useModules();
   const [isStopwatch, setIsStopwatch] = useState(true);
   const [rounds, setRounds] = useState("2");
   const [pauseLen, setPauseLen] = useState("20");
   const [roundLen, setRoundLen] = useState("40");
   const [trackingIsActive, setTrackingIsActive] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
   const [startTime, setStartTime] = useState(0);
-  const [selectedModule, setSelectedModule] = useState(3);
-
+  const [selectedModule, setSelectedModule] = useState({} as ModuleType);
+  const [timerIsDone, setTimerIsDone] = useState(false);
+  const { trackingSaved } = useLocalSearchParams<{
+    trackingSaved: string;
+  }>();
   const inputsEditable = !trackingIsActive && startTime === 0;
+
+  useFocusEffect(
+    React.useCallback(() => {
+      (async () => {
+        fetchModules && (await fetchModules());
+        if (modules?.length) {
+          setSelectedModule(modules[0]);
+        }
+      })();
+    }, [])
+  );
+
+  useEffect(() => {
+    if (timerIsDone) {
+      onTrackingDone();
+    }
+  }, [timerIsDone]);
+
+  useEffect(() => {
+    if (trackingSaved !== undefined) {
+      alert(
+        trackingSaved === "1"
+          ? "Tracking wurde gespeichert"
+          : "Fehler beim Speichern des Trackings"
+      );
+      resetTimer();
+      router.push("/(tabs)/(tracking)");
+    }
+  }, [trackingSaved]);
+
   const toggleTracking = () => {
     trackingIsActive ? "" : setStartTime(Date.now());
     setTrackingIsActive(!trackingIsActive);
@@ -29,6 +67,40 @@ export default function Tracking() {
   const resetTimer = () => {
     setStartTime(0);
     setTrackingIsActive(false);
+    setTimerIsDone(false);
+  };
+
+  const onTrackingDone = () => {
+    setTrackingIsActive(false);
+    setTimerIsDone(false);
+    let focusTime = 0;
+    let pauseTime = 0;
+    let roundLenMs = Number(roundLen) * 1000 * 60;
+    let pauseLenMs = Number(pauseLen) * 1000 * 60;
+    let totalTime = Number(rounds) * (roundLenMs + pauseLenMs) - pauseLenMs;
+    let elapsedTime = isStopwatch ? currentTime : totalTime - currentTime;
+    let currentRound = Math.ceil(elapsedTime / (roundLenMs + pauseLenMs));
+    let doneRounds = currentRound - 1;
+    if (doneRounds > 0) {
+      focusTime += roundLenMs * doneRounds;
+      pauseTime += pauseLenMs * doneRounds;
+    }
+    let timeInCurrentRound = elapsedTime % (roundLenMs + pauseLenMs);
+    if (timeInCurrentRound < roundLenMs) {
+      focusTime += timeInCurrentRound;
+    } else {
+      focusTime += roundLenMs;
+      pauseTime += timeInCurrentRound - roundLenMs;
+    }
+
+    router.push({
+      pathname: "/success",
+      params: {
+        focusTime,
+        pauseTime,
+        id: selectedModule.id,
+      },
+    });
   };
 
   return (
@@ -46,9 +118,13 @@ export default function Tracking() {
         isStopwatch={isStopwatch}
         trackingIsActive={trackingIsActive}
         startTime={startTime}
+        currentTime={currentTime}
+        setCurrentTime={setCurrentTime}
         rounds={Number(rounds)}
         pauseLen={Number(pauseLen) * 1000 * 60}
         roundLen={Number(roundLen) * 1000 * 60}
+        setTimerIsDone={setTimerIsDone}
+        moduleColor={selectedModule.colorCode}
       />
       <View style={styles.inputs}>
         {!isStopwatch && (
@@ -89,25 +165,27 @@ export default function Tracking() {
           <Picker
             style={{
               viewContainer: styles.picker,
-              inputWeb: styles.picker,
-              inputAndroid: { color: COLORTHEME.light.grey3 },
-              inputIOS: { color: COLORTHEME.light.grey3 },
+              inputWeb: { ...styles.picker, color: selectedModule.colorCode },
+              inputAndroid: { color: selectedModule.colorCode },
+              inputIOS: { color: selectedModule.colorCode },
             }}
             placeholder={{}}
-            items={[
-              { label: "Mediengestaltung 1", value: 0 },
-              { label: "Mediengestaltung 2", value: 1 },
-              { label: "Mediengestaltung 3", value: 2 },
-              { label: "Mediengestaltung 4", value: 3 },
-              { label: "Mediengestaltung 5", value: 4 },
-              { label: "Mediengestaltung 6", value: 5 },
-              { label: "Mediengestaltung 7", value: 6 },
-              { label: "Mediengestaltung 8", value: 7 },
-              { label: "Mediengestaltung 9", value: 8 },
-              { label: "Mediengestaltung 10", value: 9 },
-            ]}
-            onValueChange={(module: number) => setSelectedModule(module)}
-            disabled={!inputsEditable}
+            items={
+              modules?.length
+                ? modules.map((module) => {
+                    return {
+                      label: module.name,
+                      value: module.id,
+                      color: module.colorCode,
+                    } as Item;
+                  })
+                : []
+            }
+            onValueChange={(_: number, index: number) =>
+              setSelectedModule(modules![index])
+            }
+            //@ts-ignore
+            InputAccessoryView={() => null}
           />
         </View>
       </View>
@@ -126,10 +204,7 @@ export default function Tracking() {
               text="Tracking beenden"
               backgroundColor={COLORTHEME.light.primary}
               textColor="#FFFFFF"
-              onPress={() => {
-                router.push({ pathname: "/success" });
-                resetTimer();
-              }}
+              onPress={onTrackingDone}
               style={styles.button}
             />
           </>
@@ -158,10 +233,7 @@ export default function Tracking() {
               text="Tracking beenden"
               backgroundColor={COLORTHEME.light.primary}
               textColor="#FFFFFF"
-              onPress={() => {
-                router.push({ pathname: "/success" });
-                resetTimer();
-              }}
+              onPress={onTrackingDone}
               style={styles.button}
             />
           </>
@@ -193,7 +265,6 @@ const styles = StyleSheet.create({
   },
   picker: {
     backgroundColor: COLORTHEME.light.grey2,
-    color: COLORTHEME.light.grey3,
     border: 0,
     borderRadius: 12,
     height: 40,
