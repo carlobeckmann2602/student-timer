@@ -22,7 +22,7 @@ export default function OtherLogins() {
   const router = useRouter();
   const { onLogin } = useAuth();
 
-  useEffect(() => {
+  /* useEffect(() => {
     GoogleSignin.configure({
       webClientId: GoogleWebClientID,
       offlineAccess: true,
@@ -30,7 +30,7 @@ export default function OtherLogins() {
     });
   }, []);
 
-  /* const onLoginGoogle = async () => {
+  const onLoginGoogle = async () => {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
