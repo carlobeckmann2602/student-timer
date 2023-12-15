@@ -87,21 +87,18 @@ export function ModuleChart(moduleChartProp: ModuleChartProps) {
 
 const styles = StyleSheet.create({
   chartTextXL: {
-    fontFamily: "Roboto",
+    fontFamily: "OpenSans_SemiBold",
     fontSize: SIZES.xxLarge,
-    fontWeight: "600",
     textAlign: "center",
   },
   chartTextL: {
-    fontFamily: "Roboto",
+    fontFamily: "OpenSans_SemiBold",
     fontSize: SIZES.small,
-    fontWeight: "600",
     textAlign: "center",
   },
   chartTextS: {
-    fontFamily: "Roboto",
+    fontFamily: "OpenSans_Regular",
     fontSize: SIZES.xxsmall,
-    fontWeight: "normal",
     textAlign: "center",
   },
 });
