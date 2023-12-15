@@ -19,7 +19,6 @@ public class Student {
     private String profilePicture;
     private String email;
     @JsonIgnore
-    @Column(columnDefinition = "TEXT")
     private String password;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "student", orphanRemoval = true)

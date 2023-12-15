@@ -1,3 +1,4 @@
+
 package com.github.philippvogel92.studenttimerbackend;
 
 import com.github.philippvogel92.studenttimerbackend.learningSession.LearningSession;

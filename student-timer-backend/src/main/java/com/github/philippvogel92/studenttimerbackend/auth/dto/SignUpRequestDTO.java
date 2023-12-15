@@ -6,9 +6,7 @@ import jakarta.validation.constraints.*;
 public class SignUpRequestDTO {
     @NotBlank(message = "Name cannot be null or empty")
     private String name;
-    @NotBlank(message = "StudyCourse cannot be null or empty")
     private String studyCourse;
-    @NotBlank(message = "ProfilePicture cannot be null or empty")
     private String profilePicture;
     @Email(message = "Email should be valid")
     private String email;

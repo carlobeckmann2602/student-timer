@@ -1,25 +1,28 @@
-import React, { useState, Fragment } from "react";
-import { Octicons } from "@expo/vector-icons";
-import {
-  TouchableOpacity,
-  StyleSheet,
-  Image,
-  useWindowDimensions,
-  ImageSourcePropType,
-} from "react-native";
-import { Text, View } from "@/components/Themed";
+import React, { useState, useRef } from "react";
+import { Link, useRouter } from "expo-router";
+import { StyleSheet, useWindowDimensions, Platform } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
+import Header from "@/components/Header";
 import Button from "@/components/Button";
 import { COLORTHEME } from "@/constants/Theme";
+import { Text, View } from "@/components/Themed";
 import { onboardingData } from "@/constants/onboardingItems";
-import { ChevronLeft, ChevronRight } from "lucide-react-native";
-import { useRouter } from "expo-router";
+import OnboardingContainer from "@/components/onboarding/OnboardingContainer";
+import OnboardingCard from "@/components/onboarding/OnboardingCard";
+import CardNavigation from "@/components/onboarding/CardNavigation";
 import { saveItem } from "@/libs/deviceStorage";
 
 export default function OnboardingScreen() {
-  const { width, height } = useWindowDimensions();
 
+  const { width } = useWindowDimensions();
   const [activeIndex, setActiveIndex] = useState(0);
+  const [reachedLastItem, setReachedLastItem] = useState(false);
   const router = useRouter();
+  const scrollViewRef = useRef<ScrollView | null>(null);
+
+  const isSwipeEnabled = () => {
+    return Platform.OS === 'android' || Platform.OS === 'ios';
+  };
 
   const navigateToAuthentication = () => {
     //saveItem("onbarding", JSON.stringify(true));
@@ -27,128 +30,90 @@ export default function OnboardingScreen() {
   };
 
   const onPrevPress = () => {
-    setActiveIndex((prevIndex) => Math.max(prevIndex - 1, 0));
+    if (activeIndex > 0) {
+      setActiveIndex((prevIndex) => prevIndex - 1);
+      if (isSwipeEnabled()) {
+        scrollViewRef.current?.scrollTo({ x: width * (activeIndex - 1), animated: true });
+      }
+    }
   };
 
   const onNextPress = () => {
     if (activeIndex < onboardingData.length - 1) {
       setActiveIndex((prevIndex) => prevIndex + 1);
+      if (isSwipeEnabled()) {
+        scrollViewRef.current?.scrollTo({ x: width * (activeIndex + 1), animated: true });
+      }
     } else {
       navigateToAuthentication();
     }
   };
 
-  const renderOnboardingItem = ({
-    title,
-    description,
-    image,
-  }: {
-    title: string;
-    description: string;
-    image: ImageSourcePropType;
-  }) => {
-    return (
-      <View style={styles.onboardingItem}>
-        <Text style={styles.title}>{title}</Text>
-        <Text style={styles.description}>{description}</Text>
-        <Image source={image} />
-      </View>
-    );
-  };
-
   return (
-    <View style={styles.container}>
-      {/* Onboarding-Beschreibungs-Daten */}
-      {onboardingData.map((item, index) => (
-        <Fragment key={index}>
-          {index === activeIndex && renderOnboardingItem(item)}
-        </Fragment>
-      ))}
-
-      {/* Onboarding-Navigation */}
-      <View style={styles.navigation}>
-        <TouchableOpacity onPress={onPrevPress} disabled={activeIndex === 0}>
-          <ChevronLeft
-            color={activeIndex === 0 ? "#E8E8E8" : "#958AAA"}
-            size={24}
-          />
-        </TouchableOpacity>
-
-        {/* Punkte für jeden Onboarding-Screen */}
-        {onboardingData.map((_, index) => (
-          <Octicons
-            key={index}
-            style={index === activeIndex ? styles.active : styles.inactive}
-            name="dot"
-            size={24}
-          />
-        ))}
-
-        <TouchableOpacity onPress={onNextPress}>
-          <ChevronRight color={COLORTHEME.light.primary} size={24} />
-        </TouchableOpacity>
+    <ScrollView contentContainerStyle={styles.container}>
+      <View>
+        <Header title="StudentTimer" />
       </View>
-
-      <Button
-        text="Überspringen"
-        backgroundColor={COLORTHEME.light.primary}
-        textColor="#FFFFFF"
-        onPress={navigateToAuthentication}
-        style={{ width: 300, marginVertical: 20, height: 50 }}
+      {/* Onboarding-Cards web und smart */}
+      {Platform.OS === 'web' ? (
+        <OnboardingContainer
+          onboardingData={onboardingData}
+          activeIndex={activeIndex}
+        />
+      ) : (
+        <ScrollView
+          ref={scrollViewRef}
+          horizontal
+          pagingEnabled={isSwipeEnabled()}
+          showsHorizontalScrollIndicator={false}
+          onMomentumScrollEnd={(event) => {
+            const newIndex = Math.round(event.nativeEvent.contentOffset.x / width);
+            setActiveIndex(newIndex);
+            if (newIndex === onboardingData.length - 1) {
+              setReachedLastItem(true);
+            } else {
+              setReachedLastItem(false);
+            }
+          }}
+        >
+          {onboardingData.map((item, index) => (
+            <View key={index} style={{ width }}>
+              {index === activeIndex && <OnboardingCard onboardingItem={item} />}
+            </View>
+          ))}
+        </ScrollView>
+      )}
+      <CardNavigation
+        cardAmount={onboardingData.length}
+        activeIndex={activeIndex}
+        reachedLastItem={reachedLastItem}
+        onPrevPress={onPrevPress}
+        onNextPress={onNextPress}
       />
-    </View>
+      {reachedLastItem ? (
+        <Button
+          text="zur Registrierung"
+          backgroundColor={COLORTHEME.light.primary}
+          textColor="#FFFFFF"
+          onPress={navigateToAuthentication}
+          style={{ width: 300, marginVertical: 20, height: 50 }}
+        />
+      ) : (
+        <Text style={{ marginVertical: 20, height: 50 }}>
+          <Link href="/signup" style={{ textDecorationLine: "underline" }}>
+            Überspringen
+          </Link>
+        </Text>
+      )}
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    flexGrow: 1,
+    justifyContent: "flex-start",
     alignItems: "center",
-    justifyContent: "center",
-    flex: 1,
-  },
-  onboardingItem: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-  },
-  description: {
-    fontSize: 16,
-    textAlign: "center",
-    marginVertical: 10,
-  },
-  image: {
-    width: 200,
-    height: 200,
-    resizeMode: "contain",
-  },
-  navigation: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    width: "60%",
-  },
-  inactive: {
-    fontSize: 24,
-    color: "#E8E8E8",
-  },
-  active: {
-    fontSize: 24,
-    color: COLORTHEME.light.primary,
-  },
-  button: {
-    width: 175,
-    height: 49.84439468383789,
-    borderRadius: 50,
-    backgroundColor: COLORTHEME.light.primary,
-    padding: 10,
-    margin: 5,
-  },
-  buttontext: {
-    textAlign: "center",
-    color: "#F6F6F6",
+    backgroundColor: "white" //toDo ScrollView in Themed.tsx reparieren und stattdessen importieren
   },
 });

@@ -8,11 +8,8 @@ public class LoginRequestDTO {
     @Email(message = "Email is not valid")
     private String email;
     @NotBlank(message = "Password cannot be empty or null")
-    @Size(min = 6, max = 1500, message = "Password must be between 6 and 1500 characters")
+    @Size(min = 6, max = 200, message = "Password must be between 6 and 200 characters")
     private String password;
-
-    @NotBlank(message = "Provider cannot be empty or null")
-    private String provider;
 
     public String getEmail() {
         return email;
@@ -30,11 +27,4 @@ public class LoginRequestDTO {
         this.password = password;
     }
 
-    public String getProvider() {
-        return provider;
-    }
-
-    public void setProvider(String provider) {
-        this.provider = provider;
-    }
 }
