@@ -1,14 +1,13 @@
 package com.github.philippvogel92.studenttimerbackend.learningUnit;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.philippvogel92.studenttimerbackend.module.Module;
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.time.LocalDate;
-import java.time.Period;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
+import java.time.temporal.ChronoUnit;
 
 @Entity
 @Table
@@ -27,7 +26,9 @@ public class LearningUnit {
     @JsonBackReference
     private Module module;
 
-
+    /**
+     * Defines the total amount of minutes done by this learning unit (based on the start date, end date & workload per week)
+     */
     @Transient
     private Double totalLearningTime;
 
@@ -93,7 +94,7 @@ public class LearningUnit {
     }
 
     public Double getTotalLearningTime() {
-        return (double) Math.round(Period.between(this.startDate, this.endDate).getDays() / 7d * this.workloadPerWeek);
+        double learningTime = ChronoUnit.WEEKS.between(this.startDate, this.endDate) * this.workloadPerWeek;
+        return (Double) new BigDecimal(learningTime).round(new MathContext(2)).doubleValue();
     }
-
 }
