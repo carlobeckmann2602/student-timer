@@ -59,7 +59,7 @@ public class DatabaseConfig {
                     LocalDate.of(2023, Month.NOVEMBER, 4), 72.8, module2);
 
             LearningUnit learningUnit8 = new LearningUnit("Projekttreffen", LocalDate.of(2023, Month.APRIL, 10),
-                    LocalDate.of(2023, Month.SEPTEMBER, 2), .0, module3);
+                    LocalDate.of(2023, Month.SEPTEMBER, 2), 200.0, module3);
             LearningUnit learningUnit9 = new LearningUnit("Vorlesung", LocalDate.of(2023, Month.MAY, 2),
                     LocalDate.of(2023, Month.AUGUST, 1), 60.0, module3);
             LearningUnit learningUnit10 = new LearningUnit("Nachhilfe", LocalDate.of(2023, Month.FEBRUARY, 6),
