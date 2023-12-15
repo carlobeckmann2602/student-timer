@@ -6,15 +6,16 @@ import { COLORTHEME } from "@/constants/Theme";
 import { useRouter } from "expo-router";
 import { ModuleType } from "@/types/ModuleType";
 import { computeDeadline } from "@/libs/moduleTypeHelper";
+import { convertMinutesToHours } from "@/libs/timeHelper";
 
-export function ModuleCard(data: ModuleType) {
+export function ModuleCard(moduleData: ModuleType) {
   const router = useRouter();
 
   return (
     <TouchableOpacity
       onPress={() =>
         router.push({
-          pathname: `modules/${data.id}`,
+          pathname: `modules/${moduleData.id}`,
         } as never)
       }
     >
@@ -25,10 +26,10 @@ export function ModuleCard(data: ModuleType) {
             <View
               style={[
                 styles.moduleIndicatorM,
-                { backgroundColor: data.colorCode },
+                { backgroundColor: moduleData.colorCode },
               ]}
             />
-            <H4>{data.name}</H4>
+            <H4>{moduleData.name}</H4>
           </View>
           <TouchableOpacity>
             <MoreVertical size={28} fill="black" strokeWidth={1}></MoreVertical>
@@ -37,16 +38,16 @@ export function ModuleCard(data: ModuleType) {
         {/* Statistics */}
         <View style={styles.statisticsContainer}>
           <ModuleChart
-            inputData={data.learningUnits}
-            totalAmount={data.totalModuleTime}
-            totalAmountDone={
-              data.totalLearningSessionTime + data.totalLearningUnitTime
-            }
+            inputData={moduleData.learningUnits}
+            totalAmount={convertMinutesToHours(moduleData.totalModuleTime)}
+            totalAmountDone={convertMinutesToHours(
+              moduleData.totalLearningTime
+            )}
             width={100}
             height={100}
           />
           <View style={styles.statisticsUnitContainer}>
-            {data.learningUnits.map((unit) => {
+            {moduleData.learningUnits.map((unit) => {
               return (
                 <View key={unit.id} style={styles.headerTextRow}>
                   <View
@@ -65,15 +66,17 @@ export function ModuleCard(data: ModuleType) {
         <View style={styles.headerRow}>
           <View style={styles.resultColumn}>
             <P style={{ textAlign: "center" }}>Zeit bis zur Prüfung</P>
-            <Subhead>{computeDeadline(data.examDate)}</Subhead>
+            <Subhead>{computeDeadline(moduleData.examDate)}</Subhead>
           </View>
           <View style={styles.separator}></View>
           <View style={styles.resultColumn}>
             <P style={{ textAlign: "center" }}>Selbststudium</P>
             <Subhead>
-              {`${data.totalLearningSessionTime} von ${
-                data.totalModuleTime - data.totalLearningUnitTime
-              } Std.`}
+              {`${convertMinutesToHours(
+                moduleData.totalLearningSessionTime
+              )} von ${convertMinutesToHours(
+                moduleData.totalLearningUnitTime
+              )} Std.`}
             </Subhead>
           </View>
         </View>

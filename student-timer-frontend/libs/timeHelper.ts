@@ -20,3 +20,7 @@ export const formatTime = ({
     .toString()
     .padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
 };
+
+export const convertMinutesToHours = (minutes: number) => {
+  return +(minutes / 60).toFixed(1);
+};

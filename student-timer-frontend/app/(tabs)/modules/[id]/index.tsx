@@ -11,6 +11,7 @@ import { COLORTHEME } from "@/constants/Theme";
 import { useModules } from "@/context/ModuleContext";
 import { useState } from "react";
 import React from "react";
+import { convertMinutesToHours } from "@/libs/timeHelper";
 
 export default function ModulesDetailScreen() {
   const { id } = useLocalSearchParams<{
@@ -46,6 +47,7 @@ export default function ModulesDetailScreen() {
       learningSessions: [],
       totalLearningSessionTime: 0,
       totalLearningUnitTime: 0,
+      totalLearningTime: 0,
       totalModuleTime: 0,
     } as ModuleType;
   };
@@ -55,7 +57,10 @@ export default function ModulesDetailScreen() {
 
   const computeUnitString = (unit: LearningUnitType) => {
     let weekAmount = computeDateDifference(unit.endDate, unit.startDate, true);
-    return `${unit.workloadPerWeek} h, ${weekAmount} Wochen`;
+
+    return `${convertMinutesToHours(
+      unit.workloadPerWeek
+    )} h, ${weekAmount} Wochen`;
   };
 
   return (
@@ -78,11 +83,10 @@ export default function ModulesDetailScreen() {
           <ScrollView contentContainerStyle={styles.scrollViewContainerStyle}>
             <ModuleChart
               inputData={detailModule.learningUnits}
-              totalAmount={detailModule.totalModuleTime}
-              totalAmountDone={
-                detailModule.totalLearningSessionTime +
-                detailModule.totalLearningUnitTime
-              }
+              totalAmount={convertMinutesToHours(detailModule.totalModuleTime)}
+              totalAmountDone={convertMinutesToHours(
+                detailModule.totalLearningTime
+              )}
               width={200}
               height={200}
             />
@@ -103,7 +107,9 @@ export default function ModulesDetailScreen() {
                           <Subhead>{unit.name}</Subhead>
                           <P>{computeUnitString(unit)}</P>
                         </View>
-                        <Subhead>{unit.totalLearningTime} Std.</Subhead>
+                        <Subhead>
+                          {convertMinutesToHours(unit.totalLearningTime)} Std.
+                        </Subhead>
                       </View>
                     </View>
                   );
@@ -116,10 +122,9 @@ export default function ModulesDetailScreen() {
                   darkColor={COLORTHEME.dark.text}
                 />
                 <Subhead>
-                  {`Gesamt: ${
-                    detailModule?.totalLearningUnitTime +
-                    detailModule?.totalLearningUnitTime
-                  } Std.`}
+                  {`Gesamt: ${convertMinutesToHours(
+                    detailModule.totalLearningTime
+                  )} Std.`}
                 </Subhead>
               </View>
             </View>

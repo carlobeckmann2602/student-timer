@@ -76,30 +76,6 @@ export default function NewModule() {
     }
   };
 
-  // const newLearningUnits: LearningUnitType[] = [
-  //   {
-  //     id: 123,
-  //     name: "test",
-  //     workloadPerWeek: -1,
-  //     startDate: new Date(),
-  //     endDate: new Date(),
-  //   },
-  //   {
-  //     id: 456,
-  //     name: "test",
-  //     workloadPerWeek: -1,
-  //     startDate: new Date(),
-  //     endDate: new Date(),
-  //   },
-  //   {
-  //     id: 789,
-  //     name: "test",
-  //     workloadPerWeek: -1,
-  //     startDate: new Date(),
-  //     endDate: new Date(),
-  //   },
-  // ];
-
   const newModule: ModuleType = {
     id: Math.random(),
     name: moduleName,
@@ -110,6 +86,7 @@ export default function NewModule() {
     learningSessions: [],
     totalLearningSessionTime: 0,
     totalLearningUnitTime: 0,
+    totalLearningTime: 0,
     totalModuleTime: 0,
   };
 

@@ -27,7 +27,7 @@ export function ModuleChart(moduleChartProp: ModuleChartProps) {
       workloadPerWeek: 0,
       startDate: new Date(),
       endDate: new Date(),
-      totalLearningTime: totalAmount - totalAmountDone,
+      totalLearningTime: (totalAmount - totalAmountDone) * 60,
       colorCode: "transparent",
     } as LearningUnitType,
   ];
