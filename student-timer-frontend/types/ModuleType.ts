@@ -11,7 +11,7 @@ export type ModuleType = {
   learningSessions: LearningSessionType[];
 
   totalModuleTime: number;
-  // totalLearningTime: number;
+  totalLearningTime: number;
   totalLearningSessionTime: number;
   totalLearningUnitTime: number;
 };

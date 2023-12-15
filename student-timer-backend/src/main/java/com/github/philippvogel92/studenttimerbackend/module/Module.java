@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.github.philippvogel92.studenttimerbackend.learningSession.LearningSession;
 import com.github.philippvogel92.studenttimerbackend.learningUnit.LearningUnit;
 import com.github.philippvogel92.studenttimerbackend.student.Student;
+
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -36,28 +37,28 @@ public class Module {
     private List<LearningSession> learningSessions;
 
     /**
-     * Defines the total amount of learning hours expected for this module (based on the given creditpoints)
+     * Defines the total amount of minutes expected for this module (based on the given creditpoints)
      */
     @Transient
     private Double totalModuleTime;
 
     /**
-     * Defines the total amount of learning hours done by learning sessions
+     * Defines the total amount of minutes done by learning sessions
      */
     @Transient
     private Double totalLearningSessionTime;
 
     /**
-     * Defines the total amount of learning hours done by the given learning units
+     * Defines the total amount of minutes done by the given learning units
      */
     @Transient
     private Double totalLearningUnitTime;
 
     /**
-     * Defines the total amount of learning hours done by learning units and learning sessions
+     * Defines the total amount of minutes done by learning units and learning sessions
      */
-    // @Transient
-    // private Double totalLearningTime;
+    @Transient
+    private Double totalLearningTime;
 
     public Module(String name, String colorCode, Integer creditPoints, LocalDate examDate, Student student) {
         this.name = name;
@@ -68,7 +69,6 @@ public class Module {
         this.totalModuleTime = this.getTotalModuleTime();
         this.totalLearningSessionTime = this.getTotalLearningSessionTime();
         this.totalLearningUnitTime = this.getTotalLearningUnitTime();
-        // this.totalLearningTime = this.getTotalLearningTime();
     }
 
     public Module(Long id, String name, String colorCode, Integer creditPoints, LocalDate examDate, Student student) {
@@ -81,7 +81,6 @@ public class Module {
         this.totalModuleTime = this.getTotalModuleTime();
         this.totalLearningSessionTime = this.getTotalLearningSessionTime();
         this.totalLearningUnitTime = this.getTotalLearningUnitTime();
-        // this.totalLearningTime = this.getTotalLearningTime();
     }
 
     public Module() {
@@ -153,12 +152,12 @@ public class Module {
     }
 
     public Double getTotalModuleTime() {
-        return this.creditPoints * 30d;
+        return (this.creditPoints * 30) * 60d;
     }
 
-    // public Double getTotalLearningTime() {
-    //     return this.getTotalLearningSessionTime() + this.getTotalLearningUnitTime();
-    // }
+    public Double getTotalLearningTime() {
+        return this.getTotalLearningSessionTime() + this.getTotalLearningUnitTime();
+    }
 
     public Double getTotalLearningSessionTime() {
         Double totalDuration = 0.0;
@@ -182,5 +181,13 @@ public class Module {
         }
 
         return totalDuration;
+    }
+
+    @PostLoad
+    private void ComputeTotalTimes() {
+        this.totalModuleTime = this.getTotalModuleTime();
+        this.totalLearningSessionTime = this.getTotalLearningSessionTime();
+        this.totalLearningUnitTime = this.getTotalLearningUnitTime();
+        this.totalLearningTime = this.getTotalLearningTime();
     }
 }
