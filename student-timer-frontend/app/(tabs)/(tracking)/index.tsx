@@ -35,23 +35,11 @@ export default function Tracking() {
   }, [timerIsDone]);
 
   useEffect(() => {
-    if (trackingSaved !== undefined) {
-      alert(
-        trackingSaved === "1"
-          ? "Tracking wurde gespeichert"
-          : "Fehler beim Speichern des Trackings"
-      );
+    if (trackingSaved !== undefined || discard !== undefined) {
       resetTimer();
       router.push("/(tabs)/(tracking)");
     }
-  }, [trackingSaved]);
-
-  useEffect(() => {
-    if (discard !== undefined) {
-      resetTimer();
-      router.push("/(tabs)/(tracking)");
-    }
-  }, [discard]);
+  }, [trackingSaved, discard]);
 
   const toggleTracking = () => {
     trackingIsActive ? "" : setStartTime(Date.now());
