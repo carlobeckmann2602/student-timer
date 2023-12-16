@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Platform, KeyboardAvoidingView, StyleSheet } from "react-native";
-import { useFocusEffect } from "@react-navigation/native";
 import { router, useLocalSearchParams } from "expo-router";
 import { PauseIcon, PlayIcon } from "lucide-react-native";
 
@@ -11,11 +10,9 @@ import TrackingModeToggle from "@/components/tracking/TrackingModeToggle";
 import ModulePicker from "@/components/modules/ModulePicker";
 import Timer from "@/components/tracking/Timer";
 import { COLORS, COLORTHEME } from "@/constants/Theme";
-import { useModules } from "@/context/ModuleContext";
 import { ModuleType } from "@/types/ModuleType";
 
 export default function Tracking() {
-  const { fetchModules } = useModules();
   const [isStopwatch, setIsStopwatch] = useState(true);
   const [rounds, setRounds] = useState("2");
   const [pauseLen, setPauseLen] = useState("20");
@@ -29,14 +26,6 @@ export default function Tracking() {
     trackingSaved: string;
   }>();
   const inputsEditable = !trackingIsActive && startTime === 0;
-
-  useFocusEffect(
-    React.useCallback(() => {
-      (async () => {
-        fetchModules && (await fetchModules());
-      })();
-    }, [])
-  );
 
   useEffect(() => {
     if (timerIsDone) {

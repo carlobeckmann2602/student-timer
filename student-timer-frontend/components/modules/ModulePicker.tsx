@@ -1,6 +1,7 @@
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import Picker, { Item } from "react-native-picker-select";
+import { useFocusEffect } from "expo-router";
 
 import { useModules } from "@/context/ModuleContext";
 import { COLORTHEME } from "@/constants/Theme";
@@ -11,9 +12,21 @@ export default function ModulePicker(props: {
   setSelectedModule?: React.Dispatch<React.SetStateAction<ModuleType>>;
 }) {
   const { setSelectedModule: setSelectedModuleCallback } = props;
-  const { modules } = useModules();
-  const [selectedModuleId] = useState<number>();
+  const { modules, fetchModules } = useModules();
+  const [selectedModuleId, setSelectedModuleId] = useState<number>();
   const [selectedModule, setSelectedModule] = useState({} as ModuleType);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      (async () => {
+        fetchModules && (await fetchModules());
+      })();
+    }, [])
+  );
+
+  useEffect(() => {
+    setSelectedModuleId(modules ? modules[0].id : undefined);
+  }, []);
 
   return (
     <View style={styles.pickerContainer}>
@@ -24,7 +37,10 @@ export default function ModulePicker(props: {
             viewContainer: styles.picker,
             inputWeb: { ...styles.picker, color: selectedModule.colorCode },
             inputAndroid: { color: selectedModule.colorCode },
-            inputIOS: { color: selectedModule.colorCode },
+            inputIOS: {
+              color: selectedModule.colorCode,
+              paddingHorizontal: 10,
+            },
           }}
           placeholder={{}}
           value={selectedModuleId}
@@ -42,6 +58,7 @@ export default function ModulePicker(props: {
           }
           onValueChange={(moduleIdString: string) => {
             let moduleId = Number(moduleIdString);
+            setSelectedModuleId(moduleId);
             let module = modules?.find((module) => module.id === moduleId);
             if (!module) return;
             setSelectedModule(module);
