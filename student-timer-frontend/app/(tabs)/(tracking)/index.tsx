@@ -22,8 +22,9 @@ export default function Tracking() {
   const [startTime, setStartTime] = useState(0);
   const [selectedModule, setSelectedModule] = useState({} as ModuleType);
   const [timerIsDone, setTimerIsDone] = useState(false);
-  const { trackingSaved } = useLocalSearchParams<{
+  const { trackingSaved, discard } = useLocalSearchParams<{
     trackingSaved: string;
+    discard: string;
   }>();
   const inputsEditable = !trackingIsActive && startTime === 0;
 
@@ -44,6 +45,13 @@ export default function Tracking() {
       router.push("/(tabs)/(tracking)");
     }
   }, [trackingSaved]);
+
+  useEffect(() => {
+    if (discard !== undefined) {
+      resetTimer();
+      router.push("/(tabs)/(tracking)");
+    }
+  }, [discard]);
 
   const toggleTracking = () => {
     trackingIsActive ? "" : setStartTime(Date.now());

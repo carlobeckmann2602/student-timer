@@ -87,7 +87,20 @@ export default function Success() {
           style={styles.input}
         />
       </View>
-      <View style={styles.buttons}>
+      <View style={styles.actions}>
+        <Text
+          style={styles.discardLink}
+          onPress={() => {
+            router.push({
+              pathname: "/(tabs)/(tracking)/",
+              params: {
+                discard: 1,
+              },
+            });
+          }}
+        >
+          Verwerfen
+        </Text>
         <Button
           text="Abschließen"
           backgroundColor={selectedModule?.colorCode || ""}
@@ -162,10 +175,14 @@ const styles = StyleSheet.create({
   input: {
     flexBasis: "auto !important" as any,
   },
-  buttons: {
+  actions: {
     gap: 10,
   },
   buttonBorder: {
     borderWidth: 3,
+  },
+  discardLink: {
+    textAlign: "center",
+    textDecorationLine: "underline",
   },
 });
