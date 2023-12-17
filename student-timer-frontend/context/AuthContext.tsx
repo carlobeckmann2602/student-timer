@@ -21,6 +21,8 @@ type AuthProps = {
   ) => Promise<any>;
   onLogin?: (email: string, password: string, provider: string) => Promise<any>;
   onLogout?: () => Promise<any>;
+  //onUpdate?: () => Promise<any>;
+  //onRemove?: () => Promise<any>;
   onNewToken?: (token: TokenType) => Promise<any>;
 };
 
@@ -160,6 +162,90 @@ export const AuthProvider = ({ children }: any) => {
     }
   };
 
+  // ToDo implementieren
+  /*
+  const update = async (updateOject: {name: string, studySubject: string, password: string, email: string}) => {
+    try {
+      const result = await axios.post(`${API_URL}/student/${authState.user.id}`, updateOject);
+
+      const token = {
+        accessToken: result.data.accessToken,
+        refreshToken: result.data.refreshToken,
+      } as TokenType;
+
+      const resultUser = await axios.get(
+          `${API_URL}/students/${result.data.studentId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token.accessToken}`,
+            },
+          }
+      );
+
+      const user = resultUser.data as UserType;
+
+      setAuthState({
+        token: token,
+        authenticated: true,
+        user: user,
+      });
+
+      await saveItem(TOKEN_KEY, JSON.stringify(token));
+
+      await saveItem(USER_KEY, JSON.stringify(user));
+
+      return result;
+    } catch (e) {
+      return { error: true, msg: (e as any).response.data.message };
+    }
+  };
+
+   */
+
+  //toDo implementieren
+  /*
+  const remove = async (email: string, password: string, provider: string) => {
+    try {
+      const result = await axios.post(`${API_URL}/student/id`, {
+        email,
+        password,
+        provider,
+      });
+
+      const token = {
+        accessToken: result.data.accessToken,
+        refreshToken: result.data.refreshToken,
+      } as TokenType;
+
+      const resultUser = await axios.get(
+          `${API_URL}/students/${result.data.studentId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token.accessToken}`,
+            },
+          }
+      );
+
+      const user = resultUser.data as UserType;
+
+      setAuthState({
+        token: token,
+        authenticated: true,
+        user: user,
+      });
+
+      await saveItem(TOKEN_KEY, JSON.stringify(token));
+
+      await saveItem(USER_KEY, JSON.stringify(user));
+
+      return result;
+    } catch (e) {
+      return { error: true, msg: (e as any).response.data.message };
+    }
+  };
+
+   */
+
   const router = useRouter();
 
   const logout = async () => {
@@ -194,6 +280,8 @@ export const AuthProvider = ({ children }: any) => {
     onRegister: register,
     onLogin: login,
     onLogout: logout,
+    //onUpdate: update,
+    //onRemove: remove,
     onNewToken: newToken,
     authState,
   };

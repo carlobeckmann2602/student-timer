@@ -9,25 +9,22 @@ import { deleteStoredItem } from "@/libs/deviceStorage";
 import { useAuth } from "@/context/AuthContext";
 
 export default function Profile() {
+
   const { onLogout, authState } = useAuth();
 
   const pic = require("../../../assets/images/profile-picture.jpg");
 
-  // toDo: wieder einkommentieren, wenn DB-Anbindung läuft
-  //  Daten aus Authentifizierung / Benutzersession ziehen
-  /*
   const user = {
     name: authState?.user.name,
     studySubject: authState?.user.studyCourse,
     profileImage: pic,
   };
-   */
 
-  const user = {
+  /* const user = {
     name: "Maxine Hellas",
     studySubject: "Master Medieninformatik",
     profileImage: pic,
-  };
+  };*/
 
   const handleEditProfile = () => {
     router.push("/profile/edit/");

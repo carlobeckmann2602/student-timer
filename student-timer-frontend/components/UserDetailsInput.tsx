@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import InputField from "@/components/InputField";
-import Header from "@/components/Header";
 import {COLORTHEME} from "@/constants/Theme";
 
 export default function UserDetailsInput(props: {

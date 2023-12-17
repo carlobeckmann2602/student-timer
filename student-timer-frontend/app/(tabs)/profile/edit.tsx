@@ -7,44 +7,46 @@ import {User2} from "lucide-react-native";
 import { Edit2 } from 'lucide-react-native';
 import UserDetailsInput from "@/components/UserDetailsInput";
 import Header from "@/components/Header";
+import {useAuth} from "@/context/AuthContext";
 
 
 export default function Edit() {
 
-    //toDo Context?
-    //const { onUpdate } = useAuth();
+    //toDo in Context korrekt implementieren
+    //const { onUpdate, authState } = useAuth();
+
 
     const onUpdate = async (name: string, studySubject: string, password: string, email: string) => {
         user.name = name;
         user.studySubject = studySubject;
-        user.eMail = email;
+        user.email = email;
         console.log(user);
     };
+
 
     const router = useRouter();
 
     const pic = require("../../../assets/images/profile-picture.jpg");
 
-    // toDo: wieder einkommentieren, wenn DB-Anbindung läuft
-    //  Daten aus Authentifizierung / Benutzersession ziehen
-    /*
-    const user = {
-      name: authState?.user.name,
-      studySubject: authState?.user.studyCourse,
-      profileImage: pic,
-    };
-     */
+/*    const user = {
+        name: authState?.user.name,
+        studySubject: authState?.user.studyCourse,
+        email:  authState?.user.email,
+        profileImage: pic,
+    };*/
 
     const user = {
         name: "Maxine Hellas",
         studySubject: "Master Medieninformatik",
-        eMail: "maxine.hellas@study.hs-duesseldorf.de",
+        email: "maxine.hellas@study.hs-duesseldorf.de",
         profileImage: pic,
     };
 
+
+
     const [userName, setUserName] = useState(user.name);
     const [userStudySubject, setUserStudySubject] = useState(user.studySubject);
-    const [userEmail, setUserEmail] = useState(user.eMail);
+    const [userEmail, setUserEmail] = useState(user.email);
 
     const [nameError, setNameError] = useState("");
     const [studySubjectError, setStudySubjectError] = useState("");
