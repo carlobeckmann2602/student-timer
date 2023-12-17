@@ -26,7 +26,7 @@ export default function Edit() {
 
     const router = useRouter();
 
-    const pic = require("../../../assets/images/profile-picture.jpg");
+    const pic = require("../../../assets/images/profile/profile-picture.jpg");
 
 /*    const user = {
         name: authState?.user.name,
