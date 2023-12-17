@@ -6,6 +6,7 @@ import { Svg } from "react-native-svg";
 import { View } from "@/components/Themed";
 import { COLORTHEME, COLORS } from "@/constants/Theme";
 import { msToTimeObject, formatTime } from "@/libs/timeHelper";
+import { sendPushNotification } from "@/libs/handleLocalNotification";
 
 export default function Timer(props: {
   isStopwatch: boolean;
@@ -56,6 +57,15 @@ export default function Timer(props: {
     }
     setProgress({ data: getProgressData(currentTime, currentPauseTime) });
   }, [moduleColor]);
+
+  useEffect(() => {
+    if (!trackingIsActive) return;
+    sendPushNotification(
+      "tracking",
+      "Tracking",
+      `${isPause ? "Gönn dir eine Pause" : "Pause ist vorbei"}`
+    );
+  }, [isPause]);
 
   const getProgressData = (curTime: number, curPauseTime?: number) => {
     if (isStopwatch) {
