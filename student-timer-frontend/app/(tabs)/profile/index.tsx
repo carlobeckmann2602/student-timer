@@ -3,8 +3,10 @@ import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import Button from "@/components/Button";
 import { COLORTHEME } from "@/constants/Theme";
 import { User2 } from "lucide-react-native";
+import { LogOutIcon } from "lucide-react-native";
 import { router } from "expo-router";
 import { useAuth } from "@/context/AuthContext";
+import {Header} from "@react-navigation/elements";
 
 export default function Profile() {
 
@@ -46,12 +48,14 @@ export default function Profile() {
   return (
     <View style={styles.container}>
       {/* Profilbild */}
+
       <View style={styles.profileImageContainer}>
         {user.profileImage ? (
           <Image source={user.profileImage} style={styles.profileImage} />
         ) : (
           <User2 size={100} color={COLORTHEME.light.primary} />
         )}
+
       </View>
 
       {/* Benutzerinformationen */}
@@ -72,13 +76,10 @@ export default function Profile() {
           textColor="#FFFFFF"
           onPress={handleExportData}
         />
-        <Button
-          text="Logout"
-          backgroundColor={COLORTHEME.light.primary}
-          textColor="#FFFFFF"
-          onPress={onLogout}
-        />
       </View>
+      <TouchableOpacity onPress={onLogout} style={styles.logoutIcon}>
+        <LogOutIcon size={24} color="black" />
+      </TouchableOpacity>
     </View>
   );
 }
@@ -116,5 +117,8 @@ const styles = StyleSheet.create({
     width: 200,
     gap: 15,
     marginTop: 20,
+  },
+  logoutIcon: {
+    padding: 10,
   },
 });
