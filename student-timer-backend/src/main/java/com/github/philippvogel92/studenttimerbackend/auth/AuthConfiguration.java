@@ -16,6 +16,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+
+import java.util.List;
 
 @SecurityScheme(
         name = "bearerAuth",
@@ -39,7 +42,15 @@ public class AuthConfiguration {
 
         http
                 .csrf(CsrfConfigurer::disable) //deactivated in development to allow easy communication with swagger ui
-                .cors(CorsConfigurer::disable)
+                .cors(httpSecurityCorsConfigurer ->
+                        httpSecurityCorsConfigurer.configurationSource(request -> {
+                            CorsConfiguration cors = new CorsConfiguration();
+                            cors.setAllowedOrigins(List.of("http://localhost:8081"));
+                            cors.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                            cors.setAllowedHeaders(List.of("*"));
+                            cors.setAllowCredentials(true);
+                            return cors;
+                        }))
                 .authorizeHttpRequests(authorize -> authorize
                         .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
                         .requestMatchers("/documentation/**", "/documentation/docs", "/v3/api-docs", "/swagger" +
