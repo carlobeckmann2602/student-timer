@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Image, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
+import { Image, TouchableOpacity, StyleSheet, ScrollView, Alert } from "react-native";
 import { View, Text } from "@/components/Themed";
 import { useRouter } from "expo-router";
 import { COLORTHEME } from "@/constants/Theme";
@@ -101,6 +101,46 @@ export default function Edit() {
                 router.push("/(auth)/signup");
             }
         }
+    };
+
+    const removeUserTest = async () => {
+        if (authState?.user.id) {
+            console.log("removeUserTest");
+            console.log("UserId: " + authState?.user.id)
+            confirmAction(
+                "Konto löschen",
+                "Möchtest du dein Konto wirklich löschen?",
+                async () => {
+                    if (authState?.user.id) {
+                        const result = await onRemove!(authState.user.id);
+                        if (result && result.error) {
+                            console.log("remove error")
+                            setError(result.msg);
+                        } else {
+                            console.log("remove router")
+                            router.push("/(auth)/signup");
+                        }
+                    }
+                }
+            );
+        }
+    };
+
+    const confirmAction = (title: string, message: string, onConfirm: () => void) => {
+        Alert.alert(
+            title,
+            message,
+            [
+                {
+                    text: "Nein",
+                    style: "cancel"
+                },
+                {
+                    text: "Ja",
+                    onPress: onConfirm
+                }
+            ]
+        );
     };
 
     return (
