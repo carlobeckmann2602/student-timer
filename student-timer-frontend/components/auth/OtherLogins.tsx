@@ -18,8 +18,6 @@ import React, { useEffect, useState } from "react";
 import { View } from "@/components/Themed";
 import { useAuth } from "@/context/AuthContext";
 
-//WebBrowser.maybeCompleteAuthSession();
-
 export default function OtherLogins() {
   const router = useRouter();
   const { onLogin } = useAuth();
@@ -39,8 +37,11 @@ export default function OtherLogins() {
       console.log(userInfo);
       const result = await onLogin!(
         userInfo.user.email,
+        undefined,
         userInfo.idToken ? userInfo.idToken : "",
-        "google"
+        undefined,
+        undefined,
+        "GOOGLE"
       );
       if (result && result.error) {
         console.error(result.error);

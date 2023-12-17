@@ -16,7 +16,8 @@ type ThemeProps = {
 
 export type TextProps = ThemeProps & DefaultText["props"];
 export type ViewProps = ThemeProps & DefaultView["props"];
-export type ScrollViewProps = ThemeProps & DefaultScrollView["props"] & { ref?: React.Ref<DefaultScrollView> };
+export type ScrollViewProps = ThemeProps &
+  DefaultScrollView["props"] & { ref?: React.Ref<DefaultScrollView> };
 
 export function useThemeColor(
   props: { light?: string; dark?: string },
@@ -37,7 +38,12 @@ export function Text(props: TextProps) {
   const { style, lightColor, darkColor, ...otherProps } = props;
   const color = useThemeColor({ light: lightColor, dark: darkColor }, "text");
 
-  return <DefaultText style={[{ color }, style]} {...otherProps} />;
+  return (
+    <DefaultText
+      style={[{ fontFamily: "OpenSans_Regular", color }, style]}
+      {...otherProps}
+    />
+  );
 }
 
 export function View(props: ViewProps) {
@@ -53,9 +59,11 @@ export function View(props: ViewProps) {
 export function ScrollView(props: ScrollViewProps) {
   const { style, lightColor, darkColor, ...otherProps } = props;
   const backgroundColor = useThemeColor(
-      { light: lightColor, dark: darkColor },
-      "background"
+    { light: lightColor, dark: darkColor },
+    "background"
   );
 
-  return <DefaultScrollView style={[{ backgroundColor }, style]} {...otherProps} />;
+  return (
+    <DefaultScrollView style={[{ backgroundColor }, style]} {...otherProps} />
+  );
 }

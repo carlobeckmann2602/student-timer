@@ -7,6 +7,7 @@ import {
 import { useState } from "react";
 import { StarIcon } from "lucide-react-native";
 import { router, useLocalSearchParams } from "expo-router";
+import { useToast } from "react-native-toast-notifications";
 
 import Button from "@/components/Button";
 import InputField from "@/components/InputField";
@@ -18,6 +19,7 @@ import { useModules } from "@/context/ModuleContext";
 import { msToTimeObject, formatTime } from "@/libs/timeHelper";
 
 export default function Success() {
+  const toast = useToast();
   const { authState } = useAuth();
   const { authAxios } = useAxios();
   const { modules } = useModules();
@@ -87,29 +89,51 @@ export default function Success() {
           style={styles.input}
         />
       </View>
-      <View style={styles.buttons}>
+      <View style={styles.actions}>
+        <Text
+          style={styles.discardLink}
+          onPress={() => {
+            router.push({
+              pathname: "/(tabs)/(tracking)/",
+              params: {
+                discard: 1,
+              },
+            });
+          }}
+        >
+          Verwerfen
+        </Text>
         <Button
           text="Abschließen"
           backgroundColor={selectedModule?.colorCode || ""}
           textColor="#FFFFFF"
           disabled={starAmount === 0}
           onPress={async () => {
-            const response = await authAxios?.post(
-              `/students/${authState?.user.id}/modules/${selectedModule?.id}/learningSessions`,
-              {
-                totalDuration: Number(focusTime) + Number(pauseTime),
-                focusDuration: Number(focusTime),
-                rating: starAmount,
-                createdAt: new Date().toISOString().replace("Z", ""),
-                description: description,
-              }
-            );
-            router.push({
-              pathname: "/(tabs)/(tracking)/",
-              params: {
-                trackingSaved: response?.status === 200 ? 1 : 0,
-              },
-            });
+            let id = toast.show("Speichern...");
+            try {
+              await authAxios?.post(
+                `/students/${authState?.user.id}/modules/${selectedModule?.id}/learningSessions`,
+                {
+                  totalDuration: Number(focusTime) + Number(pauseTime),
+                  focusDuration: Number(focusTime),
+                  rating: starAmount,
+                  createdAt: new Date().toISOString().replace("Z", ""),
+                  description: description,
+                }
+              );
+              toast.update(id, "Erfolgreich gespeichert", { type: "success" });
+            } catch (e) {
+              toast.update(id, `Fehler beim Speichern: ${e}`, {
+                type: "danger",
+              });
+            } finally {
+              router.push({
+                pathname: "/(tabs)/(tracking)/",
+                params: {
+                  trackingSaved: 1,
+                },
+              });
+            }
           }}
         />
         <Button
@@ -160,12 +184,16 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   input: {
-    flexBasis: "auto !important" as any,
+    flexBasis: "auto",
   },
-  buttons: {
+  actions: {
     gap: 10,
   },
   buttonBorder: {
     borderWidth: 3,
+  },
+  discardLink: {
+    textAlign: "center",
+    textDecorationLine: "underline",
   },
 });

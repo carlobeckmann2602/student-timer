@@ -17,7 +17,7 @@ export default function Timer(props: {
   pauseLen: number;
   roundLen: number;
   setTimerIsDone: React.Dispatch<React.SetStateAction<boolean>>;
-  moduleColor: string;
+  moduleColor?: string;
 }) {
   const {
     isStopwatch,
