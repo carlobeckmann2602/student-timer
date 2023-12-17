@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Image, TouchableOpacity, StyleSheet, ScrollView, Alert } from "react-native";
 import { View, Text } from "@/components/Themed";
-import { useRouter } from "expo-router";
+import { Link, router, useRouter } from "expo-router";
 import { COLORTHEME } from "@/constants/Theme";
 import Button from "@/components/Button";
 import { User2 } from "lucide-react-native";
@@ -9,6 +9,7 @@ import { Edit2 } from 'lucide-react-native';
 import UserDetailsInput from "@/components/UserDetailsInput";
 import Header from "@/components/Header";
 import { useAuth } from "@/context/AuthContext";
+import { ConfirmModal } from "@/app/(tabs)/profile/confirm";
 
 
 export default function Edit() {
@@ -27,6 +28,9 @@ export default function Edit() {
     const [studyCourseError, setStudyCourseError] = useState("");
     const [emailError, setEmailError] = useState("");
     const [error, setError] = useState("");
+
+    const [RemoveModalVisible, setRemoveModalVisible] = useState(false);
+
 
     const validateInput = () => {
         let nameValid = false;
@@ -103,7 +107,28 @@ export default function Edit() {
         }
     };
 
-    const removeUserTest = async () => {
+    const removeUserConfirmation = async () => {
+        if (authState?.user.id) {
+            console.log("removeUserConfirmation");
+            console.log("UserId: " + authState?.user.id)
+            setRemoveModalVisible(true);
+        }
+    };
+
+    const testModal = () => {
+        router.push({
+            pathname: "/profile/confirmModal",
+            params: {
+                title: "Konto löschen",
+                message: "Möchtest du dein Konto wirklich löschen?",
+            }
+
+        });
+    };
+
+    /*
+    // ToDo: Alert funktioniert angeblich nur in App, nicht im Web
+    const removeUserAlert = async () => {
         if (authState?.user.id) {
             console.log("removeUserTest");
             console.log("UserId: " + authState?.user.id)
@@ -125,7 +150,7 @@ export default function Edit() {
             );
         }
     };
-
+ 
     const confirmAction = (title: string, message: string, onConfirm: () => void) => {
         Alert.alert(
             title,
@@ -142,6 +167,7 @@ export default function Edit() {
             ]
         );
     };
+    */
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
@@ -184,12 +210,26 @@ export default function Edit() {
                     onPress={cancel}
                 />
                 <Button
-                    text="Konto löschen"
+                    text="Konto (sofort) löschen"
                     backgroundColor={COLORTHEME.light.primary}
                     textColor="#FFFFFF"
                     onPress={removeUser}
                 />
+                <Button
+                    text="Modal-Test"
+                    backgroundColor={COLORTHEME.light.primary}
+                    textColor="#FFFFFF"
+                    onPress={testModal}
+                />
             </View>
+            <ConfirmModal
+                title="Konto löschen"
+                message="Möchtest du dein Konto wirklich löschen?"
+                onConfirm={async () => {
+                    await removeUser();
+                }
+                }
+            />
         </ScrollView>
     )
 }
