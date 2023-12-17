@@ -2,11 +2,16 @@ import React, { createContext, useContext, useState } from "react";
 import { useAxios } from "./AxiosContext";
 import { ModuleType } from "@/types/ModuleType";
 import { useAuth } from "./AuthContext";
+import { LearningUnitType } from "@/types/LearningUnitType";
+import { COLORS } from "@/constants/Theme";
+import { LearningSessionType } from "@/types/learningSessionType";
 
 type ModuleProps = {
   modules?: ModuleType[];
   fetchModules?: () => Promise<any>;
 };
+
+type ObjectKey = keyof typeof COLORS;
 
 const ModuleContext = createContext<ModuleProps>({});
 
@@ -22,16 +27,18 @@ export const ModuleProvider = ({ children }: any) => {
   const fetchModules = async () => {
     if (!authState?.user.id) return;
     try {
-      const response = await authAxios?.get(
+      const response = await authAxios?.get<ModuleType[] | undefined>(
         `/students/${authState.user.id}/modules`
       );
-      const modules = response?.data as ModuleType[];
+      const modules: ModuleType[] | undefined = response?.data;
+      modules?.forEach((item) => convertInputTypes(item));
       setModules(modules);
       return modules;
     } catch (e) {
       return e;
     }
   };
+
   const value = {
     modules,
     fetchModules,
@@ -39,4 +46,29 @@ export const ModuleProvider = ({ children }: any) => {
   return (
     <ModuleContext.Provider value={value}>{children}</ModuleContext.Provider>
   );
+};
+
+const convertInputTypes = (module: ModuleType) => {
+  module.examDate = new Date(module.examDate);
+
+  module.learningUnits = module.learningUnits as LearningUnitType[];
+  module.learningUnits.forEach((unit) => {
+    computeLearningUnitColor(unit, module.colorCode);
+    unit.startDate = new Date(unit.startDate);
+    unit.endDate = new Date(unit.endDate);
+  });
+
+  module.learningSessions = module.learningSessions as LearningSessionType[];
+  module.learningSessions.forEach((session) => {
+    session.createdAt = new Date(session.createdAt);
+  });
+};
+
+export const computeLearningUnitColor = (
+  unit: LearningUnitType,
+  defaultColor: string
+) => {
+  let unitColor = COLORS[unit.name as ObjectKey];
+  if (unitColor) unit.colorCode = unitColor;
+  else unit.colorCode = defaultColor;
 };

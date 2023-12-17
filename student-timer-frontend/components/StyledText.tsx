@@ -37,43 +37,43 @@ export function LabelS(props: TextProps) {
 
 const styles = StyleSheet.create({
   title: {
+    fontFamily: "OpenSans_Bold",
     fontSize: SIZES.xxxLarge,
-    fontWeight: "600",
     textAlign: "center",
   },
   h1: {
+    fontFamily: "OpenSans_SemiBold",
     fontSize: SIZES.xxLarge,
-    fontWeight: "600",
     textAlign: "center",
   },
   h2: {
+    fontFamily: "OpenSans_SemiBold",
     fontSize: SIZES.xLarge,
-    fontWeight: "600",
     textAlign: "center",
   },
   h3: {
+    fontFamily: "OpenSans_Medium",
     fontSize: SIZES.large,
-    fontWeight: "500",
     textAlign: "center",
   },
   h4: {
+    fontFamily: "OpenSans_Medium",
     fontSize: SIZES.medium,
-    fontWeight: "500",
     textAlign: "center",
   },
   subhead: {
+    fontFamily: "OpenSans_SemiBold",
     fontSize: SIZES.small,
-    fontWeight: "600",
     textAlign: "center",
   },
   p: {
+    fontFamily: "OpenSans_Regular",
     fontSize: SIZES.xsmall,
-    fontWeight: "normal",
     textAlign: "justify",
   },
   labelS: {
+    fontFamily: "OpenSans_Regular",
     fontSize: SIZES.xxsmall,
-    fontWeight: "normal",
     textAlign: "center",
   },
 });

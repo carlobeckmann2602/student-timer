@@ -4,7 +4,7 @@ export type LearningUnitType = {
   workloadPerWeek: number;
   startDate: Date;
   endDate: Date;
+  totalLearningTime: number;
 
   colorCode?: string;
-  y?: number;
 };

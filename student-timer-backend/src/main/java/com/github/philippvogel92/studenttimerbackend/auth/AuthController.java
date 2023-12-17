@@ -1,10 +1,8 @@
 package com.github.philippvogel92.studenttimerbackend.auth;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.github.philippvogel92.studenttimerbackend.auth.dto.LoginRequestDTO;
-import com.github.philippvogel92.studenttimerbackend.auth.dto.LoginResponseDTO;
-import com.github.philippvogel92.studenttimerbackend.auth.dto.SignUpRequestDTO;
-import com.github.philippvogel92.studenttimerbackend.auth.dto.SignUpResponseDTO;
+import com.github.philippvogel92.studenttimerbackend.auth.OAuth2.Provider;
+import com.github.philippvogel92.studenttimerbackend.auth.dto.*;
 import com.github.philippvogel92.studenttimerbackend.auth.jwt.accessToken.AccessTokenService;
 import com.github.philippvogel92.studenttimerbackend.auth.jwt.refreshToken.RefreshTokenService;
 import com.github.philippvogel92.studenttimerbackend.auth.jwt.refreshToken.dto.RefreshTokenResponseDTO;
@@ -49,6 +47,24 @@ public class AuthController {
     @PostMapping(path = "/login")
     public LoginResponseDTO login(@Valid @RequestBody LoginRequestDTO loginRequestDTO) {
         return authService.login(loginRequestDTO);
+    }
+
+    @Operation(summary = "Login with OAuth2 for student")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Access and refresh token are created",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = LoginResponseDTO.class))}),
+            @ApiResponse(responseCode = "400", description = "Invalid request body supplied",
+                    content = @Content),
+            @ApiResponse(responseCode = "401", description = "Credentials are wrong",
+                    content = @Content)
+    })
+    @PostMapping(path = "/login/oauth2")
+    public LoginResponseDTO login(@Valid @RequestBody LoginOAuth2RequestDTO loginOAuth2RequestDTO) {
+        Provider provider = loginOAuth2RequestDTO.getProvider();
+        return switch (provider) {
+            case GOOGLE -> authService.loginWithGoogle(loginOAuth2RequestDTO);
+        };
     }
 
     @Operation(summary = "Create new access token with refresh token")

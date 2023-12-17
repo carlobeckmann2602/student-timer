@@ -22,7 +22,16 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
-    Roboto: require("../assets/fonts/Roboto-Regular.ttf"),
+    OpenSans_Regular: require("../assets/fonts/OpenSans/OpenSans-Regular.ttf"),
+    OpenSans_Bold: require("../assets/fonts/OpenSans/OpenSans-Bold.ttf"),
+    OpenSans_Italic: require("../assets/fonts/OpenSans/OpenSans-Italic.ttf"),
+    OpenSans_Light: require("../assets/fonts/OpenSans/OpenSans-Light.ttf"),
+    OpenSans_LightItalic: require("../assets/fonts/OpenSans/OpenSans-LightItalic.ttf"),
+    OpenSans_Medium: require("../assets/fonts/OpenSans/OpenSans-Medium.ttf"),
+    OpenSans_MediumItalic: require("../assets/fonts/OpenSans/OpenSans-MediumItalic.ttf"),
+    OpenSans_SemiBold: require("../assets/fonts/OpenSans/OpenSans-SemiBold.ttf"),
+    OpenSans_SemiBoldItalic: require("../assets/fonts/OpenSans/OpenSans-SemiBoldItalic.ttf"),
+    // Roboto: require("../assets/fonts/Roboto/Roboto-Regular.ttf"),
   });
 
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.

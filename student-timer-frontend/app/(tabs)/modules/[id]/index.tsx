@@ -1,266 +1,136 @@
 import { ScrollView, StyleSheet } from "react-native";
 
 import { View } from "@/components/Themed";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { ModuleType } from "@/types/ModuleType";
 import { H1, H2, P, Subhead } from "@/components/StyledText";
 import { ModuleChart } from "@/components/modules/ModuleChart";
-import {
-  computeDateDifference,
-  precomputeLearningUnits,
-} from "@/libs/moduleTypeHelper";
+import { computeDateDifference } from "@/libs/moduleTypeHelper";
 import { LearningUnitType } from "@/types/LearningUnitType";
 import { COLORTHEME } from "@/constants/Theme";
+import { useModules } from "@/context/ModuleContext";
+import { useState } from "react";
+import React from "react";
+import { convertMinutesToHours } from "@/libs/timeHelper";
 
-export default function ModulesScreen() {
+export default function ModulesDetailScreen() {
+  const { id } = useLocalSearchParams<{
+    id: string;
+  }>();
+
   const router = useRouter();
+  const { modules } = useModules();
 
   // TODO?
   const isLoading = false;
   const error = false;
 
-  const mockData: ModuleType[] = [
-    {
-      id: 1,
-      name: "Datenbanksysteme 2",
-      colorCode: "#88A795",
-      creditPoints: 5,
-      examDate: new Date(2023, 10, 25),
-      learningUnits: [
-        {
-          id: 10,
-          name: "Vorlesung",
-          workloadPerWeek: 40,
-          startDate: new Date(2023, 9, 1),
-          endDate: new Date(2024, 2, 1),
-        },
-        {
-          id: 11,
-          name: "Praktikum",
-          workloadPerWeek: 10,
-          startDate: new Date(2023, 9, 1),
-          endDate: new Date(2024, 2, 1),
-        },
-        {
-          id: 12,
-          name: "Nachhilfe",
-          workloadPerWeek: 40,
-          startDate: new Date(2023, 9, 1),
-          endDate: new Date(2024, 2, 1),
-        },
-        {
-          id: 13,
-          name: "Selbststudium",
-          workloadPerWeek: 40,
-          startDate: new Date(2023, 9, 1),
-          endDate: new Date(2024, 2, 1),
-        },
-      ],
-    },
-    {
-      id: 2,
-      name: "Mathe 1",
-      colorCode: "#AB5761",
-      creditPoints: 7,
-      examDate: new Date(2024, 11, 11),
-      learningUnits: [
-        {
-          id: 20,
-          name: "Vorlesung",
-          workloadPerWeek: 10,
-          startDate: new Date(2023, 9, 1),
-          endDate: new Date(2024, 2, 1),
-        },
-        {
-          id: 21,
-          name: "Praktikum",
-          workloadPerWeek: 5,
-          startDate: new Date(2023, 9, 1),
-          endDate: new Date(2024, 2, 1),
-        },
-        {
-          id: 22,
-          name: "Nachhilfe",
-          workloadPerWeek: 13,
-          startDate: new Date(2023, 9, 1),
-          endDate: new Date(2024, 2, 1),
-        },
-        {
-          id: 23,
-          name: "Selbststudium",
-          workloadPerWeek: 40,
-          startDate: new Date(2023, 9, 1),
-          endDate: new Date(2024, 2, 1),
-        },
-      ],
-    },
-    {
-      id: 3,
-      name: "Advanced Software Engineering",
-      colorCode: "#5D7CB9",
-      creditPoints: 5,
-      examDate: new Date(2024, 11, 11),
-      learningUnits: [
-        {
-          id: 30,
-          name: "Vorlesung",
-          workloadPerWeek: 40,
-          startDate: new Date(2023, 9, 1),
-          endDate: new Date(2024, 2, 1),
-        },
-        {
-          id: 31,
-          name: "Nachhilfe",
-          workloadPerWeek: 3,
-          startDate: new Date(2023, 9, 1),
-          endDate: new Date(2024, 2, 1),
-        },
-        {
-          id: 32,
-          name: "Selbststudium",
-          workloadPerWeek: 40,
-          startDate: new Date(2023, 9, 1),
-          endDate: new Date(2024, 2, 1),
-        },
-      ],
-    },
-    {
-      id: 4,
-      name: "Theoretische Informatik",
-      colorCode: "#073B3A",
-      creditPoints: 5,
-      examDate: new Date(2024, 11, 11),
-      learningUnits: [
-        {
-          id: 40,
-          name: "Vorlesung",
-          workloadPerWeek: 40,
-          startDate: new Date(2023, 9, 1),
-          endDate: new Date(2024, 2, 1),
-        },
-        {
-          id: 41,
-          name: "Selbststudium",
-          workloadPerWeek: 40,
-          startDate: new Date(2023, 9, 1),
-          endDate: new Date(2024, 2, 1),
-        },
-      ],
-    },
-    {
-      id: 5,
-      name: "Projektcontainer",
-      colorCode: "#FBC2B5",
-      creditPoints: 10,
-      examDate: new Date(2024, 11, 11),
-      learningUnits: [
-        {
-          id: 50,
-          name: "Vorlesung",
-          workloadPerWeek: 40,
-          startDate: new Date(2023, 9, 1),
-          endDate: new Date(2024, 2, 1),
-        },
-        {
-          id: 51,
-          name: "Praktikum",
-          workloadPerWeek: 10,
-          startDate: new Date(2023, 9, 1),
-          endDate: new Date(2024, 2, 1),
-        },
-        {
-          id: 52,
-          name: "Nachhilfe",
-          workloadPerWeek: 40,
-          startDate: new Date(2023, 9, 1),
-          endDate: new Date(2024, 2, 1),
-        },
-        {
-          id: 53,
-          name: "Selbststudium",
-          workloadPerWeek: 40,
-          startDate: new Date(2023, 9, 1),
-          endDate: new Date(2024, 2, 1),
-        },
-        {
-          id: 54,
-          name: "Selbststudium",
-          workloadPerWeek: 40,
-          startDate: new Date(2023, 9, 1),
-          endDate: new Date(2024, 2, 1),
-        },
-        {
-          id: 55,
-          name: "Selbststudium",
-          workloadPerWeek: 40,
-          startDate: new Date(2023, 9, 1),
-          endDate: new Date(2024, 2, 1),
-        },
-        {
-          id: 56,
-          name: "Selbststudium",
-          workloadPerWeek: 40,
-          startDate: new Date(2023, 9, 1),
-          endDate: new Date(2024, 2, 1),
-        },
-      ],
-    },
-  ];
+  const fetchDetailModule = () => {
+    if (modules && modules.length > 0) {
+      var filteredModule: ModuleType | undefined = modules.find(
+        (module) => module.id.toString() === id
+      );
+      if (filteredModule) {
+        // setModuleError(false);
+        return filteredModule;
+      }
+    }
 
-  const transformedData: ModuleType = precomputeLearningUnits(mockData[0]);
-  const detailModule = transformedData;
+    // setModuleError(true);
+    return {
+      id: -1,
+      name: "Placeholder",
+      colorCode: "",
+      creditPoints: 0,
+      examDate: new Date(),
+      learningUnits: [],
+      learningSessions: [],
+      totalLearningSessionTime: 0,
+      totalLearningUnitTime: 0,
+      totalLearningTime: 0,
+      totalModuleTime: 0,
+    } as ModuleType;
+  };
+
+  const [moduleError, setModuleError] = useState(false);
+  const [detailModule] = useState<ModuleType>(fetchDetailModule());
 
   const computeUnitString = (unit: LearningUnitType) => {
     let weekAmount = computeDateDifference(unit.endDate, unit.startDate, true);
-    return `${unit.workloadPerWeek} h, ${weekAmount} Wochen`;
+
+    return `${convertMinutesToHours(
+      unit.workloadPerWeek
+    )} h, ${weekAmount} Wochen`;
   };
 
   return (
     <View style={styles.outerWrapper}>
-      <H1
-        style={{
-          color: detailModule.colorCode,
-          paddingTop: 12,
-          paddingBottom: 12,
-        }}
-      >
-        {detailModule.name}
-      </H1>
-      <ScrollView contentContainerStyle={styles.scrollViewContainerStyle}>
-        <ModuleChart inputData={detailModule} width={200} height={200} />
-        <View style={styles.unitWrapper}>
-          <H2 style={{ textAlign: "left" }}>Einheiten</H2>
-          <View>
-            {detailModule.learningUnits.map((unit) => {
-              return (
-                <View key={unit.id} style={styles.unitRowWraupper}>
-                  <View style={styles.unitRow}>
-                    <View
-                      style={[
-                        styles.moduleIndicatorM,
-                        { backgroundColor: unit.colorCode },
-                      ]}
-                    />
-                    <View style={styles.unitRowTitle}>
-                      <Subhead>{unit.name}</Subhead>
-                      <P>{computeUnitString(unit)}</P>
-                    </View>
-                    <Subhead>{unit.y} Std.</Subhead>
-                  </View>
-                </View>
-              );
-            })}
-          </View>
-          <View style={styles.resultRow}>
-            <View
-              style={styles.separator}
-              lightColor={COLORTHEME.light.text}
-              darkColor={COLORTHEME.dark.text}
-            />
-            <Subhead>Gesamt: {transformedData.timeInvested} Std.</Subhead>
-          </View>
+      {moduleError ? (
+        <View>
+          <H2>Es ist ein Fehler aufgetreten</H2>
         </View>
-      </ScrollView>
+      ) : (
+        <View>
+          <H1
+            style={{
+              color: detailModule?.colorCode,
+              paddingTop: 12,
+              paddingBottom: 12,
+            }}
+          >
+            {detailModule?.name}
+          </H1>
+          <ScrollView contentContainerStyle={styles.scrollViewContainerStyle}>
+            <ModuleChart
+              inputData={detailModule.learningUnits}
+              totalAmount={convertMinutesToHours(detailModule.totalModuleTime)}
+              totalAmountDone={convertMinutesToHours(
+                detailModule.totalLearningTime
+              )}
+              width={200}
+              height={200}
+            />
+            <View style={styles.unitWrapper}>
+              <H2 style={{ textAlign: "left" }}>Einheiten</H2>
+              <View>
+                {detailModule?.learningUnits.map((unit) => {
+                  return (
+                    <View key={unit.id} style={styles.unitRowWrapper}>
+                      <View style={styles.unitRow}>
+                        <View
+                          style={[
+                            styles.moduleIndicatorM,
+                            { backgroundColor: unit.colorCode },
+                          ]}
+                        />
+                        <View style={styles.unitRowTitle}>
+                          <Subhead>{unit.name}</Subhead>
+                          <P>{computeUnitString(unit)}</P>
+                        </View>
+                        <Subhead>
+                          {convertMinutesToHours(unit.totalLearningTime)} Std.
+                        </Subhead>
+                      </View>
+                    </View>
+                  );
+                })}
+              </View>
+              <View style={styles.resultRow}>
+                <View
+                  style={styles.separator}
+                  lightColor={COLORTHEME.light.text}
+                  darkColor={COLORTHEME.dark.text}
+                />
+                <Subhead>
+                  {`Gesamt: ${convertMinutesToHours(
+                    detailModule.totalLearningTime
+                  )} Std.`}
+                </Subhead>
+              </View>
+            </View>
+          </ScrollView>
+        </View>
+      )}
     </View>
   );
 }
@@ -288,7 +158,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "flex-start",
   },
-  unitRowWraupper: {
+  unitRowWrapper: {
     flexDirection: "column",
     justifyContent: "flex-start",
   },

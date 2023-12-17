@@ -26,6 +26,7 @@ export default function NewModule() {
       workloadPerWeek: -1,
       startDate: new Date(),
       endDate: new Date(),
+      totalLearningTime: 0,
     },
   ]);
 
@@ -45,7 +46,6 @@ export default function NewModule() {
     var examDateValid = false;
     var timeDifference = examDate.getTime() - minimumDate.getTime();
     var dayDifference = Math.ceil(timeDifference / (1000 * 3600 * 24));
-    console.log(dayDifference);
     if (dayDifference < 0) {
       setExamDateError("Das Prüfungsdatum muss in der Zukunft liegen");
     } else {
@@ -76,30 +76,6 @@ export default function NewModule() {
     }
   };
 
-  // const newLearningUnits: LearningUnitType[] = [
-  //   {
-  //     id: 123,
-  //     name: "test",
-  //     workloadPerWeek: -1,
-  //     startDate: new Date(),
-  //     endDate: new Date(),
-  //   },
-  //   {
-  //     id: 456,
-  //     name: "test",
-  //     workloadPerWeek: -1,
-  //     startDate: new Date(),
-  //     endDate: new Date(),
-  //   },
-  //   {
-  //     id: 789,
-  //     name: "test",
-  //     workloadPerWeek: -1,
-  //     startDate: new Date(),
-  //     endDate: new Date(),
-  //   },
-  // ];
-
   const newModule: ModuleType = {
     id: Math.random(),
     name: moduleName,
@@ -107,6 +83,11 @@ export default function NewModule() {
     creditPoints: -1,
     examDate: new Date(),
     learningUnits: learningUnits,
+    learningSessions: [],
+    totalLearningSessionTime: 0,
+    totalLearningUnitTime: 0,
+    totalLearningTime: 0,
+    totalModuleTime: 0,
   };
 
   return (
