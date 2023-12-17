@@ -29,7 +29,7 @@ type AuthProps = {
   ) => Promise<any>;
   onLogout?: () => Promise<any>;
   onUpdate?: (userName: string, userStudyCourse: string, userEmail: string) => Promise<any>;
-  //onRemove?: () => Promise<any>;
+  onRemove?: (userId: number) => Promise<any>;
   onNewToken?: (token: TokenType) => Promise<any>;
 };
 
@@ -201,9 +201,8 @@ export const AuthProvider = ({ children }: any) => {
     }
   };
 
-  // ToDo update implementieren
-  // toDo später: Passwort auch noch updaten
 
+  // toDo später: Passwort auch noch updaten
   const update = async (userName: string, userStudyCourse: string, userEmail: string) => {
     try {
       const result = await axios.put(
@@ -238,42 +237,16 @@ export const AuthProvider = ({ children }: any) => {
   };
 
 
-
-  //toDo implementieren
-  /*
-  const remove = async (email: string, password: string, provider: string) => {
+  const remove = async (userId: number) => {
     try {
-      const result = await axios.post(`${API_URL}/student/id`, {
-        email,
-        password,
-        provider,
+      const result = await axios.delete(`${API_URL}/students/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${authState.token.accessToken}`,
+        },
       });
 
-      const token = {
-        accessToken: result.data.accessToken,
-        refreshToken: result.data.refreshToken,
-      } as TokenType;
-
-      const resultUser = await axios.get(
-          `${API_URL}/students/${result.data.studentId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token.accessToken}`,
-            },
-          }
-      );
-
-      const user = resultUser.data as UserType;
-
-      setAuthState({
-        token: token,
-        authenticated: true,
-        user: user,
-      });
-
-      await saveItem(TOKEN_KEY, JSON.stringify(token));
-
-      await saveItem(USER_KEY, JSON.stringify(user));
+      await deleteStoredItem(TOKEN_KEY);
+      await deleteStoredItem(USER_KEY);
 
       return result;
     } catch (e) {
@@ -281,7 +254,6 @@ export const AuthProvider = ({ children }: any) => {
     }
   };
 
-   */
 
   const router = useRouter();
 
@@ -318,7 +290,7 @@ export const AuthProvider = ({ children }: any) => {
     onLogin: login,
     onLogout: logout,
     onUpdate: update,
-    //onRemove: remove,
+    onRemove: remove,
     onNewToken: newToken,
     authState,
   };

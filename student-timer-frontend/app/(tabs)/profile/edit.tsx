@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { View, Image, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
+import { Image, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
+import { View, Text } from "@/components/Themed";
 import { useRouter } from "expo-router";
 import { COLORTHEME } from "@/constants/Theme";
 import Button from "@/components/Button";
@@ -12,7 +13,7 @@ import { useAuth } from "@/context/AuthContext";
 
 export default function Edit() {
 
-    const { onUpdate, authState } = useAuth();
+    const { onUpdate, onRemove, authState } = useAuth();
 
     const router = useRouter();
 
@@ -23,7 +24,7 @@ export default function Edit() {
     const [userEmail, setUserEmail] = useState(authState?.user.email || "");
 
     const [nameError, setNameError] = useState("");
-    const [studyCourseError, setStudyCourseError    ] = useState("");
+    const [studyCourseError, setStudyCourseError] = useState("");
     const [emailError, setEmailError] = useState("");
     const [error, setError] = useState("");
 
@@ -86,6 +87,22 @@ export default function Edit() {
         }
     };
 
+    const removeUser = async () => {
+        if (authState?.user.id) {
+            const result = await onRemove!(
+                authState?.user.id
+            );
+            console.log("remove")
+            if (result && result.error) {
+                console.log("error")
+                setError(result.msg);
+            } else {
+                console.log("router")
+                router.push("/(auth)/signup");
+            }
+        }
+    };
+
     return (
         <ScrollView contentContainerStyle={styles.container}>
             {/* Profilbild */}
@@ -125,6 +142,12 @@ export default function Edit() {
                     backgroundColor={COLORTHEME.light.primary}
                     textColor="#FFFFFF"
                     onPress={cancel}
+                />
+                <Button
+                    text="Konto löschen"
+                    backgroundColor={COLORTHEME.light.primary}
+                    textColor="#FFFFFF"
+                    onPress={removeUser}
                 />
             </View>
         </ScrollView>
