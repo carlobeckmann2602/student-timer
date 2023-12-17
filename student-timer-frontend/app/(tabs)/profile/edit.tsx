@@ -172,15 +172,17 @@ export default function Edit() {
     return (
         <ScrollView contentContainerStyle={styles.container}>
             {/* Profilbild */}
-            <View style={styles.profileImageContainer}>
-                {defaultPic ? (
-                    <Image source={defaultPic} style={styles.profileImage} />
-                ) : (
-                    <User2 size={100} color={COLORTHEME.light.primary} />
-                )}
-                <TouchableOpacity style={styles.editIcon}>
-                    <Edit2 size={24} color={COLORTHEME.light.background} />
-                </TouchableOpacity>
+            <View style={{alignItems: "center"}}>
+                <View style={styles.profileImageContainer}>
+                    {defaultPic ? (
+                        <Image source={defaultPic} style={styles.profileImage} />
+                    ) : (
+                        <User2 size={100} color={COLORTHEME.light.primary} />
+                    )}
+                    <TouchableOpacity style={styles.editIcon}>
+                        <Edit2 size={24} color={COLORTHEME.light.background} />
+                    </TouchableOpacity>
+                </View>
             </View>
             {/*Benutzerinformationen bearbeiten*/}
             <Header title="Profil bearbeiten"></Header>
@@ -205,21 +207,24 @@ export default function Edit() {
                 />
                 <Button
                     text="Abbrechen"
-                    backgroundColor={COLORTHEME.light.primary}
+                    backgroundColor={COLORTHEME.light.grey3}
                     textColor="#FFFFFF"
                     onPress={cancel}
+                    style={{ width: 200 }}
                 />
                 <Button
                     text="Konto (sofort) löschen"
-                    backgroundColor={COLORTHEME.light.primary}
+                    backgroundColor={COLORTHEME.light.grey3}
                     textColor="#FFFFFF"
                     onPress={removeUser}
+                    style={{ width: 200 }}
                 />
                 <Button
                     text="Modal-Test"
-                    backgroundColor={COLORTHEME.light.primary}
+                    backgroundColor={COLORTHEME.light.grey3}
                     textColor="#FFFFFF"
                     onPress={testModal}
+                    style={{ width: 200 }}
                 />
             </View>
             <ConfirmModal
@@ -237,8 +242,6 @@ export default function Edit() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
         backgroundColor: COLORTHEME.light.background,
     },
     profileImageContainer: {
@@ -263,8 +266,8 @@ const styles = StyleSheet.create({
         marginBottom: 8,
     },
     actionContainer: {
-        flexDirection: "column",
-        width: 200,
+        justifyContent: "center",
+        alignItems: "center",
         gap: 15,
         marginTop: 20,
     },
