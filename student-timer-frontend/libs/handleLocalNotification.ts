@@ -12,6 +12,7 @@ export const sendPushNotification = async (
       title,
       subtitle: "Student Tracker",
       body,
+      sound: true,
     },
     trigger: null,
   });
