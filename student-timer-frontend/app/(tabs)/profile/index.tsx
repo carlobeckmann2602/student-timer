@@ -20,11 +20,6 @@ export default function Profile() {
     profileImage: pic,
   };
 
-  /* const user = {
-    name: "Maxine Hellas",
-    studySubject: "Master Medieninformatik",
-    profileImage: pic,
-  };*/
 
   const handleEditProfile = () => {
     router.push("/profile/edit/");
