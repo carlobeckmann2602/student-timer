@@ -63,9 +63,15 @@ export const AuthProvider = ({ children }: any) => {
       const userString = await getStoredItem(USER_KEY);
       if (userString) user = JSON.parse(userString);
 
+      //toDo: how to make reload with data of logged in user possible?
       if (token.accessToken && user.id) {
         setAuthState({ token: token, authenticated: true, user: user });
       } else {
+
+        // toDo: Clear user data if the token or user ID is missing: could have been deleted or logged out
+        //await deleteStoredItem(TOKEN_KEY);
+        //await deleteStoredItem(USER_KEY);
+
         setAuthState({
           token: { accessToken: null, refreshToken: null, tokenType: null },
           authenticated: false,
