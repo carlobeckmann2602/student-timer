@@ -1,4 +1,4 @@
-import { MoreVertical } from "lucide-react-native";
+import { MoreVertical, Pencil, Trash2 } from "lucide-react-native";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { ModuleChart } from "./ModuleChart";
 import { H4, P, Subhead } from "../StyledText";
@@ -8,18 +8,42 @@ import { ModuleType } from "@/types/ModuleType";
 import { computeDeadline } from "@/libs/moduleTypeHelper";
 import { convertMinutesToHours } from "@/libs/timeHelper";
 
-export function ModuleCard(moduleData: ModuleType) {
+type ModuleCardProps = {
+  moduleData: ModuleType;
+  contextMenuOpen: number;
+  setContextMenuOpen: (value: any) => void;
+};
+
+export function ModuleCard(props: ModuleCardProps) {
+  const { moduleData, contextMenuOpen, setContextMenuOpen } = props;
+
   const router = useRouter();
 
   return (
     <TouchableOpacity
-      onPress={() =>
-        router.push({
-          pathname: `modules/${moduleData.id}`,
-        } as never)
-      }
+      onPress={() => {
+        if (contextMenuOpen === moduleData.id) setContextMenuOpen(-1);
+        else {
+          router.push({
+            pathname: `modules/${moduleData.id}`,
+          } as never);
+        }
+      }}
     >
       <View style={styles.outerWrapper}>
+        {contextMenuOpen === moduleData.id && (
+          <View style={styles.contextMenuWrapper}>
+            <TouchableOpacity style={styles.contextMenuRow}>
+              <P>Bearbeiten</P>
+              <Pencil name="pencil" size={18} color="black" />
+            </TouchableOpacity>
+            <View style={styles.separatorH} />
+            <TouchableOpacity style={styles.contextMenuRow}>
+              <P style={{ color: "red" }}>Löschen</P>
+              <Trash2 size={18} name="trash2" color="red" />
+            </TouchableOpacity>
+          </View>
+        )}
         {/* Header Row */}
         <View style={styles.headerRow}>
           <View style={styles.headerTextRow}>
@@ -31,7 +55,7 @@ export function ModuleCard(moduleData: ModuleType) {
             />
             <H4>{moduleData.name}</H4>
           </View>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => setContextMenuOpen(moduleData.id)}>
             <MoreVertical size={28} fill="black" strokeWidth={1}></MoreVertical>
           </TouchableOpacity>
         </View>
@@ -68,7 +92,7 @@ export function ModuleCard(moduleData: ModuleType) {
             <P style={{ textAlign: "center" }}>Zeit bis zur Prüfung</P>
             <Subhead>{computeDeadline(moduleData.examDate)}</Subhead>
           </View>
-          <View style={styles.separator}></View>
+          <View style={styles.separatorV} />
           <View style={styles.resultColumn}>
             <P style={{ textAlign: "center" }}>Selbststudium</P>
             <Subhead>
@@ -89,19 +113,44 @@ const styles = StyleSheet.create({
   outerWrapper: {
     width: "100%",
     backgroundColor: COLORTHEME.light.grey2,
-    // shadowColor: "black",
-    // shadowOffset: { width: -2, height: 4 },
-    // shadowOpacity: 0.2,
-    // shadowRadius: 3,
     borderRadius: 12,
     flexDirection: "column",
     justifyContent: "space-between",
     padding: "8%",
     gap: 16,
   },
-  separator: {
+  contextMenuWrapper: {
+    position: "absolute",
+    right: 60,
+    top: 30,
+    zIndex: 1,
+    borderRadius: 12,
+    flexDirection: "column",
+    justifyContent: "space-between",
+    padding: "8%",
+    backgroundColor: COLORTHEME.light.grey2,
+    shadowColor: "black",
+    shadowOffset: { width: -2, height: 2 },
+    shadowOpacity: 1,
+    elevation: 5,
+    shadowRadius: 30,
+  },
+  contextMenuRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  contextMenuIcon: {
+    color: "red",
+  },
+  separatorV: {
     height: "100%",
     width: 1,
+    backgroundColor: "#909090",
+  },
+  separatorH: {
+    width: "100%",
+    height: 1,
     backgroundColor: "#909090",
   },
   headerRow: {

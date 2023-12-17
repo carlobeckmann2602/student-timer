@@ -13,8 +13,9 @@ import { H2 } from "@/components/StyledText";
 
 export default function ModulesScreen() {
   const router = useRouter();
-  const { modules: fetchedModules, fetchModules } = useModules();
 
+  const [contextMenuOpen, setContextMenuOpen] = useState(-1);
+  const { modules: fetchedModules, fetchModules } = useModules();
   const [modules, setModules] = useState<ModuleType[] | undefined>(
     fetchedModules
   );
@@ -40,7 +41,13 @@ export default function ModulesScreen() {
     <View style={styles.container}>
       <FlatList
         data={modules}
-        renderItem={({ item }) => <ModuleCard {...item} />}
+        renderItem={({ item }) => (
+          <ModuleCard
+            moduleData={item}
+            contextMenuOpen={contextMenuOpen}
+            setContextMenuOpen={setContextMenuOpen}
+          />
+        )}
         keyExtractor={(item: ModuleType) => item.id.toString()}
         contentContainerStyle={styles.flatListContainer}
         ListEmptyComponent={
