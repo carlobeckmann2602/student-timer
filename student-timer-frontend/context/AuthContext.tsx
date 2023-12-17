@@ -28,7 +28,7 @@ type AuthProps = {
     provider?: string
   ) => Promise<any>;
   onLogout?: () => Promise<any>;
-  //onUpdate?: () => Promise<any>;
+  onUpdate?: (userName: string, userStudyCourse: string, userEmail: string) => Promise<any>;
   //onRemove?: () => Promise<any>;
   onNewToken?: (token: TokenType) => Promise<any>;
 };
@@ -201,35 +201,33 @@ export const AuthProvider = ({ children }: any) => {
     }
   };
 
-  // ToDo implementieren
-  /*
-  const update = async (updateOject: {name: string, studySubject: string, password: string, email: string}) => {
+  // ToDo update implementieren
+  // toDo später: Passwort auch noch updaten
+
+  const update = async (userName: string, userStudyCourse: string, userEmail: string) => {
     try {
-      const result = await axios.post(`${API_URL}/student/${authState.user.id}`, updateOject);
-
-      const token = {
-        accessToken: result.data.accessToken,
-        refreshToken: result.data.refreshToken,
-      } as TokenType;
-
-      const resultUser = await axios.get(
-          `${API_URL}/students/${result.data.studentId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token.accessToken}`,
-            },
-          }
+      const result = await axios.put(
+        `${API_URL}/students/${authState.user.id}`,
+        { name: userName, studyCourse: userStudyCourse, email: userEmail },
+        {
+          headers: {
+            Authorization: `Bearer ${authState.token.accessToken}`,
+          },
+        }
       );
 
-      const user = resultUser.data as UserType;
+      const user = {
+        ...authState.user,
+        name: userName,
+        studyCourse: userStudyCourse,
+        email: userEmail,
+      } as UserType;
 
       setAuthState({
-        token: token,
+        token: authState.token,
         authenticated: true,
         user: user,
       });
-
-      await saveItem(TOKEN_KEY, JSON.stringify(token));
 
       await saveItem(USER_KEY, JSON.stringify(user));
 
@@ -239,7 +237,7 @@ export const AuthProvider = ({ children }: any) => {
     }
   };
 
-   */
+
 
   //toDo implementieren
   /*
@@ -319,7 +317,7 @@ export const AuthProvider = ({ children }: any) => {
     onRegister: register,
     onLogin: login,
     onLogout: logout,
-    //onUpdate: update,
+    onUpdate: update,
     //onRemove: remove,
     onNewToken: newToken,
     authState,

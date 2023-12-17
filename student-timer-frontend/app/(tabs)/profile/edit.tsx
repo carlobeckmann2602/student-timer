@@ -1,55 +1,29 @@
-import React, {useState} from "react";
-import {View, Text, Image, TouchableOpacity, StyleSheet, ScrollView} from "react-native";
-import {useRouter} from "expo-router";
-import {COLORTHEME} from "@/constants/Theme";
+import React, { useState } from "react";
+import { View, Image, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
+import { useRouter } from "expo-router";
+import { COLORTHEME } from "@/constants/Theme";
 import Button from "@/components/Button";
-import {User2} from "lucide-react-native";
+import { User2 } from "lucide-react-native";
 import { Edit2 } from 'lucide-react-native';
 import UserDetailsInput from "@/components/UserDetailsInput";
 import Header from "@/components/Header";
-import {useAuth} from "@/context/AuthContext";
+import { useAuth } from "@/context/AuthContext";
 
 
 export default function Edit() {
 
-    //toDo in Context korrekt implementieren
-    //const { onUpdate, authState } = useAuth();
-
-
-    const onUpdate = async (name: string, studySubject: string, password: string, email: string) => {
-        user.name = name;
-        user.studySubject = studySubject;
-        user.email = email;
-        console.log(user);
-    };
-
+    const { onUpdate, authState } = useAuth();
 
     const router = useRouter();
 
-    const pic = require("../../../assets/images/profile/profile-picture.jpg");
+    const defaultPic = require("../../../assets/images/profile/profile-picture.jpg");
 
-/*    const user = {
-        name: authState?.user.name,
-        studySubject: authState?.user.studyCourse,
-        email:  authState?.user.email,
-        profileImage: pic,
-    };*/
-
-    const user = {
-        name: "Maxine Hellas",
-        studySubject: "Master Medieninformatik",
-        email: "maxine.hellas@study.hs-duesseldorf.de",
-        profileImage: pic,
-    };
-
-
-
-    const [userName, setUserName] = useState(user.name);
-    const [userStudySubject, setUserStudySubject] = useState(user.studySubject);
-    const [userEmail, setUserEmail] = useState(user.email);
+    const [userName, setUserName] = useState(authState?.user.name || "");
+    const [userStudyCourse, setUserStudyCourse] = useState(authState?.user.studyCourse || "");
+    const [userEmail, setUserEmail] = useState(authState?.user.email || "");
 
     const [nameError, setNameError] = useState("");
-    const [studySubjectError, setStudySubjectError] = useState("");
+    const [studyCourseError, setStudyCourseError    ] = useState("");
     const [emailError, setEmailError] = useState("");
     const [error, setError] = useState("");
 
@@ -63,10 +37,10 @@ export default function Edit() {
         }
 
         let studyCourseValid = false;
-        if (userStudySubject.length == 0) {
-            setStudySubjectError("Studienfach ist erforderlich");
+        if (userStudyCourse.length == 0) {
+            setStudyCourseError("Studienfach ist erforderlich");
         } else {
-            setStudySubjectError("");
+            setStudyCourseError("");
             studyCourseValid = true;
         }
 
@@ -82,7 +56,7 @@ export default function Edit() {
             emailValid = true;
         }
 
-        if (nameValid && studyCourseValid && emailValid ) {
+        if (nameValid && studyCourseValid && emailValid) {
             return true;
         }
 
@@ -91,34 +65,33 @@ export default function Edit() {
 
     const cancel = () => {
         router.push("/profile/");
-        console.log("Profil bearbeiten");
+        console.log("Abbrechen");
     };
 
-    //toDo: implementieren in context
-    const save = async () => {
+    const update = async () => {
         if (validateInput()) {
             const result = await onUpdate!(
                 userName,
-                userStudySubject,
-                "empty",
+                userStudyCourse,
                 userEmail,
             );
-            /*
+            console.log("validateInput")
             if (result && result.error) {
+                console.log("error")
                 setError(result.msg);
             } else {
+                console.log("router")
                 router.push("/profile/");
-            }*/
+            }
         }
     };
-
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
             {/* Profilbild */}
             <View style={styles.profileImageContainer}>
-                {user.profileImage ? (
-                    <Image source={user.profileImage} style={styles.profileImage} />
+                {defaultPic ? (
+                    <Image source={defaultPic} style={styles.profileImage} />
                 ) : (
                     <User2 size={100} color={COLORTHEME.light.primary} />
                 )}
@@ -129,22 +102,22 @@ export default function Edit() {
             {/*Benutzerinformationen bearbeiten*/}
             <Header title="Profil bearbeiten"></Header>
             <UserDetailsInput
-                    userName={userName}
-                    setUserName={setUserName}
-                    nameError={nameError}
-                    userStudyCourse={userStudySubject}
-                    setUserStudyCourse={setUserStudySubject}
-                    studyCourseError={studySubjectError}
-                    userEmail={userEmail}
-                    setUserEmail={setUserEmail}
-                    emailError={emailError}
-                />
+                userName={userName}
+                setUserName={setUserName}
+                nameError={nameError}
+                userStudyCourse={userStudyCourse}
+                setUserStudyCourse={setUserStudyCourse}
+                studyCourseError={studyCourseError}
+                userEmail={userEmail}
+                setUserEmail={setUserEmail}
+                emailError={emailError}
+            />
             <View style={styles.actionContainer}>
                 <Button
                     text="Speichern"
                     backgroundColor={COLORTHEME.light.primary}
                     textColor={COLORTHEME.light.grey2}
-                    onPress={save}
+                    onPress={update}
                     style={{ width: 200 }}
                 />
                 <Button
