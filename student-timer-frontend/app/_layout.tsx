@@ -3,6 +3,8 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
 import { useEffect } from "react";
+import { ToastProvider } from "react-native-toast-notifications";
+
 import { AuthProvider } from "@/context/AuthContext";
 import { AxiosProvider } from "@/context/AxiosContext";
 import { ModuleProvider } from "@/context/ModuleContext";
@@ -60,33 +62,41 @@ function RootLayoutNav() {
     <SafeAreaProvider>
       <ThemeProvider value={DefaultTheme}>
         <SafeAreaView style={{ flex: 1 }}>
-          <AuthProvider>
-            <AxiosProvider>
-              <ModuleProvider>
-                <Stack>
-                  <Stack.Screen name="index" options={{ headerShown: false }} />
-                  <Stack.Screen
-                    name="(tabs)"
-                    options={{ headerShown: false }}
-                  />
-                  <Stack.Screen
-                    name="(auth)/login"
-                    options={{ headerShown: false }}
-                  />
-                  <Stack.Screen
-                    name="(auth)/signup"
-                    options={{
-                      headerShown: false,
-                    }}
-                  />
-                  <Stack.Screen
-                    name="onboarding/index"
-                    options={{ headerShown: false }}
-                  />
-                </Stack>
-              </ModuleProvider>
-            </AxiosProvider>
-          </AuthProvider>
+          <ToastProvider
+            placement="top"
+            textStyle={{ fontFamily: "OpenSans_Regular" }}
+          >
+            <AuthProvider>
+              <AxiosProvider>
+                <ModuleProvider>
+                  <Stack>
+                    <Stack.Screen
+                      name="index"
+                      options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                      name="(tabs)"
+                      options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                      name="(auth)/login"
+                      options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                      name="(auth)/signup"
+                      options={{
+                        headerShown: false,
+                      }}
+                    />
+                    <Stack.Screen
+                      name="onboarding/index"
+                      options={{ headerShown: false }}
+                    />
+                  </Stack>
+                </ModuleProvider>
+              </AxiosProvider>
+            </AuthProvider>
+          </ToastProvider>
         </SafeAreaView>
       </ThemeProvider>
     </SafeAreaProvider>

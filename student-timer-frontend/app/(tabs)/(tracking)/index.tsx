@@ -1,21 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Platform, KeyboardAvoidingView, StyleSheet } from "react-native";
-import { useFocusEffect } from "@react-navigation/native";
-import Picker, { Item } from "react-native-picker-select";
 import { router, useLocalSearchParams } from "expo-router";
+import { PauseIcon, PlayIcon } from "lucide-react-native";
 
-import { Text, View } from "@/components/Themed";
+import { View } from "@/components/Themed";
 import Button from "@/components/Button";
 import InputField from "@/components/InputField";
-import { COLORS, COLORTHEME } from "@/constants/Theme";
 import TrackingModeToggle from "@/components/tracking/TrackingModeToggle";
+import ModulePicker from "@/components/modules/ModulePicker";
 import Timer from "@/components/tracking/Timer";
-import { PauseIcon, PlayIcon } from "lucide-react-native";
-import { useModules } from "@/context/ModuleContext";
+import { COLORS, COLORTHEME } from "@/constants/Theme";
 import { ModuleType } from "@/types/ModuleType";
 
 export default function Tracking() {
-  const { modules, fetchModules } = useModules();
   const [isStopwatch, setIsStopwatch] = useState(true);
   const [rounds, setRounds] = useState("2");
   const [pauseLen, setPauseLen] = useState("20");
@@ -25,21 +22,11 @@ export default function Tracking() {
   const [startTime, setStartTime] = useState(0);
   const [selectedModule, setSelectedModule] = useState({} as ModuleType);
   const [timerIsDone, setTimerIsDone] = useState(false);
-  const { trackingSaved } = useLocalSearchParams<{
+  const { trackingSaved, discard } = useLocalSearchParams<{
     trackingSaved: string;
+    discard: string;
   }>();
   const inputsEditable = !trackingIsActive && startTime === 0;
-
-  useFocusEffect(
-    React.useCallback(() => {
-      (async () => {
-        fetchModules && (await fetchModules());
-        if (modules?.length) {
-          setSelectedModule(modules[0]);
-        }
-      })();
-    }, [])
-  );
 
   useEffect(() => {
     if (timerIsDone) {
@@ -48,16 +35,11 @@ export default function Tracking() {
   }, [timerIsDone]);
 
   useEffect(() => {
-    if (trackingSaved !== undefined) {
-      alert(
-        trackingSaved === "1"
-          ? "Tracking wurde gespeichert"
-          : "Fehler beim Speichern des Trackings"
-      );
+    if (trackingSaved !== undefined || discard !== undefined) {
       resetTimer();
       router.push("/(tabs)/(tracking)");
     }
-  }, [trackingSaved]);
+  }, [trackingSaved, discard]);
 
   const toggleTracking = () => {
     trackingIsActive ? "" : setStartTime(Date.now());
@@ -159,36 +141,7 @@ export default function Tracking() {
           editable={inputsEditable}
         />
       </View>
-      <View style={styles.pickerContainer}>
-        <Text style={styles.inputLabelText}>Modul</Text>
-        <View>
-          <Picker
-            style={{
-              viewContainer: styles.picker,
-              inputWeb: { ...styles.picker, color: selectedModule.colorCode },
-              inputAndroid: { color: selectedModule.colorCode },
-              inputIOS: { color: selectedModule.colorCode },
-            }}
-            placeholder={{}}
-            items={
-              modules?.length
-                ? modules.map((module) => {
-                    return {
-                      label: module.name,
-                      value: module.id,
-                      color: module.colorCode,
-                    } as Item;
-                  })
-                : []
-            }
-            onValueChange={(_: number, index: number) =>
-              setSelectedModule(modules![index])
-            }
-            //@ts-ignore
-            InputAccessoryView={() => null}
-          />
-        </View>
-      </View>
+      <ModulePicker setSelectedModule={setSelectedModule} />
       <View style={styles.trackerButtons}>
         {trackingIsActive ? (
           <>
@@ -254,21 +207,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
   },
-  inputLabelText: {
-    color: COLORTHEME.light.primary,
-  },
   input: {
     maxWidth: 100,
-  },
-  pickerContainer: {
-    gap: 5,
-  },
-  picker: {
-    backgroundColor: COLORTHEME.light.grey2,
-    border: 0,
-    borderRadius: 12,
-    height: 40,
-    justifyContent: "center",
   },
   trackerButtons: {
     flexDirection: "row",
