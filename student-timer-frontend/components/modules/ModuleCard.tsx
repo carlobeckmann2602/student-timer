@@ -25,7 +25,7 @@ export function ModuleCard(props: ModuleCardProps) {
   const toast = useToast();
   const { authState } = useAuth();
   const { authAxios } = useAxios();
-  const { modules, setModules } = useModules();
+  const { fetchModules } = useModules();
 
   const onEdit = () => {};
 
@@ -52,24 +52,19 @@ export function ModuleCard(props: ModuleCardProps) {
   };
 
   const handleDelete = async () => {
-    console.log("teststest");
     let id = toast.show("Löschen...");
     try {
       await authAxios?.delete(
         `/students/${authState?.user.id}/modules/${moduleData.id}`
       );
       toast.update(id, "Modul erfolgreich gelöscht", { type: "success" });
+      fetchModules && (await fetchModules());
     } catch (e) {
       toast.update(id, `Fehler beim Löschen des Moduls: ${e}`, {
         type: "danger",
       });
     } finally {
-      router.push({
-        pathname: "/(tabs)/(tracking)/",
-        params: {
-          trackingSaved: 1,
-        },
-      });
+      router.push("/(tabs)/modules");
     }
   };
 
