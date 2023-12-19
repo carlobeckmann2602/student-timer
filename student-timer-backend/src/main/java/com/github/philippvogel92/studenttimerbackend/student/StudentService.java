@@ -4,6 +4,7 @@ import com.github.philippvogel92.studenttimerbackend.student.dto.StudentUpdateDT
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -14,10 +15,12 @@ import java.util.Optional;
 public class StudentService {
 
     private final StudentRepository studentRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public StudentService(StudentRepository studentRepository) {
+    public StudentService(StudentRepository studentRepository, PasswordEncoder passwordEncoder) {
         this.studentRepository = studentRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public Student getStudent(Long studentId) {
@@ -40,12 +43,28 @@ public class StudentService {
         String name = studentUpdateDTO.getName();
         String profilePicture = studentUpdateDTO.getProfilePicture();
         String studyCourse = studentUpdateDTO.getStudyCourse();
+        String password = studentUpdateDTO.getPassword();
+        String password2 = studentUpdateDTO.getPassword2();
 
         //Check if email address is already taken
         Optional<Student> studentOptional = studentRepository.findStudentByEmail(email);
         if (studentOptional.isPresent() && !Objects.equals(studentOptional.get().getId(), studentId)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Email address already taken");
         }
+
+        //Set password
+        if (password != null) {
+            if (!Objects.equals(password, password2)) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password are not matching");
+            } else if (password.length() < 6 || password.length() > 200) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password must be between 6 and 200 " +
+                        "characters");
+            }
+            //Password encryption
+            String encryptedPassword = passwordEncoder.encode(password);
+            student.setPassword(encryptedPassword);
+        }
+
 
         //Set email
         if (!Objects.equals(student.getEmail(), email)) {

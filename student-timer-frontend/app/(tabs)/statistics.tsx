@@ -5,15 +5,19 @@ import Separator from "@/components/Separator";
 import { useEffect, useState } from "react";
 import { useAxios } from "@/context/AxiosContext";
 import Button from "@/components/Button";
+import { useAuth } from "@/context/AuthContext";
 
 export default function StatisticsScreen() {
   const [result, setResult] = useState(null);
   const { authAxios } = useAxios();
+  const { authState } = useAuth();
 
   const dummyCall = async () => {
     try {
       console.log("Dummy Call Pressed");
-      setResult((await authAxios?.get("/students/3"))?.data);
+      setResult(
+        (await authAxios?.get(`/students/${authState?.user.id}`))?.data
+      );
     } catch (e: any) {
       console.error(e.message);
     }
