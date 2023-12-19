@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Image, TouchableOpacity, StyleSheet, ScrollView, Alert } from "react-native";
-import { View, Text } from "@/components/Themed";
-import { Link, router, useRouter } from "expo-router";
+import { View } from "@/components/Themed";
+import { useRouter } from "expo-router";
 import { COLORTHEME } from "@/constants/Theme";
 import Button from "@/components/Button";
 import { User2 } from "lucide-react-native";
@@ -241,7 +241,6 @@ export default function Edit() {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         backgroundColor: COLORTHEME.light.background,
     },
     profileImageContainer: {
