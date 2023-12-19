@@ -5,6 +5,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useAxios } from "@/context/AxiosContext";
 import { useModules } from "@/context/ModuleContext";
 import { LearningUnitType } from "@/types/LearningUnitType";
+import { ModuleType } from "@/types/ModuleType";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
 import {
@@ -46,8 +47,8 @@ export default function NewModuleLearningUnits() {
     setLearningUnits((prevLearningUnits) => {
       const newlearningUnit = {
         id: Math.random(),
-        name: "testNew",
-        workloadPerWeek: -1,
+        name: "",
+        workloadPerWeek: 0,
         startDate: new Date(),
         endDate: new Date(),
         totalLearningTime: 0,
@@ -69,7 +70,21 @@ export default function NewModuleLearningUnits() {
           creditpoints: +creditPoints,
         }
       );
-      toast.update(id, "Modul erfoglreich angelegt.", { type: "success" });
+      const createdModule: ModuleType | undefined = response?.data;
+
+      learningUnits.forEach(async (unit) => {
+        await authAxios?.post(
+          `/students/${authState?.user.id}/modules/${createdModule?.id}/learningUnits`,
+          {
+            name: unit.name,
+            startDate: unit.startDate.toISOString().replace("Z", ""),
+            endDate: unit.endDate.toISOString().replace("Z", ""),
+            workloadPerWeek: unit.workloadPerWeek,
+          }
+        );
+      });
+
+      toast.update(id, "Modul erfolgreich angelegt.", { type: "success" });
       fetchModules && (await fetchModules());
     } catch (e) {
       toast.update(id, `Fehler beim Erstellen des Moduls: ${e}`, {

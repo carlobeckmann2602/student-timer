@@ -60,7 +60,9 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
       <View style={styles.row}>
         <InputField
           label="Arbeitsaufwand pro Woche"
-          onChangeText={(value) => setWorkloadPerWeek(+value)}
+          onChangeText={(value) => {
+            +value ? setWorkloadPerWeek(+value) : setWorkloadPerWeek(0);
+          }}
           value={workloadPerWeek.toString()}
           message={examDateError}
           messageColor="red"
