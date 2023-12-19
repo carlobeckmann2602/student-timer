@@ -1,56 +1,54 @@
 import { StyleSheet } from "react-native";
 
-import { Text, View } from "../../components/Themed";
-import Separator from "@/components/Separator";
-import { useEffect, useState } from "react";
-import { useAxios } from "@/context/AxiosContext";
-import Button from "@/components/Button";
-import { useAuth } from "@/context/AuthContext";
+import { View } from "../../components/Themed";
+import HBar from "@/components/statistics/HBar";
+import { COLORTHEME } from "@/constants/Theme";
 
 export default function StatisticsScreen() {
-  const [result, setResult] = useState(null);
-  const { authAxios } = useAxios();
-  const { authState } = useAuth();
+  const dummyData = {
+    title:
+      "Letzte Woche lief das Lernen etwas besser. Behalte deinen Fokus bei.",
+    xTotal: 8,
+    bars: [
+      {
+        name: "Diese Woche",
+        value: 5,
+        color: COLORTHEME.light.primary,
+        unit: "Stunden",
+        average: true,
+      },
+      {
+        name: "Letzte Woche",
+        value: 8,
+        color: COLORTHEME.light.grey3,
+        unit: "Stunden",
+        average: true,
+      },
+      {
+        name: "Vorletzte Woche",
+        value: 4,
+        color: "red",
+        unit: "Stunden",
+        average: true,
+      },
 
-  const dummyCall = async () => {
-    try {
-      console.log("Dummy Call Pressed");
-      setResult(
-        (await authAxios?.get(`/students/${authState?.user.id}`))?.data
-      );
-    } catch (e: any) {
-      console.error(e.message);
-    }
+      {
+        name: "Vor 2 Woche",
+        value: 7,
+        color: "blue",
+        unit: "Stunden",
+        average: true,
+      },
+    ],
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Statistik</Text>
-      <Separator />
-      <View
-        style={{
-          flexDirection: "column",
-          gap: 15,
-          paddingHorizontal: 15,
-          width: "100%",
-        }}
-      >
-        <Button
-          onPress={dummyCall}
-          backgroundColor="black"
-          text="API Call"
-          textColor="white"
-        />
-        <Button
-          onPress={() => {
-            setResult(null);
-          }}
-          backgroundColor="red"
-          textColor="white"
-          text="Clear"
-        />
-        <Text style={{ textAlign: "center" }}>{JSON.stringify(result)}</Text>
-      </View>
+      <HBar
+        title={dummyData.title}
+        xTotal={dummyData.xTotal}
+        bars={dummyData.bars}
+      />
     </View>
   );
 }
