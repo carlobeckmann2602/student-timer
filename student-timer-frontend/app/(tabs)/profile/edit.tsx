@@ -6,18 +6,13 @@ import { COLORTHEME } from "@/constants/Theme";
 import Button from "@/components/Button";
 import { User2 } from "lucide-react-native";
 import { Edit2 } from 'lucide-react-native';
-
 import Header from "@/components/Header";
 import { useAuth } from "@/context/AuthContext";
-import { ConfirmModal } from "@/app/(tabs)/profile/confirm";
 import UserDetailsInput from "@/components/userInput/UserDetailsInput";
 import PasswordInput from "@/components/userInput/PasswordInput";
-
-
 export default function Edit() {
 
     const { onUpdate, onRemove, onChangePassword, authState } = useAuth();
-
     const router = useRouter();
 
     const defaultPic = require("../../../assets/images/profile/profile-picture.jpg");
@@ -33,10 +28,6 @@ export default function Edit() {
     const [emailError, setEmailError] = useState("");
     const [passwordError, setPasswordError] = useState("");
     const [error, setError] = useState("");
-
-    const [RemoveModalVisible, setRemoveModalVisible] = useState(false);
-
-
 
     const validateInput = () => {
         let nameValid = false;
@@ -146,14 +137,6 @@ export default function Edit() {
         }
     };
 
-    const removeUserConfirmation = async () => {
-        if (authState?.user.id) {
-            console.log("removeUserConfirmation");
-            console.log("UserId: " + authState?.user.id)
-            setRemoveModalVisible(true);
-        }
-    };
-
     const testModal = () => {
         router.push({
             pathname: "/profile/confirmModal",
@@ -164,49 +147,6 @@ export default function Edit() {
 
         });
     };
-
-    /*
-    // ToDo: Alert funktioniert angeblich nur in App, nicht im Web
-    const removeUserAlert = async () => {
-        if (authState?.user.id) {
-            console.log("removeUserTest");
-            console.log("UserId: " + authState?.user.id)
-            confirmAction(
-                "Konto löschen",
-                "Möchtest du dein Konto wirklich löschen?",
-                async () => {
-                    if (authState?.user.id) {
-                        const result = await onRemove!(authState.user.id);
-                        if (result && result.error) {
-                            console.log("remove error")
-                            setError(result.msg);
-                        } else {
-                            console.log("remove router")
-                            router.push("/(auth)/signup");
-                        }
-                    }
-                }
-            );
-        }
-    };
- 
-    const confirmAction = (title: string, message: string, onConfirm: () => void) => {
-        Alert.alert(
-            title,
-            message,
-            [
-                {
-                    text: "Nein",
-                    style: "cancel"
-                },
-                {
-                    text: "Ja",
-                    onPress: onConfirm
-                }
-            ]
-        );
-    };
-    */
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
@@ -238,6 +178,7 @@ export default function Edit() {
                     emailError={emailError}
                     buttonAction={update}
                 />
+                {/*Passwort ändern*/}
                 <PasswordInput
                     userPassword={userPassword}
                     setUserPassword={setUserPassword}
@@ -247,6 +188,7 @@ export default function Edit() {
                     buttonAction={changePassword}
                 />
             </View>
+            {/*Abbrechen oder Löschen*/}
             <View style={styles.actionContainer}>
                 <Button
                     text="Abbrechen"
@@ -270,14 +212,6 @@ export default function Edit() {
                     style={{ width: 200 }}
                 />
             </View>
-            <ConfirmModal
-                title="Konto löschen"
-                message="Möchtest du dein Konto wirklich löschen?"
-                onConfirm={async () => {
-                    await removeUser();
-                }
-                }
-            />
         </ScrollView>
     )
 }
