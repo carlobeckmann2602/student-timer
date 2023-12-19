@@ -18,9 +18,12 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
 
   const router = useRouter();
 
-  const [examDate, setExamDate] = useState("");
-  const [startDate, setStartDate] = useState(new Date(1598051730000));
-  const [creditPoints, setCreditPoints] = useState("");
+  const [learningUnitName, setLearningUnitName] = useState(inputData.name);
+  const [startDate, setStartDate] = useState(inputData.startDate);
+  const [endDate, setEndDate] = useState(inputData.endDate);
+  const [workloadPerWeek, setWorkloadPerWeek] = useState(
+    inputData.workloadPerWeek
+  );
 
   const [examDateError, setStudyCourseError] = useState("");
   const [creditPointError, setEmailError] = useState("");
@@ -29,9 +32,9 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
     <View style={styles.outerWrapper}>
       <View style={styles.row}>
         <InputField
-          label="Vorlesung"
-          onChangeText={setCreditPoints}
-          value={creditPoints}
+          label="Name"
+          onChangeText={setLearningUnitName}
+          value={learningUnitName}
           message={creditPointError}
           messageColor="red"
         />
@@ -47,18 +50,18 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
         />
         <DateTimePicker
           label="Enddatum"
-          value={startDate}
+          value={endDate}
           onChangeDate={(selectedDate) => {
             const currentDate = selectedDate;
-            if (currentDate) setStartDate(currentDate);
+            if (currentDate) setEndDate(currentDate);
           }}
         />
       </View>
       <View style={styles.row}>
         <InputField
           label="Arbeitsaufwand pro Woche"
-          onChangeText={setExamDate}
-          value={examDate}
+          onChangeText={(value) => setWorkloadPerWeek(+value)}
+          value={workloadPerWeek.toString()}
           message={examDateError}
           messageColor="red"
           inputMode="numeric"

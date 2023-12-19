@@ -1,77 +1,45 @@
 import Button from "@/components/Button";
-import { View } from "@/components/Themed";
 import { LearningUnitForm } from "@/components/modules/LearningUnitForm";
 import { COLORTHEME } from "@/constants/Theme";
+import { useAuth } from "@/context/AuthContext";
+import { useAxios } from "@/context/AxiosContext";
+import { useModules } from "@/context/ModuleContext";
 import { LearningUnitType } from "@/types/LearningUnitType";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
-import { KeyboardAvoidingView, Platform, StyleSheet } from "react-native";
-import { FlatList, ScrollView } from "react-native-gesture-handler";
+import {
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  View,
+} from "react-native";
+import { useToast } from "react-native-toast-notifications";
 
 export default function NewModuleLearningUnits() {
-  const [learningUnits, setLearningUnits] = useState<LearningUnitType[]>([]);
-  // const [learningUnits, setLearningUnits] = useState<LearningUnitType[]>([
-  //   {
-  //     id: 123,
-  //     name: "test",
-  //     workloadPerWeek: -1,
-  //     startDate: new Date(),
-  //     endDate: new Date(),
-  //   },
-  //   {
-  //     id: 456,
-  //     name: "test",
-  //     workloadPerWeek: -1,
-  //     startDate: new Date(),
-  //     endDate: new Date(),
-  //   },
-  //   {
-  //     id: 789,
-  //     name: "test",
-  //     workloadPerWeek: -1,
-  //     startDate: new Date(),
-  //     endDate: new Date(),
-  //   },
-  //   {
-  //     id: 1,
-  //     name: "test",
-  //     workloadPerWeek: -1,
-  //     startDate: new Date(),
-  //     endDate: new Date(),
-  //   },
-  // ]);
+  const { name, colorCode, creditPoints, examDate } = useLocalSearchParams<{
+    name: string;
+    colorCode: string;
+    creditPoints: string;
+    examDate: string;
+  }>();
+
   const [error, setError] = useState("");
+
+  const toast = useToast();
+  const { authState } = useAuth();
+  const { authAxios } = useAxios();
+  const { fetchModules } = useModules();
+
+  const [learningUnits, setLearningUnits] = useState<LearningUnitType[]>([]);
 
   const router = useRouter();
 
-  // const newLearningUnits: LearningUnitType[] = [
-  //   {
-  //     id: 123,
-  //     name: "test",
-  //     workloadPerWeek: -1,
-  //     startDate: new Date(),
-  //     endDate: new Date(),
-  //   },
-  //   {
-  //     id: 456,
-  //     name: "test",
-  //     workloadPerWeek: -1,
-  //     startDate: new Date(),
-  //     endDate: new Date(),
-  //   },
-  //   {
-  //     id: 789,
-  //     name: "test",
-  //     workloadPerWeek: -1,
-  //     startDate: new Date(),
-  //     endDate: new Date(),
-  //   },
-  // ];
-
   const onDeleteLearningUnit = (id: number) => {
-    setLearningUnits(() => {
-      return learningUnits.filter((item) => item.id != id);
-    });
+    if (learningUnits.length > 1)
+      setLearningUnits(() => {
+        return learningUnits.filter((item) => item.id != id);
+      });
   };
 
   const onAddLearningUnit = () => {
@@ -88,11 +56,41 @@ export default function NewModuleLearningUnits() {
     });
   };
 
-  const onCreateModule = () => {
-    // TODO: Use API
-    const response = 1;
-    // router.replace(`/(tabs)/modules/${response}`);
-    router.replace(`/(tabs)/modules`);
+  const onCreateModule = async () => {
+    let id = toast.show("Löschen...");
+    let response;
+    try {
+      response = await authAxios?.post(
+        `/students/${authState?.user.id}/modules`,
+        {
+          id: 0,
+          name: name,
+          colorCode: colorCode,
+          creditPoints: +creditPoints,
+          examDate: new Date(examDate),
+          learningUnits: learningUnits,
+          learningSessions: [],
+
+          totalModuleTime: 0,
+          totalLearningTime: 0,
+          totalLearningSessionTime: 0,
+          totalLearningUnitTime: 0,
+        }
+      );
+      toast.update(id, "Modul erfoglreich angelegt.", { type: "success" });
+      fetchModules && (await fetchModules());
+    } catch (e) {
+      toast.update(id, `Fehler beim Erstellen des Moduls: ${e}`, {
+        type: "danger",
+      });
+    } finally {
+      router.replace({
+        pathname: "/(tabs)/modules/",
+        params: {
+          moduleSaved: response?.status === 200 ? 1 : 0,
+        },
+      });
+    }
   };
 
   return (
