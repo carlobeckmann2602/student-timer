@@ -57,24 +57,16 @@ export default function NewModuleLearningUnits() {
   };
 
   const onCreateModule = async () => {
-    let id = toast.show("Löschen...");
+    let id = toast.show("Erstellen...");
     let response;
     try {
       response = await authAxios?.post(
         `/students/${authState?.user.id}/modules`,
         {
-          id: 0,
           name: name,
+          examDate: examDate,
           colorCode: colorCode,
-          creditPoints: +creditPoints,
-          examDate: new Date(examDate),
-          learningUnits: learningUnits,
-          learningSessions: [],
-
-          totalModuleTime: 0,
-          totalLearningTime: 0,
-          totalLearningSessionTime: 0,
-          totalLearningUnitTime: 0,
+          creditpoints: +creditPoints,
         }
       );
       toast.update(id, "Modul erfoglreich angelegt.", { type: "success" });
