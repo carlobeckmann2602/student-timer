@@ -6,15 +6,17 @@ import { COLORTHEME } from "@/constants/Theme";
 import Button from "@/components/Button";
 import { User2 } from "lucide-react-native";
 import { Edit2 } from 'lucide-react-native';
-import UserDetailsInput from "@/components/UserDetailsInput";
+
 import Header from "@/components/Header";
 import { useAuth } from "@/context/AuthContext";
 import { ConfirmModal } from "@/app/(tabs)/profile/confirm";
+import UserDetailsInput from "@/components/userInput/UserDetailsInput";
+import PasswordInput from "@/components/userInput/PasswordInput";
 
 
 export default function Edit() {
 
-    const { onUpdate, onRemove, authState } = useAuth();
+    const { onUpdate, onRemove, onChangePassword, authState } = useAuth();
 
     const router = useRouter();
 
@@ -23,13 +25,17 @@ export default function Edit() {
     const [userName, setUserName] = useState(authState?.user.name || "");
     const [userStudyCourse, setUserStudyCourse] = useState(authState?.user.studyCourse || "");
     const [userEmail, setUserEmail] = useState(authState?.user.email || "");
+    const [userPassword, setUserPassword] = useState("");
+    const [userCheckPassword, setUserCheckPassword] = useState("");
 
     const [nameError, setNameError] = useState("");
     const [studyCourseError, setStudyCourseError] = useState("");
     const [emailError, setEmailError] = useState("");
+    const [passwordError, setPasswordError] = useState("");
     const [error, setError] = useState("");
 
     const [RemoveModalVisible, setRemoveModalVisible] = useState(false);
+
 
 
     const validateInput = () => {
@@ -68,6 +74,23 @@ export default function Edit() {
         return false;
     };
 
+    const validatePassword = () => {
+        let passwordValid = false;
+        if (userPassword.length == 0) {
+            setPasswordError("Passwort ist erforderlich");
+        } else if (userPassword.length < 6) {
+            setPasswordError("Das Passwort sollte mindestens 6 Zeichen lang sein");
+        } else if (userPassword.indexOf(" ") >= 0) {
+            setPasswordError("Passwort kann keine Leerzeichen enthalten");
+        } else if (userPassword != userCheckPassword) {
+            setPasswordError("Passwörter stimmen nicht überein");
+        } else {
+            setPasswordError("");
+            passwordValid = true;
+        }
+        return passwordValid;
+    }
+
     const cancel = () => {
         router.push("/profile/");
         console.log("Abbrechen");
@@ -81,6 +104,22 @@ export default function Edit() {
                 userEmail,
             );
             console.log("validateInput")
+            if (result && result.error) {
+                console.log("error")
+                setError(result.msg);
+            } else {
+                console.log("router")
+                router.push("/profile/");
+            }
+        }
+    };
+
+    const changePassword = async () => {
+        if (validatePassword()) {
+            const result = await onChangePassword!(
+                userPassword
+            );
+            console.log("validatePassword")
             if (result && result.error) {
                 console.log("error")
                 setError(result.msg);
@@ -185,26 +224,30 @@ export default function Edit() {
                 </View>
             </View>
             {/*Benutzerinformationen bearbeiten*/}
-            <Header title="Profil bearbeiten"></Header>
-            <UserDetailsInput
-                userName={userName}
-                setUserName={setUserName}
-                nameError={nameError}
-                userStudyCourse={userStudyCourse}
-                setUserStudyCourse={setUserStudyCourse}
-                studyCourseError={studyCourseError}
-                userEmail={userEmail}
-                setUserEmail={setUserEmail}
-                emailError={emailError}
-            />
-            <View style={styles.actionContainer}>
-                <Button
-                    text="Speichern"
-                    backgroundColor={COLORTHEME.light.primary}
-                    textColor={COLORTHEME.light.grey2}
-                    onPress={update}
-                    style={{ width: 200 }}
+            <View>
+                <Header title="Profil bearbeiten"></Header>
+                <UserDetailsInput
+                    userName={userName}
+                    setUserName={setUserName}
+                    nameError={nameError}
+                    userStudyCourse={userStudyCourse}
+                    setUserStudyCourse={setUserStudyCourse}
+                    studyCourseError={studyCourseError}
+                    userEmail={userEmail}
+                    setUserEmail={setUserEmail}
+                    emailError={emailError}
+                    buttonAction={update}
                 />
+                <PasswordInput
+                    userPassword={userPassword}
+                    setUserPassword={setUserPassword}
+                    userCheckPassword={userCheckPassword}
+                    setUserCheckPassword={setUserCheckPassword}
+                    passwordError={passwordError}
+                    buttonAction={changePassword}
+                />
+            </View>
+            <View style={styles.actionContainer}>
                 <Button
                     text="Abbrechen"
                     backgroundColor={COLORTHEME.light.grey3}

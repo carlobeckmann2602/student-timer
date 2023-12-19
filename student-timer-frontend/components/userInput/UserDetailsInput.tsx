@@ -2,6 +2,7 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import InputField from "@/components/InputField";
 import { COLORTHEME } from "@/constants/Theme";
+import Button from "@/components/Button";
 
 export default function UserDetailsInput(props: {
     userName: string;
@@ -13,8 +14,9 @@ export default function UserDetailsInput(props: {
     userEmail: string;
     setUserEmail: (value: string) => void;
     emailError: string;
+    buttonAction: (value: string) => void;
 }) {
-    const { userName, setUserName, nameError, userStudyCourse, setUserStudyCourse, studyCourseError, userEmail, setUserEmail, emailError } = props;
+    const { userName, setUserName, nameError, userStudyCourse, setUserStudyCourse, studyCourseError, userEmail, setUserEmail, emailError, buttonAction } = props;
 
     return (
         <>
@@ -47,6 +49,13 @@ export default function UserDetailsInput(props: {
                         />
                     </View>
                 </View>
+                <Button
+                    text="Speichern"
+                    backgroundColor={COLORTHEME.light.primary}
+                    textColor={COLORTHEME.light.grey2}
+                    onPress={buttonAction}
+                    style={{ width: 200 }}
+                />
             </View>
         </>
     );
@@ -55,10 +64,10 @@ export default function UserDetailsInput(props: {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         alignItems: "center",
         justifyContent: "space-around",
         paddingHorizontal: 12,
+        gap: 10,
     },
     outerWrapper: {
         width: "100%",

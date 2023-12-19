@@ -29,6 +29,7 @@ type AuthProps = {
   ) => Promise<any>;
   onLogout?: () => Promise<any>;
   onUpdate?: (userName: string, userStudyCourse: string, userEmail: string) => Promise<any>;
+  onChangePassword?: (userPassword: string) => Promise<any>
   onRemove?: (userId: number) => Promise<any>;
   onNewToken?: (token: TokenType) => Promise<any>;
 };
@@ -242,6 +243,38 @@ export const AuthProvider = ({ children }: any) => {
     }
   };
 
+  //ToDo: API Route für updatePasswort fehlt noch! update enthält gar nicht userPassword
+  const changePassword = async (newPassword: string) => {
+    try {
+      const result = await axios.put(
+          `${API_URL}/students/${authState.user.id}`,
+          { userPassword: newPassword },
+          {
+            headers: {
+              Authorization: `Bearer ${authState.token.accessToken}`,
+            },
+          }
+      );
+
+      const user = {
+        ...authState.user,
+        password: newPassword,
+      } as UserType;
+
+      setAuthState({
+        token: authState.token,
+        authenticated: true,
+        user: user,
+      });
+
+      await saveItem(USER_KEY, JSON.stringify(user));
+
+      return result;
+    } catch (e) {
+      return { error: true, msg: (e as any).response.data.message };
+    }
+  };
+
 
   const remove = async (userId: number) => {
     try {
@@ -297,6 +330,7 @@ export const AuthProvider = ({ children }: any) => {
     onLogout: logout,
     onUpdate: update,
     onRemove: remove,
+    onChangePassword: changePassword,
     onNewToken: newToken,
     authState,
   };
