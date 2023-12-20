@@ -78,8 +78,7 @@ public class AuthService {
         } else {
             //registration
             String name = (String) payload.get("name");
-            String profilePicture = (String) payload.get("picture");
-            Student student = new Student(name, null, profilePicture, email, null);
+            Student student = new Student(name, null, null, email, null);
 
             Student studentInDatabase = studentRepository.save(student);
 
