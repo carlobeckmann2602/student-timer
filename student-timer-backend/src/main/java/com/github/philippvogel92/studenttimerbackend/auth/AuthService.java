@@ -1,5 +1,9 @@
 package com.github.philippvogel92.studenttimerbackend.auth;
 
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.interfaces.Claim;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import com.github.philippvogel92.studenttimerbackend.auth.OAuth2.AppleTokenVerifier;
 import com.github.philippvogel92.studenttimerbackend.auth.dto.*;
 import com.github.philippvogel92.studenttimerbackend.auth.jwt.accessToken.AccessTokenService;
 import com.github.philippvogel92.studenttimerbackend.auth.jwt.refreshToken.RefreshTokenService;
@@ -24,16 +28,18 @@ public class AuthService {
     private final AccessTokenService accessTokenService;
     private final PasswordEncoder passwordEncoder;
     private final GoogleTokenVerifier googleTokenVerifier;
+    private final AppleTokenVerifier appleTokenVerifier;
 
     @Autowired
     public AuthService(StudentRepository studentRepository, RefreshTokenService refreshTokenService,
                        AccessTokenService accessTokenService, PasswordEncoder passwordEncoder,
-                       GoogleTokenVerifier googleTokenVerifier) {
+                       GoogleTokenVerifier googleTokenVerifier, AppleTokenVerifier appleTokenVerifier) {
         this.studentRepository = studentRepository;
         this.refreshTokenService = refreshTokenService;
         this.accessTokenService = accessTokenService;
         this.passwordEncoder = passwordEncoder;
         this.googleTokenVerifier = googleTokenVerifier;
+        this.appleTokenVerifier = appleTokenVerifier;
     }
 
     public LoginResponseDTO login(LoginRequestDTO loginRequestDTO) {
@@ -123,4 +129,36 @@ public class AuthService {
     }
 
 
+    public LoginResponseDTO loginWithApple(LoginOAuth2RequestDTO loginOAuth2RequestDTO) {
+        String appleIdToken = loginOAuth2RequestDTO.getTokenId();
+        String userSecret = loginOAuth2RequestDTO.getUserSecret();
+        String name = loginOAuth2RequestDTO.getName();
+
+        DecodedJWT decodedJWT = appleTokenVerifier.verify(appleIdToken, userSecret);
+        Claim claimEmail = decodedJWT.getClaim("email");
+        String email = claimEmail.asString();
+
+        Optional<Student> studentOptional =
+                studentRepository.findStudentByEmail(email);
+
+        if (studentOptional.isPresent()) {
+            //login
+            Student student = studentOptional.get();
+            String accessToken = accessTokenService.createAccessToken(student.getId(), email);
+            String refreshToken = refreshTokenService.createRefreshToken(student);
+            return new LoginResponseDTO(accessToken, refreshToken, student.getId(), student.getEmail());
+        } else {
+            //registration
+            Student student = new Student(name, null, null, email, null);
+
+            Student studentInDatabase = studentRepository.save(student);
+
+            //create access and refresh tokens
+            String accessToken = accessTokenService.createAccessToken(studentInDatabase.getId(), email);
+            String refreshToken = refreshTokenService.createRefreshToken(studentInDatabase);
+
+            return new LoginResponseDTO(accessToken, refreshToken,
+                    studentInDatabase.getId(), studentInDatabase.getEmail());
+        }
+    }
 }
