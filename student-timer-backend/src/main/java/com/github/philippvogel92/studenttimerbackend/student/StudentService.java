@@ -55,7 +55,7 @@ public class StudentService {
         //Set password
         if (password != null) {
             if (!Objects.equals(password, password2)) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password are not matching");
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Passwords are not matching");
             } else if (password.length() < 6 || password.length() > 200) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password must be between 6 and 200 " +
                         "characters");

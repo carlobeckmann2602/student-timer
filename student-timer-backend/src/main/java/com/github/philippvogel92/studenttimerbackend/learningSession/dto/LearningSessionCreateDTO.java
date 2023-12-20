@@ -1,7 +1,5 @@
 package com.github.philippvogel92.studenttimerbackend.learningSession.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -19,6 +17,7 @@ public class LearningSessionCreateDTO {
     private Integer rating;
     @NotNull(message = "Date cannot be null")
     private LocalDateTime createdAt;
+    @Max(value = 255, message = "Description must be less than or equal to 255")
     private String description;
 
     public Integer getTotalDuration() {
