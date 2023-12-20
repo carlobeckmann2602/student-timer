@@ -1,12 +1,8 @@
-import React from "react";
-import { Text, View } from "../Themed";
-import { Svg } from "react-native-svg";
 import { VictoryBar, VictoryContainer, VictoryLabel } from "victory-native";
-import { StyleSheet } from "react-native";
-import { COLORTHEME, COLORS } from "@/constants/Theme";
-import { H2, H3, H4, LabelS } from "../StyledText";
+import ChartContainer from "@/components/statistics/ChartContainer";
 
-type Props = {
+export type HChartProps = {
+  type: string;
   title: string;
   xTotal: number;
   bars: {
@@ -18,16 +14,15 @@ type Props = {
   }[];
 };
 
-export default function HBar({ title, xTotal, bars }: Props) {
+export default function HBarChart({ title, xTotal, bars }: HChartProps) {
   return (
-    <View style={styles.container}>
-      <H3 style={styles.title}>{title}</H3>
+    <ChartContainer title={title}>
       <VictoryContainer height={bars.length * 75} width={300}>
         <VictoryBar
           horizontal
           animate={{
             duration: 2000,
-            onLoad: { duration: 500 },
+            onLoad: { duration: 750 },
           }}
           data={bars.slice(0).reverse()}
           y="value"
@@ -68,21 +63,6 @@ export default function HBar({ title, xTotal, bars }: Props) {
           )}
         </>
       </VictoryContainer>
-    </View>
+    </ChartContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: COLORTHEME.light.grey2,
-    borderRadius: 12,
-    flexDirection: "column",
-    justifyContent: "space-between",
-    padding: "4%",
-    gap: 16,
-    minHeight: 280,
-  },
-  title: {
-    textAlign: "left",
-  },
-});
