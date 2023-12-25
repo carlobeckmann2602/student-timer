@@ -3,6 +3,8 @@ package com.github.philippvogel92.studenttimerbackend.learningSession.dto;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDateTime;
 
@@ -17,7 +19,7 @@ public class LearningSessionCreateDTO {
     private Integer rating;
     @NotNull(message = "Date cannot be null")
     private LocalDateTime createdAt;
-    @Max(value = 255, message = "Description must be less than or equal to 255")
+    @Size(max = 255, message = "Description must be less than or equal to 255")
     private String description;
 
     public Integer getTotalDuration() {
