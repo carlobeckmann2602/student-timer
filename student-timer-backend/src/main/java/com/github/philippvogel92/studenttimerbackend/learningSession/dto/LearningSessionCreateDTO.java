@@ -17,8 +17,6 @@ public class LearningSessionCreateDTO {
     @Min(value = 0, message = "Rating must be greater than or equal to 0")
     @Max(value = 5, message = "Rating must be less than or equal to 5")
     private Integer rating;
-    @NotNull(message = "Date cannot be null")
-    private LocalDateTime createdAt;
     @Size(max = 255, message = "Description must be less than or equal to 255")
     private String description;
 
@@ -46,13 +44,6 @@ public class LearningSessionCreateDTO {
         this.rating = rating;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
 
     public String getDescription() {
         return description;
