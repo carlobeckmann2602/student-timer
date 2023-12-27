@@ -193,7 +193,9 @@ const styles = StyleSheet.create({
     borderWidth: 3,
   },
   discardLink: {
+    fontSize: 16,
     textAlign: "center",
     textDecorationLine: "underline",
+    marginBottom: 20,
   },
 });

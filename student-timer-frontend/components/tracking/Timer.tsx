@@ -232,10 +232,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   timerText: {
+    fontFamily: "OpenSans_Bold",
     fontSize: 50,
-    fontWeight: "bold",
   },
   pauseText: {
+    fontFamily: "OpenSans_SemiBold",
     fontSize: 18,
   },
 });
