@@ -109,7 +109,7 @@ export default function Success() {
           textColor="#FFFFFF"
           disabled={starAmount === 0}
           onPress={async () => {
-            let id = toast.show("Speichern...");
+            let id = toast.show("Speichern...", { type: "loading" });
             try {
               await authAxios?.post(
                 `/students/${authState?.user.id}/modules/${selectedModule?.id}/learningSessions`,

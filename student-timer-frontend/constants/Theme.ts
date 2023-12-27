@@ -13,6 +13,7 @@ const COLORS = {
   // tertiary: "#000000",
   warning: "#D16E6E",
   success: "#51C93E",
+  danger: "#D32F2F",
   rating: "#D0D400",
   // Module units
   Vorlesung: "#F9D477",
