@@ -1,4 +1,3 @@
-
 package com.github.philippvogel92.studenttimerbackend;
 
 import com.github.philippvogel92.studenttimerbackend.learningSession.LearningSession;
@@ -90,27 +89,37 @@ public class DatabaseConfig {
                     learningUnit12));
             module4.setLearningUnits(List.of(learningUnit13, learningUnit14, learningUnit15));
 
-            LearningSession learningSession1 = new LearningSession(620, 270, 3, LocalDateTime.now(), "Heute lernen" +
-                    " wir angewandte Mathematik", module1);
-            LearningSession learningSession2 = new LearningSession(420, 370, 5, LocalDateTime.now(), "Heute lernen" +
-                    " wir Informatik", module1);
-            LearningSession learningSession3 = new LearningSession(15, 10, 1, LocalDateTime.now(), "Heute lernen" +
-                    " wir den Satz des Pythagoras", module1);
-            LearningSession learningSession4 = new LearningSession(720, 600, 4, LocalDateTime.now(), "Heute lernen" +
-                    " wir Java Spring Boot", module1);
+            LearningSession learningSession1 = new LearningSession(620, 270, 3, LocalDateTime.now().minusDays(4),
+                    "Heute lernen" +
+                            " wir angewandte Mathematik", module1);
+            LearningSession learningSession2 = new LearningSession(420, 370, 5, LocalDateTime.now().minusDays(3),
+                    "Heute lernen" +
+                            " wir Informatik", module1);
+            LearningSession learningSession3 = new LearningSession(15, 10, 1, LocalDateTime.now().minusDays(8),
+                    "Heute lernen" +
+                            " wir den Satz des Pythagoras", module1);
+            LearningSession learningSession4 = new LearningSession(720, 600, 4, LocalDateTime.now().minusDays(9),
+                    "Heute lernen" +
+                            " wir Java Spring Boot", module1);
 
-            LearningSession learningSession5 = new LearningSession(420, 70, 1, LocalDateTime.now(), "Heute lernen" +
-                    " wir angewandte Mathematik 2", module2);
-            LearningSession learningSession6 = new LearningSession(280, 70, 5, LocalDateTime.now(), "Heute lernen" +
-                    " wir Informatik 2", module2);
-            LearningSession learningSession7 = new LearningSession(500, 400, 1, LocalDateTime.now(), "Heute lernen" +
-                    " wir Javascript", module2);
-            LearningSession learningSession8 = new LearningSession(230, 130, 4, LocalDateTime.now(), "Heute lernen" +
-                    " wir Next.js", module2);
+            LearningSession learningSession5 = new LearningSession(420, 70, 1, LocalDateTime.now().minusDays(12),
+                    "Heute lernen" +
+                            " wir angewandte Mathematik 2", module2);
+            LearningSession learningSession6 = new LearningSession(280, 70, 5, LocalDateTime.now().minusDays(16),
+                    "Heute lernen" +
+                            " wir Informatik 2", module2);
+            LearningSession learningSession7 = new LearningSession(500, 400, 1, LocalDateTime.now().minusDays(15),
+                    "Heute lernen" +
+                            " wir Javascript", module2);
+            LearningSession learningSession8 = new LearningSession(230, 130, 4, LocalDateTime.now().minusDays(3),
+                    "Heute lernen" +
+                            " wir Next.js", module2);
 
-            LearningSession learningSession9 = new LearningSession(400, 347, 3, LocalDateTime.now(), "Heute lernen" +
+            LearningSession learningSession9 = new LearningSession(400, 347, 3, LocalDateTime.now().minusDays(18),
+                    "Heute lernen" +
                     " wir Restklassenringe kennen", module3);
-            LearningSession learningSession10 = new LearningSession(123, 100, 5, LocalDateTime.now(), "Heute lernen" +
+            LearningSession learningSession10 = new LearningSession(123, 100, 5, LocalDateTime.now().minusDays(20),
+                    "Heute lernen" +
                     " wir etwas über polynomielle Reduktionen.", module3);
 
             LearningSession learningSession11 = new LearningSession(220, 110, 2, LocalDateTime.now(), "Heute lernen" +

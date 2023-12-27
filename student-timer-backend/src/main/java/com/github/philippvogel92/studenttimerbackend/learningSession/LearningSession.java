@@ -112,6 +112,7 @@ public class LearningSession {
                 ", focusDuration=" + focusDuration +
                 ", rating=" + rating +
                 ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
                 ", description='" + description + '\'' +
                 ", module=" + module +
                 '}';
