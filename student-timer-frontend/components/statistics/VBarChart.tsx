@@ -6,6 +6,7 @@ import {
   VictoryLabel,
 } from "victory-native";
 import ChartContainer from "@/components/statistics/ChartContainer";
+import { Dimensions } from "react-native";
 
 export type VBarChartProps = {
   type: string;
@@ -25,13 +26,14 @@ export default function VBarChart({
   bars,
   avgBars,
 }: VBarChartProps) {
+  const width = Dimensions.get("window").width - 90;
   return (
     <ChartContainer title={title}>
-      <VictoryContainer height={300} width={320}>
+      <VictoryContainer height={300} width={width}>
         <VictoryChart
-          width={320}
+          width={width}
           standalone={false}
-          padding={{ left: 80, right: 30, bottom: 30, top: 10 }}
+          padding={{ left: 60, right: 20, bottom: 30, top: 10 }}
         >
           <VictoryBar
             animate={{
@@ -56,7 +58,7 @@ export default function VBarChart({
         </VictoryChart>
         <VictoryBar
           horizontal
-          width={320}
+          width={width}
           standalone={false}
           animate={{
             duration: 2000,
@@ -65,7 +67,7 @@ export default function VBarChart({
           data={avgBars.map((item) => ({ ...item, y: 20 }))}
           x="value"
           barWidth={8}
-          padding={{ left: 20, right: 0, bottom: 30, top: 10 }}
+          padding={{ left: 0, right: 0, bottom: 30, top: 10 }}
           cornerRadius={{ top: 4, bottom: 4 }}
           domain={{ x: [0, yTotal], y: [0, 20] }}
           style={{ data: { fill: ({ datum }) => datum.color } }}
@@ -83,8 +85,8 @@ export default function VBarChart({
                 { fontSize: 12, fill: item.color },
               ]}
               textAnchor="middle"
-              y={310 - (275 / yTotal - 1) * item.value} // 40 - 280 => 240 / 10 = 24
-              x={50}
+              y={310 - (275 / yTotal - 1) * item.value}
+              x={30}
             />
           ))}
         </>

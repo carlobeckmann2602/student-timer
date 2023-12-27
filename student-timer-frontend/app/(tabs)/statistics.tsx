@@ -310,6 +310,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     gap: 24,
+    padding: 16,
   },
   flatListContainer: {
     gap: 24,
