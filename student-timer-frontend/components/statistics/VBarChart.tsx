@@ -7,7 +7,7 @@ import {
 } from "victory-native";
 import ChartContainer from "@/components/statistics/ChartContainer";
 
-export type VChartProps = {
+export type VBarChartProps = {
   type: string;
   title: string;
   yTotal: number;
@@ -24,7 +24,7 @@ export default function VBarChart({
   yTotal,
   bars,
   avgBars,
-}: VChartProps) {
+}: VBarChartProps) {
   return (
     <ChartContainer title={title}>
       <VictoryContainer height={300} width={320}>

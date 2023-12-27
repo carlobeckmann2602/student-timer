@@ -1,7 +1,7 @@
 import { VictoryBar, VictoryContainer, VictoryLabel } from "victory-native";
 import ChartContainer from "@/components/statistics/ChartContainer";
 
-export type HChartProps = {
+export type HBarChartProps = {
   type: string;
   title: string;
   xTotal: number;
@@ -14,7 +14,7 @@ export type HChartProps = {
   }[];
 };
 
-export default function HBarChart({ title, xTotal, bars }: HChartProps) {
+export default function HBarChart({ title, xTotal, bars }: HBarChartProps) {
   return (
     <ChartContainer title={title}>
       <VictoryContainer height={bars.length * 75} width={300}>
