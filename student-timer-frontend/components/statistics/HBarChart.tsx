@@ -1,5 +1,6 @@
 import { VictoryBar, VictoryContainer, VictoryLabel } from "victory-native";
 import ChartContainer from "@/components/statistics/ChartContainer";
+import { Dimensions } from "react-native";
 
 export type HBarChartProps = {
   type: string;
@@ -17,7 +18,10 @@ export type HBarChartProps = {
 export default function HBarChart({ title, xTotal, bars }: HBarChartProps) {
   return (
     <ChartContainer title={title}>
-      <VictoryContainer height={bars.length * 75} width={300}>
+      <VictoryContainer
+        height={bars.length * 75}
+        width={Dimensions.get("window").width - 90}
+      >
         <VictoryBar
           horizontal
           animate={{

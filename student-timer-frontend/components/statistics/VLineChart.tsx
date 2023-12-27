@@ -1,11 +1,6 @@
-import {
-  VictoryAxis,
-  VictoryChart,
-  VictoryContainer,
-  VictoryLabel,
-  VictoryLine,
-} from "victory-native";
+import { VictoryAxis, VictoryChart, VictoryLine } from "victory-native";
 import ChartContainer from "@/components/statistics/ChartContainer";
+import { Dimensions } from "react-native";
 
 export type VLineChartProps = {
   type: string;
@@ -35,8 +30,13 @@ export default function VLineChart({
 }: VLineChartProps) {
   return (
     <ChartContainer title={title}>
-      <VictoryChart height={300} width={350} padding={{ bottom: 20 }}>
+      <VictoryChart
+        height={250}
+        width={Dimensions.get("window").width - 90}
+        padding={{ bottom: 20 }}
+      >
         <VictoryLine
+          animate
           data={values}
           domain={{ x: [0, xTotal], y: [-1, yTotal + 1] }}
           style={{
