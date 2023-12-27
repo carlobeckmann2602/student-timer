@@ -16,7 +16,7 @@ public class LearningUnit {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String name;
+    private LearningUnitEnum name;
     private LocalDate startDate;
     private LocalDate endDate;
     private Double workloadPerWeek;
@@ -27,12 +27,14 @@ public class LearningUnit {
     private Module module;
 
     /**
-     * Defines the total amount of minutes done by this learning unit (based on the start date, end date & workload per week)
+     * Defines the total amount of minutes done by this learning unit (based on the start date, end date & workload
+     * per week)
      */
     @Transient
     private Double totalLearningTime;
 
-    public LearningUnit(String name, LocalDate startDate, LocalDate endDate, Double workloadPerWeek, Module module) {
+    public LearningUnit(LearningUnitEnum name, LocalDate startDate, LocalDate endDate, Double workloadPerWeek,
+                        Module module) {
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -53,11 +55,11 @@ public class LearningUnit {
         this.id = id;
     }
 
-    public String getName() {
+    public LearningUnitEnum getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(LearningUnitEnum name) {
         this.name = name;
     }
 

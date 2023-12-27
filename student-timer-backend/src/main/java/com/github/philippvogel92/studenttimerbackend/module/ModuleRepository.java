@@ -10,4 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface ModuleRepository extends JpaRepository<Module, Long> {
+
+    List<Module> findModulesByStudentOrderByName(Student student);
 }

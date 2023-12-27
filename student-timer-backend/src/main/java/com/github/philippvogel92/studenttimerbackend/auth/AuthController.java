@@ -64,6 +64,7 @@ public class AuthController {
         Provider provider = loginOAuth2RequestDTO.getProvider();
         return switch (provider) {
             case GOOGLE -> authService.loginWithGoogle(loginOAuth2RequestDTO);
+            case APPLE -> authService.loginWithApple(loginOAuth2RequestDTO);
         };
     }
 

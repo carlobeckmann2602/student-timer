@@ -45,7 +45,7 @@ public class LearningUnitService {
     public LearningUnit addLearningUnit(Long moduleId, LearningUnitCreateDTO learningUnitCreateDTO) {
         Module module =
                 moduleRepository.findById(moduleId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Module not found"));
-        String name = learningUnitCreateDTO.getName();
+        LearningUnitEnum name = learningUnitCreateDTO.getName();
         LocalDate startDate = learningUnitCreateDTO.getStartDate();
         LocalDate endDate = learningUnitCreateDTO.getEndDate();
         Double workloadPerWeek = learningUnitCreateDTO.getWorkloadPerWeek();

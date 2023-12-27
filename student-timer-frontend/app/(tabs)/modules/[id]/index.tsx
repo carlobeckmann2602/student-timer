@@ -60,7 +60,7 @@ export default function ModulesDetailScreen() {
 
     return `${convertMinutesToHours(
       unit.workloadPerWeek
-    )} h, ${weekAmount} Wochen`;
+    )} Std., ${weekAmount} Wochen`;
   };
 
   return (
