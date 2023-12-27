@@ -1,13 +1,16 @@
 import { FlatList, StyleSheet } from "react-native";
 
 import { View } from "../../components/Themed";
-import HBarChart, { HChartProps } from "@/components/statistics/HBarChart";
+import HBarChart, { HBarChartProps } from "@/components/statistics/HBarChart";
 import { COLORTHEME } from "@/constants/Theme";
-import VBarChart, { VChartProps } from "@/components/statistics/VBarChart";
+import VBarChart, { VBarChartProps } from "@/components/statistics/VBarChart";
 import { H2 } from "@/components/StyledText";
+import VLineChart, {
+  VLineChartProps,
+} from "@/components/statistics/VLineChart";
 
 export default function StatisticsScreen() {
-  const dummyDataHBar: HChartProps = {
+  const dummyDataHBar: HBarChartProps = {
     type: "hBar",
     title:
       "Letzte Woche lief das Lernen etwas besser. Behalte deinen Fokus bei.",
@@ -30,7 +33,7 @@ export default function StatisticsScreen() {
     ],
   };
 
-  const dummyDataVBar: VChartProps = {
+  const dummyDataVBar: VBarChartProps = {
     type: "vBar",
     title:
       "Im letzten Monat hast du am Wochenende 100% mehr gearbeitet als unter der Woche.",
@@ -88,7 +91,136 @@ export default function StatisticsScreen() {
     ],
   };
 
-  const dummyData = [dummyDataHBar, dummyDataVBar];
+  const dummyDataVLine: VLineChartProps = {
+    type: "vLine",
+    title: "Im letzten Monat hast du zu 80% von 18 Uhr bis 23 Uhr gearbeitet.",
+    yTotal: 10,
+    xTotal: 24,
+    color: COLORTHEME.light.primary,
+    labelColor: COLORTHEME.light.grey3,
+    values: [
+      {
+        x: 0,
+        y: 0,
+      },
+      {
+        x: 1,
+        y: 0,
+      },
+      {
+        x: 2,
+        y: 5,
+      },
+      {
+        x: 3,
+        y: 3,
+      },
+      {
+        x: 4,
+        y: 0,
+      },
+      {
+        x: 5,
+        y: 0,
+      },
+      {
+        x: 6,
+        y: 0,
+      },
+      {
+        x: 7,
+        y: 0,
+      },
+      {
+        x: 8,
+        y: 1,
+      },
+      {
+        x: 9,
+        y: 0,
+      },
+      {
+        x: 10,
+        y: 0,
+      },
+      {
+        x: 11,
+        y: 0,
+      },
+      {
+        x: 12,
+        y: 0,
+      },
+      {
+        x: 13,
+        y: 0,
+      },
+      {
+        x: 14,
+        y: 0,
+      },
+      {
+        x: 15,
+        y: 10,
+      },
+      {
+        x: 16,
+        y: 0,
+      },
+      {
+        x: 17,
+        y: 0,
+      },
+      {
+        x: 18,
+        y: 0,
+      },
+      {
+        x: 19,
+        y: 0,
+      },
+      {
+        x: 20,
+        y: 8,
+      },
+      {
+        x: 21,
+        y: 0,
+      },
+      {
+        x: 22,
+        y: 0,
+      },
+      {
+        x: 23,
+        y: 0,
+      },
+      {
+        x: 24,
+        y: 0,
+      },
+    ],
+    xDiscriptions: [
+      {
+        name: "Morgens",
+        x: 3,
+      },
+      {
+        name: "Mittags",
+        x: 9,
+      },
+      {
+        name: "Abends",
+        x: 15,
+      },
+      {
+        name: "Nachts",
+        x: 21,
+      },
+    ],
+  };
+
+  const dummyData = [dummyDataHBar, dummyDataVBar, dummyDataVLine];
 
   return (
     <View style={styles.container}>
@@ -98,26 +230,39 @@ export default function StatisticsScreen() {
           if (item.type === "hBar")
             return (
               <HBarChart
-                type={item.type}
-                title={item.title}
-                xTotal={(item as HChartProps).xTotal}
-                bars={item.bars}
+                type={(item as HBarChartProps).type}
+                title={(item as HBarChartProps).title}
+                xTotal={(item as HBarChartProps).xTotal}
+                bars={(item as HBarChartProps).bars}
               />
             );
           else if (item.type === "vBar") {
             return (
               <VBarChart
-                type={item.type}
-                title={item.title}
-                yTotal={(item as VChartProps).yTotal}
-                bars={item.bars}
-                avgBars={(item as VChartProps).avgBars}
+                type={(item as VBarChartProps).type}
+                title={(item as VBarChartProps).title}
+                yTotal={(item as VBarChartProps).yTotal}
+                bars={(item as VBarChartProps).bars}
+                avgBars={(item as VBarChartProps).avgBars}
+              />
+            );
+          } else if (item.type === "vLine") {
+            return (
+              <VLineChart
+                type={(item as VLineChartProps).type}
+                title={(item as VLineChartProps).title}
+                yTotal={(item as VLineChartProps).yTotal}
+                xTotal={(item as VLineChartProps).xTotal}
+                color={(item as VLineChartProps).color}
+                labelColor={(item as VLineChartProps).labelColor}
+                values={(item as VLineChartProps).values}
+                xDiscriptions={(item as VLineChartProps).xDiscriptions}
               />
             );
           }
           return null;
         }}
-        keyExtractor={(index) => index.toString()}
+        keyExtractor={(item, index) => index.toString()}
         contentContainerStyle={styles.flatListContainer}
         ListEmptyComponent={
           <View style={styles.emptyListContainer}>
@@ -125,18 +270,6 @@ export default function StatisticsScreen() {
           </View>
         }
       />
-
-      {/* <HBarChart
-        title={dummyDataHBar.title}
-        xTotal={dummyDataHBar.xTotal}
-        bars={dummyDataHBar.bars}
-      />
-      <VBarChart
-        title={dummyDataVBar.title}
-        xTotal={dummyDataVBar.yTotal}
-        bars={dummyDataVBar.bars}
-        avgBars={dummyDataVBar.avgBars}
-      /> */}
     </View>
   );
 }
