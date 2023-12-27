@@ -20,7 +20,7 @@ export default function StarChart({ title, starValues }: StarChartProps) {
     <ChartContainer title={title}>
       {starValues.map((item) => {
         return (
-          <View style={styles.starContainer}>
+          <View style={styles.starContainer} key={item.name}>
             <P style={styles.label}>{item.name}</P>
             <StarRating starAmount={item.value} color={item.color} />
           </View>
