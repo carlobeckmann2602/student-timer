@@ -8,6 +8,7 @@ import { H2 } from "@/components/StyledText";
 import VLineChart, {
   VLineChartProps,
 } from "@/components/statistics/VLineChart";
+import StarChart, { StarChartProps } from "@/components/statistics/StarChart";
 
 export default function StatisticsScreen() {
   const dummyDataHBar: HBarChartProps = {
@@ -220,47 +221,76 @@ export default function StatisticsScreen() {
     ],
   };
 
-  const dummyData = [dummyDataHBar, dummyDataVBar, dummyDataVLine];
+  const dummyDataStarChart: StarChartProps = {
+    type: "stars",
+    title: "Mit der Leistung von Mediengestaltung 2 bist du am zufriedensten.",
+    starValues: [
+      { name: "Datenbanksysteme 1", value: 3, color: "#476930" },
+      { name: "Mediengestaltung 2", value: 5, color: "#053F5C" },
+      { name: "Mathematik 2", value: 1, color: "#A8320A" },
+    ],
+  };
+
+  const dummyData = [
+    dummyDataHBar,
+    dummyDataVBar,
+    dummyDataVLine,
+    dummyDataStarChart,
+  ];
 
   return (
     <View style={styles.container}>
       <FlatList
         data={dummyData}
         renderItem={({ item }) => {
-          if (item.type === "hBar")
-            return (
-              <HBarChart
-                type={(item as HBarChartProps).type}
-                title={(item as HBarChartProps).title}
-                xTotal={(item as HBarChartProps).xTotal}
-                bars={(item as HBarChartProps).bars}
-              />
-            );
-          else if (item.type === "vBar") {
-            return (
-              <VBarChart
-                type={(item as VBarChartProps).type}
-                title={(item as VBarChartProps).title}
-                yTotal={(item as VBarChartProps).yTotal}
-                bars={(item as VBarChartProps).bars}
-                avgBars={(item as VBarChartProps).avgBars}
-              />
-            );
-          } else if (item.type === "vLine") {
-            return (
-              <VLineChart
-                type={(item as VLineChartProps).type}
-                title={(item as VLineChartProps).title}
-                yTotal={(item as VLineChartProps).yTotal}
-                xTotal={(item as VLineChartProps).xTotal}
-                color={(item as VLineChartProps).color}
-                labelColor={(item as VLineChartProps).labelColor}
-                values={(item as VLineChartProps).values}
-                xDiscriptions={(item as VLineChartProps).xDiscriptions}
-              />
-            );
+          switch (item.type) {
+            case "hBar":
+              return (
+                <HBarChart
+                  type={(item as HBarChartProps).type}
+                  title={(item as HBarChartProps).title}
+                  xTotal={(item as HBarChartProps).xTotal}
+                  bars={(item as HBarChartProps).bars}
+                />
+              );
+
+            case "vBar":
+              return (
+                <VBarChart
+                  type={(item as VBarChartProps).type}
+                  title={(item as VBarChartProps).title}
+                  yTotal={(item as VBarChartProps).yTotal}
+                  bars={(item as VBarChartProps).bars}
+                  avgBars={(item as VBarChartProps).avgBars}
+                />
+              );
+
+            case "vLine":
+              return (
+                <VLineChart
+                  type={(item as VLineChartProps).type}
+                  title={(item as VLineChartProps).title}
+                  yTotal={(item as VLineChartProps).yTotal}
+                  xTotal={(item as VLineChartProps).xTotal}
+                  color={(item as VLineChartProps).color}
+                  labelColor={(item as VLineChartProps).labelColor}
+                  values={(item as VLineChartProps).values}
+                  xDiscriptions={(item as VLineChartProps).xDiscriptions}
+                />
+              );
+
+            case "stars":
+              return (
+                <StarChart
+                  type={(item as StarChartProps).type}
+                  title={(item as StarChartProps).title}
+                  starValues={(item as StarChartProps).starValues}
+                />
+              );
+
+            default:
+              return null;
           }
-          return null;
         }}
         keyExtractor={(item, index) => index.toString()}
         contentContainerStyle={styles.flatListContainer}
