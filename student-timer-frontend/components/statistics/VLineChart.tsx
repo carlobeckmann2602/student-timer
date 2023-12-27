@@ -37,6 +37,7 @@ export default function VLineChart({
     <ChartContainer title={title}>
       <VictoryChart height={300} width={350} padding={{ bottom: 20 }}>
         <VictoryLine
+          animate
           data={values}
           domain={{ x: [0, xTotal], y: [-1, yTotal + 1] }}
           style={{
