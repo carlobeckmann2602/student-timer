@@ -117,7 +117,7 @@ export default function StatisticsScreen() {
           }
           return null;
         }}
-        keyExtractor={(index) => index.toString()}
+        keyExtractor={(item, index) => index.toString()}
         contentContainerStyle={styles.flatListContainer}
         ListEmptyComponent={
           <View style={styles.emptyListContainer}>
@@ -125,18 +125,6 @@ export default function StatisticsScreen() {
           </View>
         }
       />
-
-      {/* <HBarChart
-        title={dummyDataHBar.title}
-        xTotal={dummyDataHBar.xTotal}
-        bars={dummyDataHBar.bars}
-      />
-      <VBarChart
-        title={dummyDataVBar.title}
-        xTotal={dummyDataVBar.yTotal}
-        bars={dummyDataVBar.bars}
-        avgBars={dummyDataVBar.avgBars}
-      /> */}
     </View>
   );
 }
