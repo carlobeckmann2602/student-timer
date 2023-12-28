@@ -8,17 +8,17 @@ import { COLORTHEME } from "@/constants/Theme";
 export type StarChartProps = {
   type: string;
   title: string;
-  starValues: {
+  stars: {
     name: string;
     value: number;
     color: string;
   }[];
 };
 
-export default function StarChart({ title, starValues }: StarChartProps) {
+export default function StarChart({ title, stars }: StarChartProps) {
   return (
     <ChartContainer title={title}>
-      {starValues.map((item) => {
+      {stars.map((item) => {
         return (
           <View style={styles.starContainer} key={item.name}>
             <P style={styles.label}>{item.name}</P>

@@ -1,6 +1,7 @@
 import { VictoryBar, VictoryContainer, VictoryLabel } from "victory-native";
 import ChartContainer from "@/components/statistics/ChartContainer";
 import { Dimensions } from "react-native";
+import { COLORTHEME } from "@/constants/Theme";
 
 export type HBarChartProps = {
   type: string;
@@ -9,7 +10,7 @@ export type HBarChartProps = {
   bars: {
     name?: string;
     value: number;
-    color: string;
+    color?: string;
     unit?: string;
     average?: boolean;
   }[];
@@ -32,17 +33,23 @@ export default function HBarChart({ title, xTotal, bars }: HBarChartProps) {
           y="value"
           x="name"
           labels={({ datum }) => [
-            datum.value + (datum.average && " Ø"),
+            Number(datum.value.toFixed(1)) + (datum.average && " Ø"),
             datum.unit,
           ]}
           labelComponent={
             <VictoryLabel
               style={[
-                { fontSize: 24, fill: ({ datum }) => datum.color },
-                { fontSize: 12, fill: ({ datum }) => datum.color },
+                {
+                  fontSize: 24,
+                  fill: ({ datum }) => datum.color || COLORTHEME.light.primary,
+                },
+                {
+                  fontSize: 12,
+                  fill: ({ datum }) => datum.color || COLORTHEME.light.primary,
+                },
               ]}
               dy={5}
-              dx={35}
+              dx={45}
               textAnchor="middle"
             />
           }
@@ -51,7 +58,11 @@ export default function HBarChart({ title, xTotal, bars }: HBarChartProps) {
           cornerRadius={{ top: 15 }}
           padding={{ right: 160, top: 50, bottom: 30 }}
           maxDomain={{ y: xTotal, x: bars.length }}
-          style={{ data: { fill: ({ datum }) => datum.color } }}
+          style={{
+            data: {
+              fill: ({ datum }) => datum.color || COLORTHEME.light.primary,
+            },
+          }}
         />
         <>
           {bars.map(

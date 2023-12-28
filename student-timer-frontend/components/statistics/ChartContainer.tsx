@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     padding: "4%",
     gap: 16,
-    minHeight: 280,
+    minHeight: 250,
     width: Dimensions.get("window").width - 32,
   },
   title: {

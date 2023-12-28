@@ -9,9 +9,12 @@ import VLineChart, {
   VLineChartProps,
 } from "@/components/statistics/VLineChart";
 import StarChart, { StarChartProps } from "@/components/statistics/StarChart";
+import { useAxios } from "@/context/AxiosContext";
+import { useAuth } from "@/context/AuthContext";
+import { useEffect, useState } from "react";
 
 export default function StatisticsScreen() {
-  const dummyDataHBar: HBarChartProps = {
+  /* const dummyDataHBar: HBarChartProps = {
     type: "hBar",
     title:
       "Letzte Woche lief das Lernen etwas besser. Behalte deinen Fokus bei.",
@@ -224,7 +227,7 @@ export default function StatisticsScreen() {
   const dummyDataStarChart: StarChartProps = {
     type: "stars",
     title: "Mit der Leistung von Mediengestaltung 2 bist du am zufriedensten.",
-    starValues: [
+    stars: [
       { name: "Datenbanksysteme 1", value: 3, color: "#476930" },
       { name: "Mediengestaltung 2", value: 5, color: "#053F5C" },
       { name: "Mathematik 2", value: 1, color: "#A8320A" },
@@ -236,11 +239,93 @@ export default function StatisticsScreen() {
     dummyDataVBar,
     dummyDataVLine,
     dummyDataStarChart,
-  ];
+  ]; */
+
+  const { authAxios } = useAxios();
+  const { authState } = useAuth();
+  const [statistics, setStatistics] =
+    useState<
+      Array<HBarChartProps | VBarChartProps | VLineChartProps | StarChartProps>
+    >();
+
+  useEffect(() => {
+    const getStatistics = async () => {
+      const response = await authAxios?.get(
+        `/students/${authState?.user.id}/statistics`
+      );
+      setStatistics(
+        Object.values(response?.data) as Array<
+          HBarChartProps | VBarChartProps | VLineChartProps | StarChartProps
+        >
+      );
+    };
+    getStatistics();
+  }, []);
 
   return (
     <View style={styles.container}>
       <FlatList
+        data={statistics}
+        style={{ borderRadius: 12 }}
+        renderItem={({ item }) => {
+          switch (item.type) {
+            case "hBar":
+              return (
+                <HBarChart
+                  type={(item as HBarChartProps).type}
+                  title={(item as HBarChartProps).title}
+                  xTotal={(item as HBarChartProps).xTotal}
+                  bars={(item as HBarChartProps).bars}
+                />
+              );
+
+            case "vBar":
+              return (
+                <VBarChart
+                  type={(item as VBarChartProps).type}
+                  title={(item as VBarChartProps).title}
+                  yTotal={(item as VBarChartProps).yTotal}
+                  bars={(item as VBarChartProps).bars}
+                  avgBars={(item as VBarChartProps).avgBars}
+                />
+              );
+
+            case "vLine":
+              return (
+                <VLineChart
+                  type={(item as VLineChartProps).type}
+                  title={(item as VLineChartProps).title}
+                  yTotal={(item as VLineChartProps).yTotal}
+                  xTotal={(item as VLineChartProps).xTotal}
+                  color={(item as VLineChartProps).color}
+                  labelColor={(item as VLineChartProps).labelColor}
+                  values={(item as VLineChartProps).values}
+                  xDiscriptions={(item as VLineChartProps).xDiscriptions}
+                />
+              );
+
+            case "stars":
+              return (
+                <StarChart
+                  type={(item as StarChartProps).type}
+                  title={(item as StarChartProps).title}
+                  stars={(item as StarChartProps).stars}
+                />
+              );
+
+            default:
+              return null;
+          }
+        }}
+        keyExtractor={(item, index) => index.toString()}
+        contentContainerStyle={styles.flatListContainer}
+        ListEmptyComponent={
+          <View style={styles.emptyListContainer}>
+            <H2>Es sind keine Statistiken vorhanden.</H2>
+          </View>
+        }
+      />
+      {/* <FlatList
         data={dummyData}
         renderItem={({ item }) => {
           switch (item.type) {
@@ -284,7 +369,7 @@ export default function StatisticsScreen() {
                 <StarChart
                   type={(item as StarChartProps).type}
                   title={(item as StarChartProps).title}
-                  starValues={(item as StarChartProps).starValues}
+                  stars={(item as StarChartProps).stars}
                 />
               );
 
@@ -299,7 +384,7 @@ export default function StatisticsScreen() {
             <H2>Es sind keine Statistiken vorhanden.</H2>
           </View>
         }
-      />
+      /> */}
     </View>
   );
 }
