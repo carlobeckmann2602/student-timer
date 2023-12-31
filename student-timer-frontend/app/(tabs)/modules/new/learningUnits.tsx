@@ -1,5 +1,6 @@
 import Button from "@/components/Button";
 import { LearningUnitForm } from "@/components/modules/LearningUnitForm";
+import { LearningUnitEnum } from "@/constants/LearningUnitEnum";
 import { COLORTHEME } from "@/constants/Theme";
 import { useAuth } from "@/context/AuthContext";
 import { useAxios } from "@/context/AxiosContext";
@@ -35,7 +36,7 @@ export default function NewModuleLearningUnits() {
   const [learningUnits, setLearningUnits] = useState<LearningUnitType[]>([
     {
       id: Math.random(),
-      name: "",
+      name: LearningUnitEnum.VORLESUNG,
       workloadPerWeek: 0,
       startDate: new Date(),
       endDate: new Date(),
@@ -65,7 +66,7 @@ export default function NewModuleLearningUnits() {
     setLearningUnits((prevLearningUnits) => {
       const newlearningUnit = {
         id: Math.random(),
-        name: "",
+        name: LearningUnitEnum.VORLESUNG,
         workloadPerWeek: 0,
         startDate: new Date(),
         endDate: new Date(),

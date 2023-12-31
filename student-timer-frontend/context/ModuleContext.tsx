@@ -5,6 +5,7 @@ import { useAuth } from "./AuthContext";
 import { LearningUnitType } from "@/types/LearningUnitType";
 import { COLORS } from "@/constants/Theme";
 import { LearningSessionType } from "@/types/learningSessionType";
+import { LearningUnitEnum } from "@/constants/LearningUnitEnum";
 
 type ModuleProps = {
   modules?: ModuleType[];
@@ -31,7 +32,7 @@ export const ModuleProvider = ({ children }: any) => {
         `/students/${authState.user.id}/modules`
       );
       const modules: ModuleType[] | undefined = response?.data;
-      modules?.forEach((item) => convertInputTypes(item));
+      modules?.forEach((item) => preprocessFetchedModule(item));
       setModules(modules);
       return modules;
     } catch (e) {
@@ -46,6 +47,11 @@ export const ModuleProvider = ({ children }: any) => {
   return (
     <ModuleContext.Provider value={value}>{children}</ModuleContext.Provider>
   );
+};
+
+const preprocessFetchedModule = (module: ModuleType) => {
+  convertInputTypes(module);
+  addSessionLearningUnit(module);
 };
 
 const convertInputTypes = (module: ModuleType) => {
@@ -70,7 +76,21 @@ export const computeLearningUnitColor = (
   unit: LearningUnitType,
   defaultColor: string
 ) => {
-  let unitColor = COLORS[unit.name as ObjectKey];
+  let unitColor = COLORS[unit.name.toString() as ObjectKey];
   if (unitColor) unit.colorCode = unitColor;
   else unit.colorCode = defaultColor;
+};
+
+const addSessionLearningUnit = (module: ModuleType) => {
+  const sessionLearningUnit: LearningUnitType = {
+    id: -1,
+    name: LearningUnitEnum.SELBSTSTUDIUM,
+    workloadPerWeek: 0,
+    startDate: new Date(),
+    endDate: new Date(),
+    totalLearningTime: module.totalLearningSessionTime,
+    colorCode: module.colorCode,
+  };
+
+  module.learningUnits.push(sessionLearningUnit);
 };
