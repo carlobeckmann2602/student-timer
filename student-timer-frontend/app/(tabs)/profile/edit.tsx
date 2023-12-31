@@ -123,6 +123,7 @@ export default function Edit() {
     };
 
     const removeUser = async () => {
+        console.log("User removed:" , authState?.user.email)
         if (authState?.user.id) {
             const result = await onRemove!(
                 authState?.user.id
@@ -138,9 +139,32 @@ export default function Edit() {
         }
     };
 
-    return (
-        <ScrollView contentContainerStyle={styles.container}>
-            {/* Profilbild */}
+    const onDelete = () => {
+        console.log("Alert für User-Löschung aktiviert:", authState?.user.email)
+        Alert.alert(
+            "Profil wirklich löschen?",
+            `Möchtest du deinen Account mit der E-Mail-Adresse "${authState?.user.email}" wirklich unwideruflich löschen? Alle zum Profil gehörenden Daten, Module, Lerneinheiten und Trackings werden dabei gelöscht.`,
+            [
+                {
+                    text: "Abbrechen",
+                    onPress: () => console.log("Alert closed"),
+                    style: "cancel",
+                },
+                {
+                    text: "Löschen",
+                    onPress: () => {
+                        removeUser();
+                    },
+                    style: "destructive",
+                },
+            ],
+            { cancelable: false }
+        );
+    };
+
+return (
+    <ScrollView contentContainerStyle={styles.container}>
+        {/* Profilbild */}
             <View style={{alignItems: "center"}}>
                 <View style={styles.profileImageContainer}>
                     {defaultPic ? (
@@ -186,7 +210,7 @@ export default function Edit() {
                     text="Konto löschen"
                     backgroundColor={'transparent'}
                     textColor={'#F00'}
-                    onPress={removeUser}
+                    onPress={onDelete}
                     style={{ width: 200 }}
                 />
             </View>
