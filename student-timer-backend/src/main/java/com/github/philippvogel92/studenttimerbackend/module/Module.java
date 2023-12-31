@@ -162,9 +162,8 @@ public class Module {
     public Double getTotalLearningSessionTime() {
         Double totalDuration = 0.0;
 
-        if(this.learningSessions != null && !this.learningSessions.isEmpty())
-        {
-            for(LearningSession currentSession : this.learningSessions)
+        if (this.learningSessions != null && !this.learningSessions.isEmpty()) {
+            for (LearningSession currentSession : this.learningSessions)
                 totalDuration += currentSession.getTotalDuration();
         }
 
@@ -174,9 +173,8 @@ public class Module {
     public Double getTotalLearningUnitTime() {
         Double totalDuration = 0.0;
 
-        if(this.learningUnits != null && !this.learningUnits.isEmpty())
-        {
-            for(LearningUnit currentUnit : this.learningUnits)
+        if (this.learningUnits != null && !this.learningUnits.isEmpty()) {
+            for (LearningUnit currentUnit : this.learningUnits)
                 totalDuration += currentUnit.getTotalLearningTime();
         }
 
@@ -184,7 +182,7 @@ public class Module {
     }
 
     @PostLoad
-    private void ComputeTotalTimes() {
+    private void computeTotalTimes() {
         this.totalModuleTime = this.getTotalModuleTime();
         this.totalLearningSessionTime = this.getTotalLearningSessionTime();
         this.totalLearningUnitTime = this.getTotalLearningUnitTime();

@@ -25,7 +25,7 @@ type AuthProps = {
     idToken?: string,
     userSecret?: string,
     name?: string,
-    provider?: string
+    provider?: LOGIN_PROVIDER
   ) => Promise<any>;
   onLogout?: () => Promise<any>;
   onUpdate?: (userName: string, userStudyCourse: string, userEmail: string) => Promise<any>;
@@ -34,6 +34,10 @@ type AuthProps = {
   onNewToken?: (token: TokenType) => Promise<any>;
 };
 
+export enum LOGIN_PROVIDER {
+  GOOGLE = "GOOGLE",
+  APPLE = "APPLE",
+}
 const USER_KEY = "user";
 const AuthContext = createContext<AuthProps>({});
 
@@ -142,13 +146,13 @@ export const AuthProvider = ({ children }: any) => {
     idToken?: string,
     userSecret?: string,
     name?: string,
-    provider?: string
+    provider?: LOGIN_PROVIDER
   ) => {
     try {
       console.log(`Provider: ${provider}`);
       let result = null;
       switch (provider) {
-        case "GOOGLE":
+        case LOGIN_PROVIDER.GOOGLE:
           console.log(`GOOGLE: ${email}, ${idToken}`);
           result = await axios.post(`${API_URL}/auth/login/oauth2`, {
             email,
@@ -158,14 +162,17 @@ export const AuthProvider = ({ children }: any) => {
           console.log(`GOOGLE: ${JSON.stringify(result, null, 2)}`);
           break;
 
-        case "APPLE":
+        case LOGIN_PROVIDER.APPLE:
+          console.log(`APPLE: ${email}, ${idToken}, ${userSecret}, ${name}`);
           result = await axios.post(`${API_URL}/auth/login/oauth2`, {
             email,
-            tokenId: idToken,
             userSecret,
             name,
+            tokenId: idToken,
             provider,
           });
+
+          console.log(`APPLE: ${JSON.stringify(result, null, 2)}`);
           break;
 
         default:

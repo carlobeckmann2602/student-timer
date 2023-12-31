@@ -46,10 +46,9 @@ public class LearningSessionService {
         String description = learningSessionCreateDTO.getDescription();
         Integer focusDuration = learningSessionCreateDTO.getFocusDuration();
         Integer totalDuration = learningSessionCreateDTO.getTotalDuration();
-        LocalDateTime createdAt = learningSessionCreateDTO.getCreatedAt();
         Integer rating = learningSessionCreateDTO.getRating();
 
-        LearningSession learningSession = new LearningSession(totalDuration, focusDuration, rating, createdAt,
+        LearningSession learningSession = new LearningSession(totalDuration, focusDuration, rating, LocalDateTime.now(),
                 description, module);
 
         return learningSessionRepository.save(learningSession);
@@ -77,7 +76,7 @@ public class LearningSessionService {
         learningSession.setTotalDuration(learningSessionCreateDTO.getTotalDuration());
         learningSession.setFocusDuration(learningSessionCreateDTO.getFocusDuration());
         learningSession.setRating(learningSessionCreateDTO.getRating());
-        learningSession.setCreatedAt(learningSessionCreateDTO.getCreatedAt());
+        learningSession.setUpdatedAt(LocalDateTime.now());
         learningSession.setDescription(learningSessionCreateDTO.getDescription());
 
         return learningSession;

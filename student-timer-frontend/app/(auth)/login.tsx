@@ -78,6 +78,7 @@ export default function Login() {
             value={email}
             onChangeText={setEmail}
             placeholder="E-Mail"
+            label="E-Mail"
             keyboardType="email-address"
             message={emailError}
             messageColor="red"
@@ -87,6 +88,7 @@ export default function Login() {
             value={password}
             onChangeText={setPassword}
             placeholder="Passwort"
+            label="Passwort"
             keyboardType="visible-password"
             secureTextEntry={true}
             message={passwordError}

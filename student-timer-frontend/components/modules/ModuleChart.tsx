@@ -5,6 +5,7 @@ import Svg from "react-native-svg";
 import { ModuleType } from "@/types/ModuleType";
 import { SIZES } from "@/constants/Theme";
 import { LearningUnitType } from "@/types/LearningUnitType";
+import { useEffect, useState } from "react";
 
 type ModuleChartProps = {
   inputData: LearningUnitType[];
@@ -19,18 +20,28 @@ export function ModuleChart(moduleChartProp: ModuleChartProps) {
   const { inputData, totalAmount, totalAmountDone, width, height } =
     moduleChartProp;
 
-  const inputDataExtended = [
-    ...inputData,
-    {
-      id: -1,
-      name: "",
-      workloadPerWeek: 0,
-      startDate: new Date(),
-      endDate: new Date(),
-      totalLearningTime: (totalAmount - totalAmountDone) * 60,
-      colorCode: "transparent",
-    } as LearningUnitType,
-  ];
+  const [inputDataExtended, setInputDataExtended] = useState<
+    LearningUnitType[]
+  >([]);
+  const [endAngle, setEndAngle] = useState(0);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setInputDataExtended([
+        ...inputData,
+        {
+          id: -1,
+          name: "",
+          workloadPerWeek: 0,
+          startDate: new Date(),
+          endDate: new Date(),
+          totalLearningTime: (totalAmount - totalAmountDone) * 60,
+          colorCode: "transparent",
+        } as LearningUnitType,
+      ]);
+      setEndAngle(360);
+    }, 100);
+  }, []);
 
   return (
     <View
@@ -50,6 +61,8 @@ export function ModuleChart(moduleChartProp: ModuleChartProps) {
       >
         <Svg viewBox={`0 0 ${width} ${height}`}>
           <VictoryPie
+            animate={{ duration: 500, easing: "circleInOut" }}
+            endAngle={endAngle}
             standalone={false}
             width={width}
             height={height}
@@ -87,7 +100,7 @@ export function ModuleChart(moduleChartProp: ModuleChartProps) {
 
 const styles = StyleSheet.create({
   chartTextXL: {
-    fontFamily: "OpenSans_SemiBold",
+    fontFamily: "OpenSans_Bold",
     fontSize: SIZES.xxLarge,
     textAlign: "center",
   },

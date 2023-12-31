@@ -72,7 +72,15 @@ export default function NewModule() {
 
   const onContinue = () => {
     if (validateInput()) {
-      router.push(`/modules/new/learningUnits`);
+      router.push({
+        pathname: "/modules/new/learningUnits",
+        params: {
+          name: moduleName,
+          colorCode: colorCode,
+          creditPoints: creditPoints,
+          examDate: examDate.toISOString().substring(0, 10),
+        },
+      });
     }
   };
 

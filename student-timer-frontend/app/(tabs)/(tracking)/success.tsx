@@ -17,13 +17,14 @@ import { useAuth } from "@/context/AuthContext";
 import { useAxios } from "@/context/AxiosContext";
 import { useModules } from "@/context/ModuleContext";
 import { msToTimeObject, formatTime } from "@/libs/timeHelper";
+import StarRating from "@/components/StarRating";
 
 export default function Success() {
   const toast = useToast();
   const { authState } = useAuth();
   const { authAxios } = useAxios();
   const { modules } = useModules();
-  const [starAmount, setStarAmount] = useState(0);
+  const [starAmount, setStarAmount] = useState(1);
   const [description, setDescription] = useState("");
   const { focusTime, pauseTime, id } = useLocalSearchParams<{
     focusTime: string;
@@ -38,24 +39,12 @@ export default function Success() {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <View style={styles.stars}>
-        {[...Array(5)].map((_, index) => (
-          <Pressable
-            key={index}
-            onPress={() => setStarAmount(index + 1)}
-            style={styles.star}
-          >
-            <StarIcon
-              name="star"
-              color={selectedModule?.colorCode || COLORTHEME.light.primary}
-              fill={
-                index < starAmount
-                  ? selectedModule?.colorCode || COLORTHEME.light.primary
-                  : "none"
-              }
-              size={48}
-            />
-          </Pressable>
-        ))}
+        <StarRating
+          interactive
+          starAmount={starAmount}
+          setStarAmount={setStarAmount}
+          color={selectedModule?.colorCode}
+        />
       </View>
       <View style={styles.successContainer}>
         <Text style={styles.successText}>Bewerte jetzt deinen Erfolg</Text>
