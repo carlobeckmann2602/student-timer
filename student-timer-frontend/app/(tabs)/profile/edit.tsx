@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Image, TouchableOpacity, StyleSheet, ScrollView, Alert } from "react-native";
+import {Image, TouchableOpacity, StyleSheet, ScrollView, Alert, Text} from "react-native";
 import { View } from "@/components/Themed";
 import { useRouter } from "expo-router";
 import { COLORTHEME } from "@/constants/Theme";
@@ -138,17 +138,6 @@ export default function Edit() {
         }
     };
 
-    const testModal = () => {
-        router.push({
-            pathname: "/profile/confirmModal",
-            params: {
-                title: "Konto löschen",
-                message: "Möchtest du dein Konto wirklich löschen?",
-            }
-
-        });
-    };
-
     return (
         <ScrollView contentContainerStyle={styles.container}>
             {/* Profilbild */}
@@ -178,6 +167,7 @@ export default function Edit() {
                     setUserEmail={setUserEmail}
                     emailError={emailError}
                     buttonAction={update}
+                    cancelAction={cancel}
                 />
                 {/*Passwort ändern*/}
                 <PasswordInput
@@ -187,29 +177,16 @@ export default function Edit() {
                     setUserCheckPassword={setUserCheckPassword}
                     passwordError={passwordError}
                     buttonAction={changePassword}
+                    cancelAction={cancel}
                 />
             </View>
-            {/*Abbrechen oder Löschen*/}
+            {/*Löschen*/}
             <View style={styles.actionContainer}>
                 <Button
-                    text="Abbrechen"
-                    backgroundColor={COLORTHEME.light.grey3}
-                    textColor="#FFFFFF"
-                    onPress={cancel}
-                    style={{ width: 200 }}
-                />
-                <Button
-                    text="Konto (sofort) löschen"
-                    backgroundColor={COLORTHEME.light.grey3}
-                    textColor="#FFFFFF"
+                    text="Konto löschen"
+                    backgroundColor={'transparent'}
+                    textColor={'#F00'}
                     onPress={removeUser}
-                    style={{ width: 200 }}
-                />
-                <Button
-                    text="Modal-Test"
-                    backgroundColor={COLORTHEME.light.grey3}
-                    textColor="#FFFFFF"
-                    onPress={testModal}
                     style={{ width: 200 }}
                 />
             </View>

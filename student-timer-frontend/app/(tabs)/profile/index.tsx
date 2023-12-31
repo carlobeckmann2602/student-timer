@@ -77,9 +77,13 @@ export default function Profile() {
           onPress={handleExportData}
         />
       </View>
-      <Text onPress={onLogout} style={{ textDecorationLine: "underline" }}>
-          Logout
-      </Text>
+      <Button
+          text="Logout"
+          backgroundColor={'transparent'}
+          textColor={COLORTHEME.light.text}
+          onPress={onLogout}
+          style={{ width: 200 }}
+      />
     </View>
   );
 }

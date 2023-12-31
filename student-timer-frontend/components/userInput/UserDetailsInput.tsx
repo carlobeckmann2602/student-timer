@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import InputField from "@/components/InputField";
 import { COLORTHEME } from "@/constants/Theme";
 import Button from "@/components/Button";
@@ -15,8 +15,9 @@ export default function UserDetailsInput(props: {
     setUserEmail: (value: string) => void;
     emailError: string;
     buttonAction: (value: string) => void;
+    cancelAction: (value: string) => void;
 }) {
-    const { userName, setUserName, nameError, userStudyCourse, setUserStudyCourse, studyCourseError, userEmail, setUserEmail, emailError, buttonAction } = props;
+    const { userName, setUserName, nameError, userStudyCourse, setUserStudyCourse, studyCourseError, userEmail, setUserEmail, emailError, buttonAction, cancelAction, } = props;
 
     return (
         <>
@@ -54,6 +55,13 @@ export default function UserDetailsInput(props: {
                     backgroundColor={COLORTHEME.light.primary}
                     textColor={COLORTHEME.light.grey2}
                     onPress={buttonAction}
+                    style={{ width: 200 }}
+                />
+                <Button
+                    text="Abbrechen"
+                    backgroundColor={'transparent'}
+                    textColor={COLORTHEME.light.text}
+                    onPress={cancelAction}
                     style={{ width: 200 }}
                 />
             </View>

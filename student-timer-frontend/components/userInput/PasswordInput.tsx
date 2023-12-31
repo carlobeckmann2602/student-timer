@@ -11,8 +11,9 @@ export default function PasswordInput(props: {
     setUserCheckPassword: (value: string) =>void;
     passwordError: string;
     buttonAction: (value: string) => void;
+    cancelAction: (value: string) => void;
 }) {
-    const { userPassword, setUserPassword, passwordError,userCheckPassword, setUserCheckPassword, buttonAction } = props;
+    const { userPassword, setUserPassword, passwordError,userCheckPassword, setUserCheckPassword, buttonAction, cancelAction, } = props;
 
     return (
         <>
@@ -44,6 +45,13 @@ export default function PasswordInput(props: {
                     backgroundColor={COLORTHEME.light.primary}
                     textColor={COLORTHEME.light.grey2}
                     onPress={buttonAction}
+                    style={{ width: 200 }}
+                />
+                <Button
+                    text="Abbrechen"
+                    backgroundColor={'transparent'}
+                    textColor={COLORTHEME.light.text}
+                    onPress={cancelAction}
                     style={{ width: 200 }}
                 />
             </View>
