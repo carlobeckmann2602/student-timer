@@ -49,7 +49,9 @@ export const ModuleProvider = ({ children }: any) => {
 };
 
 const convertInputTypes = (module: ModuleType) => {
-  module.examDate = new Date(module.examDate);
+  if (module.examDate) {
+    module.examDate = new Date(module.examDate);
+  }
 
   module.learningUnits = module.learningUnits as LearningUnitType[];
   module.learningUnits.forEach((unit) => {
