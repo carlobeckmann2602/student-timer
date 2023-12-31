@@ -1,13 +1,12 @@
 package com.github.philippvogel92.studenttimerbackend.learningUnit.dto;
 
 import com.github.philippvogel92.studenttimerbackend.learningUnit.LearningUnitEnum;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 
 public class LearningUnitCreateDTO {
-    @NotBlank(message = "Name cannot be null or empty")
+    @NotNull(message = "Name cannot be null")
     private LearningUnitEnum name;
     @NotNull(message = "Start Date cannot be null")
     private LocalDate startDate;
