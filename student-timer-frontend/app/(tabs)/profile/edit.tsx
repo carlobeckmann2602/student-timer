@@ -108,7 +108,8 @@ export default function Edit() {
     const changePassword = async () => {
         if (validatePassword()) {
             const result = await onChangePassword!(
-                userPassword
+                userPassword,
+                userCheckPassword,
             );
             console.log("validatePassword")
             if (result && result.error) {

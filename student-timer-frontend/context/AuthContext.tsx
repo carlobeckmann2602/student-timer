@@ -28,8 +28,15 @@ type AuthProps = {
     provider?: LOGIN_PROVIDER
   ) => Promise<any>;
   onLogout?: () => Promise<any>;
-  onUpdate?: (userName: string, userStudyCourse: string, userEmail: string) => Promise<any>;
-  onChangePassword?: (userPassword: string) => Promise<any>
+  onUpdate?: (
+      userName: string,
+      userStudyCourse: string,
+      userEmail: string
+  ) => Promise<any>;
+  onChangePassword?: (
+      newPassword: string,
+      newPassword2: string,
+      ) => Promise<any>
   onRemove?: (userId: number) => Promise<any>;
   onNewToken?: (token: TokenType) => Promise<any>;
 };
@@ -215,11 +222,19 @@ export const AuthProvider = ({ children }: any) => {
     }
   };
 
-  const update = async (userName: string, userStudyCourse: string, userEmail: string) => {
+  const update = async (
+      userName: string,
+      userStudyCourse: string,
+      userEmail: string
+  ) => {
     try {
       const result = await axios.put(
         `${API_URL}/students/${authState.user.id}`,
-        { name: userName, studyCourse: userStudyCourse, email: userEmail },
+        {
+          name: userName,
+          studyCourse: userStudyCourse,
+          email: userEmail
+        },
         {
           headers: {
             Authorization: `Bearer ${authState.token.accessToken}`,
@@ -249,8 +264,10 @@ export const AuthProvider = ({ children }: any) => {
   };
 
   //ToDo: API Route für Passwort-Update ist einfach update --> noch aus main pullen
-  const changePassword = async (newPassword: string) => {
-
+  const changePassword = async (
+      newPassword: string,
+      newPassword2: string
+  ) => {
     try {
       const result = await axios.put(
           `${API_URL}/students/${authState.user.id}`,
@@ -258,7 +275,8 @@ export const AuthProvider = ({ children }: any) => {
             name: authState.user.name,
             studyCourse: authState.user.studyCourse,
             email: authState.user.email,
-            userPassword: newPassword
+            password: newPassword,
+            password2: newPassword2,
           },
           {
             headers: {
