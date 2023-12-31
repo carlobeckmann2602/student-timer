@@ -208,8 +208,6 @@ export const AuthProvider = ({ children }: any) => {
     }
   };
 
-
-  // toDo später: Passwort auch noch updaten
   const update = async (userName: string, userStudyCourse: string, userEmail: string) => {
     try {
       const result = await axios.put(
@@ -243,31 +241,24 @@ export const AuthProvider = ({ children }: any) => {
     }
   };
 
-  //ToDo: API Route für updatePasswort fehlt noch! update enthält gar nicht userPassword
+  //ToDo: API Route für Passwort-Update ist einfach update --> noch aus main pullen
   const changePassword = async (newPassword: string) => {
+
     try {
       const result = await axios.put(
           `${API_URL}/students/${authState.user.id}`,
-          { userPassword: newPassword },
+          {
+            name: authState.user.name,
+            studyCourse: authState.user.studyCourse,
+            email: authState.user.email,
+            userPassword: newPassword
+          },
           {
             headers: {
               Authorization: `Bearer ${authState.token.accessToken}`,
             },
           }
       );
-
-      const user = {
-        ...authState.user,
-        password: newPassword,
-      } as UserType;
-
-      setAuthState({
-        token: authState.token,
-        authenticated: true,
-        user: user,
-      });
-
-      await saveItem(USER_KEY, JSON.stringify(user));
 
       return result;
     } catch (e) {
