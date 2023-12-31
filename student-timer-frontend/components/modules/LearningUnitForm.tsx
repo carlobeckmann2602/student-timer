@@ -11,10 +11,12 @@ import { LabelS } from "../StyledText";
 type LearningUnitFormProps = {
   inputData: LearningUnitType;
   onDelete: (id: number) => void;
+  onChange: (changedUnit: LearningUnitType) => void;
+  onValidationError: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export function LearningUnitForm(props: LearningUnitFormProps) {
-  const { inputData, onDelete } = props;
+  const { inputData, onDelete, onChange, onValidationError } = props;
 
   const router = useRouter();
 
@@ -25,15 +27,29 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
     inputData.workloadPerWeek
   );
 
-  const [examDateError, setStudyCourseError] = useState("");
+  const [workLoadError, setStudyCourseError] = useState("");
   const [creditPointError, setEmailError] = useState("");
+
+  const onNewInput = () => {
+    onChange({
+      id: inputData.id,
+      name: learningUnitName,
+      startDate: startDate,
+      endDate: endDate,
+      workloadPerWeek: workloadPerWeek,
+      totalLearningTime: 0,
+    } as LearningUnitType);
+  };
 
   return (
     <View style={styles.outerWrapper}>
       <View style={styles.row}>
         <InputField
           label="Name"
-          onChangeText={setLearningUnitName}
+          onChangeText={(value) => {
+            setLearningUnitName(value);
+            onNewInput();
+          }}
           value={learningUnitName}
           message={creditPointError}
           messageColor="red"
@@ -45,7 +61,10 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
           value={startDate}
           onChangeDate={(selectedDate) => {
             const currentDate = selectedDate;
-            if (currentDate) setStartDate(currentDate);
+            if (currentDate) {
+              setStartDate(currentDate);
+              onNewInput();
+            }
           }}
         />
         <DateTimePicker
@@ -53,7 +72,10 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
           value={endDate}
           onChangeDate={(selectedDate) => {
             const currentDate = selectedDate;
-            if (currentDate) setEndDate(currentDate);
+            if (currentDate) {
+              setEndDate(currentDate);
+              onNewInput();
+            }
           }}
         />
       </View>
@@ -62,9 +84,10 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
           label="Arbeitsaufwand pro Woche"
           onChangeText={(value) => {
             +value ? setWorkloadPerWeek(+value) : setWorkloadPerWeek(0);
+            onNewInput();
           }}
           value={workloadPerWeek.toString()}
-          message={examDateError}
+          message={workLoadError}
           messageColor="red"
           inputMode="numeric"
         />

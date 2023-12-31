@@ -25,16 +25,34 @@ export default function NewModuleLearningUnits() {
     examDate: string;
   }>();
 
-  const [error, setError] = useState("");
+  const [validateError, setValidationError] = useState(true);
 
   const toast = useToast();
   const { authState } = useAuth();
   const { authAxios } = useAxios();
   const { fetchModules } = useModules();
 
-  const [learningUnits, setLearningUnits] = useState<LearningUnitType[]>([]);
+  const [learningUnits, setLearningUnits] = useState<LearningUnitType[]>([
+    {
+      id: Math.random(),
+      name: "",
+      workloadPerWeek: 0,
+      startDate: new Date(),
+      endDate: new Date(),
+      totalLearningTime: 0,
+    },
+  ]);
 
   const router = useRouter();
+
+  const onLearningUnitChange = (changedUnit: LearningUnitType) => {
+    setLearningUnits((prevLearningUnits) => {
+      const newlearningUnits = prevLearningUnits.map((current) => {
+        return current.id === changedUnit.id ? changedUnit : current;
+      });
+      return newlearningUnits;
+    });
+  };
 
   const onDeleteLearningUnit = (id: number) => {
     if (learningUnits.length > 1)
@@ -77,8 +95,8 @@ export default function NewModuleLearningUnits() {
           `/students/${authState?.user.id}/modules/${createdModule?.id}/learningUnits`,
           {
             name: unit.name,
-            startDate: unit.startDate.toISOString().replace("Z", ""),
-            endDate: unit.endDate.toISOString().replace("Z", ""),
+            startDate: unit.startDate.toISOString().substring(0, 10),
+            endDate: unit.endDate.toISOString().substring(0, 10),
             workloadPerWeek: unit.workloadPerWeek,
           }
         );
@@ -125,6 +143,8 @@ export default function NewModuleLearningUnits() {
           <LearningUnitForm
             inputData={unit}
             onDelete={onDeleteLearningUnit}
+            onChange={onLearningUnitChange}
+            onValidationError={setValidationError}
             key={unit.id}
           />
         ))}
