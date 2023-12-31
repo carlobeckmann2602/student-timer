@@ -263,7 +263,6 @@ export const AuthProvider = ({ children }: any) => {
     }
   };
 
-  //ToDo: API Route für Passwort-Update ist einfach update --> noch aus main pullen
   const changePassword = async (
       newPassword: string,
       newPassword2: string
