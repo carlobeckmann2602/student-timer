@@ -12,7 +12,7 @@ type ModuleProps = {
   fetchModules?: () => Promise<any>;
 };
 
-type ObjectKey = keyof typeof COLORS;
+export type ObjectKey = keyof typeof COLORS;
 
 const ModuleContext = createContext<ModuleProps>({});
 
@@ -76,7 +76,12 @@ export const computeLearningUnitColor = (
   unit: LearningUnitType,
   defaultColor: string
 ) => {
-  let unitColor = COLORS[unit.name.toString() as ObjectKey];
+  let unitColor =
+    COLORS[
+      Object.keys(LearningUnitEnum)[
+        Object.values(LearningUnitEnum).indexOf(unit.name)
+      ] as ObjectKey
+    ];
   if (unitColor) unit.colorCode = unitColor;
   else unit.colorCode = defaultColor;
 };

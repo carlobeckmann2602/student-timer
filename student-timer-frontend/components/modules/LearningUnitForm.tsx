@@ -7,6 +7,8 @@ import DateTimePicker from "../DateTimePicker";
 import { LearningUnitType } from "@/types/LearningUnitType";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { LabelS } from "../StyledText";
+import UnitPicker from "./UnitPicker";
+import { LearningUnitEnum } from "@/constants/LearningUnitEnum";
 
 type LearningUnitFormProps = {
   inputData: LearningUnitType;
@@ -21,6 +23,9 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
   const router = useRouter();
 
   const [learningUnitName, setLearningUnitName] = useState(inputData.name);
+  const [selectedUnit, setSelectedUnit] = useState<
+    LearningUnitEnum | undefined
+  >();
   const [startDate, setStartDate] = useState(inputData.startDate);
   const [endDate, setEndDate] = useState(inputData.endDate);
   const [workloadPerWeek, setWorkloadPerWeek] = useState(
@@ -33,7 +38,7 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
   const onNewInput = () => {
     onChange({
       id: inputData.id,
-      name: learningUnitName,
+      name: selectedUnit,
       startDate: startDate,
       endDate: endDate,
       workloadPerWeek: workloadPerWeek,
@@ -44,7 +49,7 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
   return (
     <View style={styles.outerWrapper}>
       <View style={styles.row}>
-        <InputField
+        {/* <InputField
           label="Name"
           onChangeText={(value) => {
             setLearningUnitName(value);
@@ -53,8 +58,18 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
           value={learningUnitName}
           message={creditPointError}
           messageColor="red"
+        /> */}
+      </View>
+      <View style={styles.row}>
+        <UnitPicker
+          label="Name der Lerneinheit"
+          onValueChange={(value: LearningUnitEnum) => {
+            setSelectedUnit(value);
+            onNewInput();
+          }}
         />
       </View>
+
       <View style={styles.row}>
         <DateTimePicker
           label="Startdatum"
