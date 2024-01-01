@@ -92,13 +92,14 @@ export default function NewModuleLearningUnits() {
       const createdModule: ModuleType | undefined = response?.data;
 
       learningUnits.forEach(async (unit) => {
+        // Multiply workloadPerWeek with 60 (minutes per hour) as the input is given in hours but the backend expects minutes
         await authAxios?.post(
           `/students/${authState?.user.id}/modules/${createdModule?.id}/learningUnits`,
           {
             name: unit.name,
             startDate: unit.startDate.toISOString().substring(0, 10),
             endDate: unit.endDate.toISOString().substring(0, 10),
-            workloadPerWeek: unit.workloadPerWeek,
+            workloadPerWeek: unit.workloadPerWeek * 60,
           }
         );
       });
