@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Platform, StyleSheet } from "react-native";
 import Picker, { Item } from "react-native-picker-select";
 
@@ -12,7 +12,9 @@ export default function UnitPicker(props: {
   onValueChange: (value: LearningUnitEnum) => void;
 }) {
   const { label, onValueChange } = props;
-  const [selectedUnit, setSelectedUnit] = useState<LearningUnitEnum>();
+  const [selectedUnit, setSelectedUnit] = useState<LearningUnitEnum>(
+    LearningUnitEnum.VORLESUNG
+  );
 
   const unitValues = Object.values(LearningUnitEnum).filter(
     (item) => item !== LearningUnitEnum.SELBSTSTUDIUM
@@ -40,6 +42,7 @@ export default function UnitPicker(props: {
           style={{
             viewContainer: styles.picker,
             inputWeb: { ...styles.picker },
+            inputAndroid: { ...styles.picker },
             inputIOS: { paddingHorizontal: 10 },
           }}
           placeholder={{}}
@@ -49,12 +52,6 @@ export default function UnitPicker(props: {
               key: item,
               label: item,
               value: item,
-              color:
-                COLORS[
-                  Object.keys(LearningUnitEnum)[
-                    Object.values(LearningUnitEnum).indexOf(item)
-                  ] as ObjectKey
-                ],
             } as Item;
           })}
           onValueChange={(moduleIdString: LearningUnitEnum) => {
