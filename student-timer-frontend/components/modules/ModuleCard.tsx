@@ -21,6 +21,12 @@ type ModuleCardProps = {
 export function ModuleCard(props: ModuleCardProps) {
   const { moduleData, contextMenuOpen, setContextMenuOpen } = props;
 
+  const remainingSessionTime = Math.round(
+    convertMinutesToHours(
+      moduleData.totalModuleTime - moduleData.totalLearningTime
+    )
+  );
+
   const router = useRouter();
   const toast = useToast();
   const { authState } = useAuth();
@@ -32,7 +38,7 @@ export function ModuleCard(props: ModuleCardProps) {
   const onDelete = () => {
     Alert.alert(
       "Modul wirklich löschen?",
-      `Möchtest du das Modul "${moduleData.name}" wirklich unwiederuflich löschen? Alle zum Modul gehörenden Lerneinheiten und Trackings werden dabei gelöscht.`,
+      `Möchtest du das Modul "${moduleData.name}" wirklich unwiederuflich löschen?\n Auch die zugehörigen Lerneinheiten und Trackings werden dabei gelöscht.`,
       [
         {
           text: "Abbrechen",
@@ -105,7 +111,7 @@ export function ModuleCard(props: ModuleCardProps) {
             <H4>{moduleData.name}</H4>
           </View>
           <TouchableOpacity onPress={() => setContextMenuOpen(moduleData.id)}>
-            <MoreVertical size={28} fill="black" strokeWidth={1}></MoreVertical>
+            <MoreVertical size={28} fill="black" strokeWidth={1} />
           </TouchableOpacity>
         </View>
         {/* Statistics */}
@@ -147,9 +153,7 @@ export function ModuleCard(props: ModuleCardProps) {
             <Subhead>
               {`${convertMinutesToHours(
                 moduleData.totalLearningSessionTime
-              )} von ${convertMinutesToHours(
-                moduleData.totalLearningUnitTime
-              )} Std.`}
+              )} von ${remainingSessionTime} Std.`}
             </Subhead>
           </View>
         </View>
