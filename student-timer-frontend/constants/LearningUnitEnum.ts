@@ -7,6 +7,6 @@ export enum LearningUnitEnum {
   ÜBUNG = "Übung",
   NACHHILFE = "Nachhilfe",
   TUTORIUM = "Tutorium",
-  Exkursion = "Exkursion",
+  EXKURSION = "Exkursion",
   SELBSTSTUDIUM = "Selbststudium",
 }
