@@ -3,8 +3,6 @@ import DateTimePicker from "@/components/DateTimePicker";
 import InputField from "@/components/InputField";
 import { View } from "@/components/Themed";
 import { COLORTHEME } from "@/constants/Theme";
-import { LearningUnitType } from "@/types/LearningUnitType";
-import { ModuleType } from "@/types/ModuleType";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { KeyboardAvoidingView, Platform, StyleSheet } from "react-native";
@@ -12,26 +10,12 @@ import { KeyboardAvoidingView, Platform, StyleSheet } from "react-native";
 export default function NewModule() {
   const router = useRouter();
 
-  const minimumDate: Date = new Date(+new Date() + 86400000);
-
   const [moduleName, setModuleName] = useState("");
-  const [examDate, setExamDate] = useState<Date>(minimumDate);
+  const [examDate, setExamDate] = useState<Date>(new Date());
   const [creditPoints, setCreditPoints] = useState("");
   const [colorCode, setColorCode] = useState("");
 
-  const [learningUnits, setLearningUnits] = useState<LearningUnitType[]>([
-    {
-      id: 123,
-      name: "test",
-      workloadPerWeek: -1,
-      startDate: new Date(),
-      endDate: new Date(),
-      totalLearningTime: 0,
-    },
-  ]);
-
   const [moduleNameError, setModuleNameError] = useState("");
-  const [examDateError, setExamDateError] = useState("");
   const [creditPointError, setCreditPointError] = useState("");
 
   const validateInput = () => {
@@ -43,59 +27,40 @@ export default function NewModule() {
       nameValid = true;
     }
 
-    var examDateValid = false;
-    var timeDifference = examDate.getTime() - minimumDate.getTime();
-    var dayDifference = Math.ceil(timeDifference / (1000 * 3600 * 24));
-    if (dayDifference < 0) {
-      setExamDateError("Das Prüfungsdatum muss in der Zukunft liegen");
-    } else {
-      setExamDateError("");
-      examDateValid = true;
-    }
-
     var creditPointsValid = false;
-    if (creditPoints.length == 0) {
-      setCreditPointError(
-        "Für das Modul muss eine Anzahl von Creditpoints angegeben werden"
-      );
+    if (+creditPoints <= 0) {
+      setCreditPointError("Creditpoints muss einen Wert größer 0 enthalten");
     } else {
       setCreditPointError("");
       creditPointsValid = true;
     }
 
-    if (nameValid && examDateValid && creditPointsValid) {
-      return true;
-    }
-
-    return false;
+    return nameValid && creditPointsValid;
   };
 
   const onContinue = () => {
     if (validateInput()) {
-      router.push({
-        pathname: "/modules/new/learningUnits",
-        params: {
-          name: moduleName,
-          colorCode: colorCode,
-          creditPoints: creditPoints,
-          examDate: examDate.toISOString().substring(0, 10),
-        },
-      });
+      if (examDate) {
+        router.push({
+          pathname: "/modules/new/learningUnits",
+          params: {
+            name: moduleName,
+            colorCode: colorCode,
+            creditPoints: creditPoints,
+            examDate: examDate?.toISOString().substring(0, 10),
+          },
+        });
+      } else {
+        router.push({
+          pathname: "/modules/new/learningUnits",
+          params: {
+            name: moduleName,
+            colorCode: colorCode,
+            creditPoints: creditPoints,
+          },
+        });
+      }
     }
-  };
-
-  const newModule: ModuleType = {
-    id: Math.random(),
-    name: moduleName,
-    colorCode: "",
-    creditPoints: -1,
-    examDate: new Date(),
-    learningUnits: learningUnits,
-    learningSessions: [],
-    totalLearningSessionTime: 0,
-    totalLearningUnitTime: 0,
-    totalLearningTime: 0,
-    totalModuleTime: 0,
   };
 
   return (
@@ -106,7 +71,7 @@ export default function NewModule() {
       <View style={styles.outerWrapper}>
         <View style={styles.row}>
           <InputField
-            label="Name"
+            label="Name*"
             onChangeText={setModuleName}
             value={moduleName}
             message={moduleNameError}
@@ -115,17 +80,14 @@ export default function NewModule() {
         </View>
         <View style={styles.row}>
           <DateTimePicker
-            label="Prüfungsdatum"
+            label="Prüfungsdatum*"
             onChangeDate={(date) => {
               date ? setExamDate(date) : setExamDate(new Date());
             }}
-            minimumDate={minimumDate}
             value={examDate}
-            message={examDateError}
-            messageColor="red"
           />
           <InputField
-            label="Credit-Points"
+            label="Credit-Points*"
             onChangeText={setCreditPoints}
             value={creditPoints}
             keyboardType="number-pad"
@@ -136,7 +98,7 @@ export default function NewModule() {
         </View>
         <View style={styles.row}>
           <InputField
-            label="Farbauswahl"
+            label="Farbauswahl*"
             onChangeText={setColorCode}
             value={colorCode}
           />

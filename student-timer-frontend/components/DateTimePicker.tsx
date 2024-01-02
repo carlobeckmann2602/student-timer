@@ -22,6 +22,7 @@ type DateTimerPickerProps = {
   label?: string;
   placeholder?: string;
   minimumDate?: Date;
+  maximumDate?: Date;
   secureTextEntry?: boolean;
   message?: string;
   messageColor?: string;
@@ -36,6 +37,7 @@ export default function DateTimePicker(props: DateTimerPickerProps) {
     label,
     placeholder,
     minimumDate,
+    maximumDate,
     secureTextEntry,
     message,
     messageColor,
@@ -102,6 +104,7 @@ export default function DateTimePicker(props: DateTimerPickerProps) {
                 locale="de-DE"
                 onChange={(event, input) => onChangeDate(input)}
                 minimumDate={minimumDate}
+                maximumDate={maximumDate}
                 placeholderText={placeholder}
                 style={inputStyle}
               ></RNDateTimePicker>

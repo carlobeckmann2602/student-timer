@@ -23,10 +23,10 @@ export default function NewModuleLearningUnits() {
     name: string;
     colorCode: string;
     creditPoints: string;
-    examDate: string;
+    examDate?: string;
   }>();
 
-  const [validateError, setValidationError] = useState(true);
+  const [validationError, setValidationError] = useState(true);
 
   const toast = useToast();
   const { authState } = useAuth();
@@ -77,20 +77,33 @@ export default function NewModuleLearningUnits() {
   };
 
   const onCreateModule = async () => {
+    if (validationError) return;
+
     let id = toast.show("Erstellen...");
     let response;
     try {
-      response = await authAxios?.post(
-        `/students/${authState?.user.id}/modules`,
-        {
+      let moduleDTO;
+      if (examDate) {
+        moduleDTO = {
           name: name,
           examDate: examDate,
           colorCode: colorCode,
           creditpoints: +creditPoints,
-        }
-      );
-      const createdModule: ModuleType | undefined = response?.data;
+        };
+      } else {
+        moduleDTO = {
+          name: name,
+          colorCode: colorCode,
+          creditpoints: +creditPoints,
+        };
+      }
 
+      response = await authAxios?.post(
+        `/students/${authState?.user.id}/modules`,
+        moduleDTO
+      );
+
+      const createdModule: ModuleType | undefined = response?.data;
       learningUnits.forEach(async (unit) => {
         // Multiply workloadPerWeek with 60 (minutes per hour) as the input is given in hours but the backend expects minutes
         await authAxios?.post(
@@ -129,24 +142,12 @@ export default function NewModuleLearningUnits() {
         style={styles.scrollViewContainer}
         contentContainerStyle={styles.scrollViewContainerStyle}
       >
-        {/* <FlatList
-          data={learningUnits}
-          renderItem={({ item }) => (
-            <LearningUnitForm
-              inputData={item}
-              onDelete={onDeleteLearningUnit}
-            />
-          )}
-          keyExtractor={(item: LearningUnitType) => item.id.toString()}
-          contentContainerStyle={{ gap: 12 }}
-          style={{ width: "100%" }}
-        ></FlatList> */}
         {learningUnits.map((unit) => (
           <LearningUnitForm
             inputData={unit}
             onDelete={onDeleteLearningUnit}
             onChange={onLearningUnitChange}
-            onValidationError={setValidationError}
+            setValidationErrorCallback={setValidationError}
             key={unit.id}
           />
         ))}
@@ -164,6 +165,7 @@ export default function NewModuleLearningUnits() {
             textColor={COLORTHEME.light.grey2}
             onPress={onCreateModule}
             style={{ width: 200 }}
+            disabled={validationError}
           />
         </View>
       </ScrollView>
