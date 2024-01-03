@@ -28,6 +28,16 @@ type AuthProps = {
     provider?: LOGIN_PROVIDER
   ) => Promise<any>;
   onLogout?: () => Promise<any>;
+  onUpdate?: (
+      userName: string,
+      userStudyCourse: string,
+      userEmail: string
+  ) => Promise<any>;
+  onChangePassword?: (
+      newPassword: string,
+      newPassword2: string,
+      ) => Promise<any>
+  onRemove?: (userId: number) => Promise<any>;
   onNewToken?: (token: TokenType) => Promise<any>;
 };
 
@@ -65,9 +75,15 @@ export const AuthProvider = ({ children }: any) => {
       const userString = await getStoredItem(USER_KEY);
       if (userString) user = JSON.parse(userString);
 
+      //toDo: how to make reload with data of logged in user possible?
       if (token.accessToken && user.id) {
         setAuthState({ token: token, authenticated: true, user: user });
       } else {
+
+        // toDo: Clear user data if the token or user ID is missing: could have been deleted or logged out
+        //await deleteStoredItem(TOKEN_KEY);
+        //await deleteStoredItem(USER_KEY);
+
         setAuthState({
           token: { accessToken: null, refreshToken: null, tokenType: null },
           authenticated: false,
@@ -206,6 +222,93 @@ export const AuthProvider = ({ children }: any) => {
     }
   };
 
+  const update = async (
+      userName: string,
+      userStudyCourse: string,
+      userEmail: string
+  ) => {
+    try {
+      const result = await axios.put(
+        `${API_URL}/students/${authState.user.id}`,
+        {
+          name: userName,
+          studyCourse: userStudyCourse,
+          email: userEmail
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${authState.token.accessToken}`,
+          },
+        }
+      );
+
+      const user = {
+        ...authState.user,
+        name: userName,
+        studyCourse: userStudyCourse,
+        email: userEmail,
+      } as UserType;
+
+      setAuthState({
+        token: authState.token,
+        authenticated: true,
+        user: user,
+      });
+
+      await saveItem(USER_KEY, JSON.stringify(user));
+
+      return result;
+    } catch (e) {
+      return { error: true, msg: (e as any).response.data.message };
+    }
+  };
+
+  const changePassword = async (
+      newPassword: string,
+      newPassword2: string
+  ) => {
+    try {
+      const result = await axios.put(
+          `${API_URL}/students/${authState.user.id}`,
+          {
+            name: authState.user.name,
+            studyCourse: authState.user.studyCourse,
+            email: authState.user.email,
+            password: newPassword,
+            password2: newPassword2,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${authState.token.accessToken}`,
+            },
+          }
+      );
+
+      return result;
+    } catch (e) {
+      return { error: true, msg: (e as any).response.data.message };
+    }
+  };
+
+
+  const remove = async (userId: number) => {
+    try {
+      const result = await axios.delete(`${API_URL}/students/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${authState.token.accessToken}`,
+        },
+      });
+
+      await deleteStoredItem(TOKEN_KEY);
+      await deleteStoredItem(USER_KEY);
+
+      return result;
+    } catch (e) {
+      return { error: true, msg: (e as any).response.data.message };
+    }
+  };
+
+
   const router = useRouter();
 
   const logout = async () => {
@@ -240,6 +343,9 @@ export const AuthProvider = ({ children }: any) => {
     onRegister: register,
     onLogin: login,
     onLogout: logout,
+    onUpdate: update,
+    onRemove: remove,
+    onChangePassword: changePassword,
     onNewToken: newToken,
     authState,
   };
