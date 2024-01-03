@@ -133,7 +133,7 @@ export default function SignupScreen() {
               label="Passwort"
               onChangeText={setUserPassword}
               value={userPassword}
-              keyboardType="visible-password"
+              keyboardType="default"
               secureTextEntry={true}
               message={passwordError}
               messageColor="red"
@@ -142,7 +142,7 @@ export default function SignupScreen() {
               label="Passwort wiederholen"
               onChangeText={setUserCheckPassword}
               value={userCheckPassword}
-              keyboardType="visible-password"
+              keyboardType="default"
               secureTextEntry={true}
             />
           </View>

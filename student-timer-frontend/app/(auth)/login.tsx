@@ -89,7 +89,7 @@ export default function Login() {
             onChangeText={setPassword}
             placeholder="Passwort"
             label="Passwort"
-            keyboardType="visible-password"
+            keyboardType="default"
             secureTextEntry={true}
             message={passwordError}
             messageColor="red"
