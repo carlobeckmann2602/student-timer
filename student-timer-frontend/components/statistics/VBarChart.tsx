@@ -47,12 +47,17 @@ export default function VBarChart({
             cornerRadius={{ top: 7 }}
             domain={{ x: [0, bars.length], y: [0, yTotal] }}
             maxDomain={{ y: yTotal, x: bars.length }}
-            style={{ data: { fill: ({ datum }) => datum.color } }}
+            style={{
+              data: { fill: ({ datum }) => datum.color },
+            }}
           />
           <VictoryAxis
             style={{
               axis: { stroke: "transparent" },
               ticks: { stroke: "transparent" },
+              tickLabels: {
+                fontFamily: "OpenSans_Regular",
+              },
             }}
           />
         </VictoryChart>
@@ -81,8 +86,16 @@ export default function VBarChart({
                 item.unit ? item.unit : "",
               ]}
               style={[
-                { fontSize: 24, fill: item.color },
-                { fontSize: 12, fill: item.color },
+                {
+                  fontSize: 24,
+                  fontFamily: "OpenSans_Regular",
+                  fill: item.color,
+                },
+                {
+                  fontSize: 12,
+                  fontFamily: "OpenSans_Regular",
+                  fill: item.color,
+                },
               ]}
               textAnchor="middle"
               y={310 - (275 / yTotal - 1) * item.value}
