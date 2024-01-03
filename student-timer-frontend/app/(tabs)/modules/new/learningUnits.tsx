@@ -1,5 +1,6 @@
 import Button from "@/components/Button";
 import { LearningUnitForm } from "@/components/modules/LearningUnitForm";
+import { LearningUnitEnum } from "@/constants/LearningUnitEnum";
 import { COLORTHEME } from "@/constants/Theme";
 import { useAuth } from "@/context/AuthContext";
 import { useAxios } from "@/context/AxiosContext";
@@ -25,16 +26,34 @@ export default function NewModuleLearningUnits() {
     examDate: string;
   }>();
 
-  const [error, setError] = useState("");
+  const [validateError, setValidationError] = useState(true);
 
   const toast = useToast();
   const { authState } = useAuth();
   const { authAxios } = useAxios();
   const { fetchModules } = useModules();
 
-  const [learningUnits, setLearningUnits] = useState<LearningUnitType[]>([]);
+  const [learningUnits, setLearningUnits] = useState<LearningUnitType[]>([
+    {
+      id: Math.random(),
+      name: LearningUnitEnum.VORLESUNG,
+      workloadPerWeek: 0,
+      startDate: new Date(),
+      endDate: new Date(),
+      totalLearningTime: 0,
+    },
+  ]);
 
   const router = useRouter();
+
+  const onLearningUnitChange = (changedUnit: LearningUnitType) => {
+    setLearningUnits((prevLearningUnits) => {
+      const newlearningUnits = prevLearningUnits.map((current) => {
+        return current.id === changedUnit.id ? changedUnit : current;
+      });
+      return newlearningUnits;
+    });
+  };
 
   const onDeleteLearningUnit = (id: number) => {
     if (learningUnits.length > 1)
@@ -47,7 +66,7 @@ export default function NewModuleLearningUnits() {
     setLearningUnits((prevLearningUnits) => {
       const newlearningUnit = {
         id: Math.random(),
-        name: "",
+        name: LearningUnitEnum.VORLESUNG,
         workloadPerWeek: 0,
         startDate: new Date(),
         endDate: new Date(),
@@ -73,13 +92,14 @@ export default function NewModuleLearningUnits() {
       const createdModule: ModuleType | undefined = response?.data;
 
       learningUnits.forEach(async (unit) => {
+        // Multiply workloadPerWeek with 60 (minutes per hour) as the input is given in hours but the backend expects minutes
         await authAxios?.post(
           `/students/${authState?.user.id}/modules/${createdModule?.id}/learningUnits`,
           {
             name: unit.name,
-            startDate: unit.startDate.toISOString().replace("Z", ""),
-            endDate: unit.endDate.toISOString().replace("Z", ""),
-            workloadPerWeek: unit.workloadPerWeek,
+            startDate: unit.startDate.toISOString().substring(0, 10),
+            endDate: unit.endDate.toISOString().substring(0, 10),
+            workloadPerWeek: unit.workloadPerWeek * 60,
           }
         );
       });
@@ -125,6 +145,8 @@ export default function NewModuleLearningUnits() {
           <LearningUnitForm
             inputData={unit}
             onDelete={onDeleteLearningUnit}
+            onChange={onLearningUnitChange}
+            onValidationError={setValidationError}
             key={unit.id}
           />
         ))}

@@ -12,6 +12,7 @@ import { useModules } from "@/context/ModuleContext";
 import { useState } from "react";
 import React from "react";
 import { convertMinutesToHours } from "@/libs/timeHelper";
+import { LearningUnitEnum } from "@/constants/LearningUnitEnum";
 
 export default function ModulesDetailScreen() {
   const { id } = useLocalSearchParams<{
@@ -55,7 +56,7 @@ export default function ModulesDetailScreen() {
   const [moduleError, setModuleError] = useState(false);
   const [detailModule] = useState<ModuleType>(fetchDetailModule());
 
-  const computeUnitString = (unit: LearningUnitType) => {
+  const computeModuleDetailUnitString = (unit: LearningUnitType) => {
     let weekAmount = computeDateDifference(unit.endDate, unit.startDate, true);
 
     return `${convertMinutesToHours(
@@ -105,7 +106,14 @@ export default function ModulesDetailScreen() {
                         />
                         <View style={styles.unitRowTitle}>
                           <Subhead>{unit.name}</Subhead>
-                          <P>{computeUnitString(unit)}</P>
+                          <P>
+                            {unit.name === LearningUnitEnum.SELBSTSTUDIUM
+                              ? `${convertMinutesToHours(
+                                  detailModule.totalModuleTime -
+                                    detailModule.totalLearningTime
+                                )} Std. verbleibend`
+                              : computeModuleDetailUnitString(unit)}
+                          </P>
                         </View>
                         <Subhead>
                           {convertMinutesToHours(unit.totalLearningTime)} Std.

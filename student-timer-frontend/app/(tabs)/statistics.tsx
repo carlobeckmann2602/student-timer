@@ -270,46 +270,50 @@ export default function StatisticsScreen() {
         renderItem={({ item }) => {
           switch (item.type) {
             case "hBar":
+              item = item as HBarChartProps;
               return (
                 <HBarChart
-                  type={(item as HBarChartProps).type}
-                  title={(item as HBarChartProps).title}
-                  xTotal={(item as HBarChartProps).xTotal}
-                  bars={(item as HBarChartProps).bars}
+                  type={item.type}
+                  title={item.title}
+                  xTotal={item.xTotal}
+                  bars={item.bars}
                 />
               );
 
             case "vBar":
+              item = item as VBarChartProps;
               return (
                 <VBarChart
-                  type={(item as VBarChartProps).type}
-                  title={(item as VBarChartProps).title}
-                  yTotal={(item as VBarChartProps).yTotal}
-                  bars={(item as VBarChartProps).bars}
-                  avgBars={(item as VBarChartProps).avgBars}
+                  type={item.type}
+                  title={item.title}
+                  yTotal={item.yTotal}
+                  bars={item.bars}
+                  avgBars={item.avgBars}
                 />
               );
 
             case "vLine":
+              item = item as VLineChartProps;
               return (
                 <VLineChart
-                  type={(item as VLineChartProps).type}
-                  title={(item as VLineChartProps).title}
-                  yTotal={(item as VLineChartProps).yTotal}
-                  xTotal={(item as VLineChartProps).xTotal}
-                  color={(item as VLineChartProps).color}
-                  labelColor={(item as VLineChartProps).labelColor}
-                  values={(item as VLineChartProps).values}
-                  xDiscriptions={(item as VLineChartProps).xDiscriptions}
+                  type={item.type}
+                  title={item.title}
+                  yTotal={item.yTotal}
+                  xTotal={item.xTotal}
+                  color={item.color}
+                  labelColor={item.labelColor}
+                  values={item.values}
+                  xDiscriptions={item.xDiscriptions}
                 />
               );
 
             case "stars":
+              item = item as StarChartProps;
               return (
                 <StarChart
-                  type={(item as StarChartProps).type}
-                  title={(item as StarChartProps).title}
-                  stars={(item as StarChartProps).stars}
+                  type={item.type}
+                  title={item.title}
+                  stars={item.stars}
                 />
               );
 
@@ -325,51 +329,55 @@ export default function StatisticsScreen() {
           </View>
         }
       />
-      {/* <FlatList
+      {/*<FlatList
         data={dummyData}
         renderItem={({ item }) => {
           switch (item.type) {
             case "hBar":
+              item = item as HBarChartProps;
               return (
                 <HBarChart
-                  type={(item as HBarChartProps).type}
-                  title={(item as HBarChartProps).title}
-                  xTotal={(item as HBarChartProps).xTotal}
-                  bars={(item as HBarChartProps).bars}
+                  type={item.type}
+                  title={item.title}
+                  xTotal={item.xTotal}
+                  bars={item.bars}
                 />
               );
 
             case "vBar":
+              item = item as VBarChartProps;
               return (
                 <VBarChart
-                  type={(item as VBarChartProps).type}
-                  title={(item as VBarChartProps).title}
-                  yTotal={(item as VBarChartProps).yTotal}
-                  bars={(item as VBarChartProps).bars}
-                  avgBars={(item as VBarChartProps).avgBars}
+                  type={item.type}
+                  title={item.title}
+                  yTotal={item.yTotal}
+                  bars={item.bars}
+                  avgBars={item.avgBars}
                 />
               );
 
             case "vLine":
+              item = item as VLineChartProps;
               return (
                 <VLineChart
-                  type={(item as VLineChartProps).type}
-                  title={(item as VLineChartProps).title}
-                  yTotal={(item as VLineChartProps).yTotal}
-                  xTotal={(item as VLineChartProps).xTotal}
-                  color={(item as VLineChartProps).color}
-                  labelColor={(item as VLineChartProps).labelColor}
-                  values={(item as VLineChartProps).values}
-                  xDiscriptions={(item as VLineChartProps).xDiscriptions}
+                  type={item.type}
+                  title={item.title}
+                  yTotal={item.yTotal}
+                  xTotal={item.xTotal}
+                  color={item.color}
+                  labelColor={item.labelColor}
+                  values={item.values}
+                  xDiscriptions={item.xDiscriptions}
                 />
               );
 
             case "stars":
+              item = item as StarChartProps;
               return (
                 <StarChart
-                  type={(item as StarChartProps).type}
-                  title={(item as StarChartProps).title}
-                  stars={(item as StarChartProps).stars}
+                  type={item.type}
+                  title={item.title}
+                  stars={item.stars}
                 />
               );
 
@@ -384,7 +392,7 @@ export default function StatisticsScreen() {
             <H2>Es sind keine Statistiken vorhanden.</H2>
           </View>
         }
-      /> */}
+      />*/}
     </View>
   );
 }

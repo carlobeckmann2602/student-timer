@@ -5,13 +5,14 @@ import { useAuth } from "./AuthContext";
 import { LearningUnitType } from "@/types/LearningUnitType";
 import { COLORS } from "@/constants/Theme";
 import { LearningSessionType } from "@/types/learningSessionType";
+import { LearningUnitEnum } from "@/constants/LearningUnitEnum";
 
 type ModuleProps = {
   modules?: ModuleType[];
   fetchModules?: () => Promise<any>;
 };
 
-type ObjectKey = keyof typeof COLORS;
+export type ObjectKey = keyof typeof COLORS;
 
 const ModuleContext = createContext<ModuleProps>({});
 
@@ -31,7 +32,7 @@ export const ModuleProvider = ({ children }: any) => {
         `/students/${authState.user.id}/modules`
       );
       const modules: ModuleType[] | undefined = response?.data;
-      modules?.forEach((item) => convertInputTypes(item));
+      modules?.forEach((item) => preprocessFetchedModule(item));
       setModules(modules);
       return modules;
     } catch (e) {
@@ -48,8 +49,15 @@ export const ModuleProvider = ({ children }: any) => {
   );
 };
 
+const preprocessFetchedModule = (module: ModuleType) => {
+  convertInputTypes(module);
+  addSessionLearningUnit(module);
+};
+
 const convertInputTypes = (module: ModuleType) => {
-  module.examDate = new Date(module.examDate);
+  if (module.examDate) {
+    module.examDate = new Date(module.examDate);
+  }
 
   module.learningUnits = module.learningUnits as LearningUnitType[];
   module.learningUnits.forEach((unit) => {
@@ -68,7 +76,26 @@ export const computeLearningUnitColor = (
   unit: LearningUnitType,
   defaultColor: string
 ) => {
-  let unitColor = COLORS[unit.name as ObjectKey];
+  let unitColor =
+    COLORS[
+      Object.keys(LearningUnitEnum)[
+        Object.values(LearningUnitEnum).indexOf(unit.name)
+      ] as ObjectKey
+    ];
   if (unitColor) unit.colorCode = unitColor;
   else unit.colorCode = defaultColor;
+};
+
+const addSessionLearningUnit = (module: ModuleType) => {
+  const sessionLearningUnit: LearningUnitType = {
+    id: -1,
+    name: LearningUnitEnum.SELBSTSTUDIUM,
+    workloadPerWeek: 0,
+    startDate: new Date(),
+    endDate: new Date(),
+    totalLearningTime: module.totalLearningSessionTime,
+    colorCode: module.colorCode,
+  };
+
+  module.learningUnits.push(sessionLearningUnit);
 };
