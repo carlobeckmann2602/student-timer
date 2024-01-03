@@ -85,7 +85,7 @@ public class StatisticService {
 
         //if user has no sessions in the last 14 days
         if (sessionsLastWeek.isEmpty() && sessionsInWeekAfterLast.isEmpty()) {
-            return new HBarChart();
+            return null;
         }
 
         List<Double> totalLearningTimePerWeek = calculateTotalLearningTimePerWeek(learningSessionsPerWeek);
@@ -107,7 +107,7 @@ public class StatisticService {
         } else if (performance < 0) {
             message = "Du könntest mal wieder mehr lernen.";
         } else {
-            message = "Du hast noch nicht genug Daten für diese Statistik!";
+            message = "Weiter so!";
         }
         return message;
 
