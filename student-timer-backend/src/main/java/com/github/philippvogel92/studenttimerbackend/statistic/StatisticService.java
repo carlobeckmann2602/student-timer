@@ -37,7 +37,9 @@ public class StatisticService {
                 studentRepository.findById(studentId).orElseThrow(() -> new ResponseStatusException(HttpStatus
                         .NOT_FOUND, "Student not found"));
         List<Module> modules = moduleRepository.findModulesByStudentOrderByName(student);
-
+        if (modules.isEmpty()) {
+            return new Statistic(null, null);
+        }
         HBarChart hBarChart = createHBarChart(student);
         StarChart starChart = createStarChart(modules);
         return new Statistic(hBarChart, starChart);
