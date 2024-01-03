@@ -24,17 +24,19 @@ export default function PasswordInput(props: {
                             label="Passwort"
                             onChangeText={setUserPassword}
                             value={userPassword}
-                            keyboardType="visible-password"
-                            secureTextEntry={false}
+                            placeholder="neues Passwort"
+                            keyboardType="default"
+                            secureTextEntry={true}
                             message={passwordError}
                             messageColor="red"
                         />
                         <InputField
                             label="Passwort wiederholen"
                             onChangeText={setUserCheckPassword}
+                            placeholder="neues Passwort"
                             value={userCheckPassword}
-                            keyboardType="visible-password"
-                            secureTextEntry={false}
+                            keyboardType="default"
+                            secureTextEntry={true}
                             message={passwordError}
                             messageColor="red"
                         />
