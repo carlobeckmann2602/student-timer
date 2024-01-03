@@ -122,8 +122,8 @@ public class StatisticService {
 
     private List<Bar> createBars(double totalLearningTimeLastWeek, double totalLearningTimeWeekAfterLast) {
         List<Bar> bars = new ArrayList<>();
-        bars.add(new Bar("Diese Woche (die letzten 7 Tage)", totalLearningTimeLastWeek, "hours"));
-        bars.add(new Bar("Letzte Woche", totalLearningTimeWeekAfterLast, "hours"));
+        bars.add(new Bar("Diese Woche (die letzten 7 Tage)", totalLearningTimeLastWeek, "Std."));
+        bars.add(new Bar("Letzte Woche", totalLearningTimeWeekAfterLast, "Std."));
 
         return bars;
     }
