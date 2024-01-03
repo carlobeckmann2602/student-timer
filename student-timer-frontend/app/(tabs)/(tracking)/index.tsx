@@ -11,6 +11,8 @@ import ModulePicker from "@/components/modules/ModulePicker";
 import Timer from "@/components/tracking/Timer";
 import { COLORS, COLORTHEME } from "@/constants/Theme";
 import { ModuleType } from "@/types/ModuleType";
+import { useLocalNotification } from "@/hooks/useLocalNotification";
+import { sendPushNotification } from "@/libs/handleLocalNotification";
 
 export default function Tracking() {
   const [isStopwatch, setIsStopwatch] = useState(true);
@@ -27,9 +29,11 @@ export default function Tracking() {
     discard: string;
   }>();
   const inputsEditable = !trackingIsActive && startTime === 0;
+  useLocalNotification();
 
   useEffect(() => {
     if (timerIsDone) {
+      sendPushNotification("tracking", "Tracking", "Der Timer ist vorbei");
       onTrackingDone();
     }
   }, [timerIsDone]);
