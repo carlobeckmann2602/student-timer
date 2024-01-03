@@ -30,11 +30,8 @@ export default function StarRating({
               <StarIcon
                 name="star"
                 color=""
-                fill={
-                  index < starAmount
-                    ? color || COLORTHEME.light.primary
-                    : color + "75" || COLORTHEME.light.primary + "75"
-                }
+                fill={color || COLORTHEME.light.primary}
+                opacity={index < starAmount ? 1 : 0.4}
                 size={52}
               />
             </Pressable>
@@ -49,11 +46,8 @@ export default function StarRating({
             key={index}
             name="star"
             color=""
-            fill={
-              index < starAmount
-                ? color || COLORTHEME.light.primary
-                : color + "75" || COLORTHEME.light.primary + "75"
-            }
+            fill={color || COLORTHEME.light.primary}
+            opacity={index < starAmount ? 1 : 0.4}
             size={52}
           />
         ))}

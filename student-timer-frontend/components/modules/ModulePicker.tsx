@@ -35,12 +35,8 @@ export default function ModulePicker(props: {
         <Picker
           style={{
             viewContainer: styles.picker,
-            inputWeb: { ...styles.picker, color: selectedModule.colorCode },
-            inputAndroid: { color: selectedModule.colorCode },
-            inputIOS: {
-              color: selectedModule.colorCode,
-              paddingHorizontal: 10,
-            },
+            inputWeb: { ...styles.picker },
+            inputIOS: { paddingHorizontal: 10 },
           }}
           placeholder={{}}
           value={selectedModuleId}
@@ -51,7 +47,6 @@ export default function ModulePicker(props: {
                     key: module.id,
                     label: module.name,
                     value: module.id,
-                    color: module.colorCode,
                   } as Item;
                 })
               : []

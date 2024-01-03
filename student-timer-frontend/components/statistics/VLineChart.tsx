@@ -51,7 +51,7 @@ export default function VLineChart({
         <VictoryAxis
           style={{
             axis: { stroke: labelColor, strokeWidth: 3 },
-            tickLabels: { fill: labelColor },
+            tickLabels: { fill: labelColor, fontFamily: "OpenSans_Regular" },
             ticks: { stroke: "transparent" },
           }}
           offsetY={30}

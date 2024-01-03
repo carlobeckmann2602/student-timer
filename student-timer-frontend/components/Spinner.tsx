@@ -2,9 +2,12 @@ import { COLORTHEME } from "@/constants/Theme";
 import React from "react";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
 
-const Spinner = () => (
+const Spinner = (props: { size?: "small" | "large" }) => (
   <View style={styles.container}>
-    <ActivityIndicator size="large" color={COLORTHEME.light.primary} />
+    <ActivityIndicator
+      size={props.size || "large"}
+      color={COLORTHEME.light.primary}
+    />
   </View>
 );
 

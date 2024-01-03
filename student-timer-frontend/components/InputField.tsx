@@ -75,6 +75,7 @@ const styles = StyleSheet.create({
         outlineStyle: "none",
       },
     }),
+    fontFamily: "OpenSans_Regular",
   },
   unit: {
     color: COLORTHEME.light.grey3,

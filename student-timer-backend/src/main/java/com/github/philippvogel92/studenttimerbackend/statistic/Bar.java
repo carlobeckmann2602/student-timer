@@ -6,7 +6,7 @@ public class Bar {
     private String unit;
     private Boolean average;
 
-    public Bar(String name, Double value, String color, String unit, Boolean average) {
+    public Bar(String name, Double value, String unit, Boolean average) {
         this.name = name;
         this.value = value;
         this.unit = unit;
