@@ -1,4 +1,4 @@
-import { Pressable, ScrollView, StyleSheet } from "react-native";
+import { Modal, Pressable, ScrollView, StyleSheet } from "react-native";
 
 import { View } from "@/components/Themed";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -11,10 +11,11 @@ import { COLORTHEME } from "@/constants/Theme";
 import { useModules } from "@/context/ModuleContext";
 import { useState } from "react";
 import React from "react";
-import { convertMinutesToHours } from "@/libs/timeHelper";
+import { convertMinutesToHours, printDateAsString } from "@/libs/timeHelper";
 import { LearningUnitEnum } from "@/constants/LearningUnitEnum";
 import { LearningSessionType } from "@/types/learningSessionType";
 import { MoreVertical, StarIcon } from "lucide-react-native";
+import { FlatList } from "react-native-gesture-handler";
 
 export default function ModulesDetailScreen() {
   const { id } = useLocalSearchParams<{
@@ -97,7 +98,7 @@ export default function ModulesDetailScreen() {
               <View>
                 {detailModule?.learningUnits.map((unit: LearningUnitType) => {
                   return (
-                    <View key={unit.id} style={styles.unitRowWrapper}>
+                    <View key={unit.id}>
                       <View style={styles.unitRow}>
                         <View
                           style={[
@@ -139,40 +140,55 @@ export default function ModulesDetailScreen() {
             </View>
             <View style={styles.unitWrapper}>
               <H2 style={{ textAlign: "left" }}>Vergangene Trackings</H2>
-              <View>
-                {detailModule?.learningSessions.map(
-                  (session: LearningSessionType) => {
-                    return (
-                      <View key={session.id} style={styles.unitRowWrapper}>
-                        <View style={styles.unitRow}>
-                          <View
-                            style={[
-                              styles.moduleIndicatorM,
-                              { backgroundColor: detailModule.colorCode },
-                            ]}
-                          />
-                          <View style={styles.unitRowTitle}>
-                            <Subhead>{session.createdAt.toISOString()}</Subhead>
-                            <P>{session.description}</P>
-                          </View>
-                          <Subhead>
-                            {convertMinutesToHours(session.totalDuration)} Std.
-                          </Subhead>
-                          <Subhead>{session.rating}</Subhead>
-                          <StarIcon fill={COLORTHEME.light.text} size={20} />
-                          <Pressable onPress={() => {}}>
-                            <MoreVertical
-                              size={28}
-                              fill={COLORTHEME.light.grey3}
-                              strokeWidth={1}
-                            />
-                          </Pressable>
+              <FlatList
+                data={detailModule?.learningSessions}
+                scrollEnabled={false}
+                renderItem={({ item }) => {
+                  return (
+                    <View key={item.id}>
+                      <View style={styles.unitRow}>
+                        <View
+                          style={[
+                            styles.moduleIndicatorM,
+                            { backgroundColor: detailModule.colorCode },
+                          ]}
+                        />
+                        <View style={styles.unitRowTitle}>
+                          <Subhead>{printDateAsString(item.createdAt)}</Subhead>
+                          <P numberOfLines={2} style={{ textAlign: "left" }}>
+                            {item.description}
+                          </P>
                         </View>
+                        <Subhead>
+                          {convertMinutesToHours(item.totalDuration)} Std.
+                        </Subhead>
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Subhead>{item.rating}</Subhead>
+                          <StarIcon
+                            color=""
+                            fill={COLORTHEME.light.text}
+                            size={20}
+                          />
+                        </View>
+                        <Pressable onPress={() => {}}>
+                          <MoreVertical
+                            size={28}
+                            color=""
+                            fill={COLORTHEME.light.grey3}
+                            strokeWidth={1}
+                          />
+                        </Pressable>
                       </View>
-                    );
-                  }
-                )}
-              </View>
+                    </View>
+                  );
+                }}
+              />
             </View>
           </ScrollView>
         </View>
@@ -183,15 +199,17 @@ export default function ModulesDetailScreen() {
 
 const styles = StyleSheet.create({
   outerWrapper: {
-    paddingVertical: 30,
-    height: "100%",
+    flex: 1,
+    paddingVertical: 50,
+    justifyContent: "space-around",
+    backgroundColor: COLORTHEME.light.background,
   },
   scrollViewContainerStyle: {
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "space-between",
     padding: 24,
-    gap: 16,
+    gap: 30,
   },
   chartWrapper: {
     width: "100%",
@@ -200,19 +218,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   unitWrapper: {
-    flex: 1,
+    width: "100%",
     flexDirection: "column",
     justifyContent: "flex-start",
-  },
-  unitRowWrapper: {
-    flexDirection: "column",
-    justifyContent: "flex-start",
+    gap: 16,
   },
   unitRow: {
     width: "100%",
     flexDirection: "row",
-    justifyContent: "space-evenly",
+    justifyContent: "space-between",
     alignItems: "center",
+    gap: 12,
   },
   moduleIndicatorM: {
     width: 24,

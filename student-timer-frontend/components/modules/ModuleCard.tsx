@@ -111,7 +111,7 @@ export function ModuleCard(props: ModuleCardProps) {
             <H4>{moduleData.name}</H4>
           </View>
           <TouchableOpacity onPress={() => setContextMenuOpen(moduleData.id)}>
-            <MoreVertical size={28} fill="black" strokeWidth={1} />
+            <MoreVertical color="" size={28} fill="black" strokeWidth={1} />
           </TouchableOpacity>
         </View>
         {/* Statistics */}

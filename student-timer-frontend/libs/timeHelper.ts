@@ -24,3 +24,8 @@ export const formatTime = ({
 export const convertMinutesToHours = (minutes: number) => {
   return +(minutes / 60).toFixed(1);
 };
+
+export const printDateAsString = (date: Date) => {
+  // Add 1 to getMonth(), as JS-months start by index 0
+  return `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`;
+};
