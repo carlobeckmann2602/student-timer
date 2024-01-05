@@ -25,8 +25,8 @@ export default function TrackingModeToggle(props: {
       valuePadding={4}
       borderWidth={0}
       fontSize={16}
-      textStyle={{ fontWeight: "600" }}
-      selectedTextStyle={{ fontWeight: "600" }}
+      textStyle={{ fontFamily: "OpenSans_SemiBold" }}
+      selectedTextStyle={{ fontFamily: "OpenSans_SemiBold" }}
       disabled={disabled}
     />
   );

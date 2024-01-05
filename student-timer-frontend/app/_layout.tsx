@@ -8,6 +8,7 @@ import { ToastProvider } from "react-native-toast-notifications";
 import { AuthProvider } from "@/context/AuthContext";
 import { AxiosProvider } from "@/context/AxiosContext";
 import { ModuleProvider } from "@/context/ModuleContext";
+import Toast from "@/components/Toast";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -65,6 +66,7 @@ function RootLayoutNav() {
           <ToastProvider
             placement="top"
             textStyle={{ fontFamily: "OpenSans_Regular" }}
+            renderToast={Toast}
           >
             <AuthProvider>
               <AxiosProvider>

@@ -37,7 +37,9 @@ public class StatisticService {
                 studentRepository.findById(studentId).orElseThrow(() -> new ResponseStatusException(HttpStatus
                         .NOT_FOUND, "Student not found"));
         List<Module> modules = moduleRepository.findModulesByStudentOrderByName(student);
-
+        if (modules.isEmpty()) {
+            return new Statistic(null, null);
+        }
         HBarChart hBarChart = createHBarChart(student);
         StarChart starChart = createStarChart(modules);
         return new Statistic(hBarChart, starChart);
@@ -85,7 +87,7 @@ public class StatisticService {
 
         //if user has no sessions in the last 14 days
         if (sessionsLastWeek.isEmpty() && sessionsInWeekAfterLast.isEmpty()) {
-            return new HBarChart();
+            return null;
         }
 
         List<Double> totalLearningTimePerWeek = calculateTotalLearningTimePerWeek(learningSessionsPerWeek);
@@ -107,7 +109,7 @@ public class StatisticService {
         } else if (performance < 0) {
             message = "Du könntest mal wieder mehr lernen.";
         } else {
-            message = "Du hast noch nicht genug Daten für diese Statistik!";
+            message = "Weiter so!";
         }
         return message;
 
@@ -122,8 +124,8 @@ public class StatisticService {
 
     private List<Bar> createBars(double totalLearningTimeLastWeek, double totalLearningTimeWeekAfterLast) {
         List<Bar> bars = new ArrayList<>();
-        bars.add(new Bar("Diese Woche (die letzten 7 Tage)", totalLearningTimeLastWeek, "hours"));
-        bars.add(new Bar("Letzte Woche", totalLearningTimeWeekAfterLast, "hours"));
+        bars.add(new Bar("Diese Woche (die letzten 7 Tage)", totalLearningTimeLastWeek, "Std."));
+        bars.add(new Bar("Letzte Woche", totalLearningTimeWeekAfterLast, "Std."));
 
         return bars;
     }

@@ -41,10 +41,12 @@ export default function HBarChart({ title, xTotal, bars }: HBarChartProps) {
               style={[
                 {
                   fontSize: 24,
+                  fontFamily: "OpenSans_Regular",
                   fill: ({ datum }) => datum.color || COLORTHEME.light.primary,
                 },
                 {
                   fontSize: 12,
+                  fontFamily: "OpenSans_Regular",
                   fill: ({ datum }) => datum.color || COLORTHEME.light.primary,
                 },
               ]}
@@ -72,7 +74,7 @@ export default function HBarChart({ title, xTotal, bars }: HBarChartProps) {
                   key={index}
                   y={21 + index * 73}
                   text={item.name}
-                  style={{ fontSize: 14 }}
+                  style={{ fontSize: 14, fontFamily: "OpenSans_Regular" }}
                 />
               )
           )}

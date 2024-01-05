@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useRef,
+} from "react";
 import { useAxios } from "./AxiosContext";
 import { ModuleType } from "@/types/ModuleType";
 import { useAuth } from "./AuthContext";
@@ -22,14 +28,20 @@ export const useModules = () => {
 
 export const ModuleProvider = ({ children }: any) => {
   const { authState } = useAuth();
+  const authStateRef = useRef(authState);
   const { authAxios } = useAxios();
   const [modules, setModules] = useState<ModuleType[] | undefined>();
 
+  useEffect(() => {
+    authStateRef.current = authState;
+    fetchModules();
+  }, [authState?.authenticated]);
+
   const fetchModules = async () => {
-    if (!authState?.user.id) return;
+    if (!authStateRef.current?.user.id) return;
     try {
       const response = await authAxios?.get<ModuleType[] | undefined>(
-        `/students/${authState.user.id}/modules`
+        `/students/${authStateRef.current?.user.id}/modules`
       );
       const modules: ModuleType[] | undefined = response?.data;
       modules?.forEach((item) => preprocessFetchedModule(item));
