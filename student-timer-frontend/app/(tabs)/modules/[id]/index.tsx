@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet } from "react-native";
+import { Pressable, ScrollView, StyleSheet } from "react-native";
 
 import { View } from "@/components/Themed";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -13,6 +13,8 @@ import { useState } from "react";
 import React from "react";
 import { convertMinutesToHours } from "@/libs/timeHelper";
 import { LearningUnitEnum } from "@/constants/LearningUnitEnum";
+import { LearningSessionType } from "@/types/learningSessionType";
+import { MoreVertical, StarIcon } from "lucide-react-native";
 
 export default function ModulesDetailScreen() {
   const { id } = useLocalSearchParams<{
@@ -37,7 +39,6 @@ export default function ModulesDetailScreen() {
       }
     }
 
-    // setModuleError(true);
     return {
       id: -1,
       name: "Placeholder",
@@ -94,7 +95,7 @@ export default function ModulesDetailScreen() {
             <View style={styles.unitWrapper}>
               <H2 style={{ textAlign: "left" }}>Einheiten</H2>
               <View>
-                {detailModule?.learningUnits.map((unit) => {
+                {detailModule?.learningUnits.map((unit: LearningUnitType) => {
                   return (
                     <View key={unit.id} style={styles.unitRowWrapper}>
                       <View style={styles.unitRow}>
@@ -134,6 +135,43 @@ export default function ModulesDetailScreen() {
                     detailModule.totalLearningTime
                   )} Std.`}
                 </Subhead>
+              </View>
+            </View>
+            <View style={styles.unitWrapper}>
+              <H2 style={{ textAlign: "left" }}>Vergangene Trackings</H2>
+              <View>
+                {detailModule?.learningSessions.map(
+                  (session: LearningSessionType) => {
+                    return (
+                      <View key={session.id} style={styles.unitRowWrapper}>
+                        <View style={styles.unitRow}>
+                          <View
+                            style={[
+                              styles.moduleIndicatorM,
+                              { backgroundColor: detailModule.colorCode },
+                            ]}
+                          />
+                          <View style={styles.unitRowTitle}>
+                            <Subhead>{session.createdAt.toISOString()}</Subhead>
+                            <P>{session.description}</P>
+                          </View>
+                          <Subhead>
+                            {convertMinutesToHours(session.totalDuration)} Std.
+                          </Subhead>
+                          <Subhead>{session.rating}</Subhead>
+                          <StarIcon fill={COLORTHEME.light.text} size={20} />
+                          <Pressable onPress={() => {}}>
+                            <MoreVertical
+                              size={28}
+                              fill={COLORTHEME.light.grey3}
+                              strokeWidth={1}
+                            />
+                          </Pressable>
+                        </View>
+                      </View>
+                    );
+                  }
+                )}
               </View>
             </View>
           </ScrollView>
