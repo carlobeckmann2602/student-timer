@@ -1,14 +1,9 @@
 /**
+ *
  * Documentation of used Component: https://github.com/react-native-datetimepicker/datetimepicker
+ *
  */
-
-import React from "react";
-import {
-  StyleSheet,
-  ViewStyle,
-  Platform,
-  TouchableOpacity,
-} from "react-native";
+import { StyleSheet, ViewStyle, Platform, Pressable } from "react-native";
 import { Text, View } from "@/components/Themed";
 import { COLORTHEME } from "@/constants/Theme";
 import RNDateTimePicker, {
@@ -23,7 +18,7 @@ type DateTimerPickerProps = {
   placeholder?: string;
   minimumDate?: Date;
   maximumDate?: Date;
-  secureTextEntry?: boolean;
+  disabled?: boolean;
   message?: string;
   messageColor?: string;
   style?: ViewStyle;
@@ -38,7 +33,7 @@ export default function DateTimePicker(props: DateTimerPickerProps) {
     placeholder,
     minimumDate,
     maximumDate,
-    secureTextEntry,
+    disabled,
     message,
     messageColor,
     inputStyle,
@@ -69,45 +64,50 @@ export default function DateTimePicker(props: DateTimerPickerProps) {
               label={label}
               value={value.toLocaleDateString()}
               onChangeText={onChangeDateFromText}
-              secureTextEntry={secureTextEntry}
               placeholder={placeholder}
               message={message}
               messageColor={messageColor}
               style={inputStyle}
-            ></InputField>
+            />
           );
         } else if (Platform.OS === "android") {
           return (
-            <TouchableOpacity onPress={showDatepicker}>
+            <Pressable
+              // style={styles.innerContainer}
+              onPress={() => {
+                if (!disabled) showDatepicker();
+              }}
+            >
               <InputField
                 label={label}
                 value={value.toLocaleDateString("de-DE")}
                 onChangeText={onChangeDateFromText}
-                secureTextEntry={secureTextEntry}
                 placeholder={placeholder}
                 message={message}
                 messageColor={messageColor}
-                style={{ backgroundColor: "transparent" }}
                 editable={false}
                 selectTextOnFocus={false}
-              ></InputField>
-            </TouchableOpacity>
+              />
+            </Pressable>
           );
         } else {
           return (
             <View style={styles.innerContainer}>
               {label && <Text style={styles.inputLabelText}>{label}</Text>}
-              <RNDateTimePicker
-                display="default"
-                dateFormat="shortdate"
-                value={value}
-                locale="de-DE"
-                onChange={(event, input) => onChangeDate(input)}
-                minimumDate={minimumDate}
-                maximumDate={maximumDate}
-                placeholderText={placeholder}
-                style={inputStyle}
-              ></RNDateTimePicker>
+              <View style={styles.RNDateTimerPickerContainer}>
+                <RNDateTimePicker
+                  display="default"
+                  dateFormat="shortdate"
+                  value={value}
+                  locale="de-DE"
+                  onChange={(event, input) => onChangeDate(input)}
+                  minimumDate={minimumDate}
+                  maximumDate={maximumDate}
+                  disabled={disabled}
+                  placeholderText={placeholder}
+                  style={[styles.RNDateTimerPickerStyle, inputStyle]}
+                />
+              </View>
               <Text style={[{ color: props.messageColor }, styles.messageText]}>
                 {props.message}
               </Text>
@@ -123,20 +123,31 @@ const styles = StyleSheet.create({
   inputLabelGroup: {
     gap: 5,
     flexGrow: 1,
-    flexBasis: 65,
     flexDirection: "column",
     backgroundColor: "transparent",
     minWidth: 100,
+    // minHeight: 50,
   },
   innerContainer: {
     gap: 5,
+    justifyContent: "flex-start",
     alignItems: "flex-start",
     flexDirection: "column",
     backgroundColor: "transparent",
     minWidth: 100,
+    flex: 1,
+  },
+  RNDateTimerPickerContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    height: 40,
+    backgroundColor: "transparent",
   },
   inputLabelText: {
     color: COLORTHEME.light.primary,
+  },
+  RNDateTimerPickerStyle: {
+    marginHorizontal: -15,
   },
   messageText: {
     fontSize: 12,

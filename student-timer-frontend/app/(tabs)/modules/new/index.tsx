@@ -1,6 +1,7 @@
 import Button from "@/components/Button";
 import DateTimePicker from "@/components/DateTimePicker";
 import InputField from "@/components/InputField";
+import StyledCheckbox from "@/components/StyledCheckbox";
 import { P } from "@/components/StyledText";
 import { View } from "@/components/Themed";
 import { COLORTHEME } from "@/constants/Theme";
@@ -26,10 +27,12 @@ export default function NewModule() {
     "#88A7F5",
   ];
 
+  const [dateDiabled, setDateDisabled] = useState(false);
+
   const [moduleName, setModuleName] = useState("");
   const [examDate, setExamDate] = useState<Date>(new Date());
   const [creditPoints, setCreditPoints] = useState("");
-  const [colorCode, setColorCode] = useState("");
+  const [colorCode, setColorCode] = useState(selectableColors[0]);
 
   const [moduleNameError, setModuleNameError] = useState("");
   const [creditPointError, setCreditPointError] = useState("");
@@ -56,14 +59,13 @@ export default function NewModule() {
 
   const onContinue = () => {
     if (validateInput()) {
-      if (examDate) {
+      if (dateDiabled) {
         router.push({
           pathname: "/modules/new/learningUnits",
           params: {
             name: moduleName,
             colorCode: colorCode,
             creditPoints: creditPoints,
-            examDate: examDate?.toISOString().substring(0, 10),
           },
         });
       } else {
@@ -73,6 +75,7 @@ export default function NewModule() {
             name: moduleName,
             colorCode: colorCode,
             creditPoints: creditPoints,
+            examDate: examDate?.toISOString().substring(0, 10),
           },
         });
       }
@@ -87,23 +90,36 @@ export default function NewModule() {
       <View style={styles.outerWrapper}>
         <View style={styles.row}>
           <InputField
-            label="Name*"
+            label="Name"
             onChangeText={setModuleName}
             value={moduleName}
             message={moduleNameError}
             messageColor="red"
           />
         </View>
+        <View style={styles.dateRowContainer}>
+          <P style={{ color: COLORTHEME.light.primary }}>
+            {"Prüfungsdatum (optional)"}
+          </P>
+          <View style={styles.row}>
+            <DateTimePicker
+              onChangeDate={(date) => {
+                date ? setExamDate(date) : setExamDate(new Date());
+              }}
+              value={examDate}
+              disabled={dateDiabled}
+              style={{ opacity: dateDiabled ? 0.5 : 1 }}
+            />
+            <StyledCheckbox
+              value={dateDiabled}
+              onValueChange={setDateDisabled}
+              label="Keine Angabe"
+            />
+          </View>
+        </View>
         <View style={styles.row}>
-          <DateTimePicker
-            label="Prüfungsdatum*"
-            onChangeDate={(date) => {
-              date ? setExamDate(date) : setExamDate(new Date());
-            }}
-            value={examDate}
-          />
           <InputField
-            label="Credit-Points*"
+            label="Credit-Points"
             onChangeText={setCreditPoints}
             value={creditPoints}
             keyboardType="number-pad"
@@ -111,16 +127,18 @@ export default function NewModule() {
             messageColor="red"
             inputUnit="CP"
           />
+          <View style={{ width: "50%", backgroundColor: "transparent" }} />
         </View>
         <View style={styles.row}>
           <View style={styles.colorWrapper}>
-            <P style={styles.inputLabelText}>Farbauswahl*</P>
+            <P style={styles.inputLabelText}>Farbauswahl</P>
             <View style={styles.colorContainer}>
               {selectableColors.map((color) => {
                 return (
                   <TouchableOpacity
                     style={styles.colorOptionWrapper}
                     onPress={() => setColorCode(color)}
+                    key={color}
                   >
                     <View
                       style={[
@@ -161,6 +179,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     gap: 24,
     padding: 12,
+    backgroundColor: COLORTHEME.light.background,
   },
   scrollViewContainerStyle: {
     flexDirection: "column",
@@ -191,10 +210,15 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
     gap: 16,
   },
+  dateRowContainer: {
+    gap: 5,
+    flexDirection: "column",
+    backgroundColor: "transparent",
+  },
   buttons: {
     flexDirection: "column",
     alignItems: "center",
-    gap: 15,
+    gap: 16,
   },
   colorWrapper: {
     flexDirection: "column",

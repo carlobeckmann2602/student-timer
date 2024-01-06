@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 20,
     justifyContent: "space-around",
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORTHEME.light.background,
   },
   stars: {
     flexDirection: "row",

@@ -1,4 +1,4 @@
-import { Modal, Pressable, ScrollView, StyleSheet } from "react-native";
+import { Pressable, ScrollView, StyleSheet } from "react-native";
 
 import { View } from "@/components/Themed";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -11,9 +11,8 @@ import { COLORTHEME } from "@/constants/Theme";
 import { useModules } from "@/context/ModuleContext";
 import { useState } from "react";
 import React from "react";
-import { convertMinutesToHours, printDateAsString } from "@/libs/timeHelper";
+import { convertMinutesToHours } from "@/libs/timeHelper";
 import { LearningUnitEnum } from "@/constants/LearningUnitEnum";
-import { LearningSessionType } from "@/types/learningSessionType";
 import { MoreVertical, StarIcon } from "lucide-react-native";
 import { FlatList } from "react-native-gesture-handler";
 
