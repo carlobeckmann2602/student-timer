@@ -12,7 +12,7 @@ import { useToast } from "react-native-toast-notifications";
 import Button from "@/components/Button";
 import InputField from "@/components/InputField";
 import { Text, View } from "@/components/Themed";
-import { COLORS, COLORTHEME } from "@/constants/Theme";
+import { COLORS } from "@/constants/Theme";
 import { useAuth } from "@/context/AuthContext";
 import { useAxios } from "@/context/AxiosContext";
 import { useModules } from "@/context/ModuleContext";
@@ -38,7 +38,7 @@ export default function Success() {
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <View style={styles.stars}>
+      <View>
         <StarRating
           interactive
           starAmount={starAmount}
@@ -146,13 +146,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     justifyContent: "space-around",
     backgroundColor: COLORS.white,
-  },
-  stars: {
-    flexDirection: "row",
-    justifyContent: "center",
-  },
-  star: {
-    cursor: "pointer",
   },
   successContainer: {
     alignItems: "center",
