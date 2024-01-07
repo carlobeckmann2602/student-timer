@@ -14,15 +14,14 @@ type LearningUnitFormProps = {
   inputData: LearningUnitType;
   onDelete: (id: number) => void;
   onChange: (changedUnit: LearningUnitType) => void;
-  onValidationError: React.Dispatch<React.SetStateAction<boolean>>;
+  setValidationErrorCallback: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export function LearningUnitForm(props: LearningUnitFormProps) {
-  const { inputData, onDelete, onChange, onValidationError } = props;
+  const { inputData, onDelete, onChange, setValidationErrorCallback } = props;
 
   const router = useRouter();
 
-  const [learningUnitName, setLearningUnitName] = useState(inputData.name);
   const [selectedUnit, setSelectedUnit] = useState<
     LearningUnitEnum | undefined
   >();
@@ -32,71 +31,87 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
     inputData.workloadPerWeek
   );
 
-  const [workLoadError, setStudyCourseError] = useState("");
-  const [creditPointError, setEmailError] = useState("");
+  const [workLoadError, setWorkloadError] = useState("");
+  const [endDateError, setEndDateError] = useState("");
 
   const onNewInput = () => {
-    onChange({
-      id: inputData.id,
-      name: selectedUnit,
-      startDate: startDate,
-      endDate: endDate,
-      workloadPerWeek: workloadPerWeek,
-      totalLearningTime: 0,
-    } as LearningUnitType);
+    if (validateInputs())
+      onChange({
+        id: inputData.id,
+        name: selectedUnit,
+        startDate: startDate,
+        endDate: endDate,
+        workloadPerWeek: workloadPerWeek,
+        totalLearningTime: 0,
+      } as LearningUnitType);
+  };
+
+  const validateInputs = () => {
+    var datesValid = true;
+    if (endDate.getTime() - startDate.getTime() <= 0) {
+      setEndDateError("Das Enddatum muss nach dem Startdatum liegen");
+      datesValid = false;
+    } else {
+      setEndDateError("");
+    }
+
+    var workloadPerWeekValid = true;
+    if (workloadPerWeek <= 0) {
+      setWorkloadError("Der Aufwand muss größer als 0 Std. sein");
+      workloadPerWeekValid = false;
+    } else {
+      setWorkloadError("");
+    }
+
+    if (datesValid && workloadPerWeek) {
+      setValidationErrorCallback(false);
+      return true;
+    } else {
+      setValidationErrorCallback(true);
+      return false;
+    }
   };
 
   return (
     <View style={styles.outerWrapper}>
-      <View style={styles.row}>
-        {/* <InputField
-          label="Name"
-          onChangeText={(value) => {
-            setLearningUnitName(value);
-            onNewInput();
-          }}
-          value={learningUnitName}
-          message={creditPointError}
-          messageColor="red"
-        /> */}
-      </View>
+      <View style={styles.row}></View>
       <View style={styles.row}>
         <UnitPicker
-          label="Name der Lerneinheit"
+          label="Typ der Lerneinheit*"
           onValueChange={(value: LearningUnitEnum) => {
             setSelectedUnit(value);
             onNewInput();
           }}
         />
       </View>
-
       <View style={styles.row}>
         <DateTimePicker
-          label="Startdatum"
+          label="Startdatum*"
           value={startDate}
           onChangeDate={(selectedDate) => {
-            const currentDate = selectedDate;
-            if (currentDate) {
-              setStartDate(currentDate);
+            if (selectedDate) {
+              setStartDate(selectedDate);
               onNewInput();
             }
           }}
         />
         <DateTimePicker
-          label="Enddatum"
+          label="Enddatum*"
           value={endDate}
           onChangeDate={(selectedDate) => {
-            const currentDate = selectedDate;
-            if (currentDate) {
-              setEndDate(currentDate);
+            if (selectedDate) {
+              setEndDate(selectedDate);
               onNewInput();
             }
           }}
+          minimumDate={startDate}
+          message={endDateError}
+          messageColor="red"
         />
       </View>
       <View style={styles.row}>
         <InputField
-          label="Arbeitsaufwand pro Woche"
+          label="Arbeitsaufwand pro Woche*"
           onChangeText={(value) => {
             +value ? setWorkloadPerWeek(+value) : setWorkloadPerWeek(0);
             onNewInput();
@@ -105,6 +120,7 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
           message={workLoadError}
           messageColor="red"
           inputMode="numeric"
+          inputUnit="Std."
         />
       </View>
       <View style={styles.row}>
