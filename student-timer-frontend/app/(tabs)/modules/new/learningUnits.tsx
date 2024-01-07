@@ -8,7 +8,7 @@ import { useModules } from "@/context/ModuleContext";
 import { LearningUnitType } from "@/types/LearningUnitType";
 import { ModuleType } from "@/types/ModuleType";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -26,7 +26,8 @@ export default function NewModuleLearningUnits() {
     examDate?: string;
   }>();
 
-  const [validationError, setValidationError] = useState(true);
+  const [validationError, setValidationError] = useState(false);
+  const [validationIndicator, setValidationIndicator] = useState<boolean>();
 
   const toast = useToast();
   const { authState } = useAuth();
@@ -37,7 +38,7 @@ export default function NewModuleLearningUnits() {
     {
       id: Math.random(),
       name: LearningUnitEnum.VORLESUNG,
-      workloadPerWeek: 0,
+      workloadPerWeek: 1,
       startDate: new Date(),
       endDate: new Date(),
       totalLearningTime: 0,
@@ -47,12 +48,24 @@ export default function NewModuleLearningUnits() {
   const router = useRouter();
 
   const onLearningUnitChange = (changedUnit: LearningUnitType) => {
-    setLearningUnits((prevLearningUnits) => {
-      const newlearningUnits = prevLearningUnits.map((current) => {
-        return current.id === changedUnit.id ? changedUnit : current;
-      });
-      return newlearningUnits;
+    let updated = learningUnits.map((current) => {
+      return current.id === changedUnit.id ? changedUnit : current;
     });
+    setLearningUnits(updated);
+    // console.log("Vorher");
+    // console.log(learningUnits);
+    // const newlearningUnits = learningUnits.map((current) => {
+    //   if (current.id == changedUnit.id) {
+    //     // console.log(current);
+    //     // console.log(changedUnit);
+    //   }
+    //   return current.id === changedUnit.id ? changedUnit : current;
+    // });
+    // // console.log(newlearningUnits);
+    // setLearningUnits(newlearningUnits);
+
+    console.log("Final");
+    console.log(learningUnits);
   };
 
   const onDeleteLearningUnit = (id: number) => {
@@ -67,7 +80,7 @@ export default function NewModuleLearningUnits() {
       const newlearningUnit = {
         id: Math.random(),
         name: LearningUnitEnum.VORLESUNG,
-        workloadPerWeek: 0,
+        workloadPerWeek: 1,
         startDate: new Date(),
         endDate: new Date(),
         totalLearningTime: 0,
@@ -77,7 +90,15 @@ export default function NewModuleLearningUnits() {
   };
 
   const onCreateModule = async () => {
-    if (validationError) return;
+    setValidationError(false);
+    setValidationIndicator((prevState) => (prevState ? !prevState : false));
+    if (validationError) {
+      toast.show(
+        "Überprüfe alle Eingaben auf ihre Gültigkeit. Erst dann kann das Modul angelegt werden.",
+        { type: "danger" }
+      );
+      return;
+    }
 
     let id = toast.show("Erstellen...");
     let response;
@@ -102,17 +123,18 @@ export default function NewModuleLearningUnits() {
         `/students/${authState?.user.id}/modules`,
         moduleDTO
       );
-
       const createdModule: ModuleType | undefined = response?.data;
-      learningUnits.forEach(async (unit) => {
+      learningUnits.forEach(async (unit: LearningUnitType) => {
         // Multiply workloadPerWeek with 60 (minutes per hour) as the input is given in hours but the backend expects minutes
+        let minutesPerHour = 60;
+
         await authAxios?.post(
           `/students/${authState?.user.id}/modules/${createdModule?.id}/learningUnits`,
           {
             name: unit.name,
             startDate: unit.startDate.toISOString().substring(0, 10),
             endDate: unit.endDate.toISOString().substring(0, 10),
-            workloadPerWeek: unit.workloadPerWeek * 60,
+            workloadPerWeek: unit.workloadPerWeek * minutesPerHour,
           }
         );
       });
@@ -136,7 +158,7 @@ export default function NewModuleLearningUnits() {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={{ flex: 1 }}
+      style={{ flex: 1, backgroundColor: COLORTHEME.light.background }}
     >
       <ScrollView
         style={styles.scrollViewContainer}
@@ -144,51 +166,64 @@ export default function NewModuleLearningUnits() {
       >
         {learningUnits.map((unit) => (
           <LearningUnitForm
-            inputData={unit}
-            onDelete={onDeleteLearningUnit}
-            onChange={onLearningUnitChange}
-            setValidationErrorCallback={setValidationError}
             key={unit.id}
+            inputData={unit}
+            onDelete={
+              learningUnits.length > 1 ? onDeleteLearningUnit : undefined
+            }
+            onChange={onLearningUnitChange}
+            setValidationErrorCallback={(value) => {
+              // if one form sets the validationError to true (as it received invalid inputs),
+              // the validationError-state should not be overwritten by other, possibly valid forms
+              if (!validationError) setValidationError(value);
+            }}
+            validationIndicator={validationIndicator}
           />
         ))}
-        <View style={styles.buttons}>
-          <Button
-            text="Lerneinheit hinzufügen"
-            backgroundColor={COLORTHEME.light.primary}
-            textColor={COLORTHEME.light.grey2}
-            onPress={onAddLearningUnit}
-            style={{ width: 200 }}
-          />
-          <Button
-            text="Fertig"
-            backgroundColor={COLORTHEME.light.primary}
-            textColor={COLORTHEME.light.grey2}
-            onPress={onCreateModule}
-            style={{ width: 200 }}
-            disabled={validationError}
-          />
-        </View>
       </ScrollView>
+      <View style={styles.buttons}>
+        <Button
+          text="Lerneinheit hinzufügen"
+          backgroundColor={COLORTHEME.light.background}
+          textColor={COLORTHEME.light.primary}
+          onPress={onAddLearningUnit}
+          style={{
+            width: 200,
+            borderWidth: 4,
+            borderColor: COLORTHEME.light.primary,
+          }}
+        />
+        <Button
+          text="Modul erstellen"
+          backgroundColor={COLORTHEME.light.primary}
+          textColor={COLORTHEME.light.grey2}
+          onPress={onCreateModule}
+          style={{ width: 200 }}
+        />
+      </View>
     </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   scrollViewContainer: {
+    flexGrow: 1,
     flexDirection: "column",
-    padding: 24,
     gap: 24,
+    padding: 12,
+    backgroundColor: COLORTHEME.light.background,
   },
   scrollViewContainerStyle: {
     alignItems: "center",
     justifyContent: "space-around",
     gap: 16,
+    paddingBottom: 24,
   },
   buttons: {
     flexDirection: "column",
     alignItems: "center",
-    gap: 15,
-    paddingBottom: 46,
+    gap: 8,
+    paddingVertical: 16,
     backgroundColor: "transparent",
   },
 });
