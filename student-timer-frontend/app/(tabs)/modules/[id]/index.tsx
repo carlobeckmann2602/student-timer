@@ -1,4 +1,4 @@
-import { Pressable, ScrollView, StyleSheet } from "react-native";
+import { Alert, Pressable, ScrollView, StyleSheet } from "react-native";
 
 import { View } from "@/components/Themed";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -13,8 +13,11 @@ import { useState } from "react";
 import React from "react";
 import { convertMinutesToHours } from "@/libs/timeHelper";
 import { LearningUnitEnum } from "@/constants/LearningUnitEnum";
-import { MoreVertical, StarIcon } from "lucide-react-native";
+import { StarIcon, Pencil, Trash2 } from "lucide-react-native";
 import { FlatList } from "react-native-gesture-handler";
+import { useToast } from "react-native-toast-notifications";
+import { useAuth } from "@/context/AuthContext";
+import { useAxios } from "@/context/AxiosContext";
 
 export default function ModulesDetailScreen() {
   const { id } = useLocalSearchParams<{
@@ -23,6 +26,10 @@ export default function ModulesDetailScreen() {
 
   const router = useRouter();
   const { modules } = useModules();
+  const toast = useToast();
+  const { authState } = useAuth();
+  const { authAxios } = useAxios();
+  const { fetchModules } = useModules();
 
   // TODO?
   const isLoading = false;
@@ -63,6 +70,42 @@ export default function ModulesDetailScreen() {
     return `${convertMinutesToHours(
       unit.workloadPerWeek
     )} Std., ${weekAmount} Wochen`;
+  };
+
+  const onDelete = (trackingSessionId: number) => {
+    Alert.alert(
+      "Tracking wirklich löschen?",
+      "Möchtest du das Tracking wirklich unwiederuflich löschen?",
+      [
+        {
+          text: "Abbrechen",
+          style: "cancel",
+        },
+        {
+          text: "Löschen",
+          onPress: () => {
+            deleteLearningSession(trackingSessionId);
+          },
+          style: "destructive",
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+
+  const deleteLearningSession = async (trackingSessionId: number) => {
+    let id = toast.show("Löschen...", { type: "loading" });
+    try {
+      await authAxios?.delete(
+        `/students/${authState?.user.id}/modules/${detailModule.id}/learningSessions/${trackingSessionId}`
+      );
+      toast.update(id, "Tracking erfolgreich gelöscht", { type: "success" });
+      fetchModules && (await fetchModules());
+    } catch (e) {
+      toast.update(id, `Fehler beim Löschen des Trackings: ${e}`, {
+        type: "danger",
+      });
+    }
   };
 
   return (
@@ -177,13 +220,17 @@ export default function ModulesDetailScreen() {
                             size={20}
                           />
                         </View>
-                        <Pressable onPress={() => {}}>
-                          <MoreVertical
-                            size={28}
-                            color=""
-                            fill={COLORTHEME.light.grey3}
-                            strokeWidth={1}
-                          />
+                        <Pressable
+                          onPress={() =>
+                            router.push({
+                              pathname: `modules/${detailModule.id}/learningSessions/${item.id}/edit`,
+                            } as never)
+                          }
+                        >
+                          <Pencil name="pencil" size={18} color="black" />
+                        </Pressable>
+                        <Pressable onPress={() => onDelete(item.id)}>
+                          <Trash2 size={18} name="trash2" color="red" />
                         </Pressable>
                       </View>
                     </View>

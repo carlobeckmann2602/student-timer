@@ -51,8 +51,7 @@ export default function ModulePicker(props: {
                 })
               : []
           }
-          onValueChange={(moduleIdString: string) => {
-            let moduleId = Number(moduleIdString);
+          onValueChange={(moduleId: number) => {
             setSelectedModuleId(moduleId);
             let module = modules?.find((module) => module.id === moduleId);
             if (!module) return;
