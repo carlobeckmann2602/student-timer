@@ -3,8 +3,11 @@ import { View, StyleSheet } from 'react-native';
 import InputField from "@/components/InputField";
 import { COLORTHEME } from "@/constants/Theme";
 import Button from "@/components/Button";
+import Pressable from "@/components/Pressable";
+import {H3} from "@/components/StyledText";
 
 export default function PasswordInput(props: {
+    title: string;
     userPassword: string;
     setUserPassword: (value: string) => void;
     userCheckPassword: string;
@@ -13,11 +16,18 @@ export default function PasswordInput(props: {
     buttonAction: (value: string) => void;
     cancelAction: (value: string) => void;
 }) {
-    const { userPassword, setUserPassword, passwordError,userCheckPassword, setUserCheckPassword, buttonAction, cancelAction, } = props;
+    const {
+        title,
+        userPassword, setUserPassword, passwordError,
+        userCheckPassword, setUserCheckPassword,
+        buttonAction,
+        cancelAction,
+    } = props;
 
     return (
         <>
             <View style={styles.container}>
+                <H3>{title}</H3>
                 <View style={styles.outerWrapper}>
                     <View style={styles.row}>
                         <InputField
@@ -49,12 +59,11 @@ export default function PasswordInput(props: {
                     onPress={buttonAction}
                     style={{ width: 200 }}
                 />
-                <Button
-                    text="Abbrechen"
-                    backgroundColor={'transparent'}
-                    textColor={COLORTHEME.light.text}
+                <Pressable
+                    text={"Abbrechen"}
+                    accessibilityLabel={"Abbrechen"}
+                    accessibilityRole={"button"}
                     onPress={cancelAction}
-                    style={{ width: 200 }}
                 />
             </View>
         </>
@@ -67,7 +76,8 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "space-around",
         paddingHorizontal: 12,
-        marginVertical: 10,
+        marginVertical: 20,
+        gap: 10,
     },
     outerWrapper: {
         width: "100%",

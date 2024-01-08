@@ -10,6 +10,8 @@ import Header from "@/components/Header";
 import { useAuth } from "@/context/AuthContext";
 import UserDetailsInput from "@/components/userInput/UserDetailsInput";
 import PasswordInput from "@/components/userInput/PasswordInput";
+import Pressable from "@/components/Pressable";
+import {H3} from "@/components/StyledText";
 export default function Edit() {
 
     const { onUpdate, onRemove, onChangePassword, authState } = useAuth();
@@ -211,8 +213,8 @@ return (
             </View>
             {/*Benutzerinformationen bearbeiten*/}
             <View>
-                <Header title="Profil bearbeiten"></Header>
                 <UserDetailsInput
+                    title={"Daten bearbeiten"}
                     userName={userName}
                     setUserName={handleInputChange(setUserName)}
                     nameError={nameError}
@@ -227,6 +229,7 @@ return (
                 />
                 {/*Passwort ändern*/}
                 <PasswordInput
+                    title={"Passwort ändern"}
                     userPassword={userPassword}
                     setUserPassword={handleInputChange(setUserPassword)}
                     userCheckPassword={userCheckPassword}
@@ -238,12 +241,12 @@ return (
             </View>
             {/*Löschen*/}
             <View style={styles.actionContainer}>
-                <Button
-                    text="Konto löschen"
-                    backgroundColor={'transparent'}
+                <Pressable
+                    text={"Konto löschen"}
                     textColor={'#F00'}
+                    accessibilityLabel={"Konto löschen"}
+                    accessibilityRole={"button"}
                     onPress={onDelete}
-                    style={{ width: 200 }}
                 />
             </View>
         </ScrollView>

@@ -1,12 +1,11 @@
 import React from "react";
-import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+import {View, Text, Image, StyleSheet} from "react-native";
 import Button from "@/components/Button";
+import Pressable from "@/components/Pressable"
 import { COLORTHEME } from "@/constants/Theme";
 import { User2 } from "lucide-react-native";
-import { LogOutIcon } from "lucide-react-native";
-import {Link, router} from "expo-router";
+import {router} from "expo-router";
 import { useAuth } from "@/context/AuthContext";
-import {Header} from "@react-navigation/elements";
 
 export default function Profile() {
 
@@ -71,13 +70,14 @@ export default function Profile() {
           onPress={handleEditProfile}
         />
       </View>
-      <Button
-          text="Logout"
-          backgroundColor={'transparent'}
-          textColor={COLORTHEME.light.text}
-          onPress={onLogout}
-          style={{ width: 200 }}
-      />
+      <View>
+        <Pressable
+            text={"Logout"}
+            accessibilityLabel={"Logout"}
+            accessibilityRole={"button"}
+            onPress={onLogout}
+        />
+      </View>
     </View>
   );
 }
