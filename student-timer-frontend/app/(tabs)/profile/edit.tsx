@@ -3,17 +3,17 @@ import {Image, TouchableOpacity, StyleSheet, ScrollView, Alert} from "react-nati
 import { View } from "@/components/Themed";
 import { useRouter } from "expo-router";
 import { COLORTHEME } from "@/constants/Theme";
-import Button from "@/components/Button";
 import { User2 } from "lucide-react-native";
 import { Edit2 } from 'lucide-react-native';
-import Header from "@/components/Header";
 import { useAuth } from "@/context/AuthContext";
 import UserDetailsInput from "@/components/userInput/UserDetailsInput";
 import PasswordInput from "@/components/userInput/PasswordInput";
 import Pressable from "@/components/Pressable";
+import {useToast} from "react-native-toast-notifications";
 
 export default function Edit() {
 
+    const toast = useToast();
     const { onUpdate, onRemove, onChangePassword, authState } = useAuth();
     const router = useRouter();
 
@@ -94,6 +94,7 @@ export default function Edit() {
     };
 
     const update = async () => {
+        let id = toast.show("Speichern...", { type: "loading" });
         if (validateInput()) {
             const result = await onUpdate!(
                 userName,
@@ -101,6 +102,7 @@ export default function Edit() {
                 userEmail,
             );
             console.log("validateInput")
+            toast.update(id, "Profildaten erfolgreich geändert", { type: "success" });
             if (result && result.error) {
                 console.log("error")
                 setError(result.msg);
@@ -112,12 +114,15 @@ export default function Edit() {
     };
 
     const changePassword = async () => {
+        let id = toast.show("Speichern...", { type: "loading" });
         if (validatePassword()) {
             const result = await onChangePassword!(
                 userPassword,
                 userCheckPassword,
             );
             console.log("validatePassword")
+            toast.update(id, "Passwort erfolgreich geändert", { type: "success" });
+
             if (result && result.error) {
                 console.log("validatePassword error:", result.error)
                 setError(result.msg);
@@ -129,15 +134,20 @@ export default function Edit() {
     };
 
     const removeUser = async () => {
+        let id = toast.show("Löschen...", { type: "loading" });
         console.log("User removed:" , authState?.user.email)
         if (authState?.user.id) {
             const result = await onRemove!(
                 authState?.user.id
             );
             console.log("remove")
+            toast.update(id, "Ihr Konto wurde erfolgreich gelöscht", { type: "success" });
             if (result && result.error) {
                 console.log("error")
                 setError(result.msg);
+                toast.update(id, `Fehler beim Löschen des Kontos: ${error}`, {
+                    type: "danger",
+                });
             } else {
                 console.log("router")
                 router.push("/(auth)/signup");
@@ -282,7 +292,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         gap: 15,
-        marginTop: 20,
+        marginBottom: 40,
     },
     editIcon: {
         position: 'absolute',
