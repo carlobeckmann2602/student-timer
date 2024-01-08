@@ -58,7 +58,7 @@ export function ModuleCard(props: ModuleCardProps) {
   };
 
   const handleDelete = async () => {
-    let id = toast.show("Löschen...");
+    let id = toast.show("Löschen...", { type: "loading" });
     try {
       await authAxios?.delete(
         `/students/${authState?.user.id}/modules/${moduleData.id}`

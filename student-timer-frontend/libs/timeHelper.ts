@@ -7,6 +7,18 @@ export const msToTimeObject = (
   return { hours, mins, secs };
 };
 
+export const timeObjectToSeconds = ({
+  hours,
+  mins,
+  secs,
+}: {
+  hours: number;
+  mins: number;
+  secs: number;
+}): number => {
+  return hours * 3600 + mins * 60 + secs;
+};
+
 export const formatTime = ({
   hours,
   mins,

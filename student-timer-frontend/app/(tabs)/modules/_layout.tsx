@@ -12,6 +12,14 @@ export default function ModulesLayout() {
           animation: "default",
         }}
       />
+      <Stack.Screen
+        name="[id]/learningSessions/[learningSessionId]/edit"
+        options={{
+          headerShown: false,
+          presentation: "modal",
+          animation: "default",
+        }}
+      />
       <Stack.Screen name="new/index" options={{ headerShown: false }} />
       <Stack.Screen name="new/learningUnits" options={{ headerShown: false }} />
     </Stack>

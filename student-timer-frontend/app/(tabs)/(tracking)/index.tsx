@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Platform, KeyboardAvoidingView, StyleSheet } from "react-native";
-import { router, useLocalSearchParams } from "expo-router";
+import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import { PauseIcon, PlayIcon } from "lucide-react-native";
 
 import { View } from "@/components/Themed";
@@ -11,8 +11,11 @@ import ModulePicker from "@/components/modules/ModulePicker";
 import Timer from "@/components/tracking/Timer";
 import { COLORS, COLORTHEME } from "@/constants/Theme";
 import { ModuleType } from "@/types/ModuleType";
-import { useLocalNotification } from "@/hooks/useLocalNotification";
-import { sendPushNotification } from "@/libs/handleLocalNotification";
+import {
+  enableLocalNotification,
+  sendPushNotification,
+} from "@/libs/handleLocalNotification";
+import { roundNumber } from "@/libs/generalHelper";
 
 export default function Tracking() {
   const [isStopwatch, setIsStopwatch] = useState(true);
@@ -24,12 +27,20 @@ export default function Tracking() {
   const [startTime, setStartTime] = useState(0);
   const [selectedModule, setSelectedModule] = useState({} as ModuleType);
   const [timerIsDone, setTimerIsDone] = useState(false);
+  const [isFirstFocus, setIsFirstFocus] = useState(true);
   const { trackingSaved, discard } = useLocalSearchParams<{
     trackingSaved: string;
     discard: string;
   }>();
   const inputsEditable = !trackingIsActive && startTime === 0;
-  useLocalNotification();
+  useFocusEffect(
+    React.useCallback(() => {
+      if (isFirstFocus) {
+        enableLocalNotification();
+        setIsFirstFocus(false);
+      }
+    }, [isFirstFocus])
+  );
 
   useEffect(() => {
     if (timerIsDone) {
@@ -118,7 +129,9 @@ export default function Tracking() {
             style={styles.input}
             label="Runden"
             value={rounds}
-            onChangeText={setRounds}
+            onChangeText={(val) => {
+              setRounds(Math.abs(roundNumber(val, 1)).toString());
+            }}
             keyboardType="numeric"
             selectTextOnFocus
             editable={inputsEditable}
@@ -128,7 +141,9 @@ export default function Tracking() {
           style={styles.input}
           label="Rundenlänge"
           value={roundLen}
-          onChangeText={setRoundLen}
+          onChangeText={(val) => {
+            setRoundLen(Math.abs(roundNumber(val, 1)).toString());
+          }}
           keyboardType="numeric"
           inputUnit="min"
           selectTextOnFocus
@@ -138,7 +153,9 @@ export default function Tracking() {
           style={styles.input}
           label="Pausenlänge"
           value={pauseLen}
-          onChangeText={setPauseLen}
+          onChangeText={(val) => {
+            setPauseLen(Math.abs(roundNumber(val, 1)).toString());
+          }}
           keyboardType="numeric"
           inputUnit="min"
           selectTextOnFocus

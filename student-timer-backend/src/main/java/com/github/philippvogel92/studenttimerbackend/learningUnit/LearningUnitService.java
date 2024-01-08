@@ -3,20 +3,17 @@ package com.github.philippvogel92.studenttimerbackend.learningUnit;
 import com.github.philippvogel92.studenttimerbackend.learningUnit.dto.LearningUnitCreateDTO;
 import com.github.philippvogel92.studenttimerbackend.module.Module;
 import com.github.philippvogel92.studenttimerbackend.module.ModuleRepository;
-import com.github.philippvogel92.studenttimerbackend.module.dto.ModuleCreateDTO;
-import com.github.philippvogel92.studenttimerbackend.student.Student;
-import com.github.philippvogel92.studenttimerbackend.student.StudentRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
-@Component
+@Service
 public class LearningUnitService {
     private final ModuleRepository moduleRepository;
     private final LearningUnitRepository learningUnitRepository;
@@ -58,10 +55,14 @@ public class LearningUnitService {
     public void deleteLearningUnit(Long moduleId, Long learningUnitId) {
         LearningUnit learningUnit =
                 learningUnitRepository.findById(learningUnitId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Learning Unit doesn't exists"));
-        if (!Objects.equals(learningUnit.getModule().getId(), moduleId)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Learning Unit does not belong to the module");
+        Module module =
+                moduleRepository.findById(moduleId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Module not found"));
+
+        boolean isLearningUnitRemoved = module.getLearningUnits().remove(learningUnit);
+        if (!isLearningUnitRemoved) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Learning Unit not found in module");
         }
-        learningUnitRepository.delete(learningUnit);
+        moduleRepository.save(module);
     }
 
     @Transactional

@@ -1,6 +1,5 @@
 package com.github.philippvogel92.studenttimerbackend.auth;
 
-import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.github.philippvogel92.studenttimerbackend.auth.OAuth2.AppleTokenVerifier;
@@ -14,13 +13,13 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Objects;
 import java.util.Optional;
 
-@Component
+@Service
 public class AuthService {
 
     private final StudentRepository studentRepository;
