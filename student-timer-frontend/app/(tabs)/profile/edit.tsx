@@ -34,7 +34,7 @@ export default function Edit() {
         if (userName.length == 0) {
             setNameError("Name ist erforderlich");
         } else {
-            setNameError("");
+            setNameError("Es ist ein Fehler mit dem Namen aufgetreten.");
             nameValid = true;
         }
 
@@ -113,7 +113,7 @@ export default function Edit() {
             );
             console.log("validatePassword")
             if (result && result.error) {
-                console.log("error")
+                console.log("validatePassword error:", result.error)
                 setError(result.msg);
             } else {
                 console.log("router")
@@ -139,11 +139,35 @@ export default function Edit() {
         }
     };
 
+
+    const onCancel = () => {
+        console.log("Alert für Änderung verwerfen aktiviert:", authState?.user.email)
+        Alert.alert(
+            "Änderungen verwerfen?",
+            `Sie haben ungespeicherte Änderungen vorgenommen. Wenn Sie fortfahren, gehen alle ungespeicherten Daten verloren. Möchten Sie wirklich abbrechen?`,
+            [
+                {
+                    text: "Nein",
+                    onPress: () => console.log("Alert closed"),
+                    style: "cancel",
+                },
+                {
+                    text: "Ja",
+                    onPress: () => {
+                        cancel();
+                    },
+                    style: "destructive",
+                },
+            ],
+            { cancelable: false }
+        );
+    };
+
     const onDelete = () => {
         console.log("Alert für User-Löschung aktiviert:", authState?.user.email)
         Alert.alert(
             "Profil wirklich löschen?",
-            `Möchtest du deinen Account mit der E-Mail-Adresse "${authState?.user.email}" wirklich unwideruflich löschen? Alle zum Profil gehörenden Daten, Module, Lerneinheiten und Trackings werden dabei gelöscht.`,
+            `Möchtest du deinen Account mit der E-Mail-Adresse "${authState?.user.email}" wirklich unwiderruflich löschen? Alle zum Profil gehörenden Daten, Module, Lerneinheiten und Trackings werden dabei gelöscht.`,
             [
                 {
                     text: "Abbrechen",
@@ -191,7 +215,7 @@ return (
                     setUserEmail={setUserEmail}
                     emailError={emailError}
                     buttonAction={update}
-                    cancelAction={cancel}
+                    cancelAction={onCancel}
                 />
                 {/*Passwort ändern*/}
                 <PasswordInput
@@ -201,7 +225,7 @@ return (
                     setUserCheckPassword={setUserCheckPassword}
                     passwordError={passwordError}
                     buttonAction={changePassword}
-                    cancelAction={cancel}
+                    cancelAction={onCancel}
                 />
             </View>
             {/*Löschen*/}
