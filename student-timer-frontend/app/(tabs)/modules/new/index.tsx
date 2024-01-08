@@ -1,6 +1,7 @@
 import Button from "@/components/Button";
 import DateTimePicker from "@/components/DateTimePicker";
 import InputField from "@/components/InputField";
+import InputFieldNumeric from "@/components/InputFieldNumeric";
 import StyledCheckbox from "@/components/StyledCheckbox";
 import { P } from "@/components/StyledText";
 import { View } from "@/components/Themed";
@@ -118,11 +119,10 @@ export default function NewModule() {
           </View>
         </View>
         <View style={styles.row}>
-          <InputField
+          <InputFieldNumeric
             label="Credit-Points"
             onChangeText={setCreditPoints}
             value={creditPoints}
-            keyboardType="number-pad"
             message={creditPointError}
             messageColor="red"
             inputUnit="CP"

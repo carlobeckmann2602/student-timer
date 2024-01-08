@@ -9,6 +9,7 @@ import UnitPicker from "./UnitPicker";
 import { LearningUnitEnum } from "@/constants/LearningUnitEnum";
 import { Trash2 } from "lucide-react-native";
 import { roundNumber } from "@/libs/generalHelper";
+import InputFieldNumeric from "../InputFieldNumeric";
 
 type LearningUnitFormProps = {
   inputData: LearningUnitType;
@@ -130,26 +131,22 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
           {"Arbeitsaufwand pro Woche"}
         </P>
         <View style={styles.row}>
-          <InputField
+          <InputFieldNumeric
             onChangeText={(value) => {
               const hours = Math.abs(roundNumber(value, 0));
               setWorkloadPerWeekHour(hours);
+              validateWorkload();
             }}
-            onEndEditing={validateWorkload}
             value={workloadPerWeekHour.toString()}
-            keyboardType="number-pad"
-            inputMode="numeric"
             inputUnit="Std."
           />
-          <InputField
+          <InputFieldNumeric
             onChangeText={(value) => {
               const minutes = Math.abs(roundNumber(value, 0));
               setWorkloadPerWeekMinutes(minutes >= 60 ? 59 : minutes);
+              validateWorkload();
             }}
-            onEndEditing={validateWorkload}
             value={workloadPerWeekMinutes.toString()}
-            keyboardType="number-pad"
-            inputMode="numeric"
             inputUnit="min."
           />
         </View>
