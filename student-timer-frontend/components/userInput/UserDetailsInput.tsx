@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {View, StyleSheet, Text, TouchableOpacity, Pressable} from 'react-native';
 import InputField from "@/components/InputField";
 import { COLORTHEME } from "@/constants/Theme";
 import Button from "@/components/Button";
@@ -17,7 +17,13 @@ export default function UserDetailsInput(props: {
     buttonAction: (value: string) => void;
     cancelAction: (value: string) => void;
 }) {
-    const { userName, setUserName, nameError, userStudyCourse, setUserStudyCourse, studyCourseError, userEmail, setUserEmail, emailError, buttonAction, cancelAction, } = props;
+    const {
+        userName, setUserName, nameError,
+        userStudyCourse, setUserStudyCourse, studyCourseError,
+        userEmail, setUserEmail, emailError,
+        buttonAction,
+        cancelAction,
+    } = props;
 
     return (
         <>

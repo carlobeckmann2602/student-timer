@@ -17,6 +17,8 @@ export default function Edit() {
 
     const defaultPic = require("../../../assets/images/profile/profile-picture.jpg");
 
+    const [isChanged, setIsChanged] = useState(false);
+
     const [userName, setUserName] = useState(authState?.user.name || "");
     const [userStudyCourse, setUserStudyCourse] = useState(authState?.user.studyCourse || "");
     const [userEmail, setUserEmail] = useState(authState?.user.email || "");
@@ -28,6 +30,13 @@ export default function Edit() {
     const [emailError, setEmailError] = useState("");
     const [passwordError, setPasswordError] = useState("");
     const [error, setError] = useState("");
+
+    const handleInputChange = (setter: React.Dispatch<React.SetStateAction<string>>) => {
+        return (value: string) => {
+            setter(value);
+            setIsChanged(true);
+        };
+    };
 
     const validateInput = () => {
         let nameValid = false;
@@ -141,26 +150,30 @@ export default function Edit() {
 
 
     const onCancel = () => {
-        console.log("Alert für Änderung verwerfen aktiviert:", authState?.user.email)
-        Alert.alert(
-            "Änderungen verwerfen?",
-            `Sie haben ungespeicherte Änderungen vorgenommen. Wenn Sie fortfahren, gehen alle ungespeicherten Daten verloren. Möchten Sie wirklich abbrechen?`,
-            [
-                {
-                    text: "Nein",
-                    onPress: () => console.log("Alert closed"),
-                    style: "cancel",
-                },
-                {
-                    text: "Ja",
-                    onPress: () => {
-                        cancel();
+        if(isChanged){
+            console.log("Alert für Änderung verwerfen aktiviert:", authState?.user.email)
+            Alert.alert(
+                "Änderungen verwerfen?",
+                `Sie haben ungespeicherte Änderungen vorgenommen. Wenn Sie fortfahren, gehen alle ungespeicherten Daten verloren. Möchten Sie wirklich abbrechen?`,
+                [
+                    {
+                        text: "Nein",
+                        onPress: () => console.log("Alert closed"),
+                        style: "cancel",
                     },
-                    style: "destructive",
-                },
-            ],
-            { cancelable: false }
-        );
+                    {
+                        text: "Ja",
+                        onPress: () => {
+                            cancel();
+                        },
+                        style: "destructive",
+                    },
+                ],
+                { cancelable: false }
+            );
+        } else {
+            cancel();
+        }
     };
 
     const onDelete = () => {
@@ -206,13 +219,13 @@ return (
                 <Header title="Profil bearbeiten"></Header>
                 <UserDetailsInput
                     userName={userName}
-                    setUserName={setUserName}
+                    setUserName={handleInputChange(setUserName)}
                     nameError={nameError}
                     userStudyCourse={userStudyCourse}
-                    setUserStudyCourse={setUserStudyCourse}
+                    setUserStudyCourse={handleInputChange(setUserStudyCourse)}
                     studyCourseError={studyCourseError}
                     userEmail={userEmail}
-                    setUserEmail={setUserEmail}
+                    setUserEmail={handleInputChange(setUserEmail)}
                     emailError={emailError}
                     buttonAction={update}
                     cancelAction={onCancel}
@@ -220,9 +233,9 @@ return (
                 {/*Passwort ändern*/}
                 <PasswordInput
                     userPassword={userPassword}
-                    setUserPassword={setUserPassword}
+                    setUserPassword={handleInputChange(setUserPassword)}
                     userCheckPassword={userCheckPassword}
-                    setUserCheckPassword={setUserCheckPassword}
+                    setUserCheckPassword={handleInputChange(setUserCheckPassword)}
                     passwordError={passwordError}
                     buttonAction={changePassword}
                     cancelAction={onCancel}
