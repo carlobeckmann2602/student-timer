@@ -10,7 +10,7 @@ import {
 import { Text, View } from "@/components/Themed";
 import { COLORTHEME } from "@/constants/Theme";
 
-type InputFieldProps = {
+export type InputFieldProps = {
   label?: string;
   value: string;
   onChangeText: (text: string) => void;
