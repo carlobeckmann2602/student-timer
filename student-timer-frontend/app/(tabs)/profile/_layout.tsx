@@ -1,5 +1,4 @@
 import { Stack } from "expo-router";
-import ConfirmModal from "@/app/(tabs)/profile/confirmModal";
 
 export default function ProfileLayout() {
     return (
