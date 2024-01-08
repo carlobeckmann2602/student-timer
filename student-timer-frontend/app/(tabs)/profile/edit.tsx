@@ -11,7 +11,7 @@ import { useAuth } from "@/context/AuthContext";
 import UserDetailsInput from "@/components/userInput/UserDetailsInput";
 import PasswordInput from "@/components/userInput/PasswordInput";
 import Pressable from "@/components/Pressable";
-import {H3} from "@/components/StyledText";
+
 export default function Edit() {
 
     const { onUpdate, onRemove, onChangePassword, authState } = useAuth();
@@ -45,7 +45,7 @@ export default function Edit() {
         if (userName.length == 0) {
             setNameError("Name ist erforderlich");
         } else {
-            setNameError("Es ist ein Fehler mit dem Namen aufgetreten.");
+            setNameError("");
             nameValid = true;
         }
 
