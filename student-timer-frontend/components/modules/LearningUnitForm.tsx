@@ -8,6 +8,7 @@ import { LabelS, P } from "../StyledText";
 import UnitPicker from "./UnitPicker";
 import { LearningUnitEnum } from "@/constants/LearningUnitEnum";
 import { Trash2 } from "lucide-react-native";
+import { roundNumber } from "@/libs/generalHelper";
 
 type LearningUnitFormProps = {
   inputData: LearningUnitType;
@@ -31,8 +32,11 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
   );
   const [startDate, setStartDate] = useState(inputData.startDate);
   const [endDate, setEndDate] = useState(inputData.endDate);
-  const [workloadPerWeek, setWorkloadPerWeek] = useState(
-    inputData.workloadPerWeek
+  const [workloadPerWeekHour, setWorkloadPerWeekHour] = useState(
+    Math.floor(inputData.workloadPerWeek / 60)
+  );
+  const [workloadPerWeekMinutes, setWorkloadPerWeekMinutes] = useState(
+    inputData.workloadPerWeek % 60
   );
 
   const [workLoadError, setWorkloadError] = useState("");
@@ -45,7 +49,7 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
         name: selectedUnit,
         startDate: startDate,
         endDate: endDate,
-        workloadPerWeek: workloadPerWeek,
+        workloadPerWeek: workloadPerWeekMinutes + workloadPerWeekHour * 60,
         totalLearningTime: 0,
       } as LearningUnitType);
   }, [validationIndicator]);
@@ -74,8 +78,8 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
 
   const validateWorkload = () => {
     var workloadPerWeekValid = true;
-    if (workloadPerWeek <= 0) {
-      setWorkloadError("Der Aufwand muss größer als 0 Std. sein");
+    if (workloadPerWeekHour <= 0 && workloadPerWeekMinutes <= 0) {
+      setWorkloadError("Der Aufwand muss größer als 0 min. sein");
       workloadPerWeekValid = false;
     } else {
       setWorkloadError("");
@@ -121,19 +125,37 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
         </View>
         {dateError !== "" && <P style={styles.errorMessage}>{dateError}</P>}
       </View>
-      <View style={styles.row}>
-        <InputField
-          label="Arbeitsaufwand pro Woche"
-          onChangeText={(value) => {
-            if (+value) setWorkloadPerWeek(+value);
-          }}
-          onEndEditing={validateWorkload}
-          value={workloadPerWeek.toString()}
-          message={workLoadError}
-          messageColor="red"
-          inputMode="numeric"
-          inputUnit="Std."
-        />
+      <View style={styles.workloadRowContainer}>
+        <P style={{ color: COLORTHEME.light.primary }}>
+          {"Arbeitsaufwand pro Woche"}
+        </P>
+        <View style={styles.row}>
+          <InputField
+            onChangeText={(value) => {
+              const hours = Math.abs(roundNumber(value, 0));
+              setWorkloadPerWeekHour(hours);
+            }}
+            onEndEditing={validateWorkload}
+            value={workloadPerWeekHour.toString()}
+            keyboardType="number-pad"
+            inputMode="numeric"
+            inputUnit="Std."
+          />
+          <InputField
+            onChangeText={(value) => {
+              const minutes = Math.abs(roundNumber(value, 0));
+              setWorkloadPerWeekMinutes(minutes >= 60 ? 59 : minutes);
+            }}
+            onEndEditing={validateWorkload}
+            value={workloadPerWeekMinutes.toString()}
+            keyboardType="number-pad"
+            inputMode="numeric"
+            inputUnit="min."
+          />
+        </View>
+        {workLoadError !== "" && (
+          <P style={styles.errorMessage}>{workLoadError}</P>
+        )}
       </View>
       {onDelete && (
         <View
@@ -187,6 +209,11 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "flex-start",
     alignItems: "flex-start",
+  },
+  workloadRowContainer: {
+    gap: 5,
+    flexDirection: "column",
+    backgroundColor: "transparent",
   },
   errorMessage: {
     color: "red",

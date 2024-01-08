@@ -38,7 +38,7 @@ export default function NewModuleLearningUnits() {
     {
       id: Math.random(),
       name: LearningUnitEnum.VORLESUNG,
-      workloadPerWeek: 1,
+      workloadPerWeek: 0,
       startDate: new Date(),
       endDate: new Date(),
       totalLearningTime: 0,
@@ -80,7 +80,7 @@ export default function NewModuleLearningUnits() {
       const newlearningUnit = {
         id: Math.random(),
         name: LearningUnitEnum.VORLESUNG,
-        workloadPerWeek: 1,
+        workloadPerWeek: 0,
         startDate: new Date(),
         endDate: new Date(),
         totalLearningTime: 0,
@@ -125,16 +125,13 @@ export default function NewModuleLearningUnits() {
       );
       const createdModule: ModuleType | undefined = response?.data;
       learningUnits.forEach(async (unit: LearningUnitType) => {
-        // Multiply workloadPerWeek with 60 (minutes per hour) as the input is given in hours but the backend expects minutes
-        let minutesPerHour = 60;
-
         await authAxios?.post(
           `/students/${authState?.user.id}/modules/${createdModule?.id}/learningUnits`,
           {
             name: unit.name,
             startDate: unit.startDate.toISOString().substring(0, 10),
             endDate: unit.endDate.toISOString().substring(0, 10),
-            workloadPerWeek: unit.workloadPerWeek * minutesPerHour,
+            workloadPerWeek: unit.workloadPerWeek,
           }
         );
       });
