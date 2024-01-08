@@ -29,6 +29,7 @@ export default function Edit() {
     const [studyCourseError, setStudyCourseError] = useState("");
     const [emailError, setEmailError] = useState("");
     const [passwordError, setPasswordError] = useState("");
+    const [error, setError] = useState("");
 
     const handleInputChange = (setter: React.Dispatch<React.SetStateAction<string>>) => {
         return (value: string) => {
