@@ -70,12 +70,6 @@ export default function Profile() {
           textColor="#FFFFFF"
           onPress={handleEditProfile}
         />
-        <Button
-          text="Daten exportieren"
-          backgroundColor={COLORTHEME.light.primary}
-          textColor="#FFFFFF"
-          onPress={handleExportData}
-        />
       </View>
       <Button
           text="Logout"
