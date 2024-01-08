@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {Image, TouchableOpacity, StyleSheet, ScrollView, Alert, Text} from "react-native";
+import {Image, TouchableOpacity, StyleSheet, ScrollView, Alert} from "react-native";
 import { View } from "@/components/Themed";
 import { useRouter } from "expo-router";
 import { COLORTHEME } from "@/constants/Theme";
@@ -29,7 +29,6 @@ export default function Edit() {
     const [studyCourseError, setStudyCourseError] = useState("");
     const [emailError, setEmailError] = useState("");
     const [passwordError, setPasswordError] = useState("");
-    const [error, setError] = useState("");
 
     const handleInputChange = (setter: React.Dispatch<React.SetStateAction<string>>) => {
         return (value: string) => {
@@ -66,12 +65,7 @@ export default function Edit() {
             setEmailError("");
             emailValid = true;
         }
-
-        if (nameValid && studyCourseValid && emailValid) {
-            return true;
-        }
-
-        return false;
+        return  (nameValid && studyCourseValid && emailValid);
     };
 
     const validatePassword = () => {
