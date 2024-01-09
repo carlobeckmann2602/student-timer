@@ -1,23 +1,21 @@
 import { Alert, Pressable, ScrollView, StyleSheet } from "react-native";
-
 import { View } from "@/components/Themed";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { ModuleType } from "@/types/ModuleType";
 import { H1, H2, P, Subhead } from "@/components/StyledText";
 import { ModuleChart } from "@/components/modules/ModuleChart";
-import { computeDateDifference } from "@/libs/moduleTypeHelper";
 import { LearningUnitType } from "@/types/LearningUnitType";
 import { COLORTHEME } from "@/constants/Theme";
 import { useModules } from "@/context/ModuleContext";
 import { useState } from "react";
 import React from "react";
 import { convertMinutesToHours } from "@/libs/timeHelper";
-import { LearningUnitEnum } from "@/constants/LearningUnitEnum";
 import { StarIcon, Pencil, Trash2 } from "lucide-react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { useToast } from "react-native-toast-notifications";
 import { useAuth } from "@/context/AuthContext";
 import { useAxios } from "@/context/AxiosContext";
+import LearningUnitRow from "@/components/modules/LearningUnitRow";
 
 export default function ModulesDetailScreen() {
   const { id } = useLocalSearchParams<{
@@ -63,14 +61,6 @@ export default function ModulesDetailScreen() {
 
   const [moduleError, setModuleError] = useState(false);
   const [detailModule] = useState<ModuleType>(fetchDetailModule());
-
-  const computeModuleDetailUnitString = (unit: LearningUnitType) => {
-    let weekAmount = computeDateDifference(unit.endDate, unit.startDate, true);
-
-    return `${convertMinutesToHours(
-      unit.workloadPerWeek
-    )} Std., ${weekAmount} Wochen`;
-  };
 
   const onDelete = (trackingSessionId: number) => {
     Alert.alert(
@@ -140,30 +130,14 @@ export default function ModulesDetailScreen() {
               <View>
                 {detailModule?.learningUnits.map((unit: LearningUnitType) => {
                   return (
-                    <View key={unit.id}>
-                      <View style={styles.unitRow}>
-                        <View
-                          style={[
-                            styles.moduleIndicatorM,
-                            { backgroundColor: unit.colorCode },
-                          ]}
-                        />
-                        <View style={styles.unitRowTitle}>
-                          <Subhead>{unit.name}</Subhead>
-                          <P>
-                            {unit.name === LearningUnitEnum.SELBSTSTUDIUM
-                              ? `${convertMinutesToHours(
-                                  detailModule.totalModuleTime -
-                                    detailModule.totalLearningTime
-                                )} Std. verbleibend`
-                              : computeModuleDetailUnitString(unit)}
-                          </P>
-                        </View>
-                        <Subhead>
-                          {convertMinutesToHours(unit.totalLearningTime)} Std.
-                        </Subhead>
-                      </View>
-                    </View>
+                    <LearningUnitRow
+                      key={unit.id}
+                      learningUnit={unit}
+                      selfLearningTime={
+                        detailModule.totalModuleTime -
+                        detailModule.totalLearningTime
+                      }
+                    />
                   );
                 })}
               </View>
@@ -271,6 +245,12 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     gap: 16,
   },
+  unitRowTitle: {
+    flexDirection: "column",
+    alignItems: "flex-start",
+    flex: 1,
+    padding: 12,
+  },
   unitRow: {
     width: "100%",
     flexDirection: "row",
@@ -282,12 +262,6 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     borderRadius: 1000,
-  },
-  unitRowTitle: {
-    flexDirection: "column",
-    alignItems: "flex-start",
-    flex: 1,
-    padding: 12,
   },
   resultRow: {
     flexDirection: "column",

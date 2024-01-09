@@ -2,7 +2,6 @@ import { VictoryLabel, VictoryPie } from "victory-native";
 import { View } from "../Themed";
 import { StyleSheet } from "react-native";
 import Svg from "react-native-svg";
-import { ModuleType } from "@/types/ModuleType";
 import { SIZES } from "@/constants/Theme";
 import { LearningUnitType } from "@/types/LearningUnitType";
 import { useEffect, useState } from "react";
