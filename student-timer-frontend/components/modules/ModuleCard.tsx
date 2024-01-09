@@ -33,7 +33,11 @@ export function ModuleCard(props: ModuleCardProps) {
   const { authAxios } = useAxios();
   const { fetchModules } = useModules();
 
-  const onEdit = () => {};
+  const onEdit = () => {
+    router.push({
+      pathname: `modules/${moduleData.id}/edit`,
+    } as never);
+  };
 
   const onDelete = () => {
     Alert.alert(

@@ -138,16 +138,10 @@ export default function NewModuleLearningUnits() {
 
       toast.update(id, "Modul erfolgreich angelegt.", { type: "success" });
       fetchModules && (await fetchModules());
+      router.replace("/(tabs)/modules");
     } catch (e) {
       toast.update(id, `Fehler beim Erstellen des Moduls: ${e}`, {
         type: "danger",
-      });
-    } finally {
-      router.replace({
-        pathname: "/(tabs)/modules/",
-        params: {
-          moduleSaved: response?.status === 200 ? 1 : 0,
-        },
       });
     }
   };

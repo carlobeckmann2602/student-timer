@@ -48,7 +48,7 @@ export default function ModulesDetailScreen() {
 
     return {
       id: -1,
-      name: "Placeholder",
+      name: "Fehler",
       colorCode: "",
       creditPoints: 0,
       examDate: new Date(),
