@@ -63,7 +63,7 @@ export default function ModulesScreen() {
         textColor={COLORTHEME.light.grey2}
         onPress={onNewModulePress}
         style={styles.button}
-      ></Button>
+      />
     </View>
   );
 }
