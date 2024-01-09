@@ -29,14 +29,14 @@ type AuthProps = {
   ) => Promise<any>;
   onLogout?: () => Promise<any>;
   onUpdate?: (
-      userName: string,
-      userStudyCourse: string,
-      userEmail: string
+    userName: string,
+    userStudyCourse: string,
+    userEmail: string
   ) => Promise<any>;
   onChangePassword?: (
-      newPassword: string,
-      newPassword2: string,
-      ) => Promise<any>
+    newPassword: string,
+    newPassword2: string
+  ) => Promise<any>;
   onRemove?: (userId: number) => Promise<any>;
   onNewToken?: (token: TokenType) => Promise<any>;
 };
@@ -79,7 +79,6 @@ export const AuthProvider = ({ children }: any) => {
       if (token.accessToken && user.id) {
         setAuthState({ token: token, authenticated: true, user: user });
       } else {
-
         // toDo: Clear user data if the token or user ID is missing: could have been deleted or logged out
         //await deleteStoredItem(TOKEN_KEY);
         //await deleteStoredItem(USER_KEY);
@@ -223,9 +222,9 @@ export const AuthProvider = ({ children }: any) => {
   };
 
   const update = async (
-      userName: string,
-      userStudyCourse: string,
-      userEmail: string
+    userName: string,
+    userStudyCourse: string,
+    userEmail: string
   ) => {
     try {
       const result = await axios.put(
@@ -233,7 +232,7 @@ export const AuthProvider = ({ children }: any) => {
         {
           name: userName,
           studyCourse: userStudyCourse,
-          email: userEmail
+          email: userEmail,
         },
         {
           headers: {
@@ -263,25 +262,22 @@ export const AuthProvider = ({ children }: any) => {
     }
   };
 
-  const changePassword = async (
-      newPassword: string,
-      newPassword2: string
-  ) => {
+  const changePassword = async (newPassword: string, newPassword2: string) => {
     try {
       const result = await axios.put(
-          `${API_URL}/students/${authState.user.id}`,
-          {
-            name: authState.user.name,
-            studyCourse: authState.user.studyCourse,
-            email: authState.user.email,
-            password: newPassword,
-            password2: newPassword2,
+        `${API_URL}/students/${authState.user.id}`,
+        {
+          name: authState.user.name,
+          studyCourse: authState.user.studyCourse,
+          email: authState.user.email,
+          password: newPassword,
+          password2: newPassword2,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${authState.token.accessToken}`,
           },
-          {
-            headers: {
-              Authorization: `Bearer ${authState.token.accessToken}`,
-            },
-          }
+        }
       );
 
       return result;
@@ -289,7 +285,6 @@ export const AuthProvider = ({ children }: any) => {
       return { error: true, msg: (e as any).response.data.message };
     }
   };
-
 
   const remove = async (userId: number) => {
     try {
@@ -307,7 +302,6 @@ export const AuthProvider = ({ children }: any) => {
       return { error: true, msg: (e as any).response.data.message };
     }
   };
-
 
   const router = useRouter();
 
@@ -327,7 +321,7 @@ export const AuthProvider = ({ children }: any) => {
       },
     });
 
-    router.push("/(auth)/login");
+    router.replace("/(auth)/login");
   };
 
   const newToken = async (token: TokenType) => {

@@ -71,10 +71,12 @@ export default function ModulesScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingBottom: 16,
+    paddingVertical: BASE_STYLES.horizontalPadding,
   },
   flatListContainer: {
     borderRadius: BASE_STYLES.borderRadius,
+    borderBottomLeftRadius: 25,
+    borderBottomRightRadius: 25,
   },
   flatListContainerContent: {
     gap: 24,
