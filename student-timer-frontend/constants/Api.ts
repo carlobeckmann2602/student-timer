@@ -7,5 +7,5 @@ export const API_URL = __DEV__
         ? "localhost"
         : Constants.expoConfig?.hostUri?.split(":").shift() || "localhost"
     }:8080`
-  : "https://student-timer-backend.onrender.com";
+  : process.env.EXPO_PUBLIC_BACKEND_URL;
 export const TOKEN_KEY = "jwt-token";
