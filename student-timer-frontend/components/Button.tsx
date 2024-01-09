@@ -2,9 +2,10 @@ import React, { ReactNode } from "react";
 import { Pressable, StyleProp, StyleSheet, ViewStyle } from "react-native";
 
 import { Text, View } from "./Themed";
+import {COLORTHEME} from "@/constants/Theme";
 
 type Props = {
-  backgroundColor: string;
+  backgroundColor?: string;
   text: string;
   textColor?: string;
   borderColor?: string;
@@ -19,7 +20,7 @@ export type ButtonProps = Props;
 
 export default function Button(props: ButtonProps) {
   const {
-    backgroundColor,
+    backgroundColor = COLORTHEME.light.primary,
     text,
     textColor,
     borderColor,
@@ -34,6 +35,7 @@ export default function Button(props: ButtonProps) {
       style={[
         {
           backgroundColor: backgroundColor,
+          opacity: disabled ? 0.6 : 1,
         },
         borderColor
           ? { borderColor: borderColor, borderStyle: "solid", borderWidth: 1 }

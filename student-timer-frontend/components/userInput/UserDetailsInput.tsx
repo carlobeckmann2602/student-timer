@@ -1,10 +1,13 @@
 import React from 'react';
-import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import InputField from "@/components/InputField";
 import { COLORTHEME } from "@/constants/Theme";
 import Button from "@/components/Button";
+import Pressable from "@/components/Pressable"
+import {H3} from "@/components/StyledText";
 
 export default function UserDetailsInput(props: {
+    title: string;
     userName: string;
     setUserName: (value: string) => void;
     nameError: string;
@@ -15,13 +18,23 @@ export default function UserDetailsInput(props: {
     setUserEmail: (value: string) => void;
     emailError: string;
     buttonAction: (value: string) => void;
+    disabled?: boolean;
     cancelAction: (value: string) => void;
 }) {
-    const { userName, setUserName, nameError, userStudyCourse, setUserStudyCourse, studyCourseError, userEmail, setUserEmail, emailError, buttonAction, cancelAction, } = props;
+    const {
+        title,
+        userName, setUserName, nameError,
+        userStudyCourse, setUserStudyCourse, studyCourseError,
+        userEmail, setUserEmail, emailError,
+        buttonAction,
+        disabled,
+        cancelAction,
+    } = props;
 
     return (
         <>
             <View style={styles.container}>
+                <H3>{title}</H3>
                 <View style={styles.outerWrapper}>
                     <View style={styles.row}>
                         <InputField
@@ -56,13 +69,13 @@ export default function UserDetailsInput(props: {
                     textColor={COLORTHEME.light.grey2}
                     onPress={buttonAction}
                     style={{ width: 200 }}
+                    disabled={disabled}
                 />
-                <Button
-                    text="Abbrechen"
-                    backgroundColor={'transparent'}
-                    textColor={COLORTHEME.light.text}
+                <Pressable
+                    text={"Abbrechen"}
+                    accessibilityLabel={"Abbrechen"}
+                    accessibilityRole={"button"}
                     onPress={cancelAction}
-                    style={{ width: 200 }}
                 />
             </View>
         </>
@@ -75,6 +88,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "space-around",
         paddingHorizontal: 12,
+        marginVertical: 20,
         gap: 10,
     },
     outerWrapper: {
@@ -85,6 +99,8 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         padding: 24,
         gap: 5,
+        marginVertical: 10,
+
     },
     row: {
         flexGrow: 1,

@@ -1,21 +1,25 @@
 import React, { useState } from "react";
-import {Image, TouchableOpacity, StyleSheet, ScrollView, Alert, Text} from "react-native";
+import { Image, TouchableOpacity, StyleSheet, ScrollView, Alert } from "react-native";
 import { View } from "@/components/Themed";
 import { useRouter } from "expo-router";
 import { COLORTHEME } from "@/constants/Theme";
-import Button from "@/components/Button";
 import { User2 } from "lucide-react-native";
 import { Edit2 } from 'lucide-react-native';
-import Header from "@/components/Header";
 import { useAuth } from "@/context/AuthContext";
 import UserDetailsInput from "@/components/userInput/UserDetailsInput";
 import PasswordInput from "@/components/userInput/PasswordInput";
+import Pressable from "@/components/Pressable";
+import { useToast } from "react-native-toast-notifications";
+
 export default function Edit() {
 
+    const toast = useToast();
     const { onUpdate, onRemove, onChangePassword, authState } = useAuth();
     const router = useRouter();
 
     const defaultPic = require("../../../assets/images/profile/profile-picture.jpg");
+
+    const [isChanged, setIsChanged] = useState(false);
 
     const [userName, setUserName] = useState(authState?.user.name || "");
     const [userStudyCourse, setUserStudyCourse] = useState(authState?.user.studyCourse || "");
@@ -28,6 +32,13 @@ export default function Edit() {
     const [emailError, setEmailError] = useState("");
     const [passwordError, setPasswordError] = useState("");
     const [error, setError] = useState("");
+
+    const handleInputChange = (setter: React.Dispatch<React.SetStateAction<string>>) => {
+        return (value: string) => {
+            setter(value);
+            setIsChanged(true);
+        };
+    };
 
     const validateInput = () => {
         let nameValid = false;
@@ -57,12 +68,7 @@ export default function Edit() {
             setEmailError("");
             emailValid = true;
         }
-
-        if (nameValid && studyCourseValid && emailValid) {
-            return true;
-        }
-
-        return false;
+        return (nameValid && studyCourseValid && emailValid);
     };
 
     const validatePassword = () => {
@@ -88,6 +94,7 @@ export default function Edit() {
     };
 
     const update = async () => {
+        let id = toast.show("Speichern...", { type: "loading" });
         if (validateInput()) {
             const result = await onUpdate!(
                 userName,
@@ -96,10 +103,9 @@ export default function Edit() {
             );
             console.log("validateInput")
             if (result && result.error) {
-                console.log("error")
                 setError(result.msg);
             } else {
-                console.log("router")
+                toast.show("Profildaten erfolgreich gespeichert", { type: "success" });
                 router.push("/profile/");
             }
         }
@@ -111,31 +117,56 @@ export default function Edit() {
                 userPassword,
                 userCheckPassword,
             );
-            console.log("validatePassword")
             if (result && result.error) {
-                console.log("error")
                 setError(result.msg);
             } else {
-                console.log("router")
+                toast.show("Passwort erfolgreich geändert", { type: "success" });
                 router.push("/profile/");
             }
         }
     };
 
     const removeUser = async () => {
-        console.log("User removed:" , authState?.user.email)
+        console.log("User removed:", authState?.user.email)
+        let id = toast.show("Löschen...", { type: "loading" });
         if (authState?.user.id) {
             const result = await onRemove!(
                 authState?.user.id
             );
             console.log("remove")
             if (result && result.error) {
-                console.log("error")
                 setError(result.msg);
             } else {
-                console.log("router")
+                toast.update(id, "Ihr Konto wurde erfolgreich gelöscht", { type: "success" });
                 router.push("/(auth)/signup");
             }
+        }
+    };
+
+    const onCancel = () => {
+        if (isChanged) {
+            console.log("Alert für Änderung verwerfen aktiviert:", authState?.user.email)
+            Alert.alert(
+                "Änderungen verwerfen?",
+                `Sie haben ungespeicherte Änderungen vorgenommen. Wenn Sie fortfahren, gehen alle ungespeicherten Daten verloren. Möchten Sie wirklich abbrechen?`,
+                [
+                    {
+                        text: "Nein",
+                        onPress: () => console.log("Alert closed"),
+                        style: "cancel",
+                    },
+                    {
+                        text: "Ja",
+                        onPress: () => {
+                            cancel();
+                        },
+                        style: "destructive",
+                    },
+                ],
+                { cancelable: false }
+            );
+        } else {
+            cancel();
         }
     };
 
@@ -143,7 +174,7 @@ export default function Edit() {
         console.log("Alert für User-Löschung aktiviert:", authState?.user.email)
         Alert.alert(
             "Profil wirklich löschen?",
-            `Möchtest du deinen Account mit der E-Mail-Adresse "${authState?.user.email}" wirklich unwideruflich löschen? Alle zum Profil gehörenden Daten, Module, Lerneinheiten und Trackings werden dabei gelöscht.`,
+            `Möchtest du deinen Account mit der E-Mail-Adresse "${authState?.user.email}" wirklich unwiderruflich löschen? Alle zum Profil gehörenden Daten, Module, Lerneinheiten und Trackings werden dabei gelöscht.`,
             [
                 {
                     text: "Abbrechen",
@@ -162,10 +193,10 @@ export default function Edit() {
         );
     };
 
-return (
-    <ScrollView contentContainerStyle={styles.container}>
-        {/* Profilbild */}
-            <View style={{alignItems: "center"}}>
+    return (
+        <ScrollView contentContainerStyle={styles.container}>
+            {/* Profilbild */}
+            <View style={{ alignItems: "center" }}>
                 <View style={styles.profileImageContainer}>
                     {defaultPic ? (
                         <Image source={defaultPic} style={styles.profileImage} />
@@ -179,39 +210,42 @@ return (
             </View>
             {/*Benutzerinformationen bearbeiten*/}
             <View>
-                <Header title="Profil bearbeiten"></Header>
                 <UserDetailsInput
+                    title={"Daten bearbeiten"}
                     userName={userName}
-                    setUserName={setUserName}
+                    setUserName={handleInputChange(setUserName)}
                     nameError={nameError}
                     userStudyCourse={userStudyCourse}
-                    setUserStudyCourse={setUserStudyCourse}
+                    setUserStudyCourse={handleInputChange(setUserStudyCourse)}
                     studyCourseError={studyCourseError}
                     userEmail={userEmail}
-                    setUserEmail={setUserEmail}
+                    setUserEmail={handleInputChange(setUserEmail)}
                     emailError={emailError}
                     buttonAction={update}
-                    cancelAction={cancel}
+                    disabled={!isChanged}
+                    cancelAction={onCancel}
                 />
                 {/*Passwort ändern*/}
                 <PasswordInput
+                    title={"Passwort ändern"}
                     userPassword={userPassword}
-                    setUserPassword={setUserPassword}
+                    setUserPassword={handleInputChange(setUserPassword)}
                     userCheckPassword={userCheckPassword}
-                    setUserCheckPassword={setUserCheckPassword}
+                    setUserCheckPassword={handleInputChange(setUserCheckPassword)}
                     passwordError={passwordError}
                     buttonAction={changePassword}
-                    cancelAction={cancel}
+                    disabled={!isChanged}
+                    cancelAction={onCancel}
                 />
             </View>
             {/*Löschen*/}
             <View style={styles.actionContainer}>
-                <Button
-                    text="Konto löschen"
-                    backgroundColor={'transparent'}
+                <Pressable
+                    text={"Konto löschen"}
                     textColor={'#F00'}
+                    accessibilityLabel={"Konto löschen"}
+                    accessibilityRole={"button"}
                     onPress={onDelete}
-                    style={{ width: 200 }}
                 />
             </View>
         </ScrollView>
@@ -247,7 +281,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         gap: 15,
-        marginTop: 20,
+        marginBottom: 40,
     },
     editIcon: {
         position: 'absolute',

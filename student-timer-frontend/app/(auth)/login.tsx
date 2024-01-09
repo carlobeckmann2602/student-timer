@@ -1,4 +1,4 @@
-import { StyleSheet, TextInput } from "react-native";
+import { StyleSheet } from "react-native";
 import { useState } from "react";
 import { Link, useRouter } from "expo-router";
 
@@ -12,8 +12,12 @@ import Separator from "@/components/Separator";
 import OtherLogins from "@/components/auth/OtherLogins";
 import InputField from "@/components/InputField";
 import { useAuth } from "@/context/AuthContext";
+import { useToast } from "react-native-toast-notifications";
 
 export default function Login() {
+
+  const toast = useToast();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -26,7 +30,7 @@ export default function Login() {
   const router = useRouter();
 
   const validateInput = () => {
-    var emailValid = false;
+    let emailValid = false;
     if (email.length == 0) {
       setEmailError("E-Mail ist erforderlich");
     } else if (email.length < 6) {
@@ -38,7 +42,7 @@ export default function Login() {
       emailValid = true;
     }
 
-    var passwordValid = false;
+    let passwordValid = false;
     if (password.length == 0) {
       setPasswordError("Passwort ist erforderlich");
     } else if (password.length < 6) {
@@ -50,19 +54,17 @@ export default function Login() {
       passwordValid = true;
     }
 
-    if (emailValid && passwordValid) {
-      return true;
-    }
-
-    return false;
+    return (emailValid && passwordValid)
   };
 
   const login = async () => {
+    let id = toast.show("Login...", { type: "loading" });
     if (validateInput()) {
       const result = await onLogin!(email, password);
       if (result && result.error) {
         setError(result.msg);
       } else {
+        toast.update(id, "Login erfolgreich", { type: "success" });
         router.push("/(tabs)/(tracking)");
       }
     }
