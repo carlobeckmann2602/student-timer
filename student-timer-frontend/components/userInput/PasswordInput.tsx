@@ -14,6 +14,7 @@ export default function PasswordInput(props: {
     setUserCheckPassword: (value: string) =>void;
     passwordError: string;
     buttonAction: (value: string) => void;
+    disabled?: boolean;
     cancelAction: (value: string) => void;
 }) {
     const {
@@ -21,6 +22,7 @@ export default function PasswordInput(props: {
         userPassword, setUserPassword, passwordError,
         userCheckPassword, setUserCheckPassword,
         buttonAction,
+        disabled,
         cancelAction,
     } = props;
 
@@ -57,6 +59,7 @@ export default function PasswordInput(props: {
                     backgroundColor={COLORTHEME.light.primary}
                     textColor={COLORTHEME.light.grey2}
                     onPress={buttonAction}
+                    disabled={disabled}
                     style={{ width: 200 }}
                 />
                 <Pressable

@@ -39,11 +39,6 @@ export default function Profile() {
     console.log("Profil bearbeiten");
   };
 
-  const handleExportData = () => {
-    // Hier implementiere die Logik für den Datenexport
-    console.log("Daten exportieren");
-  };
-
   return (
     <View style={styles.container}>
       {/* Profilbild */}

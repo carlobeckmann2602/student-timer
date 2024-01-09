@@ -18,6 +18,7 @@ export default function UserDetailsInput(props: {
     setUserEmail: (value: string) => void;
     emailError: string;
     buttonAction: (value: string) => void;
+    disabled?: boolean;
     cancelAction: (value: string) => void;
 }) {
     const {
@@ -26,6 +27,7 @@ export default function UserDetailsInput(props: {
         userStudyCourse, setUserStudyCourse, studyCourseError,
         userEmail, setUserEmail, emailError,
         buttonAction,
+        disabled,
         cancelAction,
     } = props;
 
@@ -67,6 +69,7 @@ export default function UserDetailsInput(props: {
                     textColor={COLORTHEME.light.grey2}
                     onPress={buttonAction}
                     style={{ width: 200 }}
+                    disabled={disabled}
                 />
                 <Pressable
                     text={"Abbrechen"}

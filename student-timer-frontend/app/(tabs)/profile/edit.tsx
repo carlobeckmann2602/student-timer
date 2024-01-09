@@ -235,6 +235,7 @@ return (
                     setUserEmail={handleInputChange(setUserEmail)}
                     emailError={emailError}
                     buttonAction={update}
+                    disabled={!isChanged}
                     cancelAction={onCancel}
                 />
                 {/*Passwort ändern*/}
@@ -246,6 +247,7 @@ return (
                     setUserCheckPassword={handleInputChange(setUserCheckPassword)}
                     passwordError={passwordError}
                     buttonAction={changePassword}
+                    disabled={!isChanged}
                     cancelAction={onCancel}
                 />
             </View>
