@@ -10,7 +10,7 @@ import { Link, useRouter } from "expo-router";
 import Separator from "@/components/Separator";
 import OtherLogins from "@/components/auth/OtherLogins";
 import { useAuth } from "@/context/AuthContext";
-import {useToast} from "react-native-toast-notifications";
+import { useToast } from "react-native-toast-notifications";
 
 export default function SignupScreen() {
   const toast = useToast();
@@ -88,10 +88,11 @@ export default function SignupScreen() {
         userPassword,
         userCheckPassword
       );
-      toast.update(id, "Registierung war erfolgreich", { type: "success" });
       if (result && result.error) {
+        toast.update(id, "Registrierung nicht erfolgreich", { type: "danger" });
         setError(result.msg);
       } else {
+        toast.update(id, "Registierung erfolgreich", { type: "success" });
         router.push("/(tabs)/(tracking)");
       }
     }

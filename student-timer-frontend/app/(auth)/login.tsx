@@ -12,7 +12,7 @@ import Separator from "@/components/Separator";
 import OtherLogins from "@/components/auth/OtherLogins";
 import InputField from "@/components/InputField";
 import { useAuth } from "@/context/AuthContext";
-import {useToast} from "react-native-toast-notifications";
+import { useToast } from "react-native-toast-notifications";
 
 export default function Login() {
 
@@ -61,10 +61,10 @@ export default function Login() {
     let id = toast.show("Login...", { type: "loading" });
     if (validateInput()) {
       const result = await onLogin!(email, password);
-      toast.update(id, "Login war erfolgreich", { type: "success" });
       if (result && result.error) {
         setError(result.msg);
       } else {
+        toast.update(id, "Login erfolgreich", { type: "success" });
         router.push("/(tabs)/(tracking)");
       }
     }

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {Image, TouchableOpacity, StyleSheet, ScrollView, Alert} from "react-native";
+import { Image, TouchableOpacity, StyleSheet, ScrollView, Alert } from "react-native";
 import { View } from "@/components/Themed";
 import { useRouter } from "expo-router";
 import { COLORTHEME } from "@/constants/Theme";
@@ -9,7 +9,7 @@ import { useAuth } from "@/context/AuthContext";
 import UserDetailsInput from "@/components/userInput/UserDetailsInput";
 import PasswordInput from "@/components/userInput/PasswordInput";
 import Pressable from "@/components/Pressable";
-import {useToast} from "react-native-toast-notifications";
+import { useToast } from "react-native-toast-notifications";
 
 export default function Edit() {
 
@@ -68,7 +68,7 @@ export default function Edit() {
             setEmailError("");
             emailValid = true;
         }
-        return  (nameValid && studyCourseValid && emailValid);
+        return (nameValid && studyCourseValid && emailValid);
     };
 
     const validatePassword = () => {
@@ -102,62 +102,49 @@ export default function Edit() {
                 userEmail,
             );
             console.log("validateInput")
-            toast.update(id, "Profildaten erfolgreich geändert", { type: "success" });
             if (result && result.error) {
-                console.log("error")
                 setError(result.msg);
             } else {
-                console.log("router")
+                toast.show("Profildaten erfolgreich gespeichert", { type: "success" });
                 router.push("/profile/");
             }
         }
     };
 
     const changePassword = async () => {
-        let id = toast.show("Speichern...", { type: "loading" });
         if (validatePassword()) {
             const result = await onChangePassword!(
                 userPassword,
                 userCheckPassword,
             );
-            console.log("validatePassword")
-            toast.update(id, "Passwort erfolgreich geändert", { type: "success" });
-
             if (result && result.error) {
-                console.log("validatePassword error:", result.error)
                 setError(result.msg);
             } else {
-                console.log("router")
+                toast.show("Passwort erfolgreich geändert", { type: "success" });
                 router.push("/profile/");
             }
         }
     };
 
     const removeUser = async () => {
+        console.log("User removed:", authState?.user.email)
         let id = toast.show("Löschen...", { type: "loading" });
-        console.log("User removed:" , authState?.user.email)
         if (authState?.user.id) {
             const result = await onRemove!(
                 authState?.user.id
             );
             console.log("remove")
-            toast.update(id, "Ihr Konto wurde erfolgreich gelöscht", { type: "success" });
             if (result && result.error) {
-                console.log("error")
                 setError(result.msg);
-                toast.update(id, `Fehler beim Löschen des Kontos: ${error}`, {
-                    type: "danger",
-                });
             } else {
-                console.log("router")
+                toast.update(id, "Ihr Konto wurde erfolgreich gelöscht", { type: "success" });
                 router.push("/(auth)/signup");
             }
         }
     };
 
-
     const onCancel = () => {
-        if(isChanged){
+        if (isChanged) {
             console.log("Alert für Änderung verwerfen aktiviert:", authState?.user.email)
             Alert.alert(
                 "Änderungen verwerfen?",
@@ -206,10 +193,10 @@ export default function Edit() {
         );
     };
 
-return (
-    <ScrollView contentContainerStyle={styles.container}>
-        {/* Profilbild */}
-            <View style={{alignItems: "center"}}>
+    return (
+        <ScrollView contentContainerStyle={styles.container}>
+            {/* Profilbild */}
+            <View style={{ alignItems: "center" }}>
                 <View style={styles.profileImageContainer}>
                     {defaultPic ? (
                         <Image source={defaultPic} style={styles.profileImage} />
