@@ -178,7 +178,6 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     flexDirection: "column",
     gap: 24,
-    padding: 12,
     backgroundColor: COLORTHEME.light.background,
   },
   scrollViewContainerStyle: {

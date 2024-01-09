@@ -1,4 +1,5 @@
 import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
+import { StyleSheet } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
@@ -9,6 +10,7 @@ import { AuthProvider } from "@/context/AuthContext";
 import { AxiosProvider } from "@/context/AxiosContext";
 import { ModuleProvider } from "@/context/ModuleContext";
 import Toast from "@/components/Toast";
+import { BASE_STYLES, COLORTHEME } from "@/constants/Theme";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -62,7 +64,7 @@ function RootLayoutNav() {
   return (
     <SafeAreaProvider>
       <ThemeProvider value={DefaultTheme}>
-        <SafeAreaView style={{ flex: 1 }}>
+        <SafeAreaView style={styles.basePadding}>
           <ToastProvider
             placement="top"
             textStyle={{ fontFamily: "OpenSans_Regular" }}
@@ -104,3 +106,11 @@ function RootLayoutNav() {
     </SafeAreaProvider>
   );
 }
+
+const styles = StyleSheet.create({
+  basePadding: {
+    flex: 1,
+    paddingHorizontal: BASE_STYLES.horizontalPadding,
+    backgroundColor: COLORTHEME.light.background,
+  },
+});

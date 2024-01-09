@@ -330,7 +330,7 @@ export const AuthProvider = ({ children }: any) => {
         email: null,
       },
     });
-    toast.update(id, "Logout erfolgreich", { type: "success" });
+    toast.update(id, "Logout erfolgreich", { type: "success" }); //toDo update funktioniert nicht?
     router.push("/(auth)/login");
   };
 

@@ -97,21 +97,26 @@ export default function Login() {
             messageColor="red"
             style={{ width: "100%" }}
           />
-          <View style={styles.buttons}>
+        </View>
+        <View style={styles.buttons}>
+          <View style={styles.buttonText}>
             <Button
               text="Log In"
               backgroundColor={COLORTHEME.light.primary}
               textColor={COLORTHEME.light.grey2}
               onPress={login}
+              style={{ width: 200 }}
             />
+
+            {error && <Text style={styles.errorMessage}>{error}</Text>}
+
+            <Text>
+              Sie haben kein Konto?{" "}
+              <Link href="/signup" style={{ textDecorationLine: "underline" }}>
+                Account erstellen
+              </Link>
+            </Text>
           </View>
-          {error && <Text style={styles.errorMessage}>{error}</Text>}
-          <Text>
-            Sie haben kein Konto?{" "}
-            <Link href="/signup" style={{ textDecorationLine: "underline" }}>
-              Account erstellen
-            </Link>
-          </Text>
           <Separator text="oder" />
           <OtherLogins />
         </View>
@@ -123,19 +128,23 @@ export default function Login() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "space-around",
-    paddingHorizontal: 12,
+    justifyContent: "space-between",
+    gap: 45,
   },
   inputs: {
     flexDirection: "column",
-    justifyContent: "space-between",
     alignItems: "center",
     gap: 25,
   },
   buttons: {
     flexDirection: "column",
-    width: 200,
-    gap: 10,
+    alignItems: "center",
+    gap: 25,
+  },
+  buttonText: {
+    flexDirection: "column",
+    alignItems: "center",
+    gap: 15,
   },
   errorMessage: {
     color: "red",

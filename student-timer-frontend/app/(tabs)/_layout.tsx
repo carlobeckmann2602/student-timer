@@ -1,4 +1,4 @@
-import { Tabs } from "expo-router";
+import { Tabs, router } from "expo-router";
 
 import { COLORTHEME } from "@/constants/Theme";
 import Header from "@/components/Header";
@@ -13,6 +13,8 @@ export default function TabLayout() {
         tabBarActiveTintColor: COLORTHEME.light.primary,
         tabBarInactiveTintColor: COLORTHEME.light.tabIconDefault,
       }}
+      initialRouteName="(tracking)"
+      backBehavior="firstRoute"
     >
       <Tabs.Screen
         name="(tracking)"
@@ -26,6 +28,12 @@ export default function TabLayout() {
       />
       <Tabs.Screen
         name="modules"
+        listeners={{
+          tabPress: (e) => {
+            e.preventDefault();
+            router.push("/(tabs)/modules/");
+          },
+        }}
         options={{
           title: "Module",
           tabBarIcon: ({ color }) => <LayoutList name="module" color={color} />,

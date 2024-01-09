@@ -1,7 +1,7 @@
 import Button from "@/components/Button";
 import { LearningUnitForm } from "@/components/modules/LearningUnitForm";
 import { LearningUnitEnum } from "@/constants/LearningUnitEnum";
-import { COLORTHEME } from "@/constants/Theme";
+import { BASE_STYLES, COLORTHEME } from "@/constants/Theme";
 import { useAuth } from "@/context/AuthContext";
 import { useAxios } from "@/context/AxiosContext";
 import { useModules } from "@/context/ModuleContext";
@@ -136,7 +136,7 @@ export default function NewModuleLearningUnits() {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={{ flex: 1 }}
+      style={{ flex: 1, backgroundColor: COLORTHEME.light.background }}
     >
       <ScrollView
         style={styles.scrollViewContainer}
@@ -176,8 +176,8 @@ export default function NewModuleLearningUnits() {
 const styles = StyleSheet.create({
   scrollViewContainer: {
     flexDirection: "column",
-    padding: 24,
     gap: 24,
+    borderRadius: BASE_STYLES.borderRadius,
   },
   scrollViewContainerStyle: {
     alignItems: "center",
@@ -189,6 +189,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 15,
     paddingBottom: 46,
-    backgroundColor: "transparent",
   },
 });

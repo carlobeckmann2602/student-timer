@@ -11,6 +11,7 @@ import Separator from "@/components/Separator";
 import OtherLogins from "@/components/auth/OtherLogins";
 import { useAuth } from "@/context/AuthContext";
 import { useToast } from "react-native-toast-notifications";
+import { Title } from "@/components/StyledText";
 
 export default function SignupScreen() {
   const toast = useToast();
@@ -89,7 +90,6 @@ export default function SignupScreen() {
         userCheckPassword
       );
       if (result && result.error) {
-        toast.update(id, "Registrierung nicht erfolgreich", { type: "danger" });
         setError(result.msg);
       } else {
         toast.update(id, "Registierung erfolgreich", { type: "success" });
@@ -102,6 +102,7 @@ export default function SignupScreen() {
     <>
       <Header title="Registrieren"></Header>
       <View style={styles.container}>
+        <Title>Student Time Tracker</Title>
         <View style={styles.outerWrapper}>
           <View style={styles.row}>
             <InputField
@@ -149,24 +150,26 @@ export default function SignupScreen() {
           </View>
         </View>
         <View style={styles.buttons}>
-          <Button
-            text="Registrieren"
-            backgroundColor={COLORTHEME.light.primary}
-            textColor={COLORTHEME.light.grey2}
-            onPress={register}
-            style={{ width: 200 }}
-          />
+          <View style={styles.buttonText}>
+            <Button
+              text="Registrieren"
+              backgroundColor={COLORTHEME.light.primary}
+              textColor={COLORTHEME.light.grey2}
+              onPress={register}
+              style={{ width: 200 }}
+            />
 
-          {error && <Text style={styles.errorMessage}>{error}</Text>}
-          <Text>
-            Sie haben bereits ein Konto?{" "}
-            <Link href="/login" style={{ textDecorationLine: "underline" }}>
-              Anmelden
-            </Link>
-          </Text>
+            {error && <Text style={styles.errorMessage}>{error}</Text>}
+            <Text>
+              Sie haben bereits ein Konto?{" "}
+              <Link href="/login" style={{ textDecorationLine: "underline" }}>
+                Anmelden
+              </Link>
+            </Text>
+          </View>
+          <Separator text="oder" />
+          <OtherLogins />
         </View>
-        <Separator text="oder" />
-        <OtherLogins />
       </View>
     </>
   );
@@ -194,24 +197,12 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
     gap: 16,
   },
-  inputLabelGroup: {
-    flex: 1,
-    gap: 5,
-    flexDirection: "column",
-    backgroundColor: "transparent",
-  },
-  inputLabelText: {
-    color: COLORTHEME.light.primary,
-  },
-  input: {
-    flexGrow: 1,
-    backgroundColor: COLORTHEME.light.grey2,
-    color: COLORTHEME.light.grey3,
-    borderRadius: 12,
-    height: 40,
-    paddingHorizontal: 10,
-  },
   buttons: {
+    flexDirection: "column",
+    alignItems: "center",
+    gap: 25,
+  },
+  buttonText: {
     flexDirection: "column",
     alignItems: "center",
     gap: 15,
