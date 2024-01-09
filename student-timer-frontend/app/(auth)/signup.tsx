@@ -93,7 +93,8 @@ export default function SignupScreen() {
         setError(result.msg);
       } else {
         toast.update(id, "Registierung erfolgreich", { type: "success" });
-        router.push("/(tabs)/(tracking)");
+        router.push("/(tabs)/modules");
+        //toDo Popup dafür, dass man erst ein neues Modul anlegen muss? oder in Tracking?
       }
     }
   };
