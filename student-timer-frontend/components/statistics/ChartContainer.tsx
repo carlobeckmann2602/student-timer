@@ -1,7 +1,7 @@
 import { View } from "@/components/Themed";
 import { Dimensions, StyleSheet } from "react-native";
 import { H3 } from "@/components/StyledText";
-import { COLORTHEME } from "@/constants/Theme";
+import { BASE_STYLES, COLORTHEME } from "@/constants/Theme";
 
 type Props = {
   children: React.ReactNode;
@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     padding: "4%",
     gap: 16,
     minHeight: 250,
-    width: Dimensions.get("window").width - 32,
+    width: Dimensions.get("window").width - BASE_STYLES.horizontalPadding * 2,
   },
   title: {
     textAlign: "left",

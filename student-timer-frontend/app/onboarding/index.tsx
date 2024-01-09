@@ -4,7 +4,7 @@ import { StyleSheet, useWindowDimensions, Platform } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import Header from "@/components/Header";
 import Button from "@/components/Button";
-import { COLORTHEME } from "@/constants/Theme";
+import { BASE_STYLES, COLORTHEME } from "@/constants/Theme";
 import { Text, View } from "@/components/Themed";
 import { onboardingData } from "@/constants/onboardingItems";
 import OnboardingContainer from "@/components/onboarding/OnboardingContainer";
@@ -13,7 +13,6 @@ import CardNavigation from "@/components/onboarding/CardNavigation";
 import { saveItem } from "@/libs/deviceStorage";
 
 export default function OnboardingScreen() {
-
   const { width } = useWindowDimensions();
   const [activeIndex, setActiveIndex] = useState(0);
   const [reachedLastItem, setReachedLastItem] = useState(false);
@@ -21,7 +20,7 @@ export default function OnboardingScreen() {
   const scrollViewRef = useRef<ScrollView | null>(null);
 
   const isSwipeEnabled = () => {
-    return Platform.OS === 'android' || Platform.OS === 'ios';
+    return Platform.OS === "android" || Platform.OS === "ios";
   };
 
   const navigateToAuthentication = () => {
@@ -33,7 +32,10 @@ export default function OnboardingScreen() {
     if (activeIndex > 0) {
       setActiveIndex((prevIndex) => prevIndex - 1);
       if (isSwipeEnabled()) {
-        scrollViewRef.current?.scrollTo({ x: width * (activeIndex - 1), animated: true });
+        scrollViewRef.current?.scrollTo({
+          x: (width - BASE_STYLES.horizontalPadding * 2) * (activeIndex - 1),
+          animated: true,
+        });
       }
     }
   };
@@ -42,7 +44,10 @@ export default function OnboardingScreen() {
     if (activeIndex < onboardingData.length - 1) {
       setActiveIndex((prevIndex) => prevIndex + 1);
       if (isSwipeEnabled()) {
-        scrollViewRef.current?.scrollTo({ x: width * (activeIndex + 1), animated: true });
+        scrollViewRef.current?.scrollTo({
+          x: (width - BASE_STYLES.horizontalPadding * 2) * (activeIndex + 1),
+          animated: true,
+        });
       }
     } else {
       navigateToAuthentication();
@@ -55,7 +60,7 @@ export default function OnboardingScreen() {
         <Header title="StudentTimer" />
       </View>
       {/* Onboarding-Cards web und smart */}
-      {Platform.OS === 'web' ? (
+      {Platform.OS === "web" ? (
         <OnboardingContainer
           onboardingData={onboardingData}
           activeIndex={activeIndex}
@@ -67,7 +72,10 @@ export default function OnboardingScreen() {
           pagingEnabled={isSwipeEnabled()}
           showsHorizontalScrollIndicator={false}
           onMomentumScrollEnd={(event) => {
-            const newIndex = Math.round(event.nativeEvent.contentOffset.x / width);
+            const newIndex = Math.round(
+              event.nativeEvent.contentOffset.x /
+                (width - BASE_STYLES.horizontalPadding * 2)
+            );
             setActiveIndex(newIndex);
             if (newIndex === onboardingData.length - 1) {
               setReachedLastItem(true);
@@ -77,8 +85,13 @@ export default function OnboardingScreen() {
           }}
         >
           {onboardingData.map((item, index) => (
-            <View key={index} style={{ width }}>
-              {index === activeIndex && <OnboardingCard onboardingItem={item} />}
+            <View
+              key={index}
+              style={{ width: width - BASE_STYLES.horizontalPadding * 2 }}
+            >
+              {index === activeIndex && (
+                <OnboardingCard onboardingItem={item} />
+              )}
             </View>
           ))}
         </ScrollView>
@@ -114,6 +127,6 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: "flex-start",
     alignItems: "center",
-    backgroundColor: "white" //toDo ScrollView in Themed.tsx reparieren und stattdessen importieren
+    backgroundColor: "white", //toDo ScrollView in Themed.tsx reparieren und stattdessen importieren
   },
 });

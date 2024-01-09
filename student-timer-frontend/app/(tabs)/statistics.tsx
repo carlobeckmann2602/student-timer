@@ -2,7 +2,7 @@ import { FlatList, StyleSheet } from "react-native";
 
 import { View } from "../../components/Themed";
 import HBarChart, { HBarChartProps } from "@/components/statistics/HBarChart";
-import { COLORTHEME } from "@/constants/Theme";
+import { BASE_STYLES, COLORTHEME } from "@/constants/Theme";
 import VBarChart, { VBarChartProps } from "@/components/statistics/VBarChart";
 import { H2 } from "@/components/StyledText";
 import VLineChart, {
@@ -266,7 +266,7 @@ export default function StatisticsScreen() {
     <View style={styles.container}>
       <FlatList
         data={statistics}
-        style={{ borderRadius: 12 }}
+        style={{ borderRadius: BASE_STYLES.borderRadius }}
         renderItem={({ item }) => {
           switch (item.type) {
             case "hBar":
@@ -403,7 +403,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     gap: 24,
-    padding: 16,
   },
   flatListContainer: {
     gap: 24,

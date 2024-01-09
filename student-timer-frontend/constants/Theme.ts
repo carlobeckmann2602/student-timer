@@ -69,4 +69,9 @@ const COLORTHEME = {
   },
 };
 
-export { COLORTHEME, COLORS, SIZES };
+const BASE_STYLES = {
+  horizontalPadding: 16,
+  borderRadius: 12,
+};
+
+export { COLORTHEME, COLORS, SIZES, BASE_STYLES };

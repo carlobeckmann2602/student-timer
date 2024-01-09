@@ -6,7 +6,7 @@ import { ModuleCard } from "@/components/modules/ModuleCard";
 import { useFocusEffect, useRouter } from "expo-router";
 import { ModuleType } from "@/types/ModuleType";
 import Button from "@/components/Button";
-import { COLORTHEME } from "@/constants/Theme";
+import { BASE_STYLES, COLORTHEME } from "@/constants/Theme";
 import React, { useState } from "react";
 import { useModules } from "@/context/ModuleContext";
 import { H2 } from "@/components/StyledText";
@@ -41,6 +41,7 @@ export default function ModulesScreen() {
     <View style={styles.container}>
       <FlatList
         data={modules}
+        style={styles.flatListContainer}
         renderItem={({ item }) => (
           <ModuleCard
             moduleData={item}
@@ -49,18 +50,19 @@ export default function ModulesScreen() {
           />
         )}
         keyExtractor={(item: ModuleType) => item.id.toString()}
-        contentContainerStyle={styles.flatListContainer}
+        contentContainerStyle={styles.flatListContainerContent}
         ListEmptyComponent={
           <View style={styles.emptyListContainer}>
             <H2>Es sind noch keine Module vorhanden.</H2>
           </View>
         }
-      ></FlatList>
+      />
       <Button
         text={"Neues Modul anlegen"}
         backgroundColor={COLORTHEME.light.primary}
         textColor={COLORTHEME.light.grey2}
         onPress={onNewModulePress}
+        style={styles.button}
       ></Button>
     </View>
   );
@@ -69,14 +71,23 @@ export default function ModulesScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    paddingBottom: 16,
   },
   flatListContainer: {
+    borderRadius: BASE_STYLES.borderRadius,
+  },
+  flatListContainerContent: {
     gap: 24,
+    paddingBottom: 50 + BASE_STYLES.horizontalPadding,
   },
   emptyListContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  button: {
+    position: "absolute",
+    bottom: BASE_STYLES.horizontalPadding,
+    width: "100%",
   },
 });
