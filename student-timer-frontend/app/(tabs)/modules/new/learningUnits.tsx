@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
   scrollViewContainer: {
     flexGrow: 1,
     flexDirection: "column",
-    padding: 24,
+    borderRadius: BASE_STYLES.borderRadius,
     gap: 24,
   },
   scrollViewContainerStyle: {
