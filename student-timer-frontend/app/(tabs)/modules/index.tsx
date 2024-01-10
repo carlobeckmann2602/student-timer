@@ -1,5 +1,4 @@
-import { StyleSheet } from "react-native";
-
+import { RefreshControl, StyleSheet } from "react-native";
 import { View } from "@/components/Themed";
 import { FlatList } from "react-native-gesture-handler";
 import { ModuleCard } from "@/components/modules/ModuleCard";
@@ -14,20 +13,19 @@ import { H2 } from "@/components/StyledText";
 export default function ModulesScreen() {
   const router = useRouter();
   const { modules, fetchModules } = useModules();
+  const [refreshing, setRefreshing] = React.useState(false);
 
-  useFocusEffect(
-    React.useCallback(() => {
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
       (async () => {
         fetchModules && (await fetchModules());
       })();
-    }, [])
-  );
+      setRefreshing(false);
+    }, 300);
+  }, []);
 
-  // TODO?
-  const isLoading = false;
-  const error = false;
-
-  const onNewModulePress = () => router.push("/modules/new");
+  useFocusEffect(onRefresh);
 
   return (
     <View style={styles.container}>
@@ -37,6 +35,13 @@ export default function ModulesScreen() {
         renderItem={({ item }) => <ModuleCard moduleData={item} />}
         keyExtractor={(item: ModuleType) => item.id.toString()}
         contentContainerStyle={styles.flatListContainerContent}
+        refreshControl={
+          <RefreshControl
+            colors={[COLORTHEME.light.primary]}
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }
         ListEmptyComponent={
           <View style={styles.emptyListContainer}>
             <H2>Es sind noch keine Module vorhanden.</H2>
@@ -47,7 +52,7 @@ export default function ModulesScreen() {
         text={"Neues Modul anlegen"}
         backgroundColor={COLORTHEME.light.primary}
         textColor={COLORTHEME.light.grey2}
-        onPress={onNewModulePress}
+        onPress={() => router.push("/modules/new")}
         style={styles.button}
       />
     </View>
