@@ -52,7 +52,7 @@ export default function Edit() {
 
   const validateInput = () => {
     let nameValid = false;
-    if (userName.length == 0) {
+    if (userName.length === 0) {
       setNameError("Name ist erforderlich");
     } else {
       setNameError("");
@@ -60,7 +60,7 @@ export default function Edit() {
     }
 
     let studyCourseValid = false;
-    if (userStudyCourse.length == 0) {
+    if (userStudyCourse.length === 0) {
       setStudyCourseError("Studienfach ist erforderlich");
     } else {
       setStudyCourseError("");
@@ -68,7 +68,7 @@ export default function Edit() {
     }
 
     let emailValid = false;
-    if (userEmail.length == 0) {
+    if (userEmail.length === 0) {
       setEmailError("E-Mail ist erforderlich");
     } else if (userEmail.length < 6) {
       setEmailError("E-Mail sollte mindestens 6 Zeichen lang sein");
@@ -104,16 +104,21 @@ export default function Edit() {
   };
 
   const update = async () => {
-    let id = toast.show("Speichern...", { type: "loading" });
     if (validateInput()) {
+      const id = toast.show("Speichern...", { type: "loading" });
       const result = await onUpdate!(userName, userStudyCourse, userEmail);
       console.log("validateInput");
       if (result && result.error) {
         setError(result.msg);
+        toast.update(id, result.msg, { type: "danger" });
       } else {
-        toast.show("Profildaten erfolgreich gespeichert", { type: "success" });
+        toast.update(id, "Profildaten erfolgreich gespeichert", {
+          type: "success",
+        });
         router.push("/profile/");
       }
+    } else {
+      toast.show("Fehler", { type: "danger" });
     }
   };
 
