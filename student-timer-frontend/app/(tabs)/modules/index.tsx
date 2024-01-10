@@ -7,26 +7,18 @@ import { useFocusEffect, useRouter } from "expo-router";
 import { ModuleType } from "@/types/ModuleType";
 import Button from "@/components/Button";
 import { BASE_STYLES, COLORTHEME } from "@/constants/Theme";
-import React, { useState } from "react";
+import React from "react";
 import { useModules } from "@/context/ModuleContext";
 import { H2 } from "@/components/StyledText";
 
 export default function ModulesScreen() {
   const router = useRouter();
-
-  const [contextMenuOpen, setContextMenuOpen] = useState(-1);
-  const { modules: fetchedModules, fetchModules } = useModules();
-  const [modules, setModules] = useState<ModuleType[] | undefined>(
-    fetchedModules
-  );
+  const { modules, fetchModules } = useModules();
 
   useFocusEffect(
     React.useCallback(() => {
       (async () => {
         fetchModules && (await fetchModules());
-        if (fetchedModules?.length) {
-          setModules(fetchedModules);
-        }
       })();
     }, [])
   );
@@ -42,13 +34,7 @@ export default function ModulesScreen() {
       <FlatList
         data={modules}
         style={styles.flatListContainer}
-        renderItem={({ item }) => (
-          <ModuleCard
-            moduleData={item}
-            contextMenuOpen={contextMenuOpen}
-            setContextMenuOpen={setContextMenuOpen}
-          />
-        )}
+        renderItem={({ item }) => <ModuleCard moduleData={item} />}
         keyExtractor={(item: ModuleType) => item.id.toString()}
         contentContainerStyle={styles.flatListContainerContent}
         ListEmptyComponent={

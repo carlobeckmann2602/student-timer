@@ -1,4 +1,4 @@
-import { MoreVertical, Pencil, Trash2 } from "lucide-react-native";
+import { Pencil, Trash2 } from "lucide-react-native";
 import {
   View,
   StyleSheet,
@@ -18,14 +18,12 @@ import { useAuth } from "@/context/AuthContext";
 import { useAxios } from "@/context/AxiosContext";
 import { useModules } from "@/context/ModuleContext";
 
-type ModuleCardProps = {
+type moduleCardProps = {
   moduleData: ModuleType;
-  contextMenuOpen: number;
-  setContextMenuOpen: (value: any) => void;
 };
 
-export function ModuleCard(props: ModuleCardProps) {
-  const { moduleData, contextMenuOpen, setContextMenuOpen } = props;
+export function ModuleCard(props: moduleCardProps) {
+  const { moduleData } = props;
 
   const remainingSessionTime = Math.round(
     convertMinutesToHours(
@@ -87,28 +85,12 @@ export function ModuleCard(props: ModuleCardProps) {
   return (
     <TouchableOpacity
       onPress={() => {
-        if (contextMenuOpen === moduleData.id) setContextMenuOpen(-1);
-        else {
-          router.push({
-            pathname: `modules/${moduleData.id}`,
-          } as never);
-        }
+        router.push({
+          pathname: `modules/${moduleData.id}`,
+        } as never);
       }}
     >
       <View style={styles.outerWrapper}>
-        {contextMenuOpen === moduleData.id && (
-          <View style={styles.contextMenuWrapper}>
-            <TouchableOpacity onPress={onEdit} style={styles.contextMenuRow}>
-              <P>Bearbeiten</P>
-              <Pencil name="pencil" size={18} color="black" />
-            </TouchableOpacity>
-            <View style={styles.separatorH} />
-            <TouchableOpacity onPress={onDelete} style={styles.contextMenuRow}>
-              <P style={{ color: "red" }}>Löschen</P>
-              <Trash2 size={18} name="trash2" color="red" />
-            </TouchableOpacity>
-          </View>
-        )}
         {/* Header Row */}
         <View style={styles.headerRow}>
           <View style={styles.headerRowInnerWrapper}>
@@ -190,22 +172,6 @@ const styles = StyleSheet.create({
     padding: "8%",
     gap: 16,
   },
-  contextMenuWrapper: {
-    position: "absolute",
-    right: 60,
-    top: 30,
-    zIndex: 1,
-    borderRadius: 12,
-    flexDirection: "column",
-    justifyContent: "space-between",
-    padding: "8%",
-    backgroundColor: COLORTHEME.light.grey2,
-    shadowColor: "black",
-    shadowOffset: { width: -1, height: 1 },
-    shadowOpacity: 0.5,
-    elevation: 0.5,
-    shadowRadius: 5,
-  },
   contextMenuRow: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -228,7 +194,7 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
+    alignItems: "flex-start",
   },
   moduleIndicatorM: {
     width: 24,
