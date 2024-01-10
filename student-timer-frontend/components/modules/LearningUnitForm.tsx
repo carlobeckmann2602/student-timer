@@ -1,73 +1,29 @@
 import { View, StyleSheet, Pressable } from "react-native";
 import { COLORTHEME } from "@/constants/Theme";
-import InputField from "../InputField";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import DateTimePicker from "../DateTimePicker";
 import { LearningUnitType } from "@/types/LearningUnitType";
 import { LabelS, P } from "../StyledText";
 import UnitPicker from "./UnitPicker";
-import { LearningUnitEnum } from "@/constants/LearningUnitEnum";
 import { Trash2 } from "lucide-react-native";
-import { roundNumber } from "@/libs/generalHelper";
 import InputFieldNumeric from "../InputFieldNumeric";
 
 type LearningUnitFormProps = {
   inputData: LearningUnitType;
   onDelete?: (id: number) => void | undefined;
-  onChange: (changedUnit: LearningUnitType) => void;
-  setValidationErrorCallback: React.Dispatch<React.SetStateAction<boolean>>;
-  validationIndicator: boolean | undefined;
+  onChange: (vaules: LearningUnitType) => void;
+  setValidationError: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export function LearningUnitForm(props: LearningUnitFormProps) {
-  const {
-    inputData,
-    onDelete,
-    onChange,
-    setValidationErrorCallback,
-    validationIndicator,
-  } = props;
-
-  const [selectedUnit, setSelectedUnit] = useState<LearningUnitEnum>(
-    inputData.name ? inputData.name : LearningUnitEnum.VORLESUNG
-  );
-  const [startDate, setStartDate] = useState(inputData.startDate);
-  const [endDate, setEndDate] = useState(inputData.endDate);
-  const [workloadPerWeekHour, setWorkloadPerWeekHour] = useState(
-    Math.floor(inputData.workloadPerWeek / 60)
-  );
-  const [workloadPerWeekMinutes, setWorkloadPerWeekMinutes] = useState(
-    inputData.workloadPerWeek % 60
-  );
+  const { inputData, onDelete, onChange, setValidationError } = props;
 
   const [workLoadError, setWorkloadError] = useState("");
   const [dateError, setDateError] = useState("");
 
-  useEffect(() => {
-    if (validateInputs())
-      onChange({
-        id: inputData.id,
-        name: selectedUnit,
-        startDate: startDate,
-        endDate: endDate,
-        workloadPerWeek: workloadPerWeekMinutes + workloadPerWeekHour * 60,
-        totalLearningTime: 0,
-      } as LearningUnitType);
-  }, [validationIndicator]);
-
-  const validateInputs = () => {
-    if (validateDates() && validateWorkload()) {
-      setValidationErrorCallback(false);
-      return true;
-    } else {
-      setValidationErrorCallback(true);
-      return false;
-    }
-  };
-
   const validateDates = () => {
     var datesValid = true;
-    if (endDate.getTime() - startDate.getTime() < 0) {
+    if (inputData.endDate.getTime() - inputData.startDate.getTime() < 0) {
       setDateError("Das Startdatum muss vor dem Enddatum liegen");
       datesValid = false;
     } else {
@@ -79,7 +35,7 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
 
   const validateWorkload = () => {
     var workloadPerWeekValid = true;
-    if (workloadPerWeekHour <= 0 && workloadPerWeekMinutes <= 0) {
+    if (inputData.workloadPerWeek <= 0) {
       setWorkloadError("Der Aufwand muss größer als 0 min. sein");
       workloadPerWeekValid = false;
     } else {
@@ -89,38 +45,33 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
     return workloadPerWeekValid;
   };
 
+  const handleChange = (value: any) => {
+    onChange({ ...inputData, ...value });
+  };
+
   return (
     <View style={styles.outerWrapper}>
       <View style={styles.row}>
         <UnitPicker
           label="Typ der Lerneinheit"
-          onValueChange={(value: LearningUnitEnum) => {
-            setSelectedUnit(value);
-          }}
+          onValueChange={(value) => handleChange({ name: value })}
         />
       </View>
       <View style={styles.dateRowWrapper}>
         <View style={styles.row}>
           <DateTimePicker
             label="Startdatum"
-            value={startDate}
-            onChangeDate={(selectedDate) => {
-              if (selectedDate) {
-                setStartDate(selectedDate);
-                validateDates();
-              }
+            value={inputData.startDate}
+            onChangeDate={(value) => {
+              handleChange({ startDate: value });
             }}
+            maximumDate={inputData.endDate}
           />
           <DateTimePicker
             label="Enddatum"
-            value={endDate}
-            onChangeDate={(selectedDate) => {
-              if (selectedDate) {
-                setEndDate(selectedDate);
-                validateDates();
-              }
-            }}
-            minimumDate={startDate}
+            value={inputData.endDate}
+            onChangeDate={(value) => handleChange({ endDate: value })}
+            minimumDate={inputData.startDate}
           />
         </View>
         {dateError !== "" && <P style={styles.errorMessage}>{dateError}</P>}
@@ -131,21 +82,22 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
         </P>
         <View style={styles.row}>
           <InputFieldNumeric
-            onChangeText={(value) => {
-              const hours = Math.abs(roundNumber(value, 0));
-              setWorkloadPerWeekHour(hours);
-              validateWorkload();
-            }}
-            value={workloadPerWeekHour.toString()}
+            onChangeText={(value) =>
+              handleChange({
+                workloadPerWeek: +value * 60 + (inputData.workloadPerWeek % 60),
+              })
+            }
+            value={Math.round(inputData.workloadPerWeek / 60).toString()}
             inputUnit="Std."
           />
           <InputFieldNumeric
-            onChangeText={(value) => {
-              const minutes = Math.abs(roundNumber(value, 0));
-              setWorkloadPerWeekMinutes(minutes >= 60 ? 59 : minutes);
-              validateWorkload();
-            }}
-            value={workloadPerWeekMinutes.toString()}
+            onChangeText={(value) =>
+              handleChange({
+                workloadPerWeek:
+                  +value + Math.round(inputData.workloadPerWeek / 60),
+              })
+            }
+            value={(inputData.workloadPerWeek % 60).toString()}
             inputUnit="min."
           />
         </View>

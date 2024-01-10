@@ -8,7 +8,7 @@ import { useModules } from "@/context/ModuleContext";
 import { LearningUnitType } from "@/types/LearningUnitType";
 import { ModuleType } from "@/types/ModuleType";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -27,7 +27,6 @@ export default function NewModuleLearningUnits() {
   }>();
 
   const [validationError, setValidationError] = useState(false);
-  const [validationIndicator, setValidationIndicator] = useState<boolean>();
 
   const toast = useToast();
   const { authState } = useAuth();
@@ -47,25 +46,10 @@ export default function NewModuleLearningUnits() {
 
   const router = useRouter();
 
-  const onLearningUnitChange = (changedUnit: LearningUnitType) => {
-    let updated = learningUnits.map((current) => {
-      return current.id === changedUnit.id ? changedUnit : current;
-    });
-    setLearningUnits(updated);
-    // console.log("Vorher");
-    // console.log(learningUnits);
-    // const newlearningUnits = learningUnits.map((current) => {
-    //   if (current.id == changedUnit.id) {
-    //     // console.log(current);
-    //     // console.log(changedUnit);
-    //   }
-    //   return current.id === changedUnit.id ? changedUnit : current;
-    // });
-    // // console.log(newlearningUnits);
-    // setLearningUnits(newlearningUnits);
-
-    console.log("Final");
-    console.log(learningUnits);
+  const handleUpdate = (learningUnit: LearningUnitType, index: number) => {
+    const newLearningUnits = [...learningUnits];
+    newLearningUnits[index] = learningUnit;
+    setLearningUnits(newLearningUnits);
   };
 
   const onDeleteLearningUnit = (id: number) => {
@@ -90,8 +74,6 @@ export default function NewModuleLearningUnits() {
   };
 
   const onCreateModule = async () => {
-    setValidationError(false);
-    setValidationIndicator((prevState) => (prevState ? !prevState : false));
     if (validationError) {
       toast.show(
         "Überprüfe alle Eingaben auf ihre Gültigkeit. Erst dann kann das Modul angelegt werden.",
@@ -155,20 +137,19 @@ export default function NewModuleLearningUnits() {
         style={styles.scrollViewContainer}
         contentContainerStyle={styles.scrollViewContainerStyle}
       >
-        {learningUnits.map((unit) => (
+        {learningUnits.map((unit, index) => (
           <LearningUnitForm
-            key={unit.id}
+            key={index}
             inputData={unit}
             onDelete={
               learningUnits.length > 1 ? onDeleteLearningUnit : undefined
             }
-            onChange={onLearningUnitChange}
-            setValidationErrorCallback={(value) => {
+            setValidationError={(value) => {
               // if one form sets the validationError to true (as it received invalid inputs),
               // the validationError-state should not be overwritten by other, possibly valid forms
               if (!validationError) setValidationError(value);
             }}
-            validationIndicator={validationIndicator}
+            onChange={(inputData) => handleUpdate(inputData, index)}
           />
         ))}
       </ScrollView>

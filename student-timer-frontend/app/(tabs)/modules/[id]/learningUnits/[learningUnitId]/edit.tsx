@@ -96,8 +96,8 @@ export default function learningUnitEdit() {
         <LearningUnitForm
           key={learningUnit?.id}
           inputData={learningUnit!}
-          onChange={onLearningUnitChange}
-          setValidationErrorCallback={(value) => {
+          changeLearningUnit={onLearningUnitChange}
+          setValidationError={(value) => {
             // if one form sets the validationError to true (as it received invalid inputs),
             // the validationError-state should not be overwritten by other, possibly valid forms
             if (!validationError) setValidationError(value);
