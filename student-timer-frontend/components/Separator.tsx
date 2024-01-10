@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     gap: 20,
   },
   separator: {
-    marginVertical: 30,
+    marginVertical: 10,
     height: 1,
   },
 });

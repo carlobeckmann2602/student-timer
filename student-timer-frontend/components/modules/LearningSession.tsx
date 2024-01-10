@@ -6,7 +6,7 @@ import { useToast } from "react-native-toast-notifications";
 import Button from "@/components/Button";
 import InputField from "@/components/InputField";
 import { Text, View } from "@/components/Themed";
-import { COLORS, COLORTHEME } from "@/constants/Theme";
+import { BASE_STYLES, COLORS, COLORTHEME } from "@/constants/Theme";
 import { useAuth } from "@/context/AuthContext";
 import { useAxios } from "@/context/AxiosContext";
 import { useModules } from "@/context/ModuleContext";
@@ -268,7 +268,7 @@ export default function LearningSession(props: { isEdit: boolean }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 20,
+    paddingHorizontal: BASE_STYLES.horizontalPadding,
     justifyContent: "space-around",
     backgroundColor: COLORTHEME.light.background,
   },

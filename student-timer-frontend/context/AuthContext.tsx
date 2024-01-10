@@ -8,6 +8,7 @@ import {
 import { API_URL, TOKEN_KEY } from "@/constants/Api";
 import { useRouter } from "expo-router";
 import { AuthStateType, TokenType, UserType } from "@/types/AuthType";
+import { useToast } from "react-native-toast-notifications";
 
 type AuthProps = {
   authState?: AuthStateType;
@@ -311,7 +312,10 @@ export const AuthProvider = ({ children }: any) => {
 
   const router = useRouter();
 
+  const toast = useToast();
+
   const logout = async () => {
+    let id = toast.show('Logout...', { type: "loading" })
     await deleteStoredItem(TOKEN_KEY);
     await deleteStoredItem(USER_KEY);
 
@@ -326,7 +330,7 @@ export const AuthProvider = ({ children }: any) => {
         email: null,
       },
     });
-
+    toast.update(id, "Logout erfolgreich", { type: "success" }); //toDo update funktioniert nicht?
     router.push("/(auth)/login");
   };
 

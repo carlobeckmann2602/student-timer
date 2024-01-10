@@ -25,6 +25,7 @@
     "expo": "~49.0.15",
     "expo-apple-authentication": "~6.1.0",
     "expo-auth-session": "~5.0.2",
+    "expo-checkbox": "~2.4.0",
     "expo-constants": "~14.4.2",
     "expo-font": "~11.4.0",
     "expo-linking": "~5.0.2",
@@ -33,7 +34,6 @@
     "expo-secure-store": "~12.3.1",
     "expo-splash-screen": "~0.20.5",
     "expo-status-bar": "~1.6.0",
-    "expo-system-ui": "~2.4.0",
     "lucide": "^0.292.0",
     "lucide-react-native": "^0.292.0",
     "react": "18.2.0",
@@ -49,8 +49,7 @@
     "react-native-toast-notifications": "^3.4.0",
     "react-native-web": "~0.19.6",
     "react-swipeable-views-utils": "^0.14.0",
-    "victory-native": "^36.6.12",
-    "expo-checkbox": "~2.4.0"
+    "victory-native": "^36.6.12"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

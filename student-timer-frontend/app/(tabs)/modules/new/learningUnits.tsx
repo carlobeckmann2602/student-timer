@@ -1,7 +1,7 @@
 import Button from "@/components/Button";
 import { LearningUnitForm } from "@/components/modules/LearningUnitForm";
 import { LearningUnitEnum } from "@/constants/LearningUnitEnum";
-import { COLORTHEME } from "@/constants/Theme";
+import { BASE_STYLES, COLORTHEME } from "@/constants/Theme";
 import { useAuth } from "@/context/AuthContext";
 import { useAxios } from "@/context/AxiosContext";
 import { useModules } from "@/context/ModuleContext";
@@ -200,9 +200,8 @@ const styles = StyleSheet.create({
   scrollViewContainer: {
     flexGrow: 1,
     flexDirection: "column",
+    padding: 24,
     gap: 24,
-    padding: 12,
-    backgroundColor: COLORTHEME.light.background,
   },
   scrollViewContainerStyle: {
     alignItems: "center",
@@ -213,8 +212,8 @@ const styles = StyleSheet.create({
   buttons: {
     flexDirection: "column",
     alignItems: "center",
-    gap: 8,
-    paddingVertical: 16,
+    gap: 15,
+    paddingBottom: 46,
     backgroundColor: "transparent",
   },
 });

@@ -9,7 +9,7 @@ import InputField from "@/components/InputField";
 import TrackingModeToggle from "@/components/tracking/TrackingModeToggle";
 import ModulePicker from "@/components/modules/ModulePicker";
 import Timer from "@/components/tracking/Timer";
-import { COLORS, COLORTHEME } from "@/constants/Theme";
+import { BASE_STYLES, COLORS, COLORTHEME } from "@/constants/Theme";
 import { ModuleType } from "@/types/ModuleType";
 import {
   enableLocalNotification,
@@ -218,8 +218,7 @@ export default function Tracking() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "space-around",
-    paddingHorizontal: 12,
+    justifyContent: "space-between",
     backgroundColor: COLORS.white,
   },
   inputs: {
@@ -233,6 +232,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 10,
     backgroundColor: "transparent",
+    marginBottom: BASE_STYLES.horizontalPadding,
   },
   button: {
     flexGrow: 1,
