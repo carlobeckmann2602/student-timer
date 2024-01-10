@@ -1,14 +1,13 @@
 import React from "react";
-import {View, Text, Image, StyleSheet} from "react-native";
+import { View, Text, Image, StyleSheet } from "react-native";
 import Button from "@/components/Button";
-import Pressable from "@/components/Pressable"
-import { COLORTHEME } from "@/constants/Theme";
+import Pressable from "@/components/Pressable";
+import { BASE_STYLES, COLORTHEME } from "@/constants/Theme";
 import { User2 } from "lucide-react-native";
-import {router} from "expo-router";
+import { router } from "expo-router";
 import { useAuth } from "@/context/AuthContext";
 
 export default function Profile() {
-
   const { onLogout, authState } = useAuth();
 
   const images: { [key: string]: any } = {
@@ -23,7 +22,6 @@ export default function Profile() {
 
   const defaultPic = require("../../../assets/images/profile/profile-picture.jpg");
   //const pic = require("../../../assets/images/profile/phil.jpg");
-
 
   // toDo: Bildabfrage ermöglichen statt defaultPic
   const user = {
@@ -49,7 +47,6 @@ export default function Profile() {
         ) : (
           <User2 size={100} color={COLORTHEME.light.primary} />
         )}
-
       </View>
 
       {/* Benutzerinformationen */}
@@ -67,10 +64,10 @@ export default function Profile() {
       </View>
       <View>
         <Pressable
-            text={"Logout"}
-            accessibilityLabel={"Logout"}
-            accessibilityRole={"button"}
-            onPress={onLogout}
+          text={"Logout"}
+          accessibilityLabel={"Logout"}
+          accessibilityRole={"button"}
+          onPress={onLogout}
         />
       </View>
     </View>
@@ -83,6 +80,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: COLORTHEME.light.background,
+    paddingVertical: BASE_STYLES.horizontalPadding,
   },
   profileImageContainer: {
     width: 120,

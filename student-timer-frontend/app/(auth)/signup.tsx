@@ -4,7 +4,6 @@ import { Text, View } from "@/components/Themed";
 import { COLORTHEME } from "@/constants/Theme";
 import { useState } from "react";
 import Button from "@/components/Button";
-import Header from "@/components/Header";
 import InputField from "@/components/InputField";
 import { Link, useRouter } from "expo-router";
 import Separator from "@/components/Separator";
@@ -75,7 +74,7 @@ export default function SignupScreen() {
       passwordValid = true;
     }
 
-    return (emailValid && passwordValid);
+    return emailValid && passwordValid;
   };
 
   const register = async () => {
@@ -100,79 +99,76 @@ export default function SignupScreen() {
   };
 
   return (
-    <>
-      <Header title="Registrieren"></Header>
-      <View style={styles.container}>
-        <Title>Student Time Tracker</Title>
-        <View style={styles.outerWrapper}>
-          <View style={styles.row}>
-            <InputField
-              label="Name"
-              value={userName}
-              onChangeText={setUserName}
-              message={nameError}
-              messageColor="red"
-            />
-            <InputField
-              label="Studienfach"
-              onChangeText={setUserStudyCourse}
-              value={userStudyCourse}
-              message={studyCourseError}
-              messageColor="red"
-            />
-          </View>
-          <View style={styles.row}>
-            <InputField
-              label="E-Mail"
-              onChangeText={setUserEmail}
-              value={userEmail}
-              keyboardType="email-address"
-              message={emailError}
-              messageColor="red"
-            />
-          </View>
-          <View style={styles.row}>
-            <InputField
-              label="Passwort"
-              onChangeText={setUserPassword}
-              value={userPassword}
-              keyboardType="default"
-              secureTextEntry={true}
-              message={passwordError}
-              messageColor="red"
-            />
-            <InputField
-              label="Passwort wiederholen"
-              onChangeText={setUserCheckPassword}
-              value={userCheckPassword}
-              keyboardType="default"
-              secureTextEntry={true}
-            />
-          </View>
+    <View style={styles.container}>
+      <Title>Student Time Tracker</Title>
+      <View style={styles.outerWrapper}>
+        <View style={styles.row}>
+          <InputField
+            label="Name"
+            value={userName}
+            onChangeText={setUserName}
+            message={nameError}
+            messageColor="red"
+          />
+          <InputField
+            label="Studienfach"
+            onChangeText={setUserStudyCourse}
+            value={userStudyCourse}
+            message={studyCourseError}
+            messageColor="red"
+          />
         </View>
-        <View style={styles.buttons}>
-          <View style={styles.buttonText}>
-            <Button
-              text="Registrieren"
-              backgroundColor={COLORTHEME.light.primary}
-              textColor={COLORTHEME.light.grey2}
-              onPress={register}
-              style={{ width: 200 }}
-            />
-
-            {error && <Text style={styles.errorMessage}>{error}</Text>}
-            <Text>
-              Sie haben bereits ein Konto?{" "}
-              <Link href="/login" style={{ textDecorationLine: "underline" }}>
-                Anmelden
-              </Link>
-            </Text>
-          </View>
-          <Separator text="oder" />
-          <OtherLogins />
+        <View style={styles.row}>
+          <InputField
+            label="E-Mail"
+            onChangeText={setUserEmail}
+            value={userEmail}
+            keyboardType="email-address"
+            message={emailError}
+            messageColor="red"
+          />
+        </View>
+        <View style={styles.row}>
+          <InputField
+            label="Passwort"
+            onChangeText={setUserPassword}
+            value={userPassword}
+            keyboardType="default"
+            secureTextEntry={true}
+            message={passwordError}
+            messageColor="red"
+          />
+          <InputField
+            label="Passwort wiederholen"
+            onChangeText={setUserCheckPassword}
+            value={userCheckPassword}
+            keyboardType="default"
+            secureTextEntry={true}
+          />
         </View>
       </View>
-    </>
+      <View style={styles.buttons}>
+        <View style={styles.buttonText}>
+          <Button
+            text="Registrieren"
+            backgroundColor={COLORTHEME.light.primary}
+            textColor={COLORTHEME.light.grey2}
+            onPress={register}
+            style={{ width: 200 }}
+          />
+
+          {error && <Text style={styles.errorMessage}>{error}</Text>}
+          <Text>
+            Sie haben bereits ein Konto?{" "}
+            <Link href="/login" style={{ textDecorationLine: "underline" }}>
+              Anmelden
+            </Link>
+          </Text>
+        </View>
+        <Separator text="oder" />
+        <OtherLogins />
+      </View>
+    </View>
   );
 }
 
@@ -180,8 +176,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "space-around",
-    paddingHorizontal: 12,
+    justifyContent: "space-evenly",
+    gap: 35,
   },
   outerWrapper: {
     width: "100%",

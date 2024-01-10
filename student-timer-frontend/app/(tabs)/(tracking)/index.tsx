@@ -220,6 +220,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "space-between",
     backgroundColor: COLORS.white,
+    paddingVertical: BASE_STYLES.horizontalPadding,
   },
   inputs: {
     flexDirection: "row",
