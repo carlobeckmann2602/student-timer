@@ -16,6 +16,7 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
 import {
   Alert,
+  FlatList,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -260,8 +261,15 @@ export default function EditModule() {
           <View style={styles.row}>
             <View style={styles.colorWrapper}>
               <P style={styles.inputLabelText}>Farbauswahl</P>
-              <View style={styles.colorContainer}>
-                {selectableColors.map((color) => {
+              <FlatList
+                style={{ width: "100%" }}
+                columnWrapperStyle={{
+                  justifyContent: "space-between",
+                }}
+                contentContainerStyle={{ gap: 20 }}
+                data={selectableColors}
+                numColumns={4}
+                renderItem={({ item: color }) => {
                   return (
                     <TouchableOpacity
                       style={styles.colorOptionWrapper}
@@ -284,10 +292,10 @@ export default function EditModule() {
                       />
                     </TouchableOpacity>
                   );
-                })}
-              </View>
+                }}
+                keyExtractor={(item) => item}
+              />
             </View>
-            <View style={{ width: "70%", backgroundColor: "transparent" }} />
           </View>
         </View>
         <View style={styles.unitWrapper}>
@@ -355,14 +363,12 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     flexDirection: "column",
     gap: 24,
-    padding: 12,
     backgroundColor: COLORTHEME.light.background,
   },
   scrollViewContainer: {
     flexGrow: 1,
     flexDirection: "column",
     gap: 24,
-    padding: 12,
     backgroundColor: COLORTHEME.light.background,
   },
   scrollViewContainerStyle: {
@@ -414,16 +420,6 @@ const styles = StyleSheet.create({
   },
   inputLabelText: {
     color: COLORTHEME.light.primary,
-  },
-  colorContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    width: "100%",
-    justifyContent: "space-between",
-    gap: 20,
-    alignItems: "center",
-    alignContent: "center",
-    backgroundColor: "transparent",
   },
   colorOptionWrapper: {
     justifyContent: "center",
