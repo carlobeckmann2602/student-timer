@@ -27,7 +27,7 @@ export default function ProfilePicturePicker({ updateOnSelect }: ProfilePictureP
     const getImagePath = (profilePictureName: string) => {
         const fullPath = userProfilePictureName === 'empty'
             ? `${profilePictureBasePath}${defaultPictureName}`
-            : `${profilePictureBasePath}${userProfilePictureName}`;
+            : `${profilePictureBasePath}${profilePictureName}`;
 
         return fullPath;
     };
@@ -67,6 +67,7 @@ export default function ProfilePicturePicker({ updateOnSelect }: ProfilePictureP
                 <View style={{ width: '70%', backgroundColor: 'transparent' }} />
             </View>
             <View style={styles.profileImageContainer}>
+                <Text>Test {imagePath}</Text>
                 {imagePath ? (
                     <Image source={{ uri: imagePath }} style={styles.profileImage} />
                 ) : (
