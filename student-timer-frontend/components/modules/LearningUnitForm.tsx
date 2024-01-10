@@ -91,7 +91,6 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
 
   return (
     <View style={styles.outerWrapper}>
-      <View style={styles.row}></View>
       <View style={styles.row}>
         <UnitPicker
           label="Typ der Lerneinheit"
@@ -203,6 +202,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   dateRowWrapper: {
+    flexGrow: 1,
+    flexBasis: 65,
     flexDirection: "column",
     justifyContent: "flex-start",
     alignItems: "flex-start",

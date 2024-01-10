@@ -3,12 +3,14 @@ import DateTimePicker from "@/components/DateTimePicker";
 import InputField from "@/components/InputField";
 import InputFieldNumeric from "@/components/InputFieldNumeric";
 import StyledCheckbox from "@/components/StyledCheckbox";
-import { P } from "@/components/StyledText";
+import { H2, P, Subhead } from "@/components/StyledText";
 import { View } from "@/components/Themed";
+import LearningUnitRow from "@/components/modules/LearningUnitRow";
 import { COLORTHEME } from "@/constants/Theme";
 import { useAuth } from "@/context/AuthContext";
 import { useAxios } from "@/context/AxiosContext";
 import { useModules } from "@/context/ModuleContext";
+import { LearningUnitType } from "@/types/LearningUnitType";
 import { ModuleType } from "@/types/ModuleType";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
@@ -16,6 +18,7 @@ import {
   Alert,
   KeyboardAvoidingView,
   Platform,
+  ScrollView,
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
@@ -158,123 +161,204 @@ export default function EditModule() {
     }
   };
 
+  const onDelete = (learningUnitId: number) => {
+    console.log(learningUnitId);
+    console.log(detailModule.learningUnits);
+    Alert.alert(
+      "Lerneinheit wirklich löschen?",
+      `Möchtest du die Lerneinheit ${
+        detailModule.learningUnits.find((unit) => unit.id === learningUnitId)
+          ?.name
+      } wirklich unwiederuflich löschen?`,
+      [
+        {
+          text: "Abbrechen",
+          style: "cancel",
+        },
+        {
+          text: "Löschen",
+          onPress: () => {
+            deleteLearningUnit(learningUnitId);
+          },
+          style: "destructive",
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+
+  const deleteLearningUnit = async (learningUnitId: number) => {
+    let id = toast.show("Löschen...", { type: "loading" });
+    console.log(
+      `/students/${authState?.user.id}/modules/${detailModule.id}/learningUnits/${learningUnitId}`
+    );
+    try {
+      let response = await authAxios?.delete(
+        `/students/${authState?.user.id}/modules/${detailModule.id}/learningUnits/${learningUnitId}`
+      );
+      console.log(response?.status);
+      console.log(response?.data);
+      toast.update(id, "Lerneinheit erfolgreich gelöscht", { type: "success" });
+      fetchModules && (await fetchModules());
+    } catch (e) {
+      toast.update(id, `Fehler beim Löschen der Lerneinheit: ${e}`, {
+        type: "danger",
+      });
+    }
+  };
+
   return (
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <View style={styles.outerWrapper}>
-        <View style={styles.row}>
-          <InputField
-            label="Name"
-            onChangeText={setModuleName}
-            value={moduleName}
-            message={moduleNameError}
-            messageColor="red"
-          />
-        </View>
-        <View style={styles.dateRowContainer}>
-          <P style={{ color: COLORTHEME.light.primary }}>
-            {"Prüfungsdatum (optional)"}
-          </P>
+      <ScrollView
+        style={styles.scrollViewContainer}
+        contentContainerStyle={styles.scrollViewContainerStyle}
+      >
+        <View style={styles.outerWrapper}>
           <View style={styles.row}>
-            <DateTimePicker
-              onChangeDate={(date) => {
-                date ? setExamDate(date) : setExamDate(new Date());
-              }}
-              value={examDate}
-              disabled={dateDiabled}
-              style={{ opacity: dateDiabled ? 0.5 : 1 }}
-            />
-            <StyledCheckbox
-              value={dateDiabled}
-              onValueChange={setDateDisabled}
-              label="Keine Angabe"
+            <InputField
+              label="Name"
+              onChangeText={setModuleName}
+              value={moduleName}
+              message={moduleNameError}
+              messageColor="red"
             />
           </View>
-        </View>
-        <View style={styles.row}>
-          <InputFieldNumeric
-            label="Credit-Points"
-            onChangeText={setCreditPoints}
-            value={creditPoints}
-            message={creditPointError}
-            messageColor="red"
-            inputUnit="CP"
-          />
-          <View style={{ width: "50%", backgroundColor: "transparent" }} />
-        </View>
-        <View style={styles.row}>
-          <View style={styles.colorWrapper}>
-            <P style={styles.inputLabelText}>Farbauswahl</P>
-            <View style={styles.colorContainer}>
-              {selectableColors.map((color) => {
-                return (
-                  <TouchableOpacity
-                    style={styles.colorOptionWrapper}
-                    onPress={() => setColorCode(color)}
-                    key={color}
-                  >
-                    <View
-                      style={[
-                        styles.colorOptionIndicator,
-                        {
-                          borderColor:
-                            colorCode === color
-                              ? COLORTHEME.light.primary
-                              : "transparent",
-                        },
-                      ]}
-                    />
-                    <View
-                      style={[styles.colorOption, { backgroundColor: color }]}
-                    />
-                  </TouchableOpacity>
-                );
-              })}
+          <View style={styles.dateRowContainer}>
+            <P style={{ color: COLORTHEME.light.primary }}>
+              {"Prüfungsdatum (optional)"}
+            </P>
+            <View style={styles.row}>
+              <DateTimePicker
+                onChangeDate={(date) => {
+                  date ? setExamDate(date) : setExamDate(new Date());
+                }}
+                value={examDate}
+                disabled={dateDiabled}
+                style={{ opacity: dateDiabled ? 0.5 : 1 }}
+              />
+              <StyledCheckbox
+                value={dateDiabled}
+                onValueChange={setDateDisabled}
+                label="Keine Angabe"
+              />
             </View>
           </View>
-          <View style={{ width: "70%", backgroundColor: "transparent" }} />
+          <View style={styles.row}>
+            <InputFieldNumeric
+              label="Credit-Points"
+              onChangeText={setCreditPoints}
+              value={creditPoints}
+              message={creditPointError}
+              messageColor="red"
+              inputUnit="CP"
+            />
+            <View style={{ width: "50%", backgroundColor: "transparent" }} />
+          </View>
+          <View style={styles.row}>
+            <View style={styles.colorWrapper}>
+              <P style={styles.inputLabelText}>Farbauswahl</P>
+              <View style={styles.colorContainer}>
+                {selectableColors.map((color) => {
+                  return (
+                    <TouchableOpacity
+                      style={styles.colorOptionWrapper}
+                      onPress={() => setColorCode(color)}
+                      key={color}
+                    >
+                      <View
+                        style={[
+                          styles.colorOptionIndicator,
+                          {
+                            borderColor:
+                              colorCode === color
+                                ? COLORTHEME.light.primary
+                                : "transparent",
+                          },
+                        ]}
+                      />
+                      <View
+                        style={[styles.colorOption, { backgroundColor: color }]}
+                      />
+                    </TouchableOpacity>
+                  );
+                })}
+              </View>
+            </View>
+            <View style={{ width: "70%", backgroundColor: "transparent" }} />
+          </View>
         </View>
-      </View>
-      <Button
-        text="Änderungen speichern"
-        backgroundColor={COLORTHEME.light.primary}
-        textColor={COLORTHEME.light.grey2}
-        onPress={onSave}
-        style={{ width: 200, alignSelf: "center" }}
-      />
-      <P
-        style={styles.discardLink}
-        onPress={() => {
-          Alert.alert(
-            "Änderungen verwerfen?",
-            `Wenn du fortfährst, gehen alle Änderungen ungespeichert verloren. Bist du dir sicher?`,
-            [
-              {
-                text: "Abbrechen",
-                style: "default",
-              },
-              {
-                text: "Verwerfen",
-                onPress: () => {
-                  router.push("/modules");
+        <View style={styles.unitWrapper}>
+          <H2 style={{ textAlign: "left" }}>Einheiten</H2>
+          <View>
+            {detailModule?.learningUnits.map((unit: LearningUnitType) => {
+              return (
+                <LearningUnitRow
+                  key={unit.id}
+                  learningUnit={unit}
+                  selfLearningTime={
+                    detailModule.totalModuleTime -
+                    detailModule.totalLearningTime
+                  }
+                  onDelete={() => onDelete(unit.id)}
+                  onEdit={() =>
+                    router.push({
+                      pathname: `modules/${detailModule.id}/learningUnits/${unit.id}/edit`,
+                    } as never)
+                  }
+                />
+              );
+            })}
+          </View>
+        </View>
+        <Button
+          text="Änderungen speichern"
+          backgroundColor={COLORTHEME.light.primary}
+          textColor={COLORTHEME.light.grey2}
+          onPress={onSave}
+          style={{ width: 200, alignSelf: "center" }}
+        />
+        <P
+          style={styles.discardLink}
+          onPress={() => {
+            Alert.alert(
+              "Änderungen verwerfen?",
+              `Wenn du fortfährst, gehen alle Änderungen ungespeichert verloren. Bist du dir sicher?`,
+              [
+                {
+                  text: "Abbrechen",
+                  style: "default",
                 },
-                style: "destructive",
-              },
-            ],
-            { cancelable: false }
-          );
-        }}
-      >
-        Verwerfen
-      </P>
+                {
+                  text: "Verwerfen",
+                  onPress: () => {
+                    router.push("/modules");
+                  },
+                  style: "destructive",
+                },
+              ],
+              { cancelable: false }
+            );
+          }}
+        >
+          Verwerfen
+        </P>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    flexGrow: 1,
+    flexDirection: "column",
+    gap: 24,
+    padding: 12,
+    backgroundColor: COLORTHEME.light.background,
+  },
+  scrollViewContainer: {
     flexGrow: 1,
     flexDirection: "column",
     gap: 24,
@@ -368,5 +452,11 @@ const styles = StyleSheet.create({
     textAlign: "center",
     textDecorationLine: "underline",
     marginBottom: 20,
+  },
+  unitWrapper: {
+    width: "100%",
+    flexDirection: "column",
+    justifyContent: "flex-start",
+    gap: 16,
   },
 });

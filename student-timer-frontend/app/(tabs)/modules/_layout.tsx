@@ -23,6 +23,14 @@ export default function ModulesLayout() {
       />
       <Stack.Screen name="new/index" options={{ headerShown: false }} />
       <Stack.Screen name="new/learningUnits" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="[id]/learningUnits/[learningUnitId]/edit"
+        options={{
+          headerShown: false,
+          presentation: "modal",
+          animation: "default",
+        }}
+      />
     </Stack>
   );
 }
