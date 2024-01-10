@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Image, TouchableOpacity, StyleSheet, ScrollView, Alert } from "react-native";
-import { View } from "@/components/Themed";
+import {Text, View} from "@/components/Themed";
 import { useRouter } from "expo-router";
 import { COLORTHEME } from "@/constants/Theme";
 import { User2 } from "lucide-react-native";
@@ -17,7 +17,6 @@ export default function Edit() {
     const { onUpdate, onRemove, onChangePassword, authState } = useAuth();
     const router = useRouter();
 
-    const defaultPic = require("../../../assets/images/profile/profile-picture.jpg");
 
     const [isChanged, setIsChanged] = useState(false);
 
@@ -32,6 +31,32 @@ export default function Edit() {
     const [emailError, setEmailError] = useState("");
     const [passwordError, setPasswordError] = useState("");
     const [error, setError] = useState("");
+
+
+    {/* Profilbilder */}
+    const defaultPictureName="profile-picture.jpg";
+    const profilePictureBasePath = "../../../assets/images/profile/";
+
+    const userProfilePictureName = authState?.user.profilePicture || defaultPictureName;
+    const imagePath = userProfilePictureName === 'empty'
+        ? `${profilePictureBasePath}${defaultPictureName}`
+        : `${profilePictureBasePath}${userProfilePictureName}`;
+
+    const [profilePicture, setProfilePicture] = useState(userProfilePictureName);
+
+    console.log("#### useState:", profilePicture, typeof profilePicture);
+    console.log("authState?.user.profilePicture", authState?.user.profilePicture, typeof authState?.user.profilePicture);
+    console.log("imagePath", imagePath);
+
+    const images: { [key: string]: any } = {
+        "phil.jpg": require("../../../assets/images/profile/phil.jpg"),
+        "mareike.jpg": require("../../../assets/images/profile/mareike.jpg"),
+        "carlo.jpg": require("../../../assets/images/profile/carlo.jpg"),
+        "nils.png": require("../../../assets/images/profile/nils.png"),
+        "konstantin.png": require("../../../assets/images/profile/konstantin.png"),
+        "": require("../../../assets/images/profile/profile-picture.jpg"),
+        "default.jpg": require("../../../assets/images/profile/profile-picture.jpg"),
+    };
 
     const handleInputChange = (setter: React.Dispatch<React.SetStateAction<string>>) => {
         return (value: string) => {
@@ -198,8 +223,8 @@ export default function Edit() {
             {/* Profilbild */}
             <View style={{ alignItems: "center" }}>
                 <View style={styles.profileImageContainer}>
-                    {defaultPic ? (
-                        <Image source={defaultPic} style={styles.profileImage} />
+                    {imagePath ? (
+                        <Image source={{ uri: imagePath }} style={styles.profileImage} />
                     ) : (
                         <User2 size={100} color={COLORTHEME.light.primary} />
                     )}

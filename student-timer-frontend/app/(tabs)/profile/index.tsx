@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {View, Text, Image, StyleSheet} from "react-native";
 import Button from "@/components/Button";
 import Pressable from "@/components/Pressable"
@@ -18,20 +18,28 @@ export default function Profile() {
     "nils.png": require("../../../assets/images/profile/nils.png"),
     "konstantin.png": require("../../../assets/images/profile/konstantin.png"),
     "": require("../../../assets/images/profile/profile-picture.jpg"),
+    "empty":require("../../../assets/images/profile/profile-picture.jpg"),
     "default.jpg": require("../../../assets/images/profile/profile-picture.jpg"),
   };
 
-  const defaultPic = require("../../../assets/images/profile/profile-picture.jpg");
-  //const pic = require("../../../assets/images/profile/phil.jpg");
+  const defaultPictureName="profile-picture.jpg";
+  const profilePictureBasePath = "../../../assets/images/profile/";
+
+  const userProfilePictureName = authState?.user.profilePicture || defaultPictureName;
+  const imagePath = userProfilePictureName === 'empty'
+      ? `${profilePictureBasePath}${defaultPictureName}`
+      : `${profilePictureBasePath}${userProfilePictureName}`;
+
+  const [profilePicture, setProfilePicture] = useState(userProfilePictureName);
+
+  console.log("#### useState:", profilePicture, typeof profilePicture);
+  console.log("authState?.user.profilePicture", authState?.user.profilePicture, typeof authState?.user.profilePicture);
+  console.log("imagePath", imagePath);
 
 
-  // toDo: Bildabfrage ermöglichen statt defaultPic
   const user = {
     name: authState?.user.name,
     studySubject: authState?.user.studyCourse,
-    profileImage: defaultPic,
-    //profileImage: authState?.user.profilePicture,
-    //profileImage: authState?.user.profilePicture in images ? images[authState?.user.profilePicture] : images["default.jpg"],
   };
 
   const handleEditProfile = () => {
@@ -44,8 +52,8 @@ export default function Profile() {
       {/* Profilbild */}
 
       <View style={styles.profileImageContainer}>
-        {user.profileImage ? (
-          <Image source={user.profileImage} style={styles.profileImage} />
+        {imagePath ? (
+          <Image source={{uri: imagePath}} style={styles.profileImage} />
         ) : (
           <User2 size={100} color={COLORTHEME.light.primary} />
         )}
@@ -53,8 +61,8 @@ export default function Profile() {
       </View>
 
       {/* Benutzerinformationen */}
-      <Text style={styles.title}>{user.name}</Text>
-      <Text>{user.studySubject}</Text>
+      <Text style={styles.title}>{authState?.user.name}</Text>
+      <Text>{authState?.user.studyCourse}</Text>
 
       {/* Aktionen */}
       <View style={styles.actionContainer}>
