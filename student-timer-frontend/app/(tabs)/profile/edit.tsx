@@ -10,6 +10,7 @@ import UserDetailsInput from "@/components/userInput/UserDetailsInput";
 import PasswordInput from "@/components/userInput/PasswordInput";
 import Pressable from "@/components/Pressable";
 import { useToast } from "react-native-toast-notifications";
+import ProfilePicturePicker from "@/components/profile/ProfilePicturePicker";
 
 export default function Edit() {
 
@@ -38,25 +39,18 @@ export default function Edit() {
     const profilePictureBasePath = "../../../assets/images/profile/";
 
     const userProfilePictureName = authState?.user.profilePicture || defaultPictureName;
-    const imagePath = userProfilePictureName === 'empty'
+    const [profilePicture, setProfilePicture] = useState<string>(userProfilePictureName);
+
+    const userImagePath = userProfilePictureName === 'empty'
         ? `${profilePictureBasePath}${defaultPictureName}`
         : `${profilePictureBasePath}${userProfilePictureName}`;
+    const [imagePath, setImagePath] = useState<string>(userImagePath);
 
-    const [profilePicture, setProfilePicture] = useState(userProfilePictureName);
+
 
     console.log("#### useState:", profilePicture, typeof profilePicture);
     console.log("authState?.user.profilePicture", authState?.user.profilePicture, typeof authState?.user.profilePicture);
     console.log("imagePath", imagePath);
-
-    const images: { [key: string]: any } = {
-        "phil.jpg": require("../../../assets/images/profile/phil.jpg"),
-        "mareike.jpg": require("../../../assets/images/profile/mareike.jpg"),
-        "carlo.jpg": require("../../../assets/images/profile/carlo.jpg"),
-        "nils.png": require("../../../assets/images/profile/nils.png"),
-        "konstantin.png": require("../../../assets/images/profile/konstantin.png"),
-        "": require("../../../assets/images/profile/profile-picture.jpg"),
-        "default.jpg": require("../../../assets/images/profile/profile-picture.jpg"),
-    };
 
     const handleInputChange = (setter: React.Dispatch<React.SetStateAction<string>>) => {
         return (value: string) => {
@@ -273,6 +267,7 @@ export default function Edit() {
                     onPress={onDelete}
                 />
             </View>
+            <ProfilePicturePicker />
         </ScrollView>
     )
 }
