@@ -1,9 +1,25 @@
+import { BASE_STYLES, COLORTHEME } from "@/constants/Theme";
 import { Stack } from "expo-router";
 
 export default function ModulesLayout() {
   return (
-    <Stack>
-      <Stack.Screen name="index" options={{ headerShown: false }} />
+    <Stack
+      screenOptions={{
+        contentStyle: {
+          paddingVertical: BASE_STYLES.horizontalPadding,
+          backgroundColor: COLORTHEME.light.background,
+        },
+      }}
+    >
+      <Stack.Screen
+        name="index"
+        options={{
+          headerShown: false,
+          contentStyle: {
+            paddingVertical: 0,
+          },
+        }}
+      />
       <Stack.Screen
         name="[id]/index"
         options={{

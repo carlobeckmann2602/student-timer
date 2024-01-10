@@ -403,10 +403,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     gap: 24,
+    paddingVertical: BASE_STYLES.horizontalPadding,
   },
   flatListContainer: {
     gap: 24,
-    paddingVertical: 24,
   },
   emptyListContainer: {
     flex: 1,

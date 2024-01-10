@@ -1,5 +1,4 @@
 import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
-import { StyleSheet } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
@@ -10,7 +9,7 @@ import { AuthProvider } from "@/context/AuthContext";
 import { AxiosProvider } from "@/context/AxiosContext";
 import { ModuleProvider } from "@/context/ModuleContext";
 import Toast from "@/components/Toast";
-import { BASE_STYLES, COLORTHEME } from "@/constants/Theme";
+import { BASE_STYLES, COLORTHEME, SIZES } from "@/constants/Theme";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -64,7 +63,7 @@ function RootLayoutNav() {
   return (
     <SafeAreaProvider>
       <ThemeProvider value={DefaultTheme}>
-        <SafeAreaView style={styles.basePadding}>
+        <SafeAreaView style={{ flex: 1 }}>
           <ToastProvider
             placement="top"
             textStyle={{ fontFamily: "OpenSans_Regular" }}
@@ -73,28 +72,71 @@ function RootLayoutNav() {
             <AuthProvider>
               <AxiosProvider>
                 <ModuleProvider>
-                  <Stack>
+                  <Stack
+                    screenOptions={{
+                      headerShadowVisible: false,
+                    }}
+                  >
                     <Stack.Screen
                       name="index"
-                      options={{ headerShown: false }}
+                      options={{
+                        headerShown: false,
+                        contentStyle: {
+                          paddingHorizontal: BASE_STYLES.horizontalPadding,
+                          backgroundColor: COLORTHEME.light.background,
+                        },
+                      }}
                     />
                     <Stack.Screen
                       name="(tabs)"
-                      options={{ headerShown: false }}
+                      options={{
+                        header: () => <></>,
+                      }}
                     />
                     <Stack.Screen
                       name="(auth)/login"
-                      options={{ headerShown: false }}
+                      options={{
+                        headerTitle: "Login",
+                        headerTitleStyle: {
+                          fontSize: SIZES.xLarge,
+                          fontWeight: "500",
+                        },
+                        headerBackTitleVisible: false,
+                        contentStyle: {
+                          paddingHorizontal: BASE_STYLES.horizontalPadding,
+                          backgroundColor: COLORTHEME.light.background,
+                        },
+                      }}
                     />
                     <Stack.Screen
                       name="(auth)/signup"
                       options={{
-                        headerShown: false,
+                        headerTitle: "Registrieren",
+                        headerTitleStyle: {
+                          fontSize: SIZES.xLarge,
+                          fontWeight: "500",
+                        },
+                        headerBackTitleVisible: false,
+                        contentStyle: {
+                          paddingHorizontal: BASE_STYLES.horizontalPadding,
+                          backgroundColor: COLORTHEME.light.background,
+                        },
                       }}
                     />
                     <Stack.Screen
                       name="onboarding/index"
-                      options={{ headerShown: false }}
+                      options={{
+                        headerTitle: "Student Timer",
+                        headerTitleStyle: {
+                          fontSize: SIZES.xLarge,
+                          fontWeight: "500",
+                        },
+                        headerBackVisible: false,
+                        contentStyle: {
+                          paddingHorizontal: BASE_STYLES.horizontalPadding,
+                          backgroundColor: COLORTHEME.light.background,
+                        },
+                      }}
                     />
                   </Stack>
                 </ModuleProvider>
@@ -106,11 +148,3 @@ function RootLayoutNav() {
     </SafeAreaProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  basePadding: {
-    flex: 1,
-    paddingHorizontal: BASE_STYLES.horizontalPadding,
-    backgroundColor: COLORTHEME.light.background,
-  },
-});
