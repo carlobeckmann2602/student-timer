@@ -1,5 +1,11 @@
 import { MoreVertical, Pencil, Trash2 } from "lucide-react-native";
-import { View, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Alert,
+  Pressable,
+} from "react-native";
 import { ModuleChart } from "./ModuleChart";
 import { H4, P, Subhead } from "../StyledText";
 import { COLORTHEME } from "@/constants/Theme";
@@ -105,7 +111,7 @@ export function ModuleCard(props: ModuleCardProps) {
         )}
         {/* Header Row */}
         <View style={styles.headerRow}>
-          <View style={styles.headerTextRow}>
+          <View style={styles.headerRowInnerWrapper}>
             <View
               style={[
                 styles.moduleIndicatorM,
@@ -114,9 +120,17 @@ export function ModuleCard(props: ModuleCardProps) {
             />
             <H4>{moduleData.name}</H4>
           </View>
-          <TouchableOpacity onPress={() => setContextMenuOpen(moduleData.id)}>
+          {/* <TouchableOpacity onPress={() => setContextMenuOpen(moduleData.id)}>
             <MoreVertical color="" size={28} fill="black" strokeWidth={1} />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
+          <View style={styles.headerRowInnerWrapper}>
+            <Pressable onPress={onEdit} style={{ width: 28 }}>
+              <Pencil size={20} color="black" />
+            </Pressable>
+            <Pressable onPress={onDelete} style={{ width: 28 }}>
+              <Trash2 size={20} color="red" />
+            </Pressable>
+          </View>
         </View>
         {/* Statistics */}
         <View style={styles.statisticsContainer}>
@@ -132,7 +146,7 @@ export function ModuleCard(props: ModuleCardProps) {
           <View style={styles.statisticsUnitContainer}>
             {moduleData.learningUnits.map((unit) => {
               return (
-                <View key={unit.id} style={styles.headerTextRow}>
+                <View key={unit.id} style={styles.headerRowInnerWrapper}>
                   <View
                     style={[
                       styles.moduleIndicatorS,
@@ -226,7 +240,7 @@ const styles = StyleSheet.create({
     height: 16,
     borderRadius: 1000,
   },
-  headerTextRow: {
+  headerRowInnerWrapper: {
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
