@@ -38,17 +38,17 @@ export default function Edit() {
     const defaultPictureName="profile-picture.jpg";
     const profilePictureBasePath = "../../../assets/images/profile/";
 
-    const userProfilePictureName = authState?.user.profilePicture || defaultPictureName;
-    const [profilePicture, setProfilePicture] = useState<string>(userProfilePictureName);
+    const userProfilePicture = authState?.user.profilePicture || defaultPictureName;
+    const [profilePicture, setProfilePicture] = useState<string>(userProfilePicture);
 
-    const userImagePath = userProfilePictureName === 'empty'
+    const userImagePath = userProfilePicture === 'empty'
         ? `${profilePictureBasePath}${defaultPictureName}`
-        : `${profilePictureBasePath}${userProfilePictureName}`;
+        : `${profilePictureBasePath}${userProfilePicture}`;
     const [imagePath, setImagePath] = useState<string>(userImagePath);
 
 
 
-    console.log("#### useState:", profilePicture, typeof profilePicture);
+    console.log("#### useState:", userProfilePicture, typeof userProfilePicture);
     console.log("authState?.user.profilePicture", authState?.user.profilePicture, typeof authState?.user.profilePicture);
     console.log("imagePath", imagePath);
 
@@ -118,6 +118,7 @@ export default function Edit() {
             const result = await onUpdate!(
                 userName,
                 userStudyCourse,
+                userProfilePicture,
                 userEmail,
             );
             console.log("validateInput")
@@ -267,7 +268,9 @@ export default function Edit() {
                     onPress={onDelete}
                 />
             </View>
-            <ProfilePicturePicker />
+            <ProfilePicturePicker
+                updateOnSelect={update}
+            />
         </ScrollView>
     )
 }

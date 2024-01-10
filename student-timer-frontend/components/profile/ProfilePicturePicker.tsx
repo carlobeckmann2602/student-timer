@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {Image, TouchableOpacity, StyleSheet, View, Dimensions} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Image, TouchableOpacity, StyleSheet, View, Dimensions } from 'react-native';
 import { Text } from '@/components/Themed';
 import { User2 } from 'lucide-react-native';
 import { Edit2 } from 'lucide-react-native';
@@ -9,12 +9,21 @@ import { Picker } from "@react-native-picker/picker";
 
 const { width } = Dimensions.get('window');
 
-const ProfilePicturePicker = () => {
+type ProfilePicturePickerProps = {
+    updateOnSelect?: () => void;
+};
+
+export default function ProfilePicturePicker({ updateOnSelect }: ProfilePicturePickerProps) {
+
     const { authState } = useAuth();
 
     const defaultPictureName = 'profile-picture.jpg';
     const profilePictureBasePath = '../../../assets/images/profile/';
-    const userProfilePictureName = authState?.user.profilePicture || defaultPictureName;
+    const availableImageNames: string[] = ['profile-picture.jpg', 'phil.jpg', 'mareike.jpg', 'carlo.jpg', 'nils.png', 'konstantin.png', 'alex.jpg', 'random.jpg'];
+    //const userProfilePictureName = authState?.user.profilePicture || defaultPictureName;
+    const userProfilePictureName: string = availableImageNames.includes(authState?.user.profilePicture ?? '')
+        ? authState?.user.profilePicture || ''
+        : defaultPictureName;
     const getImagePath = (profilePictureName: string) => {
         const fullPath = userProfilePictureName === 'empty'
             ? `${profilePictureBasePath}${defaultPictureName}`
@@ -24,7 +33,6 @@ const ProfilePicturePicker = () => {
     };
     const [imagePath, setImagePath] = useState<string>(getImagePath(userProfilePictureName));
     const [selectedImageName, setSelectedImageName] = useState<string>(userProfilePictureName);
-    const availableImageNames: string[] = ['profile-picture.jpg', 'phil.jpg', 'mareike.jpg', 'carlo.jpg', 'nils.png', 'konstantin.png'];
 
     useEffect(() => {
         const imagePath = getImagePath(selectedImageName);
@@ -37,6 +45,8 @@ const ProfilePicturePicker = () => {
         const newPath = getImagePath(imageName);
         console.log('New Image Path:', newPath);
         setImagePath(newPath);
+        //updateOnSelect();
+        //console.log("new profile picture", authState?.user.profilePicture);
     };
 
     return (
@@ -45,7 +55,7 @@ const ProfilePicturePicker = () => {
                 <View style={styles.pictureWrapper}>
                     <Text style={styles.inputLabelText}>Bildauswahl</Text>
                     <Picker
-                        style={{ width: width * 0.7 }}
+                        style={{ width: width * 0.5 }}
                         selectedValue={selectedImageName}
                         onValueChange={(itemValue) => handleImageNameChange(itemValue)}
                     >
@@ -113,5 +123,3 @@ const styles = StyleSheet.create({
         borderWidth: 6,
     },
 });
-
-export default ProfilePicturePicker;

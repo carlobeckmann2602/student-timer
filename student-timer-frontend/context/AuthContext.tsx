@@ -32,6 +32,7 @@ type AuthProps = {
   onUpdate?: (
       userName: string,
       userStudyCourse: string,
+      userProfilePicture: string,
       userEmail: string
   ) => Promise<any>;
   onChangePassword?: (
@@ -226,6 +227,7 @@ export const AuthProvider = ({ children }: any) => {
   const update = async (
       userName: string,
       userStudyCourse: string,
+      userProfilePicture: string,
       userEmail: string
   ) => {
     try {
@@ -234,6 +236,7 @@ export const AuthProvider = ({ children }: any) => {
         {
           name: userName,
           studyCourse: userStudyCourse,
+          profilePicture: userProfilePicture,
           email: userEmail
         },
         {
