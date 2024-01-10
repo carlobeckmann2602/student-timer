@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
 import Button from "@/components/Button";
+import Pressable from "@/components/Pressable";
 import { BASE_STYLES, COLORTHEME } from "@/constants/Theme";
 import { User2 } from "lucide-react-native";
 import { router } from "expo-router";
@@ -36,11 +37,6 @@ export default function Profile() {
     console.log("Profil bearbeiten");
   };
 
-  const handleExportData = () => {
-    // Hier implementiere die Logik für den Datenexport
-    console.log("Daten exportieren");
-  };
-
   return (
     <View style={styles.container}>
       {/* Profilbild */}
@@ -65,20 +61,15 @@ export default function Profile() {
           textColor="#FFFFFF"
           onPress={handleEditProfile}
         />
-        <Button
-          text="Daten exportieren"
-          backgroundColor={COLORTHEME.light.primary}
-          textColor="#FFFFFF"
-          onPress={handleExportData}
+      </View>
+      <View>
+        <Pressable
+          text={"Logout"}
+          accessibilityLabel={"Logout"}
+          accessibilityRole={"button"}
+          onPress={onLogout}
         />
       </View>
-      <Button
-        text="Logout"
-        backgroundColor={"transparent"}
-        textColor={COLORTHEME.light.text}
-        onPress={onLogout}
-        style={{ width: 200 }}
-      />
     </View>
   );
 }
