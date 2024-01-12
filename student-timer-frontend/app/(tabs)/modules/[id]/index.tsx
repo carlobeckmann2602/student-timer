@@ -171,7 +171,11 @@ export default function ModulesDetailScreen() {
                         />
                         <View style={styles.unitRowTitle}>
                           <Subhead>
-                            {item.createdAt.toLocaleDateString("de-DE")}
+                            {item.createdAt.toLocaleDateString("de-DE", {
+                              year: "numeric",
+                              month: "2-digit",
+                              day: "2-digit",
+                            })}
                           </Subhead>
                           <P numberOfLines={2} style={{ textAlign: "left" }}>
                             {item.description}

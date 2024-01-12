@@ -62,7 +62,11 @@ export default function DateTimePicker(props: DateTimerPickerProps) {
           return (
             <InputField
               label={label}
-              value={value.toLocaleDateString()}
+              value={value.toLocaleDateString("de-DE", {
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+              })}
               onChangeText={onChangeDateFromText}
               placeholder={placeholder}
               message={message}
@@ -73,14 +77,17 @@ export default function DateTimePicker(props: DateTimerPickerProps) {
         } else if (Platform.OS === "android") {
           return (
             <Pressable
-              // style={styles.innerContainer}
               onPress={() => {
                 if (!disabled) showDatepicker();
               }}
             >
               <InputField
                 label={label}
-                value={value.toLocaleDateString("de-DE")}
+                value={value.toLocaleDateString("de-DE", {
+                  year: "numeric",
+                  month: "2-digit",
+                  day: "2-digit",
+                })}
                 onChangeText={onChangeDateFromText}
                 placeholder={placeholder}
                 message={message}
