@@ -1,20 +1,10 @@
 import Button from "@/components/Button";
-import DateTimePicker from "@/components/DateTimePicker";
-import InputField from "@/components/InputField";
-import InputFieldNumeric from "@/components/InputFieldNumeric";
-import StyledCheckbox from "@/components/StyledCheckbox";
-import { P } from "@/components/StyledText";
-import { View } from "@/components/Themed";
+import ModuleForm from "@/components/modules/ModuleForm";
 import { COLORTHEME } from "@/constants/Theme";
+import { ModuleType } from "@/types/ModuleType";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import {
-  FlatList,
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
+import { KeyboardAvoidingView, Platform, StyleSheet } from "react-native";
 
 export default function NewModule() {
   const router = useRouter();
@@ -29,34 +19,50 @@ export default function NewModule() {
     "#88A7F5",
   ];
 
+  const [newModule, setNewModule] = useState<ModuleType>({
+    id: -1,
+    name: "",
+    colorCode: selectableColors[0],
+    creditPoints: 0,
+    examDate: new Date(),
+    learningUnits: [],
+    learningSessions: [],
+    totalLearningSessionTime: 0,
+    totalLearningUnitTime: 0,
+    totalLearningTime: 0,
+    totalModuleTime: 0,
+  } as ModuleType);
+
   const [dateDiabled, setDateDisabled] = useState(false);
-
-  const [moduleName, setModuleName] = useState("");
-  const [examDate, setExamDate] = useState<Date>(new Date());
-  const [creditPoints, setCreditPoints] = useState("");
-  const [colorCode, setColorCode] = useState(selectableColors[0]);
-
   const [moduleNameError, setModuleNameError] = useState("");
   const [creditPointError, setCreditPointError] = useState("");
 
   const validateInput = () => {
     var nameValid = false;
-    if (moduleName.trim().length == 0) {
-      setModuleNameError("Name ist erforderlich");
+    if (newModule.name.trim().length == 0) {
+      setModuleNameError(() => "Name ist erforderlich");
     } else {
-      setModuleNameError("");
+      setModuleNameError(() => "");
       nameValid = true;
     }
 
     var creditPointsValid = false;
-    if (+creditPoints <= 0) {
-      setCreditPointError("Creditpoints muss einen Wert größer 0 enthalten");
+    if (+newModule.creditPoints <= 0) {
+      setCreditPointError(
+        () => "Creditpoints muss einen Wert größer 0 enthalten"
+      );
     } else {
-      setCreditPointError("");
+      setCreditPointError(() => "");
       creditPointsValid = true;
     }
 
     return nameValid && creditPointsValid;
+  };
+
+  const handleUpdate = (module: ModuleType, disabledStatus?: boolean) => {
+    if (module) setNewModule(module);
+    if (disabledStatus != undefined) setDateDisabled(disabledStatus);
+    validateInput();
   };
 
   const onContinue = () => {
@@ -65,19 +71,19 @@ export default function NewModule() {
         router.push({
           pathname: "/modules/new/learningUnits",
           params: {
-            name: moduleName,
-            colorCode: colorCode,
-            creditPoints: creditPoints,
+            name: newModule.name,
+            colorCode: newModule.colorCode,
+            creditPoints: newModule.creditPoints,
           },
         });
       } else {
         router.push({
           pathname: "/modules/new/learningUnits",
           params: {
-            name: moduleName,
-            colorCode: colorCode,
-            creditPoints: creditPoints,
-            examDate: examDate?.toISOString().substring(0, 10),
+            name: newModule.name,
+            colorCode: newModule.colorCode,
+            creditPoints: newModule.creditPoints,
+            examDate: newModule.examDate?.toISOString().substring(0, 10),
           },
         });
       }
@@ -89,88 +95,13 @@ export default function NewModule() {
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <View style={styles.outerWrapper}>
-        <View style={styles.row}>
-          <InputField
-            label="Name"
-            onChangeText={setModuleName}
-            value={moduleName}
-            message={moduleNameError}
-            messageColor="red"
-          />
-        </View>
-        <View style={styles.dateRowContainer}>
-          <P style={{ color: COLORTHEME.light.primary }}>
-            {"Prüfungsdatum (optional)"}
-          </P>
-          <View style={styles.row}>
-            <DateTimePicker
-              onChangeDate={(date) => {
-                date ? setExamDate(date) : setExamDate(new Date());
-              }}
-              value={examDate}
-              disabled={dateDiabled}
-              style={{ opacity: dateDiabled ? 0.5 : 1 }}
-            />
-            <StyledCheckbox
-              value={dateDiabled}
-              onValueChange={setDateDisabled}
-              label="Keine Angabe"
-            />
-          </View>
-        </View>
-        <View style={styles.row}>
-          <InputFieldNumeric
-            label="Credit-Points"
-            onChangeText={setCreditPoints}
-            value={creditPoints}
-            message={creditPointError}
-            messageColor="red"
-            inputUnit="CP"
-          />
-          <View style={{ width: "50%", backgroundColor: "transparent" }} />
-        </View>
-        <View style={styles.row}>
-          <View style={styles.colorWrapper}>
-            <P style={styles.inputLabelText}>Farbauswahl</P>
-            <FlatList
-              style={{ width: "100%" }}
-              columnWrapperStyle={{
-                justifyContent: "space-between",
-              }}
-              contentContainerStyle={{ gap: 20 }}
-              data={selectableColors}
-              numColumns={4}
-              renderItem={({ item: color }) => {
-                return (
-                  <TouchableOpacity
-                    style={styles.colorOptionWrapper}
-                    onPress={() => setColorCode(color)}
-                    key={color}
-                  >
-                    <View
-                      style={[
-                        styles.colorOptionIndicator,
-                        {
-                          borderColor:
-                            colorCode === color
-                              ? COLORTHEME.light.primary
-                              : "transparent",
-                        },
-                      ]}
-                    />
-                    <View
-                      style={[styles.colorOption, { backgroundColor: color }]}
-                    />
-                  </TouchableOpacity>
-                );
-              }}
-              keyExtractor={(item) => item}
-            />
-          </View>
-          <View style={{ width: "70%", backgroundColor: "transparent" }} />
-        </View>
-      </View>
+      <ModuleForm
+        inputData={newModule}
+        onChange={handleUpdate}
+        dateDiabled={dateDiabled}
+        moduleNameError={moduleNameError}
+        creditPointError={creditPointError}
+      />
       <Button
         text="Weiter"
         backgroundColor={COLORTHEME.light.primary}

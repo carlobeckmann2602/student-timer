@@ -13,7 +13,7 @@ import { useState } from "react";
 type CheckboyProps = {
   label?: string;
   value: boolean;
-  onValueChange: React.Dispatch<React.SetStateAction<boolean>>;
+  onValueChange: (value: boolean) => void;
   style?: ViewStyle;
   containerStyle?: ViewStyle;
 };

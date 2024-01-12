@@ -1,11 +1,9 @@
 import Button from "@/components/Button";
-import DateTimePicker from "@/components/DateTimePicker";
-import InputField from "@/components/InputField";
-import InputFieldNumeric from "@/components/InputFieldNumeric";
-import StyledCheckbox from "@/components/StyledCheckbox";
-import { H2, P, Subhead } from "@/components/StyledText";
+import { H2, P } from "@/components/StyledText";
 import { View } from "@/components/Themed";
 import LearningUnitRow from "@/components/modules/LearningUnitRow";
+import ModuleForm from "@/components/modules/ModuleForm";
+import { LearningUnitEnum } from "@/constants/LearningUnitEnum";
 import { COLORTHEME } from "@/constants/Theme";
 import { useAuth } from "@/context/AuthContext";
 import { useAxios } from "@/context/AxiosContext";
@@ -16,12 +14,10 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
 import {
   Alert,
-  FlatList,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
   StyleSheet,
-  TouchableOpacity,
 } from "react-native";
 import { useToast } from "react-native-toast-notifications";
 
@@ -35,17 +31,6 @@ export default function EditModule() {
   const { authAxios } = useAxios();
   const { modules, fetchModules } = useModules();
   const router = useRouter();
-
-  const selectableColors: string[] = [
-    "#88A795",
-    "#AB5761",
-    "#5D7CB9",
-    "#FBC2B5",
-    "#073B3A",
-    "#243119",
-    "#FA7921",
-    "#88A7F5",
-  ];
 
   const fetchDetailModule = () => {
     if (modules && modules.length > 0) {
@@ -73,41 +58,42 @@ export default function EditModule() {
     } as ModuleType;
   };
 
-  const [detailModule] = useState<ModuleType>(fetchDetailModule());
+  const [detailModule, setDetailModule] = useState<ModuleType>(
+    fetchDetailModule()
+  );
   const [dateDiabled, setDateDisabled] = useState(
     detailModule.examDate ? false : true
   );
-
-  const [moduleName, setModuleName] = useState(detailModule.name);
-  const [examDate, setExamDate] = useState<Date>(
-    detailModule.examDate ? detailModule.examDate : new Date()
-  );
-  const [creditPoints, setCreditPoints] = useState(
-    detailModule.creditPoints.toString()
-  );
-  const [colorCode, setColorCode] = useState(detailModule.colorCode);
 
   const [moduleNameError, setModuleNameError] = useState("");
   const [creditPointError, setCreditPointError] = useState("");
 
   const validateInput = () => {
     var nameValid = false;
-    if (moduleName.trim().length == 0) {
-      setModuleNameError("Name ist erforderlich");
+    if (detailModule.name.trim().length == 0) {
+      setModuleNameError(() => "Name ist erforderlich");
     } else {
-      setModuleNameError("");
+      setModuleNameError(() => "");
       nameValid = true;
     }
 
     var creditPointsValid = false;
-    if (+creditPoints <= 0) {
-      setCreditPointError("Creditpoints muss einen Wert größer 0 enthalten");
+    if (+detailModule.creditPoints <= 0) {
+      setCreditPointError(
+        () => "Creditpoints muss einen Wert größer 0 enthalten"
+      );
     } else {
-      setCreditPointError("");
+      setCreditPointError(() => "");
       creditPointsValid = true;
     }
 
     return nameValid && creditPointsValid;
+  };
+
+  const handleUpdate = (module: ModuleType, disabledStatus?: boolean) => {
+    if (module) setDetailModule(module);
+    if (disabledStatus != undefined) setDateDisabled(disabledStatus);
+    validateInput();
   };
 
   const onSave = async () => {
@@ -117,18 +103,18 @@ export default function EditModule() {
 
       try {
         let moduleDTO;
-        if (examDate && !dateDiabled) {
+        if (detailModule.examDate && !dateDiabled) {
           moduleDTO = {
-            name: moduleName,
-            examDate: examDate,
-            colorCode: colorCode,
-            creditpoints: +creditPoints,
+            name: detailModule.name,
+            examDate: detailModule.examDate,
+            colorCode: detailModule.colorCode,
+            creditpoints: +detailModule.creditPoints,
           };
         } else {
           moduleDTO = {
-            name: moduleName,
-            colorCode: colorCode,
-            creditpoints: +creditPoints,
+            name: detailModule.name,
+            colorCode: detailModule.colorCode,
+            creditpoints: +detailModule.creditPoints,
           };
         }
 
@@ -163,8 +149,6 @@ export default function EditModule() {
   };
 
   const onDelete = (learningUnitId: number) => {
-    console.log(learningUnitId);
-    console.log(detailModule.learningUnits);
     Alert.alert(
       "Lerneinheit wirklich löschen?",
       `Möchtest du die Lerneinheit ${
@@ -190,15 +174,10 @@ export default function EditModule() {
 
   const deleteLearningUnit = async (learningUnitId: number) => {
     let id = toast.show("Löschen...", { type: "loading" });
-    console.log(
-      `/students/${authState?.user.id}/modules/${detailModule.id}/learningUnits/${learningUnitId}`
-    );
     try {
       let response = await authAxios?.delete(
         `/students/${authState?.user.id}/modules/${detailModule.id}/learningUnits/${learningUnitId}`
       );
-      console.log(response?.status);
-      console.log(response?.data);
       toast.update(id, "Lerneinheit erfolgreich gelöscht", { type: "success" });
       fetchModules && (await fetchModules());
     } catch (e) {
@@ -217,107 +196,37 @@ export default function EditModule() {
         style={styles.scrollViewContainer}
         contentContainerStyle={styles.scrollViewContainerStyle}
       >
-        <View style={styles.outerWrapper}>
-          <View style={styles.row}>
-            <InputField
-              label="Name"
-              onChangeText={setModuleName}
-              value={moduleName}
-              message={moduleNameError}
-              messageColor="red"
-            />
-          </View>
-          <View style={styles.dateRowContainer}>
-            <P style={{ color: COLORTHEME.light.primary }}>
-              {"Prüfungsdatum (optional)"}
-            </P>
-            <View style={styles.row}>
-              <DateTimePicker
-                onChangeDate={(date) => {
-                  date ? setExamDate(date) : setExamDate(new Date());
-                }}
-                value={examDate}
-                disabled={dateDiabled}
-                style={{ opacity: dateDiabled ? 0.5 : 1 }}
-              />
-              <StyledCheckbox
-                value={dateDiabled}
-                onValueChange={setDateDisabled}
-                label="Keine Angabe"
-              />
-            </View>
-          </View>
-          <View style={styles.row}>
-            <InputFieldNumeric
-              label="Credit-Points"
-              onChangeText={setCreditPoints}
-              value={creditPoints}
-              message={creditPointError}
-              messageColor="red"
-              inputUnit="CP"
-            />
-            <View style={{ width: "50%", backgroundColor: "transparent" }} />
-          </View>
-          <View style={styles.row}>
-            <View style={styles.colorWrapper}>
-              <P style={styles.inputLabelText}>Farbauswahl</P>
-              <FlatList
-                style={{ width: "100%" }}
-                columnWrapperStyle={{
-                  justifyContent: "space-between",
-                }}
-                contentContainerStyle={{ gap: 20 }}
-                data={selectableColors}
-                numColumns={4}
-                renderItem={({ item: color }) => {
-                  return (
-                    <TouchableOpacity
-                      style={styles.colorOptionWrapper}
-                      onPress={() => setColorCode(color)}
-                      key={color}
-                    >
-                      <View
-                        style={[
-                          styles.colorOptionIndicator,
-                          {
-                            borderColor:
-                              colorCode === color
-                                ? COLORTHEME.light.primary
-                                : "transparent",
-                          },
-                        ]}
-                      />
-                      <View
-                        style={[styles.colorOption, { backgroundColor: color }]}
-                      />
-                    </TouchableOpacity>
-                  );
-                }}
-                keyExtractor={(item) => item}
-              />
-            </View>
-          </View>
-        </View>
+        <ModuleForm
+          inputData={detailModule}
+          onChange={handleUpdate}
+          dateDiabled={dateDiabled}
+          moduleNameError={moduleNameError}
+          creditPointError={creditPointError}
+        />
         <View style={styles.unitWrapper}>
-          <H2 style={{ textAlign: "left" }}>Einheiten</H2>
+          <View>
+            <H2 style={{ textAlign: "left" }}>Einheiten</H2>
+          </View>
           <View>
             {detailModule?.learningUnits.map((unit: LearningUnitType) => {
-              return (
-                <LearningUnitRow
-                  key={unit.id}
-                  learningUnit={unit}
-                  selfLearningTime={
-                    detailModule.totalModuleTime -
-                    detailModule.totalLearningTime
-                  }
-                  onDelete={() => onDelete(unit.id)}
-                  onEdit={() =>
-                    router.push({
-                      pathname: `modules/${detailModule.id}/learningUnits/${unit.id}/edit`,
-                    } as never)
-                  }
-                />
-              );
+              if (unit.name != LearningUnitEnum.SELBSTSTUDIUM) {
+                return (
+                  <LearningUnitRow
+                    key={unit.id}
+                    learningUnit={unit}
+                    selfLearningTime={
+                      detailModule.totalModuleTime -
+                      detailModule.totalLearningTime
+                    }
+                    onDelete={() => onDelete(unit.id)}
+                    onEdit={() =>
+                      router.push({
+                        pathname: `modules/${detailModule.id}/learningUnits/${unit.id}/edit`,
+                      } as never)
+                    }
+                  />
+                );
+              }
             })}
           </View>
         </View>

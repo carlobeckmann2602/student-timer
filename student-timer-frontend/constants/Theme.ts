@@ -9,8 +9,6 @@ const COLORS = {
   icon: "#292D32",
   // CI colors
   primary: "#958AAA",
-  // secondary: "#000000",
-  // tertiary: "#000000",
   warning: "#D16E6E",
   success: "#51C93E",
   danger: "#D32F2F",
@@ -57,6 +55,7 @@ const COLORTHEME = {
     grey1: COLORS.grey1,
     grey2: COLORS.grey2,
     grey3: COLORS.grey3,
+    danger: COLORS.danger,
   },
   dark: {
     text: COLORS.white,
@@ -66,6 +65,7 @@ const COLORTHEME = {
     grey1: COLORS.grey1,
     grey2: COLORS.grey2,
     grey3: COLORS.grey3,
+    danger: COLORS.danger,
   },
 };
 
