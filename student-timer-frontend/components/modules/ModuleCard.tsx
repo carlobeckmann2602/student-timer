@@ -11,7 +11,10 @@ import { H4, P, Subhead } from "../StyledText";
 import { COLORTHEME } from "@/constants/Theme";
 import { useRouter } from "expo-router";
 import { ModuleType } from "@/types/ModuleType";
-import { computeDeadline } from "@/libs/moduleTypeHelper";
+import {
+  computeDeadline,
+  computeRemainingSessionTime,
+} from "@/libs/moduleTypeHelper";
 import { convertMinutesToHours } from "@/libs/timeHelper";
 import { useToast } from "react-native-toast-notifications";
 import { useAuth } from "@/context/AuthContext";
@@ -24,12 +27,6 @@ type moduleCardProps = {
 
 export function ModuleCard(props: moduleCardProps) {
   const { moduleData } = props;
-
-  const remainingSessionTime = Math.round(
-    convertMinutesToHours(
-      moduleData.totalModuleTime - moduleData.totalLearningTime
-    )
-  );
 
   const router = useRouter();
   const toast = useToast();
@@ -153,7 +150,10 @@ export function ModuleCard(props: moduleCardProps) {
             <Subhead>
               {`${convertMinutesToHours(
                 moduleData.totalLearningSessionTime
-              )} von ${remainingSessionTime} Std.`}
+              )} von ${computeRemainingSessionTime(
+                moduleData.totalModuleTime,
+                moduleData.totalLearningTime
+              )} Std.`}
             </Subhead>
           </View>
         </View>

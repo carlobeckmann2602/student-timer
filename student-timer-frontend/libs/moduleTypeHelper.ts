@@ -1,5 +1,6 @@
 import { COLORS } from "@/constants/Theme";
 import { LearningUnitType } from "@/types/LearningUnitType";
+import { convertMinutesToHours } from "./timeHelper";
 
 type ObjectKey = keyof typeof COLORS;
 
@@ -47,4 +48,14 @@ export const computeLearningUnitColor = (
 ) => {
   let unit_color = COLORS[unit.name as ObjectKey];
   return unit_color !== undefined ? unit_color : defaultColor;
+};
+
+export const computeRemainingSessionTime = (
+  totalModuleTime: number,
+  totalLearningTime: number
+) => {
+  const learningDifference = Math.round(
+    convertMinutesToHours(totalModuleTime - totalLearningTime)
+  );
+  return learningDifference > 0 ? learningDifference : 0;
 };

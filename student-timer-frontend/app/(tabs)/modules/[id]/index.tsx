@@ -17,6 +17,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useAxios } from "@/context/AxiosContext";
 import LearningUnitRow from "@/components/modules/LearningUnitRow";
 import Button from "@/components/Button";
+import { computeRemainingSessionTime } from "@/libs/moduleTypeHelper";
 
 export default function ModulesDetailScreen() {
   const { id } = useLocalSearchParams<{
@@ -197,10 +198,10 @@ export default function ModulesDetailScreen() {
                     <LearningUnitRow
                       key={unit.id}
                       learningUnit={unit}
-                      selfLearningTime={
-                        detailModule.totalModuleTime -
+                      selfLearningTime={computeRemainingSessionTime(
+                        detailModule.totalModuleTime,
                         detailModule.totalLearningTime
-                      }
+                      )}
                     />
                   );
                 })}
