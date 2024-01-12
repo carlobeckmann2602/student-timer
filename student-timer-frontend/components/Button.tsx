@@ -2,7 +2,7 @@ import React, { ReactNode } from "react";
 import { Pressable, StyleProp, StyleSheet, ViewStyle } from "react-native";
 
 import { Text, View } from "./Themed";
-import {COLORTHEME} from "@/constants/Theme";
+import { COLORTHEME } from "@/constants/Theme";
 
 type Props = {
   backgroundColor?: string;
@@ -38,7 +38,7 @@ export default function Button(props: ButtonProps) {
           opacity: disabled ? 0.6 : 1,
         },
         borderColor
-          ? { borderColor: borderColor, borderStyle: "solid", borderWidth: 1 }
+          ? { borderColor: borderColor, borderStyle: "solid", borderWidth: 3 }
           : null,
         styles.button,
         style,

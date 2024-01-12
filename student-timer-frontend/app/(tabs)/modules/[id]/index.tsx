@@ -5,7 +5,7 @@ import { ModuleType } from "@/types/ModuleType";
 import { H1, H2, P, Subhead } from "@/components/StyledText";
 import { ModuleChart } from "@/components/modules/ModuleChart";
 import { LearningUnitType } from "@/types/LearningUnitType";
-import { COLORTHEME } from "@/constants/Theme";
+import { COLORS, COLORTHEME } from "@/constants/Theme";
 import { useModules } from "@/context/ModuleContext";
 import { useState } from "react";
 import React from "react";
@@ -16,6 +16,7 @@ import { useToast } from "react-native-toast-notifications";
 import { useAuth } from "@/context/AuthContext";
 import { useAxios } from "@/context/AxiosContext";
 import LearningUnitRow from "@/components/modules/LearningUnitRow";
+import Button from "@/components/Button";
 
 export default function ModulesDetailScreen() {
   const { id } = useLocalSearchParams<{
@@ -62,7 +63,46 @@ export default function ModulesDetailScreen() {
   const [moduleError, setModuleError] = useState(false);
   const [detailModule] = useState<ModuleType>(fetchDetailModule());
 
-  const onDelete = (trackingSessionId: number) => {
+  const onDeleteModule = () => {
+    Alert.alert(
+      "Modul wirklich löschen?",
+      `Möchtest du das Modul "${detailModule.name}" wirklich unwiederuflich löschen?\n Auch die zugehörigen Lerneinheiten und Trackings werden dabei gelöscht.`,
+      [
+        {
+          text: "Abbrechen",
+          onPress: () => console.log("Alert closed"),
+          style: "cancel",
+        },
+        {
+          text: "Löschen",
+          onPress: () => {
+            deleteModule();
+          },
+          style: "destructive",
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+
+  const deleteModule = async () => {
+    let id = toast.show("Löschen...", { type: "loading" });
+    try {
+      await authAxios?.delete(
+        `/students/${authState?.user.id}/modules/${detailModule.id}`
+      );
+      toast.update(id, "Modul erfolgreich gelöscht", { type: "success" });
+      fetchModules && (await fetchModules());
+    } catch (e) {
+      toast.update(id, `Fehler beim Löschen des Moduls: ${e}`, {
+        type: "danger",
+      });
+    } finally {
+      router.push("/(tabs)/modules");
+    }
+  };
+
+  const onDeleteTracking = (trackingSessionId: number) => {
     Alert.alert(
       "Tracking wirklich löschen?",
       "Möchtest du das Tracking wirklich unwiederuflich löschen?",
@@ -125,6 +165,30 @@ export default function ModulesDetailScreen() {
               width={200}
               height={200}
             />
+            <View style={styles.buttonWrapper}>
+              <Button
+                text="Bearbeiten"
+                borderColor={COLORTHEME.light.primary}
+                backgroundColor={COLORTHEME.light.background}
+                textColor={COLORTHEME.light.primary}
+                iconRight={<Pencil color={COLORTHEME.light.primary} />}
+                style={{ flex: 1 }}
+                onPress={() =>
+                  router.push({
+                    pathname: `modules/${detailModule.id}/edit`,
+                  } as never)
+                }
+              />
+              <Button
+                text="Löschen"
+                borderColor={COLORS.danger}
+                backgroundColor={COLORTHEME.light.background}
+                textColor={COLORS.danger}
+                iconRight={<Trash2 color={COLORS.danger} />}
+                style={{ flex: 1 }}
+                onPress={onDeleteModule}
+              />
+            </View>
             <View style={styles.unitWrapper}>
               <H2 style={{ textAlign: "left" }}>Einheiten</H2>
               <View>
@@ -207,7 +271,7 @@ export default function ModulesDetailScreen() {
                         >
                           <Pencil name="pencil" size={18} color="black" />
                         </Pressable>
-                        <Pressable onPress={() => onDelete(item.id)}>
+                        <Pressable onPress={() => onDeleteTracking(item.id)}>
                           <Trash2 size={18} name="trash2" color="red" />
                         </Pressable>
                       </View>
@@ -242,6 +306,13 @@ const styles = StyleSheet.create({
     height: 300,
     justifyContent: "center",
     alignItems: "center",
+  },
+  buttonWrapper: {
+    flexDirection: "row",
+    width: "100%",
+    justifyContent: "space-between",
+    alignItems: "center",
+    gap: 12,
   },
   unitWrapper: {
     width: "100%",
