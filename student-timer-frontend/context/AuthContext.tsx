@@ -30,16 +30,16 @@ type AuthProps = {
   ) => Promise<any>;
   onLogout?: () => Promise<any>;
   onUpdate?: (
-      userName: string,
-      userStudyCourse: string,
-      userEmail: string
+    userName: string,
+    userStudyCourse: string,
+    userEmail: string
   ) => Promise<any>;
   onChangePassword?: (
-      newPassword: string,
-      newPassword2: string,
-      ) => Promise<any>
+    newPassword: string,
+    newPassword2: string,
+  ) => Promise<any>
   onChangePicture?: (
-      newProfilePicture: string,
+    newProfilePicture: string,
   ) => Promise<any>
   onRemove?: (userId: number) => Promise<any>;
   onNewToken?: (token: TokenType) => Promise<any>;
@@ -103,6 +103,16 @@ export const AuthProvider = ({ children }: any) => {
     };
     loadToken();
   }, []);
+
+  useEffect(() => {
+    console.log("#####: authState hat sich geändert");
+    console.log("name", authState.user.name);
+    console.log("studyCourse", authState.user.studyCourse);
+    console.log("profilePicture", authState.user.profilePicture);
+    console.log("email", authState.user.email);
+    console.log("token", authState.token.accessToken);
+    console.log("authenticated", authState.authenticated);
+  }, [authState]);
 
   const register = async (
     name: string,
@@ -227,9 +237,9 @@ export const AuthProvider = ({ children }: any) => {
   };
 
   const update = async (
-      userName: string,
-      userStudyCourse: string,
-      userEmail: string
+    userName: string,
+    userStudyCourse: string,
+    userEmail: string
   ) => {
     try {
       const result = await axios.put(
@@ -268,24 +278,24 @@ export const AuthProvider = ({ children }: any) => {
   };
 
   const changePassword = async (
-      newPassword: string,
-      newPassword2: string
+    newPassword: string,
+    newPassword2: string
   ) => {
     try {
       const result = await axios.put(
-          `${API_URL}/students/${authState.user.id}`,
-          {
-            name: authState.user.name,
-            studyCourse: authState.user.studyCourse,
-            email: authState.user.email,
-            password: newPassword,
-            password2: newPassword2,
+        `${API_URL}/students/${authState.user.id}`,
+        {
+          name: authState.user.name,
+          studyCourse: authState.user.studyCourse,
+          email: authState.user.email,
+          password: newPassword,
+          password2: newPassword2,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${authState.token.accessToken}`,
           },
-          {
-            headers: {
-              Authorization: `Bearer ${authState.token.accessToken}`,
-            },
-          }
+        }
       );
 
       return result;
@@ -295,25 +305,38 @@ export const AuthProvider = ({ children }: any) => {
   };
 
   const changePicture = async (
-      newProfilePicture: string,
+    newProfilePicture: string,
   ) => {
     try {
       console.log("neues Profilbild (changePicture): ", newProfilePicture);
 
       const result = await axios.put(
-          `${API_URL}/students/${authState.user.id}`,
-          {
-            name: authState.user.name,
-            studyCourse: authState.user.studyCourse,
-            email: authState.user.email,
-            profilePicture: newProfilePicture,
+        `${API_URL}/students/${authState.user.id}`,
+        {
+          name: authState.user.name,
+          studyCourse: authState.user.studyCourse,
+          email: authState.user.email,
+          profilePicture: newProfilePicture,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${authState.token.accessToken}`,
           },
-          {
-            headers: {
-              Authorization: `Bearer ${authState.token.accessToken}`,
-            },
-          }
+        }
       );
+
+      const user = {
+        ...authState.user,
+        profilePicture: newProfilePicture,
+      } as UserType;
+
+      setAuthState({
+        token: authState.token,
+        authenticated: true,
+        user: user,
+      });
+
+      await saveItem(USER_KEY, JSON.stringify(user));
 
       return result;
     } catch (e) {
@@ -341,7 +364,6 @@ export const AuthProvider = ({ children }: any) => {
 
 
   const router = useRouter();
-
   const toast = useToast();
 
   const logout = async () => {
