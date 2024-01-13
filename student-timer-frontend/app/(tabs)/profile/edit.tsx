@@ -274,6 +274,8 @@ export default function Edit() {
                 />
             </View>
             <ProfilePicturePicker
+                profilePicture={profilePicture}
+                setProfilePicture={setProfilePicture}
                 updateOnSelect={update}
                 cancelAction={cancel}
             />

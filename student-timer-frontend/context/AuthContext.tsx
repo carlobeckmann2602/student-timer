@@ -32,7 +32,6 @@ type AuthProps = {
   onUpdate?: (
       userName: string,
       userStudyCourse: string,
-      userProfilePicture: string,
       userEmail: string
   ) => Promise<any>;
   onChangePassword?: (
@@ -299,6 +298,8 @@ export const AuthProvider = ({ children }: any) => {
       newProfilePicture: string,
   ) => {
     try {
+      console.log("neues Profilbild (changePicture): ", newProfilePicture);
+
       const result = await axios.put(
           `${API_URL}/students/${authState.user.id}`,
           {

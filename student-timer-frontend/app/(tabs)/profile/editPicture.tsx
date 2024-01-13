@@ -16,7 +16,6 @@ export default function EditPicture() {
 
     const [isChanged, setIsChanged] = useState(false);
 
-
     const [error, setError] = useState("");
 
 
@@ -31,8 +30,6 @@ export default function EditPicture() {
         ? `${profilePictureBasePath}${defaultPictureName}`
         : `${profilePictureBasePath}${userProfilePicture}`;
     const [imagePath, setImagePath] = useState<string>(userImagePath);
-
-
 
     console.log("#### useState:", userProfilePicture, typeof userProfilePicture);
     console.log("authState?.user.profilePicture", authState?.user.profilePicture, typeof authState?.user.profilePicture);
@@ -64,6 +61,7 @@ export default function EditPicture() {
             toast.update(id, "Profilbild erfolgreich geändert", {
                 type: "success",
             });
+            router.push("/profile/");
         }
     };
 
@@ -98,7 +96,10 @@ export default function EditPicture() {
     return (
         <ScrollView contentContainerStyle={styles.container}>
             <ProfilePicturePicker
+                profilePicture={profilePicture}
+                setProfilePicture={handleInputChange(setProfilePicture)}
                 updateOnSelect={changePicture}
+                disabled={!isChanged}
                 cancelAction={onCancel}
             />
         </ScrollView>

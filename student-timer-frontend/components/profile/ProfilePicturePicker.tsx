@@ -9,26 +9,35 @@ import { Picker } from "@react-native-picker/picker";
 import {H3} from "@/components/StyledText";
 import Button from "@/components/Button";
 import Pressable from "@/components/Pressable";
+import {useToast} from "react-native-toast-notifications";
+import {useRouter} from "expo-router";
 
 const { width } = Dimensions.get('window');
 
 type ProfilePicturePickerProps = {
+    profilePicture: string;
+    setProfilePicture: (value: string) => void;
     updateOnSelect?: (value: string) => void;
     disabled?: boolean;
     cancelAction: (value: string) => void;
 };
 
 export default function ProfilePicturePicker({
+    profilePicture,
+    setProfilePicture,
     updateOnSelect,
     disabled,
     cancelAction,
 }: ProfilePicturePickerProps) {
 
-    const { authState } = useAuth();
+    const toast = useToast();
+    const { onChangePicture, authState } = useAuth();
+    const router = useRouter();
 
     const defaultPictureName = 'profile-picture.jpg';
     const profilePictureBasePath = '../../../assets/images/profile/';
     const availableImageNames: string[] = ['profile-picture.jpg', 'phil.jpg', 'mareike.jpg', 'carlo.jpg', 'nils.png', 'konstantin.png', 'alex.jpg', 'random.jpg'];
+
     const userProfilePictureName: string = availableImageNames.includes(authState?.user.profilePicture ?? '')
         ? authState?.user.profilePicture || ''
         : defaultPictureName;
@@ -41,6 +50,8 @@ export default function ProfilePicturePicker({
     };
     const [imagePath, setImagePath] = useState<string>(getImagePath(userProfilePictureName));
     const [selectedImageName, setSelectedImageName] = useState<string>(userProfilePictureName);
+    const [error, setError] = useState("");
+
 
     useEffect(() => {
         const imagePath = getImagePath(selectedImageName);
@@ -53,8 +64,26 @@ export default function ProfilePicturePicker({
         const newPath = getImagePath(imageName);
         console.log('New Image Path:', newPath);
         setImagePath(newPath);
-        //updateOnSelect();
+        setProfilePicture(imageName);
         //console.log("new profile picture", authState?.user.profilePicture);
+    };
+
+    const changePicture = async () => {
+        let id = toast.show("Speichern...", { type: "loading" });
+        console.log("ProfilePicturePicker: selectedImage Name in changePicture)", selectedImageName);
+        const result = await onChangePicture!(
+            selectedImageName,
+        );
+        if (result && result.error) {
+            setError(result.msg);
+            toast.update(id, result.msg, { type: "danger" });
+        } else {
+            toast.update(id, "Profilbild erfolgreich geändert", {
+                type: "success",
+            });
+            router.push("/profile/");
+            console.log("after onChangePicture", authState?.user.profilePicture);
+        }
     };
 
     return (
@@ -89,7 +118,7 @@ export default function ProfilePicturePicker({
                 text="Speichern"
                 backgroundColor={COLORTHEME.light.primary}
                 textColor={COLORTHEME.light.grey2}
-                onPress={updateOnSelect}
+                onPress={changePicture}
                 style={{ width: 200 }}
                 disabled={disabled}
             />

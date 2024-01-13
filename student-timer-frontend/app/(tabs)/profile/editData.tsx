@@ -4,7 +4,6 @@ import { View} from "@/components/Themed";
 import { useRouter } from "expo-router";
 import { COLORTHEME } from "@/constants/Theme";
 import { User2 } from "lucide-react-native";
-import { Edit2 } from 'lucide-react-native';
 import { useAuth } from "@/context/AuthContext";
 import UserDetailsInput from "@/components/userInput/UserDetailsInput";
 import Pressable from "@/components/Pressable";
@@ -32,18 +31,16 @@ export default function EditData() {
     {/* Profilbilder */}
     const defaultPictureName="profile-picture.jpg";
     const profilePictureBasePath = "../../../assets/images/profile/";
+    const [profilePicture, setProfilePicture] = useState<string>(authState?.user.profilePicture || defaultPictureName);
 
-    const userProfilePicture = authState?.user.profilePicture || defaultPictureName;
-    const [profilePicture, setProfilePicture] = useState<string>(userProfilePicture);
-
-    const userImagePath = userProfilePicture === 'empty'
+    const userImagePath = profilePicture === 'empty' || null
         ? `${profilePictureBasePath}${defaultPictureName}`
-        : `${profilePictureBasePath}${userProfilePicture}`;
+        : `${profilePictureBasePath}${profilePicture}`;
     const [imagePath, setImagePath] = useState<string>(userImagePath);
 
 
 
-    console.log("#### useState:", userProfilePicture, typeof userProfilePicture);
+    console.log("#### useState:", profilePicture, typeof profilePicture);
     console.log("authState?.user.profilePicture", authState?.user.profilePicture, typeof authState?.user.profilePicture);
     console.log("imagePath", imagePath);
 
@@ -96,7 +93,6 @@ export default function EditData() {
             const result = await onUpdate!(
                 userName,
                 userStudyCourse,
-                userProfilePicture,
                 userEmail,
             );
             console.log("validateInput");
