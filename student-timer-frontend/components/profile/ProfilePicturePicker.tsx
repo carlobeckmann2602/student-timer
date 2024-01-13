@@ -20,12 +20,11 @@ export default function ProfilePicturePicker({ updateOnSelect }: ProfilePictureP
     const defaultPictureName = 'profile-picture.jpg';
     const profilePictureBasePath = '../../../assets/images/profile/';
     const availableImageNames: string[] = ['profile-picture.jpg', 'phil.jpg', 'mareike.jpg', 'carlo.jpg', 'nils.png', 'konstantin.png', 'alex.jpg', 'random.jpg'];
-    //const userProfilePictureName = authState?.user.profilePicture || defaultPictureName;
     const userProfilePictureName: string = availableImageNames.includes(authState?.user.profilePicture ?? '')
         ? authState?.user.profilePicture || ''
         : defaultPictureName;
     const getImagePath = (profilePictureName: string) => {
-        const fullPath = userProfilePictureName === 'empty'
+        const fullPath = profilePictureName === 'empty'
             ? `${profilePictureBasePath}${defaultPictureName}`
             : `${profilePictureBasePath}${profilePictureName}`;
 
