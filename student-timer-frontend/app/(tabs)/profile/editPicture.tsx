@@ -28,22 +28,24 @@ export default function EditPicture() {
     const profilePictureBasePath = '../../../assets/images/profile/';
     const availableImageNames: string[] = ['profile-picture.jpg', 'phil.jpg', 'mareike.jpg', 'carlo.jpg', 'nils.png', 'konstantin.png', 'alex.jpg', 'random.jpg'];
 
-    const userProfilePictureName: string = availableImageNames.includes(authState?.user.profilePicture ?? '')
-        ? authState?.user.profilePicture || ''
-        : defaultPictureName;
+    const getProfilePictureName = () => {
+        return availableImageNames.includes(authState?.user.profilePicture ?? '')
+            ? authState?.user.profilePicture || ''
+            : defaultPictureName;
+    };
     const getImagePath = (profilePictureName: string) => {
         const fullPath = profilePictureName === 'empty'
             ? `${profilePictureBasePath}${defaultPictureName}`
             : `${profilePictureBasePath}${profilePictureName}`;
         return fullPath;
     };
-    const [imagePath, setImagePath] = useState<string>(getImagePath(userProfilePictureName));
-    const [profilePictureName, setProfilePictureName] = useState<string>(userProfilePictureName);
+
+    const [profilePictureName, setProfilePictureName] = useState<string>(getProfilePictureName());
+    const [imagePath, setImagePath] = useState<string>(getImagePath(getProfilePictureName()));
     const [error, setError] = useState("");
 
     useEffect(() => {
-        const imagePath = getImagePath(profilePictureName);
-        setImagePath(imagePath);
+        setImagePath(getImagePath(profilePictureName));
     }, [profilePictureName]);
 
     const handleImageNameChange = (imageName: string) => {

@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {View, Text, Image, StyleSheet} from "react-native";
 import Button from "@/components/Button";
 import { ScrollView } from "@/components/Themed";
@@ -9,45 +9,40 @@ import { useAuth } from "@/context/AuthContext";
 import ProfilePicture from "@/components/profile/ProfilePicture";
 
 export default function Profile() {
-
   const { onLogout, authState } = useAuth();
-
   const defaultPictureName="profile-picture.jpg";
   const profilePictureBasePath = "../../../assets/images/profile/";
+  const availableImageNames: string[] = ['profile-picture.jpg', 'phil.jpg', 'mareike.jpg', 'carlo.jpg', 'nils.png', 'konstantin.png', 'alex.jpg', 'random.jpg'];
 
-  const userProfilePictureName = authState?.user.profilePicture || defaultPictureName;
-  const imagePath = userProfilePictureName === 'empty'
-      ? `${profilePictureBasePath}${defaultPictureName}`
-      : `${profilePictureBasePath}${userProfilePictureName}`;
+  const getProfilePictureName = () => {
+    return availableImageNames.includes(authState?.user.profilePicture ?? '')
+        ? authState?.user.profilePicture || ''
+        : defaultPictureName;
+  };
+  const getImagePath = (profilePictureName: string) => {
+    const fullPath = profilePictureName === 'empty'
+        ? `${profilePictureBasePath}${defaultPictureName}`
+        : `${profilePictureBasePath}${profilePictureName}`;
+    return fullPath;
+  };
 
-  const [profilePicture, setProfilePicture] = useState(userProfilePictureName);
+  const [profilePictureName, setProfilePictureName] = useState<string>(getProfilePictureName());
+  const [imagePath, setImagePath] = useState<string>(getImagePath(getProfilePictureName()));
 
-  console.log("#### useState:", profilePicture, typeof profilePicture);
+  useEffect(() => {
+    setImagePath(getImagePath(getProfilePictureName()));
+  }, [authState]);
+
+
+  console.log("#### useState:", profilePictureName, typeof profilePictureName);
   console.log("authState?.user.profilePicture", authState?.user.profilePicture, typeof authState?.user.profilePicture);
   console.log("imagePath", imagePath);
 
 
-  const user = {
-    name: authState?.user.name,
-    studySubject: authState?.user.studyCourse,
-  };
-
-  const handleEditData = () => {
-    router.push("/profile/editData/");
-    console.log("Profildaten bearbeiten");
-  };
-  const handleEditPassword = () => {
-    router.push("/profile/editPassword/");
-    console.log("Passwort ändern");
-  };
-  const handleEditPicture = () => {
-    router.push("/profile/editPicture/");
-    console.log("Profilbild ändern");
-  };
-  const handleEditProfile = () => {
-    router.push("/profile/edit/");
-    console.log("Profil bearbeiten");
-  };
+  const handleEditData = () => router.push("/profile/editData/");
+  const handleEditPassword = () => router.push("/profile/editPassword/");
+  const handleEditPicture = () => router.push("/profile/editPicture/");
+  const handleEditProfile = () => router.push("/profile/edit/");
 
   return (
     <ScrollView>
