@@ -1,6 +1,7 @@
 import Button from "@/components/Button";
 import DateTimePicker from "@/components/DateTimePicker";
 import InputField from "@/components/InputField";
+import InputFieldNumeric from "@/components/InputFieldNumeric";
 import StyledCheckbox from "@/components/StyledCheckbox";
 import { P } from "@/components/StyledText";
 import { View } from "@/components/Themed";
@@ -8,6 +9,7 @@ import { COLORTHEME } from "@/constants/Theme";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import {
+  FlatList,
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
@@ -118,11 +120,10 @@ export default function NewModule() {
           </View>
         </View>
         <View style={styles.row}>
-          <InputField
+          <InputFieldNumeric
             label="Credit-Points"
             onChangeText={setCreditPoints}
             value={creditPoints}
-            keyboardType="number-pad"
             message={creditPointError}
             messageColor="red"
             inputUnit="CP"
@@ -132,8 +133,15 @@ export default function NewModule() {
         <View style={styles.row}>
           <View style={styles.colorWrapper}>
             <P style={styles.inputLabelText}>Farbauswahl</P>
-            <View style={styles.colorContainer}>
-              {selectableColors.map((color) => {
+            <FlatList
+              style={{ width: "100%" }}
+              columnWrapperStyle={{
+                justifyContent: "space-between",
+              }}
+              contentContainerStyle={{ gap: 20 }}
+              data={selectableColors}
+              numColumns={4}
+              renderItem={({ item: color }) => {
                 return (
                   <TouchableOpacity
                     style={styles.colorOptionWrapper}
@@ -156,8 +164,9 @@ export default function NewModule() {
                     />
                   </TouchableOpacity>
                 );
-              })}
-            </View>
+              }}
+              keyExtractor={(item) => item}
+            />
           </View>
           <View style={{ width: "70%", backgroundColor: "transparent" }} />
         </View>
@@ -229,16 +238,6 @@ const styles = StyleSheet.create({
   },
   inputLabelText: {
     color: COLORTHEME.light.primary,
-  },
-  colorContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    width: "100%",
-    justifyContent: "space-between",
-    gap: 20,
-    alignItems: "center",
-    alignContent: "center",
-    backgroundColor: "transparent",
   },
   colorOptionWrapper: {
     justifyContent: "center",

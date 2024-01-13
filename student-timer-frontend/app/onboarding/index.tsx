@@ -2,7 +2,6 @@ import React, { useState, useRef } from "react";
 import { Link, useRouter } from "expo-router";
 import { StyleSheet, useWindowDimensions, Platform } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import Header from "@/components/Header";
 import Button from "@/components/Button";
 import { BASE_STYLES, COLORTHEME } from "@/constants/Theme";
 import { Text, View } from "@/components/Themed";
@@ -56,9 +55,6 @@ export default function OnboardingScreen() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <View>
-        <Header title="StudentTimer" />
-      </View>
       {/* Onboarding-Cards web und smart */}
       {Platform.OS === "web" ? (
         <OnboardingContainer

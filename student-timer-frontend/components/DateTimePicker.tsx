@@ -108,9 +108,13 @@ export default function DateTimePicker(props: DateTimerPickerProps) {
                   style={[styles.RNDateTimerPickerStyle, inputStyle]}
                 />
               </View>
-              <Text style={[{ color: props.messageColor }, styles.messageText]}>
-                {props.message}
-              </Text>
+              {props.message && (
+                <Text
+                  style={[{ color: props.messageColor }, styles.messageText]}
+                >
+                  {props.message}
+                </Text>
+              )}
             </View>
           );
         }
@@ -147,7 +151,7 @@ const styles = StyleSheet.create({
     color: COLORTHEME.light.primary,
   },
   RNDateTimerPickerStyle: {
-    marginHorizontal: -15,
+    marginHorizontal: -20,
   },
   messageText: {
     fontSize: 12,

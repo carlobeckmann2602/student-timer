@@ -16,6 +16,7 @@ import {
   sendPushNotification,
 } from "@/libs/handleLocalNotification";
 import { roundNumber } from "@/libs/generalHelper";
+import InputFieldNumeric from "@/components/InputFieldNumeric";
 
 export default function Tracking() {
   const [isStopwatch, setIsStopwatch] = useState(true);
@@ -125,38 +126,35 @@ export default function Tracking() {
       />
       <View style={styles.inputs}>
         {!isStopwatch && (
-          <InputField
+          <InputFieldNumeric
             style={styles.input}
             label="Runden"
             value={rounds}
             onChangeText={(val) => {
               setRounds(Math.abs(roundNumber(val, 1)).toString());
             }}
-            keyboardType="numeric"
             selectTextOnFocus
             editable={inputsEditable}
           />
         )}
-        <InputField
+        <InputFieldNumeric
           style={styles.input}
           label="Rundenlänge"
           value={roundLen}
           onChangeText={(val) => {
             setRoundLen(Math.abs(roundNumber(val, 1)).toString());
           }}
-          keyboardType="numeric"
           inputUnit="min"
           selectTextOnFocus
           editable={inputsEditable}
         />
-        <InputField
+        <InputFieldNumeric
           style={styles.input}
           label="Pausenlänge"
           value={pauseLen}
           onChangeText={(val) => {
             setPauseLen(Math.abs(roundNumber(val, 1)).toString());
           }}
-          keyboardType="numeric"
           inputUnit="min"
           selectTextOnFocus
           editable={inputsEditable}
@@ -222,6 +220,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "space-between",
     backgroundColor: COLORS.white,
+    paddingVertical: BASE_STYLES.horizontalPadding,
   },
   inputs: {
     flexDirection: "row",

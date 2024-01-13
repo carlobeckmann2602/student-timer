@@ -1,10 +1,7 @@
 import { StyleSheet } from "react-native";
 import { useState } from "react";
 import { Link, useRouter } from "expo-router";
-
 import { COLORTHEME } from "@/constants/Theme";
-
-import Header from "@/components/Header";
 import { Title } from "@/components/StyledText";
 import { View, Text } from "@/components/Themed";
 import Button from "@/components/Button";
@@ -71,64 +68,61 @@ export default function Login() {
   };
 
   return (
-    <>
-      <Header title="Login"></Header>
-      <View style={styles.container}>
-        <Title>Student Time Tracker</Title>
-        <View style={styles.inputs}>
-          <InputField
-            value={email}
-            onChangeText={setEmail}
-            placeholder="E-Mail"
-            label="E-Mail"
-            keyboardType="email-address"
-            message={emailError}
-            messageColor="red"
-            style={{ width: "100%" }}
-          />
-          <InputField
-            value={password}
-            onChangeText={setPassword}
-            placeholder="Passwort"
-            label="Passwort"
-            keyboardType="default"
-            secureTextEntry={true}
-            message={passwordError}
-            messageColor="red"
-            style={{ width: "100%" }}
-          />
-        </View>
-        <View style={styles.buttons}>
-          <View style={styles.buttonText}>
-            <Button
-              text="Log In"
-              backgroundColor={COLORTHEME.light.primary}
-              textColor={COLORTHEME.light.grey2}
-              onPress={login}
-              style={{ width: 200 }}
-            />
-
-            {error && <Text style={styles.errorMessage}>{error}</Text>}
-
-            <Text>
-              Sie haben kein Konto?{" "}
-              <Link href="/signup" style={{ textDecorationLine: "underline" }}>
-                Account erstellen
-              </Link>
-            </Text>
-          </View>
-          <Separator text="oder" />
-          <OtherLogins />
-        </View>
+    <View style={styles.container}>
+      <Title>Student Time Tracker</Title>
+      <View style={styles.inputs}>
+        <InputField
+          value={email}
+          onChangeText={setEmail}
+          placeholder="E-Mail"
+          label="E-Mail"
+          keyboardType="email-address"
+          message={emailError}
+          messageColor="red"
+          style={{ width: "100%" }}
+        />
+        <InputField
+          value={password}
+          onChangeText={setPassword}
+          placeholder="Passwort"
+          label="Passwort"
+          keyboardType="default"
+          secureTextEntry={true}
+          message={passwordError}
+          messageColor="red"
+          style={{ width: "100%" }}
+        />
       </View>
-    </>
+      <View style={styles.buttons}>
+        <View style={styles.buttonText}>
+          <Button
+            text="Log In"
+            backgroundColor={COLORTHEME.light.primary}
+            textColor={COLORTHEME.light.grey2}
+            onPress={login}
+            style={{ width: 200 }}
+          />
+
+          {error && <Text style={styles.errorMessage}>{error}</Text>}
+
+          <Text>
+            Sie haben kein Konto?{" "}
+            <Link href="/signup" style={{ textDecorationLine: "underline" }}>
+              Account erstellen
+            </Link>
+          </Text>
+        </View>
+        <Separator text="oder" />
+        <OtherLogins />
+      </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "space-between",
+    justifyContent: "space-evenly",
     gap: 45,
   },
   inputs: {

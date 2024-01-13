@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pressable as RNPressable, Text, TextStyle, StyleProp, ViewStyle, StyleSheet } from 'react-native';
+import { Pressable as RNPressable, Text, StyleProp, ViewStyle, StyleSheet } from 'react-native';
 
 type PressableProps = {
     text: string;

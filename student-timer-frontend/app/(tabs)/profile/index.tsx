@@ -1,10 +1,10 @@
 import React, {useState} from "react";
 import {View, Text, Image, StyleSheet} from "react-native";
 import Button from "@/components/Button";
-import Pressable from "@/components/Pressable"
-import { COLORTHEME } from "@/constants/Theme";
+import Pressable from "@/components/Pressable";
+import { BASE_STYLES, COLORTHEME } from "@/constants/Theme";
 import { User2 } from "lucide-react-native";
-import {router} from "expo-router";
+import { router } from "expo-router";
 import { useAuth } from "@/context/AuthContext";
 
 export default function Profile() {
@@ -121,6 +121,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: COLORTHEME.light.background,
+    paddingVertical: BASE_STYLES.horizontalPadding,
   },
   profileImageContainer: {
     width: 120,

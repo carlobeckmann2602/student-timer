@@ -17,6 +17,7 @@ import {
 } from "@/libs/timeHelper";
 import StarRating from "@/components/StarRating";
 import { roundNumber } from "@/libs/generalHelper";
+import InputFieldNumeric from "../InputFieldNumeric";
 
 export default function LearningSession(props: { isEdit: boolean }) {
   const { isEdit } = props;
@@ -70,7 +71,7 @@ export default function LearningSession(props: { isEdit: boolean }) {
           <Text>Fokuszeit</Text>
           {isEdit ? (
             <View style={styles.timeEdit}>
-              <InputField
+              <InputFieldNumeric
                 style={styles.input}
                 value={focusDuration.hours.toString()}
                 onChangeText={(val) => {
@@ -79,11 +80,10 @@ export default function LearningSession(props: { isEdit: boolean }) {
                     hours: Math.abs(roundNumber(val, 0)),
                   }));
                 }}
-                keyboardType="numeric"
                 inputUnit="std"
                 selectTextOnFocus
               />
-              <InputField
+              <InputFieldNumeric
                 style={styles.input}
                 value={focusDuration.mins.toString()}
                 onChangeText={(val) => {
@@ -93,11 +93,10 @@ export default function LearningSession(props: { isEdit: boolean }) {
                     mins: mins >= 60 ? 59 : mins,
                   }));
                 }}
-                keyboardType="numeric"
                 inputUnit="min"
                 selectTextOnFocus
               />
-              <InputField
+              <InputFieldNumeric
                 style={styles.input}
                 value={focusDuration.secs.toString()}
                 onChangeText={(val) => {
@@ -107,7 +106,6 @@ export default function LearningSession(props: { isEdit: boolean }) {
                     secs: secs >= 60 ? 59 : secs,
                   }));
                 }}
-                keyboardType="numeric"
                 inputUnit="sec"
                 selectTextOnFocus
               />
@@ -122,7 +120,7 @@ export default function LearningSession(props: { isEdit: boolean }) {
           <Text>Pausenzeit</Text>
           {isEdit ? (
             <View style={styles.timeEdit}>
-              <InputField
+              <InputFieldNumeric
                 style={styles.input}
                 value={pauseDuration.hours.toString()}
                 onChangeText={(val) => {
@@ -131,11 +129,10 @@ export default function LearningSession(props: { isEdit: boolean }) {
                     hours: Math.abs(roundNumber(val, 0)),
                   }));
                 }}
-                keyboardType="numeric"
                 inputUnit="std"
                 selectTextOnFocus
               />
-              <InputField
+              <InputFieldNumeric
                 style={styles.input}
                 value={pauseDuration.mins.toString()}
                 onChangeText={(val) => {
@@ -145,11 +142,10 @@ export default function LearningSession(props: { isEdit: boolean }) {
                     mins: mins >= 60 ? 59 : mins,
                   }));
                 }}
-                keyboardType="numeric"
                 inputUnit="min"
                 selectTextOnFocus
               />
-              <InputField
+              <InputFieldNumeric
                 style={styles.input}
                 value={pauseDuration.secs.toString()}
                 onChangeText={(val) => {
@@ -159,7 +155,6 @@ export default function LearningSession(props: { isEdit: boolean }) {
                     secs: secs >= 60 ? 59 : secs,
                   }));
                 }}
-                keyboardType="numeric"
                 inputUnit="sec"
                 selectTextOnFocus
               />
