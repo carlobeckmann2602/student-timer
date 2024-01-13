@@ -6,14 +6,23 @@ import { Edit2 } from 'lucide-react-native';
 import { useAuth } from '@/context/AuthContext';
 import { COLORTHEME } from '@/constants/Theme';
 import { Picker } from "@react-native-picker/picker";
+import {H3} from "@/components/StyledText";
+import Button from "@/components/Button";
+import Pressable from "@/components/Pressable";
 
 const { width } = Dimensions.get('window');
 
 type ProfilePicturePickerProps = {
-    updateOnSelect?: () => void;
+    updateOnSelect?: (value: string) => void;
+    disabled?: boolean;
+    cancelAction: (value: string) => void;
 };
 
-export default function ProfilePicturePicker({ updateOnSelect }: ProfilePicturePickerProps) {
+export default function ProfilePicturePicker({
+    updateOnSelect,
+    disabled,
+    cancelAction,
+}: ProfilePicturePickerProps) {
 
     const { authState } = useAuth();
 
@@ -50,6 +59,18 @@ export default function ProfilePicturePicker({ updateOnSelect }: ProfilePictureP
 
     return (
         <View style={styles.container}>
+            <H3>Profilbild ändern</H3>
+              <View style={styles.profileImageContainer}>
+                {imagePath ? (
+                    <Image source={{ uri: imagePath }} style={styles.profileImage} />
+                ) : (
+                    <User2 size={100} color={COLORTHEME.light.primary} />
+                )}
+                <TouchableOpacity style={styles.editIcon}>
+                    <Edit2 size={24} color={COLORTHEME.light.background} />
+                </TouchableOpacity>
+            </View>
+            <Text>Test {imagePath}</Text>
             <View style={styles.row}>
                 <View style={styles.pictureWrapper}>
                     <Text style={styles.inputLabelText}>Bildauswahl</Text>
@@ -63,19 +84,21 @@ export default function ProfilePicturePicker({ updateOnSelect }: ProfilePictureP
                         ))}
                     </Picker>
                 </View>
-                <View style={{ width: '70%', backgroundColor: 'transparent' }} />
             </View>
-            <View style={styles.profileImageContainer}>
-                <Text>Test {imagePath}</Text>
-                {imagePath ? (
-                    <Image source={{ uri: imagePath }} style={styles.profileImage} />
-                ) : (
-                    <User2 size={100} color={COLORTHEME.light.primary} />
-                )}
-                <TouchableOpacity style={styles.editIcon}>
-                    <Edit2 size={24} color={COLORTHEME.light.background} />
-                </TouchableOpacity>
-            </View>
+            <Button
+                text="Speichern"
+                backgroundColor={COLORTHEME.light.primary}
+                textColor={COLORTHEME.light.grey2}
+                onPress={updateOnSelect}
+                style={{ width: 200 }}
+                disabled={disabled}
+            />
+            <Pressable
+                text={"Abbrechen"}
+                accessibilityLabel={"Abbrechen"}
+                accessibilityRole={"button"}
+                onPress={cancelAction}
+            />
         </View>
     );
 };
@@ -87,6 +110,7 @@ const styles = StyleSheet.create({
     row: {
         flexDirection: 'row',
         marginTop: 20,
+        width: "100%",
     },
     pictureWrapper: {
         width: '30%',

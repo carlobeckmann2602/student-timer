@@ -39,6 +39,9 @@ type AuthProps = {
       newPassword: string,
       newPassword2: string,
       ) => Promise<any>
+  onChangePicture?: (
+      newProfilePicture: string,
+  ) => Promise<any>
   onRemove?: (userId: number) => Promise<any>;
   onNewToken?: (token: TokenType) => Promise<any>;
 };
@@ -227,7 +230,6 @@ export const AuthProvider = ({ children }: any) => {
   const update = async (
       userName: string,
       userStudyCourse: string,
-      userProfilePicture: string,
       userEmail: string
   ) => {
     try {
@@ -236,7 +238,6 @@ export const AuthProvider = ({ children }: any) => {
         {
           name: userName,
           studyCourse: userStudyCourse,
-          profilePicture: userProfilePicture,
           email: userEmail
         },
         {
@@ -294,6 +295,31 @@ export const AuthProvider = ({ children }: any) => {
     }
   };
 
+  const changePicture = async (
+      newProfilePicture: string,
+  ) => {
+    try {
+      const result = await axios.put(
+          `${API_URL}/students/${authState.user.id}`,
+          {
+            name: authState.user.name,
+            studyCourse: authState.user.studyCourse,
+            email: authState.user.email,
+            profilePicture: newProfilePicture,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${authState.token.accessToken}`,
+            },
+          }
+      );
+
+      return result;
+    } catch (e) {
+      return { error: true, msg: (e as any).response.data.message };
+    }
+  };
+
 
   const remove = async (userId: number) => {
     try {
@@ -318,7 +344,6 @@ export const AuthProvider = ({ children }: any) => {
   const toast = useToast();
 
   const logout = async () => {
-    let id = toast.show('Logout...', { type: "loading" })
     await deleteStoredItem(TOKEN_KEY);
     await deleteStoredItem(USER_KEY);
 
@@ -333,7 +358,7 @@ export const AuthProvider = ({ children }: any) => {
         email: null,
       },
     });
-    toast.update(id, "Logout erfolgreich", { type: "success" }); //toDo update funktioniert nicht?
+    toast.show("Logout erfolgreich", { type: "success" });
     router.push("/(auth)/login");
   };
 
@@ -353,6 +378,7 @@ export const AuthProvider = ({ children }: any) => {
     onUpdate: update,
     onRemove: remove,
     onChangePassword: changePassword,
+    onChangePicture: changePicture,
     onNewToken: newToken,
     authState,
   };

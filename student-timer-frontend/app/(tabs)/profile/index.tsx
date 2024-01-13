@@ -42,6 +42,18 @@ export default function Profile() {
     studySubject: authState?.user.studyCourse,
   };
 
+  const handleEditData = () => {
+    router.push("/profile/editData/");
+    console.log("Profildaten bearbeiten");
+  };
+  const handleEditPassword = () => {
+    router.push("/profile/editPassword/");
+    console.log("Passwort ändern");
+  };
+  const handleEditPicture = () => {
+    router.push("/profile/editPicture/");
+    console.log("Profilbild ändern");
+  };
   const handleEditProfile = () => {
     router.push("/profile/edit/");
     console.log("Profil bearbeiten");
@@ -67,10 +79,28 @@ export default function Profile() {
       {/* Aktionen */}
       <View style={styles.actionContainer}>
         <Button
-          text="Profil bearbeiten"
+          text="Profildaten bearbeiten"
           backgroundColor={COLORTHEME.light.primary}
           textColor="#FFFFFF"
-          onPress={handleEditProfile}
+          onPress={handleEditData}
+        />
+        <Button
+            text="Passwort ändern"
+            backgroundColor={COLORTHEME.light.primary}
+            textColor="#FFFFFF"
+            onPress={handleEditPassword}
+        />
+        <Button
+            text="Profilbild wechseln"
+            backgroundColor={COLORTHEME.light.primary}
+            textColor="#FFFFFF"
+            onPress={handleEditPicture}
+        />
+        <Button
+            text="Profil bearbeiten (alt)"
+            backgroundColor={COLORTHEME.light.primary}
+            textColor="#FFFFFF"
+            onPress={handleEditProfile}
         />
       </View>
       <View>

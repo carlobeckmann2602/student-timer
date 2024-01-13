@@ -1,21 +1,19 @@
 import React, { useState } from "react";
 import { Image, TouchableOpacity, StyleSheet, ScrollView, Alert } from "react-native";
-import { View } from "@/components/Themed";
+import { View} from "@/components/Themed";
 import { useRouter } from "expo-router";
 import { COLORTHEME } from "@/constants/Theme";
 import { User2 } from "lucide-react-native";
 import { Edit2 } from 'lucide-react-native';
 import { useAuth } from "@/context/AuthContext";
 import UserDetailsInput from "@/components/userInput/UserDetailsInput";
-import PasswordInput from "@/components/userInput/PasswordInput";
 import Pressable from "@/components/Pressable";
 import { useToast } from "react-native-toast-notifications";
-import ProfilePicturePicker from "@/components/profile/ProfilePicturePicker";
 
-export default function Edit() {
+export default function EditData() {
 
     const toast = useToast();
-    const { onUpdate, onRemove, onChangePassword, authState } = useAuth();
+    const { onUpdate, onRemove, authState } = useAuth();
     const router = useRouter();
 
 
@@ -24,13 +22,10 @@ export default function Edit() {
     const [userName, setUserName] = useState(authState?.user.name || "");
     const [userStudyCourse, setUserStudyCourse] = useState(authState?.user.studyCourse || "");
     const [userEmail, setUserEmail] = useState(authState?.user.email || "");
-    const [userPassword, setUserPassword] = useState("");
-    const [userCheckPassword, setUserCheckPassword] = useState("");
 
     const [nameError, setNameError] = useState("");
     const [studyCourseError, setStudyCourseError] = useState("");
     const [emailError, setEmailError] = useState("");
-    const [passwordError, setPasswordError] = useState("");
     const [error, setError] = useState("");
 
 
@@ -61,7 +56,7 @@ export default function Edit() {
 
     const validateInput = () => {
         let nameValid = false;
-        if (userName.length === 0) {
+        if (userName.length == 0) {
             setNameError("Name ist erforderlich");
         } else {
             setNameError("");
@@ -69,7 +64,7 @@ export default function Edit() {
         }
 
         let studyCourseValid = false;
-        if (userStudyCourse.length === 0) {
+        if (userStudyCourse.length == 0) {
             setStudyCourseError("Studienfach ist erforderlich");
         } else {
             setStudyCourseError("");
@@ -77,7 +72,7 @@ export default function Edit() {
         }
 
         let emailValid = false;
-        if (userEmail.length === 0) {
+        if (userEmail.length == 0) {
             setEmailError("E-Mail ist erforderlich");
         } else if (userEmail.length < 6) {
             setEmailError("E-Mail sollte mindestens 6 Zeichen lang sein");
@@ -89,23 +84,6 @@ export default function Edit() {
         }
         return (nameValid && studyCourseValid && emailValid);
     };
-
-    const validatePassword = () => {
-        let passwordValid = false;
-        if (userPassword.length === 0) {
-            setPasswordError("Passwort ist erforderlich");
-        } else if (userPassword.length < 6) {
-            setPasswordError("Das Passwort sollte mindestens 6 Zeichen lang sein");
-        } else if (userPassword.indexOf(" ") >= 0) {
-            setPasswordError("Passwort kann keine Leerzeichen enthalten");
-        } else if (userPassword != userCheckPassword) {
-            setPasswordError("Passwörter stimmen nicht überein");
-        } else {
-            setPasswordError("");
-            passwordValid = true;
-        }
-        return passwordValid;
-    }
 
     const cancel = () => {
         router.push("/profile/");
@@ -132,24 +110,10 @@ export default function Edit() {
                 router.push("/profile/");
             }
         } else {
-            toast.show("Korrektur notwendig", { type: "danger" });
+            toast.show("Validierung fehlgeschlagen", { type: "warning" });
         }
     };
 
-    const changePassword = async () => {
-        if (validatePassword()) {
-            const result = await onChangePassword!(
-                userPassword,
-                userCheckPassword,
-            );
-            if (result && result.error) {
-                setError(result.msg);
-            } else {
-                toast.show("Passwort erfolgreich geändert", { type: "success" });
-                router.push("/profile/");
-            }
-        }
-    };
 
     const removeUser = async () => {
         console.log("User removed:", authState?.user.email)
@@ -228,9 +192,6 @@ export default function Edit() {
                     ) : (
                         <User2 size={100} color={COLORTHEME.light.primary} />
                     )}
-                    <TouchableOpacity style={styles.editIcon}>
-                        <Edit2 size={24} color={COLORTHEME.light.background} />
-                    </TouchableOpacity>
                 </View>
             </View>
             {/*Benutzerinformationen bearbeiten*/}
@@ -250,18 +211,6 @@ export default function Edit() {
                     disabled={!isChanged}
                     cancelAction={onCancel}
                 />
-                {/*Passwort ändern*/}
-                <PasswordInput
-                    title={"Passwort ändern"}
-                    userPassword={userPassword}
-                    setUserPassword={handleInputChange(setUserPassword)}
-                    userCheckPassword={userCheckPassword}
-                    setUserCheckPassword={handleInputChange(setUserCheckPassword)}
-                    passwordError={passwordError}
-                    buttonAction={changePassword}
-                    disabled={!isChanged}
-                    cancelAction={onCancel}
-                />
             </View>
             {/*Löschen*/}
             <View style={styles.actionContainer}>
@@ -273,10 +222,6 @@ export default function Edit() {
                     onPress={onDelete}
                 />
             </View>
-            <ProfilePicturePicker
-                updateOnSelect={update}
-                cancelAction={cancel}
-            />
         </ScrollView>
     )
 }
@@ -311,15 +256,6 @@ const styles = StyleSheet.create({
         alignItems: "center",
         gap: 15,
         marginBottom: 40,
-    },
-    editIcon: {
-        position: 'absolute',
-        bottom: 0,
-        right: 0,
-        borderRadius: 60,
-        backgroundColor: COLORTHEME.light.primary,
-        borderColor: COLORTHEME.light.primary,
-        borderWidth: 6,
     },
     row: {
         flexGrow: 1,
