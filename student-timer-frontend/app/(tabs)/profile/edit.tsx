@@ -16,8 +16,6 @@ export default function Edit() {
     const { onUpdate, onRemove, onChangePassword, authState } = useAuth();
     const router = useRouter();
 
-    const defaultPic = require("../../../assets/images/profile/profile-picture.jpg");
-
     const [isChanged, setIsChanged] = useState(false);
 
     const [userName, setUserName] = useState(authState?.user.name || "");
