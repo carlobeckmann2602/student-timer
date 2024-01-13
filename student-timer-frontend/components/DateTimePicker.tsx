@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
     color: COLORTHEME.light.primary,
   },
   RNDateTimerPickerStyle: {
-    marginHorizontal: -20,
+    marginHorizontal: -25,
   },
   messageText: {
     fontSize: 12,

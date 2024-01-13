@@ -12,38 +12,18 @@ type LearningUnitFormProps = {
   inputData: LearningUnitType;
   onDelete?: (id: number) => void | undefined;
   onChange: (vaules: LearningUnitType) => void;
-  setValidationError: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export function LearningUnitForm(props: LearningUnitFormProps) {
-  const { inputData, onDelete, onChange, setValidationError } = props;
+  const { inputData, onDelete, onChange } = props;
 
   const [workLoadError, setWorkloadError] = useState("");
-  const [dateError, setDateError] = useState("");
 
-  const validateDates = () => {
-    var datesValid = true;
-    if (inputData.endDate.getTime() - inputData.startDate.getTime() < 0) {
-      setDateError("Das Startdatum muss vor dem Enddatum liegen");
-      datesValid = false;
-    } else {
-      setDateError("");
-    }
+  const [oldMinuteValue, setOldMinuteValue] = useState(1);
+  const [oldHourValue, setOldHourValue] = useState(0);
 
-    return datesValid;
-  };
-
-  const validateWorkload = () => {
-    var workloadPerWeekValid = true;
-    if (inputData.workloadPerWeek <= 0) {
-      setWorkloadError("Der Aufwand muss größer als 0 min. sein");
-      workloadPerWeekValid = false;
-    } else {
-      setWorkloadError("");
-    }
-
-    return workloadPerWeekValid;
-  };
+  const [minuteValue, setMinuteValue] = useState(1);
+  const [hourValue, setHourValue] = useState(0);
 
   const handleChange = (value: any) => {
     onChange({ ...inputData, ...value });
@@ -74,7 +54,6 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
             minimumDate={inputData.startDate}
           />
         </View>
-        {dateError !== "" && <P style={styles.errorMessage}>{dateError}</P>}
       </View>
       <View style={styles.workloadRowContainer}>
         <P style={{ color: COLORTHEME.light.primary }}>
@@ -82,21 +61,39 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
         </P>
         <View style={styles.row}>
           <InputFieldNumeric
-            onChangeText={(value) =>
+            onChangeText={(value) => {
               handleChange({
-                workloadPerWeek: +value * 60 + (inputData.workloadPerWeek % 60),
-              })
-            }
+                workloadPerWeek: Math.abs(
+                  +value * 60 + (inputData.workloadPerWeek % 60)
+                ),
+              });
+              // console.log("alter state" + oldHourValue);
+              // const clearedWorkload = inputData.workloadPerWeek - oldHourValue;
+              // const newHourValue = +value * 60 + clearedWorkload;
+              // setOldHourValue(() => +value * 60);
+              // handleChange({
+              //   workloadPerWeek: newHourValue,
+              // });
+              // console.log(clearedWorkload);
+              // console.log(oldHourValue);
+            }}
             value={Math.round(inputData.workloadPerWeek / 60).toString()}
             inputUnit="Std."
           />
           <InputFieldNumeric
-            onChangeText={(value) =>
+            onChangeText={(value) => {
               handleChange({
-                workloadPerWeek:
-                  +value + Math.round(inputData.workloadPerWeek / 60),
-              })
-            }
+                workloadPerWeek: +value + inputData.workloadPerWeek,
+              });
+              // const clearedWorkload =
+              //   inputData.workloadPerWeek - oldMinuteValue;
+              // const newMinuteValue = +value + clearedWorkload;
+              // setOldMinuteValue(+value);
+              // handleChange({
+              //   workloadPerWeek: newMinuteValue,
+              // });
+              // console.log("stateWorkload" + inputData.workloadPerWeek);
+            }}
             value={(inputData.workloadPerWeek % 60).toString()}
             inputUnit="min."
           />

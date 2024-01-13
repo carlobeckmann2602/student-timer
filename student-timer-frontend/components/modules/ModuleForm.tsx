@@ -5,7 +5,7 @@ import InputFieldNumeric from "../InputFieldNumeric";
 import StyledCheckbox from "../StyledCheckbox";
 import { P } from "../StyledText";
 import { View } from "../Themed";
-import { COLORTHEME } from "@/constants/Theme";
+import { COLORS, COLORTHEME } from "@/constants/Theme";
 import { ModuleType } from "@/types/ModuleType";
 
 type ModuleFormProps = {
@@ -26,14 +26,14 @@ export default function ModuleForm(props: ModuleFormProps) {
   } = props;
 
   const selectableColors: string[] = [
-    "#88A795",
-    "#AB5761",
-    "#5D7CB9",
-    "#FBC2B5",
-    "#073B3A",
-    "#243119",
-    "#FA7921",
-    "#88A7F5",
+    COLORS.moduleColor1,
+    COLORS.moduleColor2,
+    COLORS.moduleColor3,
+    COLORS.moduleColor4,
+    COLORS.moduleColor5,
+    COLORS.moduleColor6,
+    COLORS.moduleColor7,
+    COLORS.moduleColor8,
   ];
 
   const handleChange = (value?: any, newDateDisabledState?: boolean) => {
@@ -44,7 +44,7 @@ export default function ModuleForm(props: ModuleFormProps) {
     <View style={styles.outerWrapper}>
       <View style={styles.row}>
         <InputField
-          label="Name"
+          label="Name des Moduls"
           onChangeText={(value) => {
             handleChange({ name: value });
           }}

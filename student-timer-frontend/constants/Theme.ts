@@ -23,14 +23,15 @@ const COLORS = {
   NACHHILFE: "#AB5761",
   TUTORIUM: "#5D7CB9",
   EXKURSION: "#FBC2B5",
-  // selectable course colors
-  course1: "#88A795",
-  course2: "#AB5761",
-  course3: "#5D7CB9",
-  course4: "#FBC2B5",
-  course5: "#073B3A",
-  course6: "#243119",
-  course7: "#FA7921",
+  // selectable module colors
+  moduleColor1: "#88A795",
+  moduleColor2: "#AB5761",
+  moduleColor3: "#5D7CB9",
+  moduleColor4: "#FBC2B5",
+  moduleColor5: "#073B3A",
+  moduleColor6: "#243119",
+  moduleColor7: "#FA7921",
+  moduleColor8: "#88A7F5",
   // timer colors
   progressBarPauseColor: "#F5F56A",
 };

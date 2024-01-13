@@ -8,13 +8,13 @@ import { useModules } from "@/context/ModuleContext";
 import { LearningUnitType } from "@/types/LearningUnitType";
 import { ModuleType } from "@/types/ModuleType";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { Plus } from "lucide-react-native";
 import { useState } from "react";
 import {
+  FlatList,
   KeyboardAvoidingView,
   Platform,
-  ScrollView,
   StyleSheet,
-  View,
 } from "react-native";
 import { useToast } from "react-native-toast-notifications";
 
@@ -26,8 +26,6 @@ export default function NewModuleLearningUnits() {
     examDate?: string;
   }>();
 
-  const [validationError, setValidationError] = useState(false);
-
   const toast = useToast();
   const { authState } = useAuth();
   const { authAxios } = useAxios();
@@ -37,7 +35,7 @@ export default function NewModuleLearningUnits() {
     {
       id: Math.random(),
       name: LearningUnitEnum.VORLESUNG,
-      workloadPerWeek: 0,
+      workloadPerWeek: 1,
       startDate: new Date(),
       endDate: new Date(),
       totalLearningTime: 0,
@@ -73,14 +71,25 @@ export default function NewModuleLearningUnits() {
     });
   };
 
+  // const validateInputs = () => {
+  //   var workloadPerWeekValid = true;
+  //   if (inputData.workloadPerWeek <= 0) {
+  //     setWorkloadError("Der Aufwand muss größer als 0 min. sein");
+  //     workloadPerWeekValid = false;
+  //   } else {
+  //     setWorkloadError("");
+  //   }
+  //   return workloadPerWeekValid;
+  // };
+
   const onCreateModule = async () => {
-    if (validationError) {
-      toast.show(
-        "Überprüfe alle Eingaben auf ihre Gültigkeit. Erst dann kann das Modul angelegt werden.",
-        { type: "danger" }
-      );
-      return;
-    }
+    // if (!validateInputs()) {
+    //   toast.show(
+    //     "Überprüfe alle Eingaben auf ihre Gültigkeit. Erst dann kann das Modul angelegt werden.",
+    //     { type: "danger" }
+    //   );
+    //   return;
+    // }
 
     let id = toast.show("Erstellen...");
     let response;
@@ -130,54 +139,54 @@ export default function NewModuleLearningUnits() {
 
   return (
     <KeyboardAvoidingView
+      style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={{ flex: 1, backgroundColor: COLORTHEME.light.background }}
     >
-      <ScrollView
-        style={styles.scrollViewContainer}
-        contentContainerStyle={styles.scrollViewContainerStyle}
-      >
-        {learningUnits.map((unit, index) => (
+      <FlatList
+        data={learningUnits}
+        renderItem={({ item, index }) => (
           <LearningUnitForm
             key={index}
-            inputData={unit}
+            inputData={item}
             onDelete={
               learningUnits.length > 1 ? onDeleteLearningUnit : undefined
             }
-            setValidationError={(value) => {
-              // if one form sets the validationError to true (as it received invalid inputs),
-              // the validationError-state should not be overwritten by other, possibly valid forms
-              if (!validationError) setValidationError(value);
-            }}
             onChange={(inputData) => handleUpdate(inputData, index)}
           />
-        ))}
-      </ScrollView>
-      <View style={styles.buttons}>
-        <Button
-          text="Lerneinheit hinzufügen"
-          backgroundColor={COLORTHEME.light.background}
-          textColor={COLORTHEME.light.primary}
-          onPress={onAddLearningUnit}
-          style={{
-            width: 200,
-            borderWidth: 4,
-            borderColor: COLORTHEME.light.primary,
-          }}
-        />
-        <Button
-          text="Modul erstellen"
-          backgroundColor={COLORTHEME.light.primary}
-          textColor={COLORTHEME.light.grey2}
-          onPress={onCreateModule}
-          style={{ width: 200 }}
-        />
-      </View>
+        )}
+        keyExtractor={(item: LearningUnitType) => item.id.toString()}
+        contentContainerStyle={styles.scrollViewContainerStyle}
+        style={styles.scrollViewContainer}
+        ListFooterComponent={
+          <Button
+            text="Lerneinheit hinzufügen"
+            borderColor={COLORTHEME.light.primary}
+            backgroundColor={COLORTHEME.light.background}
+            textColor={COLORTHEME.light.primary}
+            onPress={onAddLearningUnit}
+            iconRight={<Plus color={COLORTHEME.light.primary} />}
+            style={{ width: "50%" }}
+          />
+        }
+      />
+      <Button
+        text="Erstellung abschließen"
+        backgroundColor={COLORTHEME.light.primary}
+        textColor={COLORTHEME.light.grey2}
+        onPress={onCreateModule}
+      />
     </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: "column",
+    justifyContent: "space-between",
+    gap: 24,
+    backgroundColor: COLORTHEME.light.background,
+  },
   scrollViewContainer: {
     flexGrow: 1,
     flexDirection: "column",
@@ -185,16 +194,7 @@ const styles = StyleSheet.create({
     gap: 24,
   },
   scrollViewContainerStyle: {
-    alignItems: "center",
     justifyContent: "space-around",
     gap: 16,
-    paddingBottom: 24,
-  },
-  buttons: {
-    flexDirection: "column",
-    alignItems: "center",
-    gap: 15,
-    paddingBottom: 46,
-    backgroundColor: "transparent",
   },
 });

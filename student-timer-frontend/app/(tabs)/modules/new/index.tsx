@@ -17,7 +17,7 @@ export default function NewModule() {
   const [newModule, setNewModule] = useState<ModuleType>({
     id: -1,
     name: "",
-    colorCode: COLORS.course1,
+    colorCode: COLORS.moduleColor1,
     creditPoints: 0,
     examDate: new Date(),
     learningUnits: [],
@@ -57,7 +57,6 @@ export default function NewModule() {
   const handleUpdate = (module: ModuleType, disabledStatus?: boolean) => {
     if (module) setNewModule(module);
     if (disabledStatus != undefined) setDateDisabled(disabledStatus);
-    validateInput();
   };
 
   const onContinue = () => {
@@ -139,6 +138,7 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     flexDirection: "column",
+    justifyContent: "space-between",
     gap: 24,
     backgroundColor: COLORTHEME.light.background,
   },

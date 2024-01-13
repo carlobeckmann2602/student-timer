@@ -38,7 +38,7 @@ export default function LearningUnitRow(props: learningUnitProps) {
           <Subhead>{learningUnit.name}</Subhead>
           <P>
             {learningUnit.name === LearningUnitEnum.SELBSTSTUDIUM
-              ? `${convertMinutesToHours(selfLearningTime)} Std. verbleibend`
+              ? `${selfLearningTime} Std. verbleibend`
               : computeModuleDetailUnitString(learningUnit)}
           </P>
         </View>
