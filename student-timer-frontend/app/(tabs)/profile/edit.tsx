@@ -1,18 +1,14 @@
 import React, { useState } from "react";
-import {
-    StyleSheet,
-    Alert, Image, TouchableOpacity,
-} from "react-native";
+import { Alert } from "react-native";
 import { View, ScrollView } from "@/components/Themed";
 import { useRouter } from "expo-router";
-import { BASE_STYLES, COLORTHEME } from "@/constants/Theme";
-import { User2 } from "lucide-react-native";
-import { Edit2 } from "lucide-react-native";
+import { BASE_STYLES } from "@/constants/Theme";
 import { useAuth } from "@/context/AuthContext";
 import UserDetailsInput from "@/components/userInput/UserDetailsInput";
 import PasswordInput from "@/components/userInput/PasswordInput";
 import Pressable from "@/components/Pressable";
 import { useToast } from "react-native-toast-notifications";
+import ProfilePicture from "@/components/profile/ProfilePicture";
 
 export default function Edit() {
 
@@ -224,21 +220,9 @@ export default function Edit() {
   };
 
   return (
-      <View style={styles.container}>
-          <ScrollView style={{ borderRadius: BASE_STYLES.borderRadius }}>
+      <ScrollView contentContainerStyle={{borderRadius: BASE_STYLES.borderRadius}}>
           <View style={{ alignItems: "center" }}>
-              <View style={styles.profileImageContainer}>
-                  {imagePath ? (
-                      <Image source={{ uri: imagePath }} style={styles.profileImage} />
-                  ) : (
-                      <User2 size={100} color={COLORTHEME.light.primary} />
-                  )}
-                  <TouchableOpacity style={styles.editIcon}>
-                      <Edit2 size={24} color={COLORTHEME.light.background} />
-                  </TouchableOpacity>
-              </View>
-          </View>
-          <View>
+              <ProfilePicture imagePath={imagePath} editMode={true}/>
               <UserDetailsInput
                   title={"Daten bearbeiten"}
                   userName={userName}
@@ -265,66 +249,15 @@ export default function Edit() {
                   disabled={!isChanged}
                   cancelAction={onCancel}
               />
-          </View>
-          <View style={styles.actionContainer}>
-              <Pressable
+              <Pressable style={{ marginBottom: 40 }}
                   text={"Konto löschen"}
                   textColor={"#F00"}
-                  accessibilityLabel={"Konto löschen"}
+                  ariaLabel={"Konto löschen"}
                   accessibilityRole={"button"}
                   onPress={onDelete}
               />
           </View>
       </ScrollView>
-    </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: COLORTHEME.light.background,
-    paddingVertical: BASE_STYLES.horizontalPadding,
-  },
-  profileImageContainer: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    backgroundColor: "#EEEAEA",
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 16,
-  },
-  profileImage: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    borderColor: COLORTHEME.light.primary,
-    borderWidth: 5,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 8,
-  },
-  actionContainer: {
-    justifyContent: "center",
-    alignItems: "center",
-    gap: 15,
-    marginBottom: 40,
-  },
-  editIcon: {
-    position: "absolute",
-    bottom: 0,
-    right: 0,
-    borderRadius: 60,
-    backgroundColor: COLORTHEME.light.primary,
-    borderColor: COLORTHEME.light.primary,
-    borderWidth: 6,
-  },
-  row: {
-    flexGrow: 1,
-    flexDirection: "row",
-    backgroundColor: "transparent",
-    gap: 16,
-  },
-});

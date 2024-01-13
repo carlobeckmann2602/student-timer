@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import { Image, TouchableOpacity, StyleSheet, ScrollView, Alert } from "react-native";
-import { View} from "@/components/Themed";
+import { StyleSheet, Alert } from "react-native";
+import { View, ScrollView } from "@/components/Themed";
 import { useRouter } from "expo-router";
-import { COLORTHEME } from "@/constants/Theme";
-import { User2 } from "lucide-react-native";
+import { BASE_STYLES } from "@/constants/Theme";
 import { useAuth } from "@/context/AuthContext";
 import UserDetailsInput from "@/components/userInput/UserDetailsInput";
 import Pressable from "@/components/Pressable";
 import { useToast } from "react-native-toast-notifications";
+import ProfilePicture from "@/components/profile/ProfilePicture";
 
 export default function EditData() {
 
@@ -37,8 +37,6 @@ export default function EditData() {
         ? `${profilePictureBasePath}${defaultPictureName}`
         : `${profilePictureBasePath}${profilePicture}`;
     const [imagePath, setImagePath] = useState<string>(userImagePath);
-
-
 
     console.log("#### useState:", profilePicture, typeof profilePicture);
     console.log("authState?.user.profilePicture", authState?.user.profilePicture, typeof authState?.user.profilePicture);
@@ -179,18 +177,10 @@ export default function EditData() {
     };
 
     return (
-        <ScrollView contentContainerStyle={styles.container}>
-            {/* Profilbild */}
+        <ScrollView contentContainerStyle={{borderRadius: BASE_STYLES.borderRadius}}>
             <View style={{ alignItems: "center" }}>
-                <View style={styles.profileImageContainer}>
-                    {imagePath ? (
-                        <Image source={{ uri: imagePath }} style={styles.profileImage} />
-                    ) : (
-                        <User2 size={100} color={COLORTHEME.light.primary} />
-                    )}
-                </View>
+                <ProfilePicture imagePath={imagePath}/>
             </View>
-            {/*Benutzerinformationen bearbeiten*/}
             <View>
                 <UserDetailsInput
                     title={"Daten bearbeiten"}
@@ -207,13 +197,10 @@ export default function EditData() {
                     disabled={!isChanged}
                     cancelAction={onCancel}
                 />
-            </View>
-            {/*Löschen*/}
-            <View style={styles.actionContainer}>
                 <Pressable
                     text={"Konto löschen"}
                     textColor={'#F00'}
-                    accessibilityLabel={"Konto löschen"}
+                    ariaLabel={"Konto löschen"}
                     accessibilityRole={"button"}
                     onPress={onDelete}
                 />
@@ -223,40 +210,10 @@ export default function EditData() {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        backgroundColor: COLORTHEME.light.background,
-    },
-    profileImageContainer: {
-        width: 120,
-        height: 120,
-        borderRadius: 60,
-        backgroundColor: "#EEEAEA",
-        justifyContent: "center",
-        alignItems: "center",
-        marginBottom: 16,
-    },
-    profileImage: {
-        width: 120,
-        height: 120,
-        borderRadius: 60,
-        borderColor: COLORTHEME.light.primary,
-        borderWidth: 5,
-    },
-    title: {
-        fontSize: 24,
-        fontWeight: "bold",
-        marginBottom: 8,
-    },
     actionContainer: {
         justifyContent: "center",
         alignItems: "center",
         gap: 15,
         marginBottom: 40,
-    },
-    row: {
-        flexGrow: 1,
-        flexDirection: "row",
-        backgroundColor: "transparent",
-        gap: 16,
     },
 });

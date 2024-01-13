@@ -1,26 +1,16 @@
 import React, {useState} from "react";
 import {View, Text, Image, StyleSheet} from "react-native";
 import Button from "@/components/Button";
+import { ScrollView } from "@/components/Themed";
 import Pressable from "@/components/Pressable";
-import { BASE_STYLES, COLORTHEME } from "@/constants/Theme";
-import { User2 } from "lucide-react-native";
+import { COLORTHEME } from "@/constants/Theme";
 import { router } from "expo-router";
 import { useAuth } from "@/context/AuthContext";
+import ProfilePicture from "@/components/profile/ProfilePicture";
 
 export default function Profile() {
 
   const { onLogout, authState } = useAuth();
-
-  const images: { [key: string]: any } = {
-    "phil.jpg": require("../../../assets/images/profile/phil.jpg"),
-    "mareike.jpg": require("../../../assets/images/profile/mareike.jpg"),
-    "carlo.jpg": require("../../../assets/images/profile/carlo.jpg"),
-    "nils.png": require("../../../assets/images/profile/nils.png"),
-    "konstantin.png": require("../../../assets/images/profile/konstantin.png"),
-    "": require("../../../assets/images/profile/profile-picture.jpg"),
-    "empty":require("../../../assets/images/profile/profile-picture.jpg"),
-    "default.jpg": require("../../../assets/images/profile/profile-picture.jpg"),
-  };
 
   const defaultPictureName="profile-picture.jpg";
   const profilePictureBasePath = "../../../assets/images/profile/";
@@ -60,58 +50,47 @@ export default function Profile() {
   };
 
   return (
-    <View style={styles.container}>
-      {/* Profilbild */}
-
-      <View style={styles.profileImageContainer}>
-        {imagePath ? (
-          <Image source={{uri: imagePath}} style={styles.profileImage} />
-        ) : (
-          <User2 size={100} color={COLORTHEME.light.primary} />
-        )}
-
-      </View>
-
-      {/* Benutzerinformationen */}
-      <Text style={styles.title}>{authState?.user.name}</Text>
-      <Text>{authState?.user.studyCourse}</Text>
-
-      {/* Aktionen */}
-      <View style={styles.actionContainer}>
-        <Button
-          text="Profildaten bearbeiten"
-          backgroundColor={COLORTHEME.light.primary}
-          textColor="#FFFFFF"
-          onPress={handleEditData}
-        />
-        <Button
-            text="Passwort ändern"
+    <ScrollView>
+      <View style={{ alignItems: "center" }}>
+        <ProfilePicture imagePath={imagePath} />
+        <Text style={styles.title}>{authState?.user.name}</Text>
+        <Text>{authState?.user.studyCourse}</Text>
+        <View style={styles.actionContainer}>
+          <Button
+            text="Profildaten bearbeiten"
             backgroundColor={COLORTHEME.light.primary}
             textColor="#FFFFFF"
-            onPress={handleEditPassword}
-        />
-        <Button
-            text="Profilbild wechseln"
-            backgroundColor={COLORTHEME.light.primary}
-            textColor="#FFFFFF"
-            onPress={handleEditPicture}
-        />
-        <Button
-            text="Profil bearbeiten (alt)"
-            backgroundColor={COLORTHEME.light.primary}
-            textColor="#FFFFFF"
-            onPress={handleEditProfile}
-        />
+            onPress={handleEditData}
+          />
+          <Button
+              text="Passwort ändern"
+              backgroundColor={COLORTHEME.light.primary}
+              textColor="#FFFFFF"
+              onPress={handleEditPassword}
+          />
+          <Button
+              text="Profilbild wechseln"
+              backgroundColor={COLORTHEME.light.primary}
+              textColor="#FFFFFF"
+              onPress={handleEditPicture}
+          />
+          <Button
+              text="Profil bearbeiten (alt)"
+              backgroundColor={COLORTHEME.light.primary}
+              textColor="#FFFFFF"
+              onPress={handleEditProfile}
+          />
+        </View>
+        <View>
+          <Pressable
+              text={"Logout"}
+              ariaLabel={"Logout"}
+              accessibilityRole={"button"}
+              onPress={onLogout}
+          />
+        </View>
       </View>
-      <View>
-        <Pressable
-            text={"Logout"}
-            accessibilityLabel={"Logout"}
-            accessibilityRole={"button"}
-            onPress={onLogout}
-        />
-      </View>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -120,24 +99,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: COLORTHEME.light.background,
-    paddingVertical: BASE_STYLES.horizontalPadding,
-  },
-  profileImageContainer: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    backgroundColor: "#EEEAEA",
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 16,
-  },
-  profileImage: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    borderColor: COLORTHEME.light.primary,
-    borderWidth: 5,
   },
   title: {
     fontSize: 24,

@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { Image, StyleSheet, Alert } from "react-native";
+import { Alert } from "react-native";
 import { View, ScrollView } from "@/components/Themed";
 import { useRouter } from "expo-router";
-import { COLORTHEME } from "@/constants/Theme";
-import { User2 } from "lucide-react-native";
+import {BASE_STYLES } from "@/constants/Theme";
 import { useAuth } from "@/context/AuthContext";
 import PasswordInput from "@/components/userInput/PasswordInput";
 import { useToast } from "react-native-toast-notifications";
+import ProfilePicture from "@/components/profile/ProfilePicture";
 
 export default function EditPassword() {
 
@@ -121,20 +121,11 @@ export default function EditPassword() {
     };
 
     return (
-        <ScrollView contentContainerStyle={styles.container}>
-            {/* Profilbild */}
+        <ScrollView contentContainerStyle={{borderRadius: BASE_STYLES.borderRadius}}>
             <View style={{ alignItems: "center" }}>
-                <View style={styles.profileImageContainer}>
-                    {imagePath ? (
-                        <Image source={{ uri: imagePath }} style={styles.profileImage} />
-                    ) : (
-                        <User2 size={100} color={COLORTHEME.light.primary} />
-                    )}
-                </View>
+                <ProfilePicture imagePath={imagePath}/>
             </View>
-            {/*Benutzerinformationen bearbeiten*/}
             <View>
-                {/*Passwort ändern*/}
                 <PasswordInput
                     title={"Passwort ändern"}
                     userPassword={userPassword}
@@ -150,42 +141,3 @@ export default function EditPassword() {
         </ScrollView>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        backgroundColor: COLORTHEME.light.background,
-    },
-    profileImageContainer: {
-        width: 120,
-        height: 120,
-        borderRadius: 60,
-        backgroundColor: "#EEEAEA",
-        justifyContent: "center",
-        alignItems: "center",
-        marginBottom: 16,
-    },
-    profileImage: {
-        width: 120,
-        height: 120,
-        borderRadius: 60,
-        borderColor: COLORTHEME.light.primary,
-        borderWidth: 5,
-    },
-    title: {
-        fontSize: 24,
-        fontWeight: "bold",
-        marginBottom: 8,
-    },
-    actionContainer: {
-        justifyContent: "center",
-        alignItems: "center",
-        gap: 15,
-        marginBottom: 40,
-    },
-    row: {
-        flexGrow: 1,
-        flexDirection: "row",
-        backgroundColor: "transparent",
-        gap: 16,
-    },
-});

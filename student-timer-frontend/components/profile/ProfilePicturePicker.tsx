@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Image, TouchableOpacity, StyleSheet, View, Dimensions } from 'react-native';
+import { StyleSheet, View, Dimensions } from 'react-native';
 import { Text } from '@/components/Themed';
-import { User2 } from 'lucide-react-native';
-import { Edit2 } from 'lucide-react-native';
 import { useAuth } from '@/context/AuthContext';
 import { COLORTHEME } from '@/constants/Theme';
 import { Picker } from "@react-native-picker/picker";
@@ -11,6 +9,7 @@ import Button from "@/components/Button";
 import Pressable from "@/components/Pressable";
 import {useToast} from "react-native-toast-notifications";
 import {useRouter} from "expo-router";
+import ProfilePicture from "@/components/profile/ProfilePicture";
 
 const { width } = Dimensions.get('window');
 
@@ -45,7 +44,6 @@ export default function ProfilePicturePicker({
         const fullPath = profilePictureName === 'empty'
             ? `${profilePictureBasePath}${defaultPictureName}`
             : `${profilePictureBasePath}${profilePictureName}`;
-
         return fullPath;
     };
     const [imagePath, setImagePath] = useState<string>(getImagePath(userProfilePictureName));
@@ -89,16 +87,7 @@ export default function ProfilePicturePicker({
     return (
         <View style={styles.container}>
             <H3>Profilbild ändern</H3>
-              <View style={styles.profileImageContainer}>
-                {imagePath ? (
-                    <Image source={{ uri: imagePath }} style={styles.profileImage} />
-                ) : (
-                    <User2 size={100} color={COLORTHEME.light.primary} />
-                )}
-                <TouchableOpacity style={styles.editIcon}>
-                    <Edit2 size={24} color={COLORTHEME.light.background} />
-                </TouchableOpacity>
-            </View>
+            <ProfilePicture imagePath={imagePath} editMode={true}/>
             <Text>Test {imagePath}</Text>
             <View style={styles.row}>
                 <View style={styles.pictureWrapper}>
@@ -124,7 +113,7 @@ export default function ProfilePicturePicker({
             />
             <Pressable
                 text={"Abbrechen"}
-                accessibilityLabel={"Abbrechen"}
+                ariaLabel={"Abbrechen"}
                 accessibilityRole={"button"}
                 onPress={cancelAction}
             />

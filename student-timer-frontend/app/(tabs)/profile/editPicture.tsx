@@ -1,12 +1,13 @@
 import React, { useState } from "react";
-import { StyleSheet, Alert } from "react-native";
-import { View, ScrollView } from "@/components/Themed";
+import { Alert } from "react-native";
+import {ScrollView, View} from "@/components/Themed";
 import { useRouter } from "expo-router";
-import { COLORTHEME } from "@/constants/Theme";
-
 import { useAuth } from "@/context/AuthContext";
 import { useToast } from "react-native-toast-notifications";
 import ProfilePicturePicker from "@/components/profile/ProfilePicturePicker";
+import {BASE_STYLES} from "@/constants/Theme";
+import ProfilePicture from "@/components/profile/ProfilePicture";
+import {H3} from "@/components/StyledText";
 
 export default function EditPicture() {
 
@@ -18,8 +19,6 @@ export default function EditPicture() {
 
     const [error, setError] = useState("");
 
-
-    {/* Profilbilder */}
     const defaultPictureName="profile-picture.jpg";
     const profilePictureBasePath = "../../../assets/images/profile/";
 
@@ -94,7 +93,11 @@ export default function EditPicture() {
     };
 
     return (
-        <ScrollView contentContainerStyle={styles.container}>
+        <ScrollView contentContainerStyle={{borderRadius: BASE_STYLES.borderRadius}}>
+            <View style={{ alignItems: "center" }}>
+                <ProfilePicture imagePath={imagePath} editMode={true}/>
+            </View>
+            <H3>Profilbild ändern</H3>
             <ProfilePicturePicker
                 profilePicture={profilePicture}
                 setProfilePicture={handleInputChange(setProfilePicture)}
@@ -105,51 +108,3 @@ export default function EditPicture() {
         </ScrollView>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        backgroundColor: COLORTHEME.light.background,
-    },
-    profileImageContainer: {
-        width: 120,
-        height: 120,
-        borderRadius: 60,
-        backgroundColor: "#EEEAEA",
-        justifyContent: "center",
-        alignItems: "center",
-        marginBottom: 16,
-    },
-    profileImage: {
-        width: 120,
-        height: 120,
-        borderRadius: 60,
-        borderColor: COLORTHEME.light.primary,
-        borderWidth: 5,
-    },
-    title: {
-        fontSize: 24,
-        fontWeight: "bold",
-        marginBottom: 8,
-    },
-    actionContainer: {
-        justifyContent: "center",
-        alignItems: "center",
-        gap: 15,
-        marginBottom: 40,
-    },
-    editIcon: {
-        position: 'absolute',
-        bottom: 0,
-        right: 0,
-        borderRadius: 60,
-        backgroundColor: COLORTHEME.light.primary,
-        borderColor: COLORTHEME.light.primary,
-        borderWidth: 6,
-    },
-    row: {
-        flexGrow: 1,
-        flexDirection: "row",
-        backgroundColor: "transparent",
-        gap: 16,
-    },
-});
