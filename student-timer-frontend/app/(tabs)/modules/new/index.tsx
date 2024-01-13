@@ -1,28 +1,23 @@
 import Button from "@/components/Button";
 import ModuleForm from "@/components/modules/ModuleForm";
-import { COLORTHEME } from "@/constants/Theme";
+import { COLORS, COLORTHEME } from "@/constants/Theme";
 import { ModuleType } from "@/types/ModuleType";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { KeyboardAvoidingView, Platform, StyleSheet } from "react-native";
+import {
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+} from "react-native";
 
 export default function NewModule() {
   const router = useRouter();
-  const selectableColors: string[] = [
-    "#88A795",
-    "#AB5761",
-    "#5D7CB9",
-    "#FBC2B5",
-    "#073B3A",
-    "#243119",
-    "#FA7921",
-    "#88A7F5",
-  ];
 
   const [newModule, setNewModule] = useState<ModuleType>({
     id: -1,
     name: "",
-    colorCode: selectableColors[0],
+    colorCode: COLORS.course1,
     creditPoints: 0,
     examDate: new Date(),
     learningUnits: [],
@@ -33,7 +28,7 @@ export default function NewModule() {
     totalModuleTime: 0,
   } as ModuleType);
 
-  const [dateDiabled, setDateDisabled] = useState(false);
+  const [dateDisabled, setDateDisabled] = useState(false);
   const [moduleNameError, setModuleNameError] = useState("");
   const [creditPointError, setCreditPointError] = useState("");
 
@@ -67,7 +62,7 @@ export default function NewModule() {
 
   const onContinue = () => {
     if (validateInput()) {
-      if (dateDiabled) {
+      if (dateDisabled) {
         router.push({
           pathname: "/modules/new/learningUnits",
           params: {
@@ -90,6 +85,27 @@ export default function NewModule() {
     }
   };
 
+  /*   const onAbort = () => {
+    Alert.alert(
+      "Erstellung abbrechen?",
+      "Alle Eingaben gehen ungespeichert verloren.",
+      [
+        {
+          text: "Abbrechen",
+          style: "destructive",
+        },
+        {
+          text: "Fortfahren",
+          onPress: () => {
+            router.replace("/modules");
+          },
+          style: "default",
+        },
+      ],
+      { cancelable: false }
+    );
+  }; */
+
   return (
     <KeyboardAvoidingView
       style={styles.container}
@@ -98,7 +114,7 @@ export default function NewModule() {
       <ModuleForm
         inputData={newModule}
         onChange={handleUpdate}
-        dateDiabled={dateDiabled}
+        dateDiabled={dateDisabled}
         moduleNameError={moduleNameError}
         creditPointError={creditPointError}
       />
@@ -107,8 +123,14 @@ export default function NewModule() {
         backgroundColor={COLORTHEME.light.primary}
         textColor={COLORTHEME.light.grey2}
         onPress={onContinue}
-        style={{ width: 200, alignSelf: "center" }}
       />
+      {/* <Button
+        text="Abbrechen"
+        borderColor={COLORTHEME.light.danger}
+        backgroundColor={COLORTHEME.light.background}
+        textColor={COLORTHEME.light.danger}
+        onPress={onAbort}
+      /> */}
     </KeyboardAvoidingView>
   );
 }

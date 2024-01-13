@@ -8,14 +8,17 @@ import { COLORTHEME } from "@/constants/Theme";
 import { useAuth } from "@/context/AuthContext";
 import { useAxios } from "@/context/AxiosContext";
 import { useModules } from "@/context/ModuleContext";
+import { computeRemainingSessionTime } from "@/libs/moduleTypeHelper";
 import { LearningUnitType } from "@/types/LearningUnitType";
 import { ModuleType } from "@/types/ModuleType";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { Plus } from "lucide-react-native";
 import { useState } from "react";
 import {
   Alert,
   KeyboardAvoidingView,
   Platform,
+  Pressable,
   ScrollView,
   StyleSheet,
 } from "react-native";
@@ -204,8 +207,19 @@ export default function EditModule() {
           creditPointError={creditPointError}
         />
         <View style={styles.unitWrapper}>
-          <View>
+          <View style={styles.unitHeaderRow}>
             <H2 style={{ textAlign: "left" }}>Einheiten</H2>
+            <Pressable
+              onPress={() =>
+                router.push(`/modules/${detailModule.id}/learningUnits/new`)
+              }
+              style={styles.roundButton}
+            >
+              <Plus
+                color={COLORTHEME.light.background}
+                style={{ backgroundColor: "transparent" }}
+              />
+            </Pressable>
           </View>
           <View>
             {detailModule?.learningUnits.map((unit: LearningUnitType) => {
@@ -214,11 +228,18 @@ export default function EditModule() {
                   <LearningUnitRow
                     key={unit.id}
                     learningUnit={unit}
-                    selfLearningTime={
-                      detailModule.totalModuleTime -
+                    selfLearningTime={computeRemainingSessionTime(
+                      detailModule.totalModuleTime,
                       detailModule.totalLearningTime
+                    )}
+                    onDelete={() =>
+                      detailModule.learningUnits.length > 1
+                        ? onDelete(unit.id)
+                        : toast.show(
+                            "Es muss mindestens eine Lerneinheit vorhanden sein.",
+                            { type: "normal" }
+                          )
                     }
-                    onDelete={() => onDelete(unit.id)}
                     onEdit={() =>
                       router.push({
                         pathname: `modules/${detailModule.id}/learningUnits/${unit.id}/edit`,
@@ -242,7 +263,7 @@ export default function EditModule() {
           onPress={() => {
             Alert.alert(
               "Änderungen verwerfen?",
-              `Wenn du fortfährst, gehen alle Änderungen ungespeichert verloren. Bist du dir sicher?`,
+              `Wenn du fortfährst, gehen alle Änderungen ungespeichert verloren.`,
               [
                 {
                   text: "Abbrechen",
@@ -363,5 +384,20 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "flex-start",
     gap: 16,
+  },
+  unitHeaderRow: {
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingRight: 4,
+  },
+  roundButton: {
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 50,
+    height: 40,
+    width: 40,
+    backgroundColor: COLORTHEME.light.primary,
   },
 });

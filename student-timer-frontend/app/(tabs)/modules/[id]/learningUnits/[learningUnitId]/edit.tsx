@@ -96,13 +96,13 @@ export default function learningUnitEdit() {
         <LearningUnitForm
           key={learningUnit?.id}
           inputData={learningUnit!}
-          changeLearningUnit={onLearningUnitChange}
+          onChange={onLearningUnitChange}
           setValidationError={(value) => {
             // if one form sets the validationError to true (as it received invalid inputs),
             // the validationError-state should not be overwritten by other, possibly valid forms
             if (!validationError) setValidationError(value);
           }}
-          validationIndicator={validationIndicator}
+          // validationIndicator={validationIndicator}
         />
       </View>
       <View style={styles.buttons}>

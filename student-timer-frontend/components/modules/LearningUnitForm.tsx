@@ -122,7 +122,7 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
             >
               Lerneinheit entfernen
             </LabelS>
-            <Trash2 size={14} color="red" />
+            <Trash2 size={14} color={COLORTHEME.light.danger} />
           </Pressable>
         </View>
       )}
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
   },
   errorMessage: {
-    color: "red",
+    color: COLORTHEME.light.danger,
     fontSize: 12,
     textAlign: "left",
   },
