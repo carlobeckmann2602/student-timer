@@ -118,7 +118,6 @@ export default function Edit() {
             const result = await onUpdate!(
                 userName,
                 userStudyCourse,
-                userProfilePicture,
                 userEmail,
             );
             console.log("validateInput");
