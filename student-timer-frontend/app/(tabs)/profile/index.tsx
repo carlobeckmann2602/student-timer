@@ -74,12 +74,6 @@ export default function Profile() {
               textColor="#FFFFFF"
               onPress={handleEditPicture}
           />
-          <Button
-              text="Profil bearbeiten (alt)"
-              backgroundColor={COLORTHEME.light.primary}
-              textColor="#FFFFFF"
-              onPress={handleEditProfile}
-          />
         </View>
         <View>
           <Pressable
@@ -109,6 +103,6 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     width: 200,
     gap: 15,
-    marginTop: 20,
+    marginVertical: 40,
   },
 });

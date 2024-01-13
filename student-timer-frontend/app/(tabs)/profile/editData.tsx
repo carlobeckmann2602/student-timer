@@ -197,6 +197,8 @@ export default function EditData() {
                     disabled={!isChanged}
                     cancelAction={onCancel}
                 />
+            </View>
+            <View style={{ alignItems: "center", marginBottom: 40  }}>
                 <Pressable
                     text={"Konto löschen"}
                     textColor={'#F00'}
@@ -208,12 +210,3 @@ export default function EditData() {
         </ScrollView>
     )
 }
-
-const styles = StyleSheet.create({
-    actionContainer: {
-        justifyContent: "center",
-        alignItems: "center",
-        gap: 15,
-        marginBottom: 40,
-    },
-});

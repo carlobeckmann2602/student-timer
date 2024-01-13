@@ -85,12 +85,12 @@ export default function ProfilePicturePicker({
     };
 
     return (
-        <View style={styles.container}>
-            <H3>Profilbild ändern</H3>
+        <View style={{alignItems: 'center'}}>
             <ProfilePicture imagePath={imagePath} editMode={true}/>
-            <Text>Test {imagePath}</Text>
+            <H3>Profilbild ändern</H3>
+            <Text>Pfad:{imagePath}</Text>
             <View style={styles.row}>
-                <View style={styles.pictureWrapper}>
+                <View style={styles.pickerWrapper}>
                     <Text style={styles.inputLabelText}>Bildauswahl</Text>
                     <Picker
                         style={{ width: width * 0.5 }}
@@ -122,15 +122,12 @@ export default function ProfilePicturePicker({
 };
 
 const styles = StyleSheet.create({
-    container: {
-        alignItems: 'center',
-    },
     row: {
         flexDirection: 'row',
         marginTop: 20,
         width: "100%",
     },
-    pictureWrapper: {
+    pickerWrapper: {
         width: '30%',
         marginRight: 10,
     },
@@ -138,30 +135,5 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
         marginBottom: 8,
-    },
-    profileImageContainer: {
-        width: 120,
-        height: 120,
-        borderRadius: 60,
-        backgroundColor: '#EEEAEA',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 20,
-    },
-    profileImage: {
-        width: 120,
-        height: 120,
-        borderRadius: 60,
-        borderColor: COLORTHEME.light.primary,
-        borderWidth: 5,
-    },
-    editIcon: {
-        position: 'absolute',
-        bottom: 0,
-        right: 0,
-        borderRadius: 60,
-        backgroundColor: COLORTHEME.light.primary,
-        borderColor: COLORTHEME.light.primary,
-        borderWidth: 6,
     },
 });
