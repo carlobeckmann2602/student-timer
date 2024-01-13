@@ -233,11 +233,17 @@ export default function EditModule() {
                       detailModule.totalLearningTime
                     )}
                     onDelete={() =>
-                      detailModule.learningUnits.length > 1
+                      detailModule.learningUnits.length > 2
                         ? onDelete(unit.id)
-                        : toast.show(
-                            "Es muss mindestens eine Lerneinheit vorhanden sein.",
-                            { type: "normal" }
+                        : Alert.alert(
+                            "Entfernen nicht möglich",
+                            `Ein Modul muss mindestens eine Lerneinheit besitzen.`,
+                            [
+                              {
+                                text: "Okay",
+                                style: "default",
+                              },
+                            ]
                           )
                     }
                     onEdit={() =>
@@ -256,10 +262,12 @@ export default function EditModule() {
           backgroundColor={COLORTHEME.light.primary}
           textColor={COLORTHEME.light.grey2}
           onPress={onSave}
-          style={{ width: 200, alignSelf: "center" }}
         />
-        <P
-          style={styles.discardLink}
+        <Button
+          text="Abbrechen"
+          borderColor={COLORTHEME.light.danger}
+          backgroundColor={COLORTHEME.light.background}
+          textColor={COLORTHEME.light.danger}
           onPress={() => {
             Alert.alert(
               "Änderungen verwerfen?",
@@ -280,9 +288,7 @@ export default function EditModule() {
               { cancelable: false }
             );
           }}
-        >
-          Verwerfen
-        </P>
+        />
       </ScrollView>
     </KeyboardAvoidingView>
   );
