@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from "react";
-import {View, Text, Image, StyleSheet} from "react-native";
+import React, { useEffect } from "react";
+import {View, StyleSheet} from "react-native";
 import Button from "@/components/Button";
 import { ScrollView } from "@/components/Themed";
 import Pressable from "@/components/Pressable";
@@ -7,32 +7,16 @@ import { COLORTHEME } from "@/constants/Theme";
 import { router } from "expo-router";
 import { useAuth } from "@/context/AuthContext";
 import ProfilePicture from "@/components/profile/ProfilePicture";
+import { useProfilePicture } from '@/components/profile/useProfilePicture';
+import {H2, H3} from "@/components/StyledText";
 
 export default function Profile() {
   const { onLogout, authState } = useAuth();
-  const defaultPictureName="profile-picture.jpg";
-  const profilePictureBasePath = "../../../assets/images/profile/";
-  const availableImageNames: string[] = ['profile-picture.jpg', 'phil.jpg', 'mareike.jpg', 'carlo.jpg', 'nils.png', 'konstantin.png', 'alex.jpg', 'random.jpg'];
-
-  const getProfilePictureName = () => {
-    return availableImageNames.includes(authState?.user.profilePicture ?? '')
-        ? authState?.user.profilePicture || ''
-        : defaultPictureName;
-  };
-  const getImagePath = (profilePictureName: string) => {
-    const fullPath = profilePictureName === 'empty'
-        ? `${profilePictureBasePath}${defaultPictureName}`
-        : `${profilePictureBasePath}${profilePictureName}`;
-    return fullPath;
-  };
-
-  const [profilePictureName, setProfilePictureName] = useState<string>(getProfilePictureName());
-  const [imagePath, setImagePath] = useState<string>(getImagePath(getProfilePictureName()));
+  const { profilePictureName, imagePath, setImagePath, getImagePath, getProfilePictureName } = useProfilePicture();
 
   useEffect(() => {
     setImagePath(getImagePath(getProfilePictureName()));
   }, [authState]);
-
 
   console.log("#### useState:", profilePictureName, typeof profilePictureName);
   console.log("authState?.user.profilePicture", authState?.user.profilePicture, typeof authState?.user.profilePicture);
@@ -48,8 +32,8 @@ export default function Profile() {
     <ScrollView>
       <View style={{ alignItems: "center" }}>
         <ProfilePicture imagePath={imagePath} />
-        <Text style={styles.title}>{authState?.user.name}</Text>
-        <Text>{authState?.user.studyCourse}</Text>
+        <H2>{authState?.user.name}</H2>
+        <H3>{authState?.user.studyCourse}</H3>
         <View style={styles.actionContainer}>
           <Button
             text="Profildaten bearbeiten"
@@ -84,11 +68,6 @@ export default function Profile() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
   title: {
     fontSize: 24,
     fontWeight: "bold",

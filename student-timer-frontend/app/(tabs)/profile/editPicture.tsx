@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Alert, Dimensions, StyleSheet} from "react-native";
+import {Alert, Dimensions} from "react-native";
 import {ScrollView, View} from "@/components/Themed";
 import { useRouter } from "expo-router";
 import { useAuth } from "@/context/AuthContext";
@@ -12,7 +12,7 @@ import { Picker } from "@react-native-picker/picker";
 import Button from "@/components/Button";
 import { COLORTHEME } from '@/constants/Theme';
 import { Text } from '@/components/Themed';
-
+import { useProfilePicture, availableImageNames } from '@/components/profile/useProfilePicture';
 
 const { width } = Dimensions.get('window');
 
@@ -23,25 +23,14 @@ export default function EditPicture() {
     const router = useRouter();
 
     const [isChanged, setIsChanged] = useState(false);
+    const {
+        profilePictureName,
+        setProfilePictureName,
+        imagePath,
+        setImagePath,
+        getImagePath, getProfilePictureName ,
 
-    const defaultPictureName = 'profile-picture.jpg';
-    const profilePictureBasePath = '../../../assets/images/profile/';
-    const availableImageNames: string[] = ['profile-picture.jpg', 'phil.jpg', 'mareike.jpg', 'carlo.jpg', 'nils.png', 'konstantin.png', 'alex.jpg', 'random.jpg'];
-
-    const getProfilePictureName = () => {
-        return availableImageNames.includes(authState?.user.profilePicture ?? '')
-            ? authState?.user.profilePicture || ''
-            : defaultPictureName;
-    };
-    const getImagePath = (profilePictureName: string) => {
-        const fullPath = profilePictureName === 'empty'
-            ? `${profilePictureBasePath}${defaultPictureName}`
-            : `${profilePictureBasePath}${profilePictureName}`;
-        return fullPath;
-    };
-
-    const [profilePictureName, setProfilePictureName] = useState<string>(getProfilePictureName());
-    const [imagePath, setImagePath] = useState<string>(getImagePath(getProfilePictureName()));
+    } = useProfilePicture();
     const [error, setError] = useState("");
 
     useEffect(() => {
@@ -50,8 +39,7 @@ export default function EditPicture() {
 
     const handleImageNameChange = (imageName: string) => {
         setProfilePictureName(imageName);
-        const newPath = getImagePath(imageName);
-        setImagePath(newPath);
+        setImagePath(getImagePath(imageName));
         setIsChanged(true);
     };
 

@@ -3,7 +3,7 @@ import { useAuth } from "@/context/AuthContext";
 
 const defaultPictureName = 'profile-picture.jpg';
 const profilePictureBasePath = '../../../assets/images/profile/';
-const availableImageNames: string[] = ['profile-picture.jpg', 'phil.jpg', 'mareike.jpg', 'carlo.jpg', 'nils.png', 'konstantin.png', 'alex.jpg', 'random.jpg'];
+export const availableImageNames: string[] = ['profile-picture.jpg', 'phil.jpg', 'mareike.jpg', 'carlo.jpg', 'nils.png', 'konstantin.png', 'alex.jpg', 'random.jpg'];
 
 export const useProfilePicture = () => {
     const { authState } = useAuth();
@@ -26,3 +26,4 @@ export const useProfilePicture = () => {
 
     return { profilePictureName, setProfilePictureName, imagePath, setImagePath, getImagePath, getProfilePictureName };
 };
+
