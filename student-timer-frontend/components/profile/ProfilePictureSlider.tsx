@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
-import {View, FlatList, Image, TouchableOpacity, Text, Dimensions, Pressable} from 'react-native';
-import { useProfilePicture } from '@/components/profile/useProfilePicture';
-
-import {ScrollView} from "@/components/Themed";
-import { Picker } from "@react-native-picker/picker";
-
+import { View, FlatList, Image, Text, Dimensions, Pressable } from 'react-native';
+import { BASE_STYLES, COLORTHEME } from "@/constants/Theme";
+import {P} from "@/components/StyledText";
 
 type ProfilePictureSliderProps = {
     availableImages: string[];
@@ -15,27 +12,22 @@ type ProfilePictureSliderProps = {
 const { width } = Dimensions.get('window');
 
 export default function ProfilePictureSlider({
-             availableImages,
-             onSelect,
-             getImagePath,
-         }: ProfilePictureSliderProps): React.ReactElement {
+    availableImages,
+    onSelect,
+    getImagePath,
+}: ProfilePictureSliderProps): React.ReactElement {
     const [selectedIndex, setSelectedIndex] = useState(0);
 
-    const {
-        profilePictureName,
-        setProfilePictureName,
-        imagePath,
-        setImagePath,
-        getProfilePictureName,
-    } = useProfilePicture();
     const handleImageSelect = (index: number) => {
         setSelectedIndex(index);
         onSelect(availableImages[index]);
     };
 
     return (
-        <View>
+        <View style={{ width: width, backgroundColor: COLORTHEME.light.grey2 }}>
             <FlatList
+                contentContainerStyle={{ paddingHorizontal: 30, paddingVertical: 10 }}
+                style={{ borderRadius: BASE_STYLES.borderRadius }}
                 data={availableImages}
                 horizontal
                 pagingEnabled
@@ -45,37 +37,13 @@ export default function ProfilePictureSlider({
                     <Pressable onPress={() => handleImageSelect(index)}>
                         <Image
                             source={{ uri: getImagePath(item) }}
-                            style={{ width: 70, height: 70, margin: 5, resizeMode: 'cover' }}
+                            style={{ width: 100, height: 100, margin: 5, resizeMode: 'cover', backgroundColor: "lightgrey" }}
                         />
                     </Pressable>
                 )}
             />
-            {/*
-            <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-            >
-                {availableImages.map((imageName, index) => (
-                    <TouchableOpacity key={index} onPress={() => onSelect(imageName)}>
-                        <Image source={{ uri: getImagePath(imageName) }} style={{ width: 70, height: 70 }} />
-                    </TouchableOpacity>
-                ))}
-
-            </ScrollView>
-            */}
-            {/*
-            <Picker
-                style={{ width: width * 0.5 }}
-                selectedValue={profilePictureName}
-                onValueChange={(itemValue) => onSelect(itemValue)}
-            >
-                {availableImages.map((imageName, index) => (
-                    <Picker.Item key={index} label={imageName} value={imageName} />
-                ))}
-            </Picker>
-            */}
-            <View style={{ alignItems: 'center' }}>
-                <Text>Aktuelles Bild: {availableImages[selectedIndex]}</Text>
+            <View style={{ alignItems: 'center', paddingBottom: 2 }}>
+                <P>Aktuelles Bild: {availableImages[selectedIndex]}</P>
             </View>
         </View>
     );

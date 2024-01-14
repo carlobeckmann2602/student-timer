@@ -94,21 +94,21 @@ export default function EditPicture() {
                 <ProfilePicture imagePath={imagePath} editMode={true} />
                 <H3>Profilbild ändern</H3>
                 <Text>{profilePictureName}</Text>
-                <View style={{marginVertical: 40}}>
+                <View style={{marginVertical: 20}}>
                     <H4>Bildauswahl</H4>
-                    <View style={{width: width}}>
+                    <View>
                         <ProfilePictureSlider
                             availableImages={availableImageNames}
                             onSelect={handleImageNameChange}
                             getImagePath={getImagePath}
                         />
                     </View>
-                    <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                    <View style={{width: width, alignItems: 'center', justifyContent: 'center' }}>
                         <Picker
                             style={{ width: width * 0.5 }}
                             selectedValue={profilePictureName}
                             onValueChange={(itemValue) => handleImageNameChange(itemValue)}
-                            >
+                        >
                             {availableImageNames.map((imageName, index) => (
                                 <Picker.Item key={index} label={imageName} value={imageName} />
                             ))}
