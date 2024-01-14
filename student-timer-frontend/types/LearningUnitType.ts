@@ -1,3 +1,5 @@
+import { LearningUnitEnum } from "@/constants/LearningUnitEnum";
+
 export type LearningUnitType = {
   id: number;
   name: LearningUnitEnum;
@@ -7,4 +9,6 @@ export type LearningUnitType = {
   totalLearningTime: number;
 
   colorCode?: string;
+  workloadPerWeekWholeHours?: number;
+  workloadPerWeekMinutes?: number;
 };

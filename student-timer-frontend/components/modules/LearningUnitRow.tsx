@@ -22,7 +22,7 @@ export default function LearningUnitRow(props: learningUnitProps) {
 
     return `${convertMinutesToHours(
       unit.workloadPerWeek
-    )} Std., ${weekAmount} Wochen`;
+    )} Std., ${weekAmount} Woche(n)`;
   };
 
   return (

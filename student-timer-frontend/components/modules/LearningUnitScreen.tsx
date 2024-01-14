@@ -1,7 +1,7 @@
 import Button from "@/components/Button";
 import { LearningUnitForm } from "@/components/modules/LearningUnitForm";
 import { LearningUnitEnum } from "@/constants/LearningUnitEnum";
-import { BASE_STYLES, COLORTHEME } from "@/constants/Theme";
+import { BASE_STYLES, COLORS, COLORTHEME } from "@/constants/Theme";
 import { useAuth } from "@/context/AuthContext";
 import { useAxios } from "@/context/AxiosContext";
 import { useModules } from "@/context/ModuleContext";
@@ -49,6 +49,9 @@ export default function NewModuleLearningUnits(props: LearningUnitScreenProps) {
       startDate: new Date(),
       endDate: new Date(),
       totalLearningTime: 0,
+      colorCode: COLORS.VORLESUNG,
+      workloadPerWeekMinutes: 1,
+      workloadPerWeekWholeHours: 0,
     } as LearningUnitType;
   };
 
@@ -57,6 +60,18 @@ export default function NewModuleLearningUnits(props: LearningUnitScreenProps) {
   );
 
   const onUpdateLearningUnit = async () => {
+    let totalWorkloadPerWeek = learningUnit.workloadPerWeekWholeHours
+      ? learningUnit.workloadPerWeekWholeHours
+      : 0;
+    totalWorkloadPerWeek += learningUnit.workloadPerWeekMinutes
+      ? learningUnit.workloadPerWeekMinutes
+      : 0;
+
+    setLearningUnit((prevLearningUnit) => ({
+      ...prevLearningUnit,
+      workloadPerWeek: totalWorkloadPerWeek,
+    }));
+
     let toastId = toast.show(
       learningUnitId ? "Aktualisieren..." : "Erstellen..."
     );
@@ -69,7 +84,7 @@ export default function NewModuleLearningUnits(props: LearningUnitScreenProps) {
             name: learningUnit.name,
             startDate: learningUnit.startDate.toISOString().substring(0, 10),
             endDate: learningUnit.endDate.toISOString().substring(0, 10),
-            workloadPerWeek: learningUnit.workloadPerWeek,
+            workloadPerWeek: totalWorkloadPerWeek,
           }
         );
         toast.update(toastId, "Lerneinheit erfolgreich aktualisiert.", {
@@ -82,7 +97,7 @@ export default function NewModuleLearningUnits(props: LearningUnitScreenProps) {
             name: learningUnit.name,
             startDate: learningUnit.startDate.toISOString().substring(0, 10),
             endDate: learningUnit.endDate.toISOString().substring(0, 10),
-            workloadPerWeek: learningUnit.workloadPerWeek,
+            workloadPerWeek: totalWorkloadPerWeek,
           }
         );
         toast.update(toastId, "Lerneinheit erfolgreich erstellt.", {

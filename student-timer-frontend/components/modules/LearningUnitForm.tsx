@@ -17,14 +17,6 @@ type LearningUnitFormProps = {
 export function LearningUnitForm(props: LearningUnitFormProps) {
   const { inputData, onDelete, onChange } = props;
 
-  const [workLoadError, setWorkloadError] = useState("");
-
-  const [oldMinuteValue, setOldMinuteValue] = useState(1);
-  const [oldHourValue, setOldHourValue] = useState(0);
-
-  const [minuteValue, setMinuteValue] = useState(1);
-  const [hourValue, setHourValue] = useState(0);
-
   const handleChange = (value: any) => {
     onChange({ ...inputData, ...value });
   };
@@ -64,44 +56,41 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
           <InputFieldNumeric
             onChangeText={(value) => {
               handleChange({
-                workloadPerWeek: Math.abs(
-                  +value * 60 + (inputData.workloadPerWeek % 60)
-                ),
+                workloadPerWeekWholeHours: Math.abs(+value * 60),
               });
-              // console.log("alter state" + oldHourValue);
-              // const clearedWorkload = inputData.workloadPerWeek - oldHourValue;
-              // const newHourValue = +value * 60 + clearedWorkload;
-              // setOldHourValue(() => +value * 60);
-              // handleChange({
-              //   workloadPerWeek: newHourValue,
-              // });
-              // console.log(clearedWorkload);
-              // console.log(oldHourValue);
             }}
-            value={Math.round(inputData.workloadPerWeek / 60).toString()}
+            value={
+              inputData.workloadPerWeekWholeHours
+                ? Math.floor(
+                    inputData.workloadPerWeekWholeHours / 60
+                  ).toString()
+                : "0"
+            }
             inputUnit="Std."
           />
           <InputFieldNumeric
             onChangeText={(value) => {
+              let formattedValue =
+                Math.abs(+value) >= 60 ? 59 : Math.round(Math.abs(+value));
+              if (
+                formattedValue === 0 &&
+                inputData.workloadPerWeekWholeHours! <= 0
+              ) {
+                formattedValue = 1;
+              }
+
               handleChange({
-                workloadPerWeek: +value + inputData.workloadPerWeek,
+                workloadPerWeekMinutes: formattedValue,
               });
-              // const clearedWorkload =
-              //   inputData.workloadPerWeek - oldMinuteValue;
-              // const newMinuteValue = +value + clearedWorkload;
-              // setOldMinuteValue(+value);
-              // handleChange({
-              //   workloadPerWeek: newMinuteValue,
-              // });
-              // console.log("stateWorkload" + inputData.workloadPerWeek);
             }}
-            value={(inputData.workloadPerWeek % 60).toString()}
+            value={
+              inputData.workloadPerWeekMinutes
+                ? inputData.workloadPerWeekMinutes.toString()
+                : "0"
+            }
             inputUnit="min."
           />
         </View>
-        {workLoadError !== "" && (
-          <P style={styles.errorMessage}>{workLoadError}</P>
-        )}
       </View>
       {onDelete && (
         <View

@@ -83,6 +83,8 @@ const convertInputTypes = (module: ModuleType) => {
     computeLearningUnitColor(unit, module.colorCode);
     unit.startDate = new Date(unit.startDate);
     unit.endDate = new Date(unit.endDate);
+    unit.workloadPerWeekWholeHours = Math.floor(unit.workloadPerWeek / 60) * 60;
+    unit.workloadPerWeekMinutes = Math.round(unit.workloadPerWeek % 60);
   });
 
   module.learningSessions = module.learningSessions as LearningSessionType[];
@@ -114,6 +116,9 @@ const addSessionLearningUnit = (module: ModuleType) => {
     endDate: new Date(),
     totalLearningTime: module.totalLearningSessionTime,
     colorCode: module.colorCode,
+    workloadPerWeekWholeHours:
+      Math.floor(module.totalLearningSessionTime / 60) * 60,
+    workloadPerWeekMinutes: module.totalLearningSessionTime % 60,
   };
 
   module.learningUnits.push(sessionLearningUnit);
