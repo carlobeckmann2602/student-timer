@@ -97,11 +97,10 @@ export function ModuleCard(props: moduleCardProps) {
                 { backgroundColor: moduleData.colorCode },
               ]}
             />
-            <H4>{moduleData.name}</H4>
+            <H4 style={{ textAlign: "left", overflow: "hidden" }}>
+              {moduleData.name}
+            </H4>
           </View>
-          {/* <TouchableOpacity onPress={() => setContextMenuOpen(moduleData.id)}>
-            <MoreVertical color="" size={28} fill="black" strokeWidth={1} />
-          </TouchableOpacity> */}
           <View style={styles.headerRowInnerWrapper}>
             <Pressable onPress={onEdit} style={{ width: 28 }}>
               <Pencil size={20} color="black" />
@@ -172,29 +171,16 @@ const styles = StyleSheet.create({
     padding: "8%",
     gap: 16,
   },
-  contextMenuRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  contextMenuIcon: {
-    color: "red",
-  },
   separatorV: {
     height: "100%",
     width: 1,
-    backgroundColor: "#909090",
-  },
-  separatorH: {
-    width: "100%",
-    height: 1,
     backgroundColor: "#909090",
   },
   headerRow: {
     width: "100%",
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "flex-start",
+    alignItems: "center",
   },
   moduleIndicatorM: {
     width: 24,
