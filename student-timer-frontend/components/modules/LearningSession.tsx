@@ -13,7 +13,8 @@ import { useModules } from "@/context/ModuleContext";
 import {
   msToTimeObject,
   formatTime,
-  timeObjectToSeconds,
+  timeObjectToMinutes,
+  formatTimeLearningSession,
 } from "@/libs/timeHelper";
 import StarRating from "@/components/StarRating";
 import { roundNumber } from "@/libs/generalHelper";
@@ -40,13 +41,13 @@ export default function LearningSession(props: { isEdit: boolean }) {
     learningSession?.description || ""
   );
   const [focusDuration, setFocusDuration] = useState(
-    msToTimeObject((learningSession?.focusDuration || 0) * 1000)
+    msToTimeObject((learningSession?.focusDuration || 0) * (1000 * 60))
   );
   const [pauseDuration, setPauseDuration] = useState(
     msToTimeObject(
       ((learningSession?.totalDuration || 0) -
         (learningSession?.focusDuration || 0)) *
-        1000
+        (1000 * 60)
     )
   );
 
@@ -96,23 +97,10 @@ export default function LearningSession(props: { isEdit: boolean }) {
                 inputUnit="min"
                 selectTextOnFocus
               />
-              <InputFieldNumeric
-                style={styles.input}
-                value={focusDuration.secs.toString()}
-                onChangeText={(val) => {
-                  let secs = Math.abs(roundNumber(val, 0));
-                  setFocusDuration((prevState) => ({
-                    ...prevState,
-                    secs: secs >= 60 ? 59 : secs,
-                  }));
-                }}
-                inputUnit="sec"
-                selectTextOnFocus
-              />
             </View>
           ) : (
             <Text style={styles.timeText}>
-              {formatTime(msToTimeObject(Number(focusTime)))}h
+              {formatTimeLearningSession(msToTimeObject(Number(focusTime)))}
             </Text>
           )}
         </View>
@@ -145,23 +133,10 @@ export default function LearningSession(props: { isEdit: boolean }) {
                 inputUnit="min"
                 selectTextOnFocus
               />
-              <InputFieldNumeric
-                style={styles.input}
-                value={pauseDuration.secs.toString()}
-                onChangeText={(val) => {
-                  let secs = Math.abs(roundNumber(val, 0));
-                  setPauseDuration((prevState) => ({
-                    ...prevState,
-                    secs: secs >= 60 ? 59 : secs,
-                  }));
-                }}
-                inputUnit="sec"
-                selectTextOnFocus
-              />
             </View>
           ) : (
             <Text style={styles.timeText}>
-              {formatTime(msToTimeObject(Number(pauseTime)))}h
+              {formatTimeLearningSession(msToTimeObject(Number(pauseTime)))}
             </Text>
           )}
         </View>
@@ -207,8 +182,8 @@ export default function LearningSession(props: { isEdit: boolean }) {
             };
             try {
               if (isEdit) {
-                let focusTime = timeObjectToSeconds(focusDuration);
-                let pauseTime = timeObjectToSeconds(pauseDuration);
+                let focusTime = timeObjectToMinutes(focusDuration);
+                let pauseTime = timeObjectToMinutes(pauseDuration);
                 await authAxios?.put(
                   `/students/${authState?.user.id}/modules/${module?.id}/learningSessions/${learningSession?.id}`,
                   {
@@ -222,11 +197,10 @@ export default function LearningSession(props: { isEdit: boolean }) {
                   `/students/${authState?.user.id}/modules/${module?.id}/learningSessions`,
                   {
                     ...body,
-                    createdAt: new Date().toISOString().replace("Z", ""),
                     totalDuration:
-                      Math.floor(Number(focusTime) / 1000) +
-                      Math.floor(Number(pauseTime) / 1000),
-                    focusDuration: Math.floor(Number(focusTime) / 1000),
+                      Math.floor(Number(focusTime) / (1000 * 60)) +
+                      Math.floor(Number(pauseTime) / (1000 * 60)),
+                    focusDuration: Math.floor(Number(focusTime) / (1000 * 60)),
                   }
                 );
               }

@@ -36,33 +36,9 @@ export default function EditModule() {
   const { modules, fetchModules } = useModules();
   const router = useRouter();
 
-  const findDetailModule = () => {
-    if (modules && modules.length > 0) {
-      var filteredModule: ModuleType | undefined = modules.find(
-        (module) => module.id.toString() === moduleToEditId
-      );
-      if (filteredModule) {
-        // setModuleError(false);
-        return { ...filteredModule };
-      }
-    }
-
-    return {
-      id: -1,
-      name: "",
-      colorCode: COLORS.moduleColor1,
-      creditPoints: 0,
-      examDate: new Date(),
-      learningUnits: [],
-      learningSessions: [],
-      totalLearningSessionTime: 0,
-      totalLearningUnitTime: 0,
-      totalLearningTime: 0,
-      totalModuleTime: 0,
-    } as ModuleType;
-  };
-
-  const [detailModule, setDetailModule] = useState(findDetailModule());
+  const detailModule =
+    modules?.find((module) => module.id.toString() === moduleToEditId) ||
+    ({} as ModuleType);
 
   const [dateDiabled, setDateDisabled] = useState(
     detailModule.examDate ? false : true
@@ -70,15 +46,6 @@ export default function EditModule() {
 
   const [moduleNameError, setModuleNameError] = useState("");
   const [creditPointError, setCreditPointError] = useState("");
-
-  useFocusEffect(
-    React.useCallback(() => {
-      (async () => {
-        fetchModules && (await fetchModules());
-        setDetailModule(findDetailModule());
-      })();
-    }, [])
-  );
 
   const validateInput = () => {
     var nameValid = false;
@@ -103,7 +70,7 @@ export default function EditModule() {
   };
 
   const handleUpdate = (module: ModuleType, disabledStatus?: boolean) => {
-    setDetailModule(module);
+    // setDetailModule(module);
     if (disabledStatus != undefined) setDateDisabled(disabledStatus);
   };
 

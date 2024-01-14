@@ -9,6 +9,8 @@ import Button from "@/components/Button";
 import TrackingModeToggle from "@/components/tracking/TrackingModeToggle";
 import ModulePicker from "@/components/modules/ModulePicker";
 import Timer from "@/components/tracking/Timer";
+import InputFieldNumeric from "@/components/InputFieldNumeric";
+import { useModules } from "@/context/ModuleContext";
 import { BASE_STYLES, COLORS, COLORTHEME } from "@/constants/Theme";
 import { ModuleType } from "@/types/ModuleType";
 import {
@@ -16,8 +18,7 @@ import {
   sendPushNotification,
 } from "@/libs/handleLocalNotification";
 import { roundNumber } from "@/libs/generalHelper";
-import InputFieldNumeric from "@/components/InputFieldNumeric";
-import { useModules } from "@/context/ModuleContext";
+import { roundSecToMinInMs } from "@/libs/timeHelper";
 
 export default function Tracking() {
   const [isStopwatch, setIsStopwatch] = useState(true);
@@ -96,8 +97,8 @@ export default function Tracking() {
     router.push({
       pathname: "/success",
       params: {
-        focusTime,
-        pauseTime,
+        focusTime: roundSecToMinInMs(focusTime),
+        pauseTime: roundSecToMinInMs(pauseTime),
         id: selectedModule.id,
       },
     });

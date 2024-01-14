@@ -35,34 +35,10 @@ export default function ModulesDetailScreen() {
   const isLoading = false;
   const error = false;
 
-  const fetchDetailModule = () => {
-    if (modules && modules.length > 0) {
-      var filteredModule: ModuleType | undefined = modules.find(
-        (module) => module.id.toString() === id
-      );
-      if (filteredModule) {
-        // setModuleError(false);
-        return filteredModule;
-      }
-    }
-
-    return {
-      id: -1,
-      name: "Fehler",
-      colorCode: "",
-      creditPoints: 0,
-      examDate: new Date(),
-      learningUnits: [],
-      learningSessions: [],
-      totalLearningSessionTime: 0,
-      totalLearningUnitTime: 0,
-      totalLearningTime: 0,
-      totalModuleTime: 0,
-    } as ModuleType;
-  };
-
   const [moduleError, setModuleError] = useState(false);
-  const [detailModule] = useState<ModuleType>(fetchDetailModule());
+  const detailModule =
+    modules?.find((module) => module.id.toString() === id) ||
+    ({} as ModuleType);
 
   const onDeleteModule = () => {
     Alert.alert(
