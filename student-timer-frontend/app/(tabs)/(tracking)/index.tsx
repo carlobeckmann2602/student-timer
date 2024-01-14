@@ -4,11 +4,13 @@ import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import { PauseIcon, PlayIcon } from "lucide-react-native";
 
 import { View } from "@/components/Themed";
+import { H4 } from "@/components/StyledText";
 import Button from "@/components/Button";
-import InputField from "@/components/InputField";
 import TrackingModeToggle from "@/components/tracking/TrackingModeToggle";
 import ModulePicker from "@/components/modules/ModulePicker";
 import Timer from "@/components/tracking/Timer";
+import InputFieldNumeric from "@/components/InputFieldNumeric";
+import { useModules } from "@/context/ModuleContext";
 import { BASE_STYLES, COLORS, COLORTHEME } from "@/constants/Theme";
 import { ModuleType } from "@/types/ModuleType";
 import {
@@ -16,7 +18,7 @@ import {
   sendPushNotification,
 } from "@/libs/handleLocalNotification";
 import { roundNumber } from "@/libs/generalHelper";
-import InputFieldNumeric from "@/components/InputFieldNumeric";
+import { roundSecToMinInMs } from "@/libs/timeHelper";
 
 export default function Tracking() {
   const [isStopwatch, setIsStopwatch] = useState(true);
@@ -33,6 +35,7 @@ export default function Tracking() {
     trackingSaved: string;
     discard: string;
   }>();
+  const { modules } = useModules();
   const inputsEditable = !trackingIsActive && startTime === 0;
   useFocusEffect(
     React.useCallback(() => {
@@ -94,8 +97,8 @@ export default function Tracking() {
     router.push({
       pathname: "/success",
       params: {
-        focusTime,
-        pauseTime,
+        focusTime: roundSecToMinInMs(focusTime),
+        pauseTime: roundSecToMinInMs(pauseTime),
         id: selectedModule.id,
       },
     });
@@ -160,57 +163,71 @@ export default function Tracking() {
           editable={inputsEditable}
         />
       </View>
-      <ModulePicker setSelectedModule={setSelectedModule} />
-      <View style={styles.trackerButtons}>
-        {trackingIsActive ? (
-          <>
-            <Button
-              text="Pausieren"
-              backgroundColor={COLORTHEME.light.primary}
-              textColor="#FFFFFF"
-              onPress={toggleTracking}
-              iconRight={<PauseIcon fill="#FFFFFF" color="#FFFFFF" />}
-              style={styles.button}
-            />
-            <Button
-              text="Tracking beenden"
-              backgroundColor={COLORTHEME.light.primary}
-              textColor="#FFFFFF"
-              onPress={onTrackingDone}
-              style={styles.button}
-            />
-          </>
-        ) : startTime === 0 ? (
-          <>
-            <Button
-              text="Tracking starten"
-              backgroundColor={COLORTHEME.light.primary}
-              textColor="#FFFFFF"
-              onPress={toggleTracking}
-              iconRight={<PlayIcon fill="#FFFFFF" color="#FFFFFF" />}
-              style={styles.button}
-            />
-          </>
-        ) : (
-          <>
-            <Button
-              text="Play"
-              backgroundColor={COLORTHEME.light.primary}
-              textColor="#FFFFFF"
-              onPress={toggleTracking}
-              iconRight={<PlayIcon fill="#FFFFFF" color="#FFFFFF" />}
-              style={styles.button}
-            />
-            <Button
-              text="Tracking beenden"
-              backgroundColor={COLORTHEME.light.primary}
-              textColor="#FFFFFF"
-              onPress={onTrackingDone}
-              style={styles.button}
-            />
-          </>
-        )}
-      </View>
+
+      {modules?.length ? (
+        <>
+          <ModulePicker setSelectedModule={setSelectedModule} />
+          <View style={styles.trackerButtons}>
+            {trackingIsActive ? (
+              <>
+                <Button
+                  text="Pausieren"
+                  backgroundColor={COLORTHEME.light.primary}
+                  textColor="#FFFFFF"
+                  onPress={toggleTracking}
+                  iconRight={<PauseIcon fill="#FFFFFF" color="#FFFFFF" />}
+                  style={styles.button}
+                />
+                <Button
+                  text="Tracking beenden"
+                  backgroundColor={COLORTHEME.light.primary}
+                  textColor="#FFFFFF"
+                  onPress={onTrackingDone}
+                  style={styles.button}
+                />
+              </>
+            ) : startTime === 0 ? (
+              <Button
+                text="Tracking starten"
+                backgroundColor={COLORTHEME.light.primary}
+                textColor="#FFFFFF"
+                onPress={toggleTracking}
+                iconRight={<PlayIcon fill="#FFFFFF" color="#FFFFFF" />}
+                style={styles.button}
+              />
+            ) : (
+              <>
+                <Button
+                  text="Play"
+                  backgroundColor={COLORTHEME.light.primary}
+                  textColor="#FFFFFF"
+                  onPress={toggleTracking}
+                  iconRight={<PlayIcon fill="#FFFFFF" color="#FFFFFF" />}
+                  style={styles.button}
+                />
+                <Button
+                  text="Tracking beenden"
+                  backgroundColor={COLORTHEME.light.primary}
+                  textColor="#FFFFFF"
+                  onPress={onTrackingDone}
+                  style={styles.button}
+                />
+              </>
+            )}
+          </View>
+        </>
+      ) : (
+        <View style={styles.modulesMissing}>
+          <H4>Du hast noch keine Module</H4>
+          <Button
+            text="Neues Modul anlegen"
+            backgroundColor={COLORTHEME.light.primary}
+            textColor={COLORTHEME.light.grey2}
+            onPress={() => router.push("/modules/new/")}
+            style={styles.button}
+          />
+        </View>
+      )}
     </KeyboardAvoidingView>
   );
 }
@@ -233,9 +250,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 10,
     backgroundColor: "transparent",
-    marginBottom: BASE_STYLES.horizontalPadding,
   },
   button: {
     flexGrow: 1,
+  },
+  modulesMissing: {
+    gap: 10,
   },
 });

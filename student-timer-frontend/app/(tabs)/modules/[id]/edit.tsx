@@ -47,33 +47,9 @@ export default function EditModule() {
     "#88A7F5",
   ];
 
-  const fetchDetailModule = () => {
-    if (modules && modules.length > 0) {
-      var filteredModule: ModuleType | undefined = modules.find(
-        (module) => module.id.toString() === moduleToEditId
-      );
-      if (filteredModule) {
-        // setModuleError(false);
-        return filteredModule;
-      }
-    }
-
-    return {
-      id: -1,
-      name: "",
-      colorCode: "",
-      creditPoints: 0,
-      examDate: new Date(),
-      learningUnits: [],
-      learningSessions: [],
-      totalLearningSessionTime: 0,
-      totalLearningUnitTime: 0,
-      totalLearningTime: 0,
-      totalModuleTime: 0,
-    } as ModuleType;
-  };
-
-  const [detailModule] = useState<ModuleType>(fetchDetailModule());
+  const detailModule =
+    modules?.find((module) => module.id.toString() === moduleToEditId) ||
+    ({} as ModuleType);
   const [dateDiabled, setDateDisabled] = useState(
     detailModule.examDate ? false : true
   );
