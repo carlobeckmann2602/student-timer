@@ -9,7 +9,6 @@ import {
   User2,
 } from "lucide-react-native";
 import { Pressable } from "react-native";
-import {P} from "@/components/StyledText";
 
 export default function TabLayout() {
   // const colorScheme = useColorScheme();
