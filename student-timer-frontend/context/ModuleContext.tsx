@@ -16,6 +16,7 @@ import { LearningUnitEnum } from "@/constants/LearningUnitEnum";
 type ModuleProps = {
   modules?: ModuleType[];
   fetchModules?: () => Promise<any>;
+  setModules?: React.Dispatch<React.SetStateAction<ModuleType[] | undefined>>;
 };
 
 export type ObjectKey = keyof typeof COLORS;
@@ -55,6 +56,7 @@ export const ModuleProvider = ({ children }: any) => {
   const value = {
     modules,
     fetchModules,
+    setModules,
   } as ModuleProps;
   return (
     <ModuleContext.Provider value={value}>{children}</ModuleContext.Provider>

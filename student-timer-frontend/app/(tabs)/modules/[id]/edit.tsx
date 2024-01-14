@@ -4,14 +4,14 @@ import { View } from "@/components/Themed";
 import LearningUnitRow from "@/components/modules/LearningUnitRow";
 import ModuleForm from "@/components/modules/ModuleForm";
 import { LearningUnitEnum } from "@/constants/LearningUnitEnum";
-import { BASE_STYLES, COLORS, COLORTHEME } from "@/constants/Theme";
+import { BASE_STYLES, COLORTHEME } from "@/constants/Theme";
 import { useAuth } from "@/context/AuthContext";
 import { useAxios } from "@/context/AxiosContext";
 import { useModules } from "@/context/ModuleContext";
 import { computeRemainingSessionTime } from "@/libs/moduleTypeHelper";
 import { LearningUnitType } from "@/types/LearningUnitType";
 import { ModuleType } from "@/types/ModuleType";
-import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { Plus } from "lucide-react-native";
 import React from "react";
 import { useState } from "react";
@@ -33,7 +33,7 @@ export default function EditModule() {
   const toast = useToast();
   const { authState } = useAuth();
   const { authAxios } = useAxios();
-  const { modules, fetchModules } = useModules();
+  const { modules, setModules, fetchModules } = useModules();
   const router = useRouter();
 
   const detailModule =
@@ -70,7 +70,12 @@ export default function EditModule() {
   };
 
   const handleUpdate = (module: ModuleType, disabledStatus?: boolean) => {
-    // setDetailModule(module);
+    setModules &&
+      setModules((prevState) =>
+        prevState?.map((currentModule) => {
+          return currentModule.id === module.id ? module : currentModule;
+        })
+      );
     if (disabledStatus != undefined) setDateDisabled(disabledStatus);
   };
 
@@ -234,7 +239,7 @@ export default function EditModule() {
         </View>
       </ScrollView>
       <View style={{ flexDirection: "row", width: "100%", gap: 16 }}>
-        <Button
+        {/* <Button
           text="Abbrechen"
           borderColor={COLORTHEME.light.danger}
           backgroundColor={COLORTHEME.light.background}
@@ -260,7 +265,7 @@ export default function EditModule() {
               { cancelable: false }
             );
           }}
-        />
+        /> */}
         <Button
           text="Fertig"
           backgroundColor={COLORTHEME.light.primary}

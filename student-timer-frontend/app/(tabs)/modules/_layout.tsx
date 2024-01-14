@@ -43,8 +43,6 @@ export default function ModulesLayout() {
         name="[id]/learningUnits/[learningUnitId]/edit"
         options={{
           headerShown: false,
-          presentation: "modal",
-          animation: "default",
         }}
       />
     </Stack>
