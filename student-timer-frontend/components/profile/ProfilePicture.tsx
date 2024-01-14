@@ -3,22 +3,26 @@ import { Image, StyleSheet, View } from 'react-native';
 import { User2 } from 'lucide-react-native';
 import { Edit2 } from 'lucide-react-native';
 import { COLORTHEME } from '@/constants/Theme';
+import { profileImages } from "@/components/profile/useProfilePicture";
 
 type ProfilePictureProps = {
-    imagePath: string;
+    imageName: string;
     editMode?: boolean;
     style?: object;
 };
 
 export default function ProfilePicture({
-                                           imagePath,
-                                           editMode=false,
-                                           style
-}:  ProfilePictureProps)  {
+    imageName,
+    editMode = false,
+    style
+}: ProfilePictureProps) {
+
+    const imagePath = profileImages[imageName] || profileImages["default.jpg"];
+
     return (
         <View style={[styles.profileImageContainer, style]}>
             {imagePath ? (
-                <Image source={{ uri: imagePath }} style={styles.profileImage} />
+                <Image source={imagePath} style={styles.profileImage} />
             ) : (
                 <User2 size={100} color={COLORTHEME.light.primary} />
             )}

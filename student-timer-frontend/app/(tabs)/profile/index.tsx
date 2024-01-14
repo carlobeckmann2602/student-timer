@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import {View, StyleSheet} from "react-native";
+import React, { useEffect, useState } from "react";
+import {View, StyleSheet, Image} from "react-native";
 import Button from "@/components/Button";
 import { ScrollView } from "@/components/Themed";
 import Pressable from "@/components/Pressable";
@@ -12,15 +12,16 @@ import {H2, H3} from "@/components/StyledText";
 
 export default function Profile() {
   const { onLogout, authState } = useAuth();
-  const { profilePictureName, imagePath, setImagePath, getImagePath, getProfilePictureName } = useProfilePicture();
+  const { profilePictureName, getProfilePictureName, setProfilePictureName } = useProfilePicture();
 
   useEffect(() => {
-    setImagePath(getImagePath(getProfilePictureName()));
+    setProfilePictureName(getProfilePictureName());
   }, [authState]);
 
-  //console.log("#### useState:", profilePictureName, typeof profilePictureName);
-  //console.log("authState?.user.profilePicture", authState?.user.profilePicture, typeof authState?.user.profilePicture);
-  //console.log("imagePath", imagePath);
+  console.log("index:", authState?.user.name)
+  console.log("#### useState:", profilePictureName, typeof profilePictureName);
+  console.log("authState?.user.profilePicture", authState?.user.profilePicture, typeof authState?.user.profilePicture);
+
 
   const handleEditData = () => router.push("/profile/editData/");
   const handleEditPassword = () => router.push("/profile/editPassword/");
@@ -29,7 +30,7 @@ export default function Profile() {
   return (
     <ScrollView>
       <View style={{ alignItems: "center" }}>
-        <ProfilePicture imagePath={imagePath} />
+        <ProfilePicture imageName={profilePictureName} />
         <H2>{authState?.user.name}</H2>
         <H3>{authState?.user.studyCourse}</H3>
         <View style={styles.actionContainer}>
