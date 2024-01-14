@@ -14,7 +14,7 @@ export default function ModulePicker(props: {
   const { setSelectedModule: setSelectedModuleCallback } = props;
   const { modules, fetchModules } = useModules();
   const [selectedModuleId, setSelectedModuleId] = useState<number>();
-  const [selectedModule, setSelectedModule] = useState({} as ModuleType);
+  const [selectedModule, setSelectedModule] = useState<ModuleType>();
 
   useFocusEffect(
     React.useCallback(() => {
@@ -38,12 +38,8 @@ export default function ModulePicker(props: {
       <View style={styles.pickerContainer}>
         <View
           style={[
-            styles.color,
-            {
-              backgroundColor: selectedModule
-                ? selectedModule.colorCode
-                : "transparent",
-            },
+            styles.colorCircle,
+            { backgroundColor: selectedModule?.colorCode || "transparent" },
           ]}
         />
         <Picker
@@ -86,10 +82,8 @@ const styles = StyleSheet.create({
   container: {
     gap: 5,
   },
-  color: {
-    width: 16,
-    height: 16,
-    borderRadius: 1000,
+  inputLabelText: {
+    color: COLORTHEME.light.primary,
   },
   pickerContainer: {
     flexDirection: "row",
@@ -100,6 +94,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     gap: 8,
   },
+  colorCircle: {
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+  },
   picker: {
     flex: 1,
     justifyContent: "center",
@@ -108,8 +107,5 @@ const styles = StyleSheet.create({
   },
   pickerText: {
     color: COLORTHEME.light.grey3,
-  },
-  inputLabelText: {
-    color: COLORTHEME.light.primary,
   },
 });
