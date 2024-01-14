@@ -163,7 +163,6 @@ export default function Tracking() {
           editable={inputsEditable}
         />
       </View>
-
       {modules?.length ? (
         <>
           <ModulePicker setSelectedModule={setSelectedModule} />
@@ -235,7 +234,7 @@ export default function Tracking() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "space-between",
+    justifyContent: "space-around",
     backgroundColor: COLORS.white,
     paddingVertical: BASE_STYLES.horizontalPadding,
   },
