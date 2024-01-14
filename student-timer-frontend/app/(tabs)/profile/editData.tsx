@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { StyleSheet, Alert } from "react-native";
 import { View, ScrollView } from "@/components/Themed";
 import { useRouter } from "expo-router";
@@ -8,6 +8,7 @@ import UserDetailsInput from "@/components/userInput/UserDetailsInput";
 import Pressable from "@/components/Pressable";
 import { useToast } from "react-native-toast-notifications";
 import ProfilePicture from "@/components/profile/ProfilePicture";
+import {useProfilePicture} from "@/components/profile/useProfilePicture";
 
 export default function EditData() {
 
@@ -28,19 +29,15 @@ export default function EditData() {
     const [error, setError] = useState("");
 
 
-    {/* Profilbilder */}
-    const defaultPictureName="profile-picture.jpg";
-    const profilePictureBasePath = "../../../assets/images/profile/";
-    const [profilePicture, setProfilePicture] = useState<string>(authState?.user.profilePicture || defaultPictureName);
+    const { profilePictureName, getProfilePictureName } = useProfilePicture();
 
-    const userImagePath = profilePicture === 'empty' || null
-        ? `${profilePictureBasePath}${defaultPictureName}`
-        : `${profilePictureBasePath}${profilePicture}`;
-    const [imagePath, setImagePath] = useState<string>(userImagePath);
+    useEffect(() => {
+        getProfilePictureName();
+    }, [authState]);
 
-    console.log("#### useState:", profilePicture, typeof profilePicture);
+    console.log("editData:", authState?.user.name)
+    console.log("#### useState:", profilePictureName, typeof profilePictureName);
     console.log("authState?.user.profilePicture", authState?.user.profilePicture, typeof authState?.user.profilePicture);
-    console.log("imagePath", imagePath);
 
     const handleInputChange = (setter: React.Dispatch<React.SetStateAction<string>>) => {
         return (value: string) => {
@@ -179,7 +176,7 @@ export default function EditData() {
     return (
         <ScrollView contentContainerStyle={{borderRadius: BASE_STYLES.borderRadius}}>
             <View style={{ alignItems: "center" }}>
-                <ProfilePicture imagePath={imagePath}/>
+                <ProfilePicture imageName={profilePictureName}/>
             </View>
             <View>
                 <UserDetailsInput
