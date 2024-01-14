@@ -25,7 +25,10 @@ export default function ModulePicker(props: {
   );
 
   useEffect(() => {
-    setSelectedModuleId(modules ? modules[0].id : undefined);
+    if (modules?.length) {
+      setSelectedModuleId(modules[0].id);
+      setSelectedModuleCallback && setSelectedModuleCallback(modules[0]);
+    }
   }, []);
 
   return (
