@@ -7,12 +7,15 @@ type ObjectKey = keyof typeof COLORS;
 export const computeDateDifference = (
   date1: Date,
   date2: Date,
-  amountWeeks: boolean = false
+  countAsWeeks: boolean = false
 ) => {
-  let diff: number = date1.getTime() - date2.getTime();
-  return amountWeeks
-    ? Math.ceil(diff / (1000 * 3600 * 24) / 7)
-    : Math.ceil(diff / (1000 * 3600 * 24));
+  let dateDifference: number = date1.getTime() - date2.getTime();
+  if (countAsWeeks) {
+    let amountOfWeeks = Math.ceil(dateDifference / (1000 * 3600 * 24) / 7);
+    return amountOfWeeks > 0 ? amountOfWeeks : 1;
+  }
+
+  return Math.ceil(dateDifference / (1000 * 3600 * 24));
 };
 
 /**

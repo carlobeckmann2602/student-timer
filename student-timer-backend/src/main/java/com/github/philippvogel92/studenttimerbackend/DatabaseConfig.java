@@ -35,11 +35,11 @@ public class DatabaseConfig {
             Student student2 = new Student("Alex", "Bachelor Medientechnologie", "alex.jpg", "alex@test.de",
                     passwordEncoder.encode("string"));
 
-            Module module1 = new Module("Datenbanksysteme 1", "#88A795", 15, LocalDate.of(2023, Month.JUNE, 10),
+            Module module1 = new Module("Datenbanksysteme 1", "#3AAF6B", 15, LocalDate.of(2023, Month.JUNE, 10),
                     student1);
-            Module module2 = new Module("Mathematik 1", "#66A715", 5, LocalDate.of(2024, Month.APRIL, 12), student1);
-            Module module3 = new Module("Mediengestaltung 1", "#22A715", 9, null, student1);
-            Module module4 = new Module("Mediengestaltung 2", "#12A715", 20, LocalDate.of(2024, Month.MARCH, 31),
+            Module module2 = new Module("Mathematik 1", "#52EBAB", 5, LocalDate.of(2024, Month.APRIL, 12), student1);
+            Module module3 = new Module("Mediengestaltung 1", "#88A7F5", 9, null, student1);
+            Module module4 = new Module("Mediengestaltung 2", "#5D7CB9", 20, LocalDate.of(2024, Month.MARCH, 31),
                     student1);
 
             LearningUnit learningUnit1 = new LearningUnit(LearningUnitEnum.Vorlesung, LocalDate.of(2023,

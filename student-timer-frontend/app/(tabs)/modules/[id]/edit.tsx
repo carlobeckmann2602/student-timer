@@ -4,7 +4,7 @@ import { View } from "@/components/Themed";
 import LearningUnitRow from "@/components/modules/LearningUnitRow";
 import ModuleForm from "@/components/modules/ModuleForm";
 import { LearningUnitEnum } from "@/constants/LearningUnitEnum";
-import { BASE_STYLES, COLORTHEME } from "@/constants/Theme";
+import { BASE_STYLES, COLORS, COLORTHEME } from "@/constants/Theme";
 import { useAuth } from "@/context/AuthContext";
 import { useAxios } from "@/context/AxiosContext";
 import { useModules } from "@/context/ModuleContext";
@@ -50,7 +50,7 @@ export default function EditModule() {
     return {
       id: -1,
       name: "",
-      colorCode: "",
+      colorCode: COLORS.moduleColor1,
       creditPoints: 0,
       examDate: new Date(),
       learningUnits: [],

@@ -24,14 +24,14 @@ const COLORS = {
   TUTORIUM: "#5D7CB9",
   EXKURSION: "#FBC2B5",
   // selectable module colors
-  moduleColor1: "#88A795",
-  moduleColor2: "#AB5761",
-  moduleColor3: "#5D7CB9",
-  moduleColor4: "#FBC2B5",
-  moduleColor5: "#073B3A",
-  moduleColor6: "#243119",
-  moduleColor7: "#FA7921",
-  moduleColor8: "#88A7F5",
+  moduleColor1: "#3AAF6B",
+  moduleColor2: "#52EBAB",
+  moduleColor3: "#88A7F5",
+  moduleColor4: "#5D7CB9",
+  moduleColor5: "#D8C839",
+  moduleColor6: "#FA7921",
+  moduleColor7: "#C93C1C",
+  moduleColor8: "#AC56AE",
   // timer colors
   progressBarPauseColor: "#F5F56A",
 };
