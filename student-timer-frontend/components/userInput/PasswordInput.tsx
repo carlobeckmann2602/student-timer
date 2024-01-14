@@ -67,7 +67,7 @@ export default function PasswordInput(props: {
         />
         <Pressable
           text={"Abbrechen"}
-          accessibilityLabel={"Abbrechen"}
+          ariaLabel={"Abbrechen"}
           accessibilityRole={"button"}
           onPress={cancelAction}
         />

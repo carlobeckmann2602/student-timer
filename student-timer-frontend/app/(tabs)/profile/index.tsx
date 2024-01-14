@@ -1,103 +1,71 @@
-import React from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
+import React, { useEffect } from "react";
+import {View, StyleSheet} from "react-native";
 import Button from "@/components/Button";
+import { ScrollView } from "@/components/Themed";
 import Pressable from "@/components/Pressable";
-import { BASE_STYLES, COLORTHEME } from "@/constants/Theme";
-import { User2 } from "lucide-react-native";
+import { COLORTHEME } from "@/constants/Theme";
 import { router } from "expo-router";
 import { useAuth } from "@/context/AuthContext";
+import ProfilePicture from "@/components/profile/ProfilePicture";
+import { useProfilePicture } from '@/components/profile/useProfilePicture';
+import {H2, H3} from "@/components/StyledText";
 
 export default function Profile() {
   const { onLogout, authState } = useAuth();
+  const { profilePictureName, imagePath, setImagePath, getImagePath, getProfilePictureName } = useProfilePicture();
 
-  const images: { [key: string]: any } = {
-    "phil.jpg": require("../../../assets/images/profile/phil.jpg"),
-    "mareike.jpg": require("../../../assets/images/profile/mareike.jpg"),
-    "carlo.jpg": require("../../../assets/images/profile/carlo.jpg"),
-    "nils.png": require("../../../assets/images/profile/nils.png"),
-    "konstantin.png": require("../../../assets/images/profile/konstantin.png"),
-    "": require("../../../assets/images/profile/profile-picture.jpg"),
-    "default.jpg": require("../../../assets/images/profile/profile-picture.jpg"),
-  };
+  useEffect(() => {
+    setImagePath(getImagePath(getProfilePictureName()));
+  }, [authState]);
 
-  const defaultPic = require("../../../assets/images/profile/profile-picture.jpg");
-  //const pic = require("../../../assets/images/profile/phil.jpg");
+  //console.log("#### useState:", profilePictureName, typeof profilePictureName);
+  //console.log("authState?.user.profilePicture", authState?.user.profilePicture, typeof authState?.user.profilePicture);
+  //console.log("imagePath", imagePath);
 
-  // toDo: Bildabfrage ermöglichen statt defaultPic
-  const user = {
-    name: authState?.user.name,
-    studySubject: authState?.user.studyCourse,
-    profileImage: defaultPic,
-    //profileImage: authState?.user.profilePicture,
-    //profileImage: authState?.user.profilePicture in images ? images[authState?.user.profilePicture] : images["default.jpg"],
-  };
-
-  const handleEditProfile = () => {
-    router.push("/profile/edit/");
-    console.log("Profil bearbeiten");
-  };
+  const handleEditData = () => router.push("/profile/editData/");
+  const handleEditPassword = () => router.push("/profile/editPassword/");
+  const handleEditPicture = () => router.push("/profile/editPicture/");
 
   return (
-    <View style={styles.container}>
-      {/* Profilbild */}
-
-      <View style={styles.profileImageContainer}>
-        {user.profileImage ? (
-          <Image source={user.profileImage} style={styles.profileImage} />
-        ) : (
-          <User2 size={100} color={COLORTHEME.light.primary} />
-        )}
+    <ScrollView>
+      <View style={{ alignItems: "center" }}>
+        <ProfilePicture imagePath={imagePath} />
+        <H2>{authState?.user.name}</H2>
+        <H3>{authState?.user.studyCourse}</H3>
+        <View style={styles.actionContainer}>
+          <Button
+            text="Profildaten bearbeiten"
+            backgroundColor={COLORTHEME.light.primary}
+            textColor="#FFFFFF"
+            onPress={handleEditData}
+          />
+          <Button
+              text="Passwort ändern"
+              backgroundColor={COLORTHEME.light.primary}
+              textColor="#FFFFFF"
+              onPress={handleEditPassword}
+          />
+          <Button
+              text="Profilbild wechseln"
+              backgroundColor={COLORTHEME.light.primary}
+              textColor="#FFFFFF"
+              onPress={handleEditPicture}
+          />
+        </View>
+        <View>
+          <Pressable
+              text={"Logout"}
+              ariaLabel={"Logout"}
+              accessibilityRole={"button"}
+              onPress={onLogout}
+          />
+        </View>
       </View>
-
-      {/* Benutzerinformationen */}
-      <Text style={styles.title}>{user.name}</Text>
-      <Text>{user.studySubject}</Text>
-
-      {/* Aktionen */}
-      <View style={styles.actionContainer}>
-        <Button
-          text="Profil bearbeiten"
-          backgroundColor={COLORTHEME.light.primary}
-          textColor="#FFFFFF"
-          onPress={handleEditProfile}
-        />
-      </View>
-      <View>
-        <Pressable
-          text={"Logout"}
-          accessibilityLabel={"Logout"}
-          accessibilityRole={"button"}
-          onPress={onLogout}
-        />
-      </View>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: COLORTHEME.light.background,
-    paddingVertical: BASE_STYLES.horizontalPadding,
-  },
-  profileImageContainer: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    backgroundColor: "#EEEAEA",
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 16,
-  },
-  profileImage: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    borderColor: COLORTHEME.light.primary,
-    borderWidth: 5,
-  },
   title: {
     fontSize: 24,
     fontWeight: "bold",
@@ -107,6 +75,6 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     width: 200,
     gap: 15,
-    marginTop: 20,
+    marginVertical: 40,
   },
 });

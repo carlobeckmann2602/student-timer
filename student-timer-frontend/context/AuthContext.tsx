@@ -38,6 +38,9 @@ type AuthProps = {
     newPassword: string,
     newPassword2: string
   ) => Promise<any>;
+  onChangePicture?: (
+    newProfilePicture: string,
+  ) => Promise<any>
   onRemove?: (userId: number) => Promise<any>;
   onNewToken?: (token: TokenType) => Promise<any>;
 };
@@ -99,6 +102,16 @@ export const AuthProvider = ({ children }: any) => {
     };
     loadToken();
   }, []);
+
+  useEffect(() => {
+    console.log("#####: authState hat sich geändert");
+    console.log("name", authState.user.name);
+    console.log("studyCourse", authState.user.studyCourse);
+    console.log("profilePicture", authState.user.profilePicture);
+    console.log("email", authState.user.email);
+    console.log("token", authState.token.accessToken);
+    console.log("authenticated", authState.authenticated);
+  }, [authState]);
 
   const register = async (
     name: string,
@@ -263,7 +276,10 @@ export const AuthProvider = ({ children }: any) => {
     }
   };
 
-  const changePassword = async (newPassword: string, newPassword2: string) => {
+  const changePassword = async (
+    newPassword: string,
+    newPassword2: string
+  ) => {
     try {
       const result = await axios.put(
         `${API_URL}/students/${authState.user.id}`,
@@ -287,6 +303,47 @@ export const AuthProvider = ({ children }: any) => {
     }
   };
 
+  const changePicture = async (
+    newProfilePicture: string,
+  ) => {
+    try {
+      console.log("neues Profilbild (changePicture): ", newProfilePicture);
+
+      const result = await axios.put(
+        `${API_URL}/students/${authState.user.id}`,
+        {
+          name: authState.user.name,
+          studyCourse: authState.user.studyCourse,
+          email: authState.user.email,
+          profilePicture: newProfilePicture,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${authState.token.accessToken}`,
+          },
+        }
+      );
+
+      const user = {
+        ...authState.user,
+        profilePicture: newProfilePicture,
+      } as UserType;
+
+      setAuthState({
+        token: authState.token,
+        authenticated: true,
+        user: user,
+      });
+
+      await saveItem(USER_KEY, JSON.stringify(user));
+
+      return result;
+    } catch (e) {
+      return { error: true, msg: (e as any).response.data.message };
+    }
+  };
+
+
   const remove = async (userId: number) => {
     try {
       const result = await axios.delete(`${API_URL}/students/${userId}`, {
@@ -304,12 +361,11 @@ export const AuthProvider = ({ children }: any) => {
     }
   };
 
-  const router = useRouter();
 
+  const router = useRouter();
   const toast = useToast();
 
   const logout = async () => {
-    let id = toast.show("Logout...", { type: "loading" });
     await deleteStoredItem(TOKEN_KEY);
     await deleteStoredItem(USER_KEY);
 
@@ -324,8 +380,8 @@ export const AuthProvider = ({ children }: any) => {
         email: null,
       },
     });
-    toast.update(id, "Logout erfolgreich", { type: "success" }); //toDo update funktioniert nicht?
-    router.replace("/(auth)/login");
+    toast.show("Logout erfolgreich", { type: "success" });
+    router.push("/(auth)/login");
   };
 
   const newToken = async (token: TokenType) => {
@@ -344,6 +400,7 @@ export const AuthProvider = ({ children }: any) => {
     onUpdate: update,
     onRemove: remove,
     onChangePassword: changePassword,
+    onChangePicture: changePicture,
     onNewToken: newToken,
     authState,
   };
