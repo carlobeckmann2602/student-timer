@@ -1,4 +1,5 @@
 import { Tabs, router, usePathname } from "expo-router";
+import { Platform } from "react-native";
 
 import { BASE_STYLES, COLORTHEME, SIZES } from "@/constants/Theme";
 import {
@@ -26,10 +27,11 @@ export default function TabLayout() {
           fontSize: SIZES.xLarge,
           fontWeight: "500",
         },
+        headerTitleAlign: "center",
         headerShadowVisible: false,
         tabBarStyle: {
           borderTopWidth: 1,
-          paddingBottom: 15,
+          paddingBottom: Platform.OS === "ios" ? 15 : undefined,
         },
         headerLeft: () => {
           const pathname = usePathname();
