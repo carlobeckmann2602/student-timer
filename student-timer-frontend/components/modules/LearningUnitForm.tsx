@@ -34,6 +34,7 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
       <View style={styles.row}>
         <UnitPicker
           label="Typ der Lerneinheit"
+          value={inputData.name}
           onValueChange={(value) => handleChange({ name: value })}
         />
       </View>

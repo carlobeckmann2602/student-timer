@@ -26,36 +26,34 @@ export default function LearningUnitRow(props: learningUnitProps) {
   };
 
   return (
-    <View key={learningUnit.id}>
-      <View style={styles.unitRow}>
-        <View
-          style={[
-            styles.moduleIndicatorM,
-            { backgroundColor: learningUnit.colorCode },
-          ]}
-        />
-        <View style={styles.unitRowTitle}>
-          <Subhead>{learningUnit.name}</Subhead>
-          <P>
-            {learningUnit.name === LearningUnitEnum.SELBSTSTUDIUM
-              ? `${selfLearningTime} Std. verbleibend`
-              : computeModuleDetailUnitString(learningUnit)}
-          </P>
-        </View>
-        <Subhead>
-          {convertMinutesToHours(learningUnit.totalLearningTime)} Std.
-        </Subhead>
-        {onEdit && (
-          <Pressable onPress={onEdit}>
-            <Pencil name="pencil" size={18} color="black" />
-          </Pressable>
-        )}
-        {onDelete && (
-          <Pressable onPress={onDelete}>
-            <Trash2 size={18} name="trash2" color="red" />
-          </Pressable>
-        )}
+    <View key={learningUnit.id} style={styles.unitRow}>
+      <View
+        style={[
+          styles.moduleIndicatorM,
+          { backgroundColor: learningUnit.colorCode },
+        ]}
+      />
+      <View style={styles.unitRowTitle}>
+        <Subhead>{learningUnit.name}</Subhead>
+        <P>
+          {learningUnit.name === LearningUnitEnum.SELBSTSTUDIUM
+            ? `${selfLearningTime} Std. verbleibend`
+            : computeModuleDetailUnitString(learningUnit)}
+        </P>
       </View>
+      <Subhead>
+        {convertMinutesToHours(learningUnit.totalLearningTime)} Std.
+      </Subhead>
+      {onEdit && (
+        <Pressable onPress={onEdit}>
+          <Pencil name="pencil" size={18} color="black" />
+        </Pressable>
+      )}
+      {onDelete && (
+        <Pressable onPress={onDelete}>
+          <Trash2 size={18} name="trash2" color="red" />
+        </Pressable>
+      )}
     </View>
   );
 }
@@ -78,5 +76,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     gap: 12,
+    paddingRight: 8,
   },
 });

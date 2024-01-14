@@ -175,7 +175,7 @@ export default function ModulesDetailScreen() {
                 iconRight={<Pencil color={COLORTHEME.light.primary} />}
                 style={{ flex: 1 }}
                 onPress={() =>
-                  router.push({
+                  router.replace({
                     pathname: `modules/${detailModule.id}/edit`,
                   } as never)
                 }

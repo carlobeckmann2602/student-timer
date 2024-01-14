@@ -7,13 +7,17 @@ import { COLORS, COLORTHEME } from "@/constants/Theme";
 import { View, Text } from "@/components/Themed";
 import { LearningUnitEnum } from "@/constants/LearningUnitEnum";
 
-export default function UnitPicker(props: {
+export type UnitPickerProps = {
   label?: string;
+  value?: LearningUnitEnum;
   onValueChange: (value: LearningUnitEnum) => void;
-}) {
-  const { label, onValueChange } = props;
+};
+
+export default function UnitPicker(props: UnitPickerProps) {
+  const { label, value, onValueChange } = props;
+
   const [selectedUnit, setSelectedUnit] = useState<LearningUnitEnum>(
-    LearningUnitEnum.VORLESUNG
+    value ? value : LearningUnitEnum.VORLESUNG
   );
 
   const unitValues = Object.values(LearningUnitEnum).filter(

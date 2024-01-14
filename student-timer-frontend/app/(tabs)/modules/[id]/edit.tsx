@@ -1,18 +1,19 @@
 import Button from "@/components/Button";
-import { H2, P } from "@/components/StyledText";
+import { H2 } from "@/components/StyledText";
 import { View } from "@/components/Themed";
 import LearningUnitRow from "@/components/modules/LearningUnitRow";
 import ModuleForm from "@/components/modules/ModuleForm";
 import { LearningUnitEnum } from "@/constants/LearningUnitEnum";
-import { COLORTHEME } from "@/constants/Theme";
+import { BASE_STYLES, COLORTHEME } from "@/constants/Theme";
 import { useAuth } from "@/context/AuthContext";
 import { useAxios } from "@/context/AxiosContext";
 import { useModules } from "@/context/ModuleContext";
 import { computeRemainingSessionTime } from "@/libs/moduleTypeHelper";
 import { LearningUnitType } from "@/types/LearningUnitType";
 import { ModuleType } from "@/types/ModuleType";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 import { Plus } from "lucide-react-native";
+import React from "react";
 import { useState } from "react";
 import {
   Alert,
@@ -35,14 +36,14 @@ export default function EditModule() {
   const { modules, fetchModules } = useModules();
   const router = useRouter();
 
-  const fetchDetailModule = () => {
+  const findDetailModule = () => {
     if (modules && modules.length > 0) {
       var filteredModule: ModuleType | undefined = modules.find(
         (module) => module.id.toString() === moduleToEditId
       );
       if (filteredModule) {
         // setModuleError(false);
-        return filteredModule;
+        return { ...filteredModule };
       }
     }
 
@@ -61,15 +62,23 @@ export default function EditModule() {
     } as ModuleType;
   };
 
-  const [detailModule, setDetailModule] = useState<ModuleType>(
-    fetchDetailModule()
-  );
+  const [detailModule, setDetailModule] = useState(findDetailModule());
+
   const [dateDiabled, setDateDisabled] = useState(
     detailModule.examDate ? false : true
   );
 
   const [moduleNameError, setModuleNameError] = useState("");
   const [creditPointError, setCreditPointError] = useState("");
+
+  useFocusEffect(
+    React.useCallback(() => {
+      (async () => {
+        fetchModules && (await fetchModules());
+        setDetailModule(findDetailModule());
+      })();
+    }, [])
+  );
 
   const validateInput = () => {
     var nameValid = false;
@@ -94,9 +103,8 @@ export default function EditModule() {
   };
 
   const handleUpdate = (module: ModuleType, disabledStatus?: boolean) => {
-    if (module) setDetailModule(module);
+    setDetailModule(module);
     if (disabledStatus != undefined) setDateDisabled(disabledStatus);
-    validateInput();
   };
 
   const onSave = async () => {
@@ -257,21 +265,18 @@ export default function EditModule() {
             })}
           </View>
         </View>
-        <Button
-          text="Änderungen speichern"
-          backgroundColor={COLORTHEME.light.primary}
-          textColor={COLORTHEME.light.grey2}
-          onPress={onSave}
-        />
+      </ScrollView>
+      <View style={{ flexDirection: "row", width: "100%", gap: 16 }}>
         <Button
           text="Abbrechen"
           borderColor={COLORTHEME.light.danger}
           backgroundColor={COLORTHEME.light.background}
           textColor={COLORTHEME.light.danger}
+          style={{ flex: 1 }}
           onPress={() => {
             Alert.alert(
               "Änderungen verwerfen?",
-              `Wenn du fortfährst, gehen alle Änderungen ungespeichert verloren.`,
+              `Wenn du fortfährst, gehen die Änderungen am Modul ungespeichert verloren.`,
               [
                 {
                   text: "Abbrechen",
@@ -289,15 +294,23 @@ export default function EditModule() {
             );
           }}
         />
-      </ScrollView>
+        <Button
+          text="Fertig"
+          backgroundColor={COLORTHEME.light.primary}
+          textColor={COLORTHEME.light.grey2}
+          onPress={onSave}
+          style={{ flex: 1 }}
+        />
+      </View>
     </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
+    flex: 1,
     flexDirection: "column",
+    justifyContent: "space-between",
     gap: 24,
     backgroundColor: COLORTHEME.light.background,
   },
@@ -306,12 +319,13 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     gap: 24,
     backgroundColor: COLORTHEME.light.background,
+    borderRadius: BASE_STYLES.borderRadius,
   },
   scrollViewContainerStyle: {
     flexDirection: "column",
     alignItems: "center",
-    justifyContent: "space-between",
-    gap: 16,
+    justifyContent: "space-around",
+    gap: 24,
   },
   section: {
     width: "100%",
@@ -389,7 +403,7 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "column",
     justifyContent: "flex-start",
-    gap: 16,
+    gap: 8,
   },
   unitHeaderRow: {
     width: "100%",
