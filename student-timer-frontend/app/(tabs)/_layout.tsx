@@ -9,6 +9,7 @@ import {
   User2,
 } from "lucide-react-native";
 import { Pressable } from "react-native";
+import {P} from "@/components/StyledText";
 
 export default function TabLayout() {
   // const colorScheme = useColorScheme();
@@ -47,7 +48,9 @@ export default function TabLayout() {
                 </Pressable>
               );
 
-            case "/profile/edit":
+            case "/profile/editData":
+            case "/profile/editPassword":
+            case "/profile/editPicture":
               return (
                 <Pressable onPress={() => router.push("/profile")}>
                   <ChevronLeft />
