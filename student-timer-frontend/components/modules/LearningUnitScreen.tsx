@@ -72,7 +72,7 @@ export default function NewModuleLearningUnits(props: LearningUnitScreenProps) {
             workloadPerWeek: learningUnit.workloadPerWeek,
           }
         );
-        toast.update(toastId, "Lerneinheit erfolgreich erstellt.", {
+        toast.update(toastId, "Lerneinheit erfolgreich aktualisiert.", {
           type: "success",
         });
       } else {
@@ -85,7 +85,7 @@ export default function NewModuleLearningUnits(props: LearningUnitScreenProps) {
             workloadPerWeek: learningUnit.workloadPerWeek,
           }
         );
-        toast.update(toastId, "Lerneinheit erfolgreich aktualisiert.", {
+        toast.update(toastId, "Lerneinheit erfolgreich erstellt.", {
           type: "success",
         });
       }

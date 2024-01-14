@@ -65,6 +65,11 @@ export const ModuleProvider = ({ children }: any) => {
 
 const preprocessFetchedModule = (module: ModuleType) => {
   convertInputTypes(module);
+
+  module.learningUnits = module.learningUnits.sort((firstUnit, secondUnit) =>
+    firstUnit.name.localeCompare(secondUnit.name)
+  );
+
   addSessionLearningUnit(module);
 };
 
