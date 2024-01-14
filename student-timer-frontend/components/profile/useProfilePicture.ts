@@ -3,8 +3,6 @@ import { useAuth } from "@/context/AuthContext";
 
 const defaultPictureName = 'random.jpg';
 const profilePictureBasePath = '../../assets/images/profile/';
-export const availableImageNames: string[] = ['profile-picture.jpg', 'phil.jpg', 'mareike.jpg', 'carlo.jpg', 'nils.png', 'konstantin.png', 'alex.jpg', 'random.jpg'];
-
 export interface ProfileImages {
     [key: string]: any;
 }
@@ -17,8 +15,8 @@ export const profileImages: ProfileImages = {
     "carlo.jpg": require(`${profilePictureBasePath}carlo.jpg`),
     "nils.png": require(`${profilePictureBasePath}nils.png`),
     "random.jpg": require(`${profilePictureBasePath}random.jpg`),
+    "maxine.jpg": require(`${profilePictureBasePath}maxine.jpg`),
     "default.jpg": require(`${profilePictureBasePath}${defaultPictureName}`),
-    "profile-picture.jpg": require(`${profilePictureBasePath}profile-picture.jpg`),
     null: require(`${profilePictureBasePath}${defaultPictureName}`),
 };
 
