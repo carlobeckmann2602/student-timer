@@ -38,9 +38,7 @@ type AuthProps = {
     newPassword: string,
     newPassword2: string
   ) => Promise<any>;
-  onChangePicture?: (
-    newProfilePicture: string,
-  ) => Promise<any>
+  onChangePicture?: (newProfilePicture: string) => Promise<any>;
   onRemove?: (userId: number) => Promise<any>;
   onNewToken?: (token: TokenType) => Promise<any>;
 };
@@ -103,16 +101,6 @@ export const AuthProvider = ({ children }: any) => {
     loadToken();
   }, []);
 
-  useEffect(() => {
-    console.log("#####: authState hat sich geändert");
-    console.log("name", authState.user.name);
-    console.log("studyCourse", authState.user.studyCourse);
-    console.log("profilePicture", authState.user.profilePicture);
-    console.log("email", authState.user.email);
-    console.log("token", authState.token.accessToken);
-    console.log("authenticated", authState.authenticated);
-  }, [authState]);
-
   const register = async (
     name: string,
     studyCourse: string,
@@ -169,21 +157,17 @@ export const AuthProvider = ({ children }: any) => {
     provider?: LOGIN_PROVIDER
   ) => {
     try {
-      console.log(`Provider: ${provider}`);
       let result = null;
       switch (provider) {
         case LOGIN_PROVIDER.GOOGLE:
-          console.log(`GOOGLE: ${email}, ${idToken}`);
           result = await axios.post(`${API_URL}/auth/login/oauth2`, {
             email,
             tokenId: idToken,
             provider,
           });
-          console.log(`GOOGLE: ${JSON.stringify(result, null, 2)}`);
           break;
 
         case LOGIN_PROVIDER.APPLE:
-          console.log(`APPLE: ${email}, ${idToken}, ${userSecret}, ${name}`);
           result = await axios.post(`${API_URL}/auth/login/oauth2`, {
             email,
             userSecret,
@@ -191,8 +175,6 @@ export const AuthProvider = ({ children }: any) => {
             tokenId: idToken,
             provider,
           });
-
-          console.log(`APPLE: ${JSON.stringify(result, null, 2)}`);
           break;
 
         default:
@@ -262,11 +244,11 @@ export const AuthProvider = ({ children }: any) => {
         email: userEmail,
       } as UserType;
 
-      setAuthState({
-        token: authState.token,
+      setAuthState((prevState) => ({
+        token: prevState.token,
         authenticated: true,
         user: user,
-      });
+      }));
 
       await saveItem(USER_KEY, JSON.stringify(user));
 
@@ -276,10 +258,7 @@ export const AuthProvider = ({ children }: any) => {
     }
   };
 
-  const changePassword = async (
-    newPassword: string,
-    newPassword2: string
-  ) => {
+  const changePassword = async (newPassword: string, newPassword2: string) => {
     try {
       const result = await axios.put(
         `${API_URL}/students/${authState.user.id}`,
@@ -303,12 +282,8 @@ export const AuthProvider = ({ children }: any) => {
     }
   };
 
-  const changePicture = async (
-    newProfilePicture: string,
-  ) => {
+  const changePicture = async (newProfilePicture: string) => {
     try {
-      console.log("neues Profilbild (changePicture): ", newProfilePicture);
-
       const result = await axios.put(
         `${API_URL}/students/${authState.user.id}`,
         {
@@ -329,11 +304,11 @@ export const AuthProvider = ({ children }: any) => {
         profilePicture: newProfilePicture,
       } as UserType;
 
-      setAuthState({
-        token: authState.token,
+      setAuthState((prevState) => ({
+        token: prevState.token,
         authenticated: true,
         user: user,
-      });
+      }));
 
       await saveItem(USER_KEY, JSON.stringify(user));
 
@@ -342,7 +317,6 @@ export const AuthProvider = ({ children }: any) => {
       return { error: true, msg: (e as any).response.data.message };
     }
   };
-
 
   const remove = async (userId: number) => {
     try {
@@ -355,12 +329,23 @@ export const AuthProvider = ({ children }: any) => {
       await deleteStoredItem(TOKEN_KEY);
       await deleteStoredItem(USER_KEY);
 
+      setAuthState({
+        token: { accessToken: null, refreshToken: null, tokenType: null },
+        authenticated: false,
+        user: {
+          id: null,
+          name: null,
+          studyCourse: null,
+          profilePicture: null,
+          email: null,
+        },
+      });
+
       return result;
     } catch (e) {
       return { error: true, msg: (e as any).response.data.message };
     }
   };
-
 
   const router = useRouter();
   const toast = useToast();
@@ -385,11 +370,11 @@ export const AuthProvider = ({ children }: any) => {
   };
 
   const newToken = async (token: TokenType) => {
-    setAuthState({
+    setAuthState((prevState) => ({
       token: token,
       authenticated: true,
-      user: authState.user,
-    });
+      user: prevState.user,
+    }));
     await saveItem(TOKEN_KEY, JSON.stringify(token));
   };
 
