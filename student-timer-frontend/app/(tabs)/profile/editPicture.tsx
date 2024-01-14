@@ -14,7 +14,6 @@ import { COLORTHEME } from '@/constants/Theme';
 import { Text } from '@/components/Themed';
 import { useProfilePicture, availableImageNames } from '@/components/profile/useProfilePicture';
 import ProfilePictureSlider from "@/components/profile/ProfilePictureSlider";
-import ProfilePictureSelection from "@/components/profile/ProfilePictureSelection";
 
 const { width } = Dimensions.get('window');
 

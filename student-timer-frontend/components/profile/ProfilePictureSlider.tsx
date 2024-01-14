@@ -42,9 +42,11 @@ export default function ProfilePictureSlider({
                     </Pressable>
                 )}
             />
+            {/*
             <View style={{ alignItems: 'center', paddingBottom: 2 }}>
                 <P>Aktuelles Bild: {availableImages[selectedIndex]}</P>
             </View>
+            */}
         </View>
     );
 }
