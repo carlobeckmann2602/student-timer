@@ -1,23 +1,46 @@
-import { BASE_STYLES, COLORTHEME } from "@/constants/Theme";
-import { Stack } from "expo-router";
+import { BASE_STYLES, COLORTHEME, SIZES } from "@/constants/Theme";
+import { Stack, router, usePathname } from "expo-router";
+import { ChevronLeft } from "lucide-react-native";
+import { Pressable } from "react-native";
 
 export default function ModulesLayout() {
   return (
     <Stack
       screenOptions={{
-        contentStyle: {
-          paddingVertical: BASE_STYLES.horizontalPadding,
-          backgroundColor: COLORTHEME.light.background,
+        headerTitleStyle: {
+          fontSize: SIZES.xLarge,
+          fontWeight: "500",
+        },
+        headerShadowVisible: false,
+        headerLeft: () => {
+          const pathname = usePathname();
+          switch (pathname) {
+            case "/modules/new":
+              return (
+                <Pressable onPress={() => router.push("/modules")}>
+                  <ChevronLeft />
+                </Pressable>
+              );
+            case "/modules/new/learningUnits":
+            case pathname.match(/\/modules\/\d+\/edit/)?.input:
+            case pathname.match(/\d+\/learningUnits\/\d+\/edit/)?.input:
+            case pathname.match(/\d+\/learningUnits\/new/)?.input:
+              return (
+                <Pressable onPress={() => router.back()}>
+                  <ChevronLeft />
+                </Pressable>
+              );
+
+            default:
+              return null;
+          }
         },
       }}
     >
       <Stack.Screen
         name="index"
         options={{
-          headerShown: false,
-          contentStyle: {
-            paddingVertical: 0,
-          },
+          title: "Modulübersicht",
         }}
       />
       <Stack.Screen
@@ -28,7 +51,11 @@ export default function ModulesLayout() {
           animation: "default",
         }}
       />
-      <Stack.Screen name="[id]/edit" options={{ headerShown: false }} />
+      <Stack.Screen name="[id]/edit" options={{ title: "Modul bearbeiten" }} />
+      <Stack.Screen
+        name="[id]/learningUnits/new"
+        options={{ title: "Lerneinheit hinzufügen" }}
+      />
       <Stack.Screen
         name="[id]/learningSessions/[learningSessionId]/edit"
         options={{
@@ -37,12 +64,18 @@ export default function ModulesLayout() {
           animation: "default",
         }}
       />
-      <Stack.Screen name="new/index" options={{ headerShown: false }} />
-      <Stack.Screen name="new/learningUnits" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="new/index"
+        options={{ title: "Neues Modul anlegen" }}
+      />
+      <Stack.Screen
+        name="new/learningUnits"
+        options={{ title: "Lerneinheiten hinzufügen" }}
+      />
       <Stack.Screen
         name="[id]/learningUnits/[learningUnitId]/edit"
         options={{
-          headerShown: false,
+          title: "Lerneinheit bearbeiten",
         }}
       />
     </Stack>

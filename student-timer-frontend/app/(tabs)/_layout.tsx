@@ -34,19 +34,6 @@ export default function TabLayout() {
         headerLeft: () => {
           const pathname = usePathname();
           switch (pathname) {
-            case "/modules/new":
-              return (
-                <Pressable onPress={() => router.push("/modules")}>
-                  <ChevronLeft />
-                </Pressable>
-              );
-            case "/modules/new/learningUnits":
-              return (
-                <Pressable onPress={() => router.back()}>
-                  <ChevronLeft />
-                </Pressable>
-              );
-
             case "/profile/editData":
             case "/profile/editPassword":
             case "/profile/editPicture":
@@ -55,7 +42,6 @@ export default function TabLayout() {
                   <ChevronLeft />
                 </Pressable>
               );
-
             default:
               return null;
           }
@@ -74,7 +60,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="modules"
         options={{
-          title: "Module",
+          headerShown: false,
           href: "/modules",
           tabBarIcon: ({ color }) => <LayoutList name="module" color={color} />,
         }}
