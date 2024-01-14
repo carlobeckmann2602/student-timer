@@ -25,18 +25,33 @@ export default function ModulePicker(props: {
   );
 
   useEffect(() => {
-    setSelectedModuleId(modules ? modules[0].id : undefined);
+    if (modules?.length) {
+      setSelectedModuleId(modules[0].id);
+      setSelectedModule(modules[0]);
+      setSelectedModuleCallback && setSelectedModuleCallback(modules[0]);
+    }
   }, []);
 
   return (
-    <View style={styles.pickerContainer}>
+    <View style={styles.container}>
       <Text style={styles.inputLabelText}>Modul</Text>
-      <View>
+      <View style={styles.pickerContainer}>
+        <View
+          style={[
+            styles.color,
+            {
+              backgroundColor: selectedModule
+                ? selectedModule.colorCode
+                : "transparent",
+            },
+          ]}
+        />
         <Picker
           style={{
             viewContainer: styles.picker,
-            inputWeb: { ...styles.picker },
-            inputIOS: { paddingHorizontal: 10 },
+            inputWeb: { ...styles.picker, ...styles.pickerText },
+            inputAndroid: styles.pickerText,
+            inputIOS: { ...styles.pickerText, paddingHorizontal: 10 },
           }}
           placeholder={{}}
           value={selectedModuleId}
@@ -68,15 +83,31 @@ export default function ModulePicker(props: {
 }
 
 const styles = StyleSheet.create({
-  pickerContainer: {
+  container: {
     gap: 5,
   },
-  picker: {
+  color: {
+    width: 16,
+    height: 16,
+    borderRadius: 1000,
+  },
+  pickerContainer: {
+    flexDirection: "row",
+    alignItems: "center",
     backgroundColor: COLORTHEME.light.grey2,
-    border: 0,
     borderRadius: 12,
     height: 40,
+    paddingHorizontal: 10,
+    gap: 8,
+  },
+  picker: {
+    flex: 1,
     justifyContent: "center",
+    backgroundColor: "transparent",
+    border: 0,
+  },
+  pickerText: {
+    color: COLORTHEME.light.grey3,
   },
   inputLabelText: {
     color: COLORTHEME.light.primary,

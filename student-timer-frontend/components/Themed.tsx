@@ -6,7 +6,7 @@
 import { Text as DefaultText, View as DefaultView } from "react-native";
 import { ScrollView as DefaultScrollView } from "react-native-gesture-handler";
 
-import { COLORTHEME } from "../constants/Theme";
+import {BASE_STYLES, COLORTHEME} from "../constants/Theme";
 import React from "react";
 
 type ThemeProps = {
@@ -64,6 +64,10 @@ export function ScrollView(props: ScrollViewProps) {
   );
 
   return (
-    <DefaultScrollView style={[{ backgroundColor }, style]} {...otherProps} />
+    <DefaultScrollView style={[{
+      backgroundColor,
+      paddingVertical: BASE_STYLES.horizontalPadding,
+      borderRadius: BASE_STYLES.borderRadius,
+    }, style]} {...otherProps} />
   );
 }
