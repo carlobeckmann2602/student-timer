@@ -2,20 +2,21 @@ import React, { useState } from 'react';
 import { View, FlatList, Image, Text, Dimensions, Pressable } from 'react-native';
 import { BASE_STYLES, COLORTHEME } from "@/constants/Theme";
 import {P} from "@/components/StyledText";
+import {ProfileImages} from "@/components/profile/useProfilePicture";
 
 type ProfilePictureSliderProps = {
-    availableImages: string[];
+    profileImages: ProfileImages;
     onSelect: (imageName: string) => void;
-    getImagePath: (imageName: string) => string;
 };
 
 const { width } = Dimensions.get('window');
 
 export default function ProfilePictureSlider({
-    availableImages,
-    onSelect,
-    getImagePath,
+                                                 profileImages,
+                                                 onSelect,
 }: ProfilePictureSliderProps): React.ReactElement {
+    const availableImages = Object.keys(profileImages);
+
     const [selectedIndex, setSelectedIndex] = useState(0);
 
     const handleImageSelect = (index: number) => {
@@ -36,8 +37,8 @@ export default function ProfilePictureSlider({
                 renderItem={({ item, index }) => (
                     <Pressable onPress={() => handleImageSelect(index)}>
                         <Image
-                            source={{ uri: getImagePath(item) }}
-                            style={{ width: 100, height: 100, margin: 5, resizeMode: 'cover', backgroundColor: "lightgrey" }}
+                            source={profileImages[item]}
+                            style={{ width: 150, height: 150, margin: 5, resizeMode: 'cover', backgroundColor: "lightgrey" }}
                         />
                     </Pressable>
                 )}

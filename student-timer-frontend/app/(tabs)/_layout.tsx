@@ -47,7 +47,9 @@ export default function TabLayout() {
                 </Pressable>
               );
 
-            case "/profile/edit":
+            case "/profile/editData":
+            case "/profile/editPassword":
+            case "/profile/editPicture":
               return (
                 <Pressable onPress={() => router.push("/profile")}>
                   <ChevronLeft />

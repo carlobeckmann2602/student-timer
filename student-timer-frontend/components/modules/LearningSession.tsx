@@ -5,6 +5,7 @@ import { useToast } from "react-native-toast-notifications";
 
 import Button from "@/components/Button";
 import InputField from "@/components/InputField";
+import Alert from "@/components/Alert";
 import { Text, View } from "@/components/Themed";
 import { BASE_STYLES, COLORS, COLORTHEME } from "@/constants/Theme";
 import { useAuth } from "@/context/AuthContext";
@@ -12,7 +13,6 @@ import { useAxios } from "@/context/AxiosContext";
 import { useModules } from "@/context/ModuleContext";
 import {
   msToTimeObject,
-  formatTime,
   timeObjectToMinutes,
   formatTimeLearningSession,
 } from "@/libs/timeHelper";
@@ -159,12 +159,17 @@ export default function LearningSession(props: { isEdit: boolean }) {
           <Text
             style={styles.discardLink}
             onPress={() => {
-              router.push({
-                pathname: "/(tabs)/(tracking)/",
-                params: {
-                  discard: 1,
-                },
-              });
+              Alert(
+                "Tracking verwerfen?",
+                "Wenn du fortfährst, wird das Tracking gelöscht. Bist du dir sicher?",
+                () =>
+                  router.push({
+                    pathname: "/(tabs)/(tracking)/",
+                    params: {
+                      discard: 1,
+                    },
+                  })
+              );
             }}
           >
             Verwerfen
@@ -228,11 +233,17 @@ export default function LearningSession(props: { isEdit: boolean }) {
           text={isEdit ? "Abbrechen" : "Tracking fortsetzen"}
           backgroundColor={COLORS.white}
           textColor={module?.colorCode}
-          onPress={() =>
-            router.push(
-              isEdit ? `/(tabs)/modules/${module?.id}/` : "/(tabs)/(tracking)"
-            )
-          }
+          onPress={() => {
+            if (isEdit) {
+              Alert(
+                "Änderungen verwerfen?",
+                "Wenn du fortfährst, gehen alle Änderungen ungespeichert verloren. Bist du dir sicher?",
+                () => router.push(`/(tabs)/modules/${module?.id}/`)
+              );
+            } else {
+              router.push("/(tabs)/(tracking)");
+            }
+          }}
         />
       </View>
     </KeyboardAvoidingView>

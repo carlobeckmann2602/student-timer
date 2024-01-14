@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { Alert } from "react-native";
 import { View, ScrollView } from "@/components/Themed";
 import { useRouter } from "expo-router";
@@ -7,6 +7,7 @@ import { useAuth } from "@/context/AuthContext";
 import PasswordInput from "@/components/userInput/PasswordInput";
 import { useToast } from "react-native-toast-notifications";
 import ProfilePicture from "@/components/profile/ProfilePicture";
+import {useProfilePicture} from "@/components/profile/useProfilePicture";
 
 export default function EditPassword() {
 
@@ -24,22 +25,16 @@ export default function EditPassword() {
     const [error, setError] = useState("");
 
 
-    {/* Profilbilder */}
-    const defaultPictureName="profile-picture.jpg";
-    const profilePictureBasePath = "../../../assets/images/profile/";
+    const { profilePictureName, getProfilePictureName } = useProfilePicture();
 
-    const userProfilePicture = authState?.user.profilePicture || defaultPictureName;
-    const [profilePicture, setProfilePicture] = useState<string>(userProfilePicture);
+    useEffect(() => {
+        getProfilePictureName();
+    }, [authState]);
 
-    const userImagePath = profilePicture === 'empty'
-        ? `${profilePictureBasePath}${defaultPictureName}`
-        : `${profilePictureBasePath}${profilePicture}`;
-    const [imagePath, setImagePath] = useState<string>(userImagePath);
-
-
-    console.log("#### useState:", userProfilePicture, typeof userProfilePicture);
+    console.log("index:", authState?.user.name)
+    console.log("#### useState:", profilePictureName, typeof profilePictureName);
     console.log("authState?.user.profilePicture", authState?.user.profilePicture, typeof authState?.user.profilePicture);
-    console.log("imagePath", imagePath);
+
 
     const handleInputChange = (setter: React.Dispatch<React.SetStateAction<string>>) => {
         return (value: string) => {
@@ -123,7 +118,7 @@ export default function EditPassword() {
     return (
         <ScrollView contentContainerStyle={{borderRadius: BASE_STYLES.borderRadius}}>
             <View style={{ alignItems: "center" }}>
-                <ProfilePicture imagePath={imagePath}/>
+                <ProfilePicture imageName={profilePictureName}/>
             </View>
             <View>
                 <PasswordInput

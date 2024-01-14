@@ -12,7 +12,7 @@ import { Picker } from "@react-native-picker/picker";
 import Button from "@/components/Button";
 import { COLORTHEME } from '@/constants/Theme';
 import { Text } from '@/components/Themed';
-import { useProfilePicture, availableImageNames } from '@/components/profile/useProfilePicture';
+import {profileImages, useProfilePicture} from '@/components/profile/useProfilePicture';
 import ProfilePictureSlider from "@/components/profile/ProfilePictureSlider";
 
 const { width } = Dimensions.get('window');
@@ -27,10 +27,8 @@ export default function EditPicture() {
     const {
         profilePictureName,
         setProfilePictureName,
-        imagePath,
         setImagePath,
         getImagePath,
-        getProfilePictureName,
     } = useProfilePicture();
     const [error, setError] = useState("");
 
@@ -40,7 +38,7 @@ export default function EditPicture() {
 
     const handleImageNameChange = (imageName: string) => {
         setProfilePictureName(imageName);
-        setImagePath(getImagePath(imageName));
+        setImagePath(imageName);
         setIsChanged(true);
     };
 
@@ -90,28 +88,16 @@ export default function EditPicture() {
     return (
         <ScrollView contentContainerStyle={{ borderRadius: BASE_STYLES.borderRadius }}>
             <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                <ProfilePicture imagePath={imagePath} editMode={true} />
+                <ProfilePicture imageName={profilePictureName} editMode={true} />
                 <H3>Profilbild ändern</H3>
                 <Text>{profilePictureName}</Text>
                 <View style={{marginVertical: 20}}>
                     <H4>Bildauswahl</H4>
                     <View>
                         <ProfilePictureSlider
-                            availableImages={availableImageNames}
+                            profileImages={profileImages}
                             onSelect={handleImageNameChange}
-                            getImagePath={getImagePath}
                         />
-                    </View>
-                    <View style={{width: width, alignItems: 'center', justifyContent: 'center' }}>
-                        <Picker
-                            style={{ width: width * 0.5 }}
-                            selectedValue={profilePictureName}
-                            onValueChange={(itemValue) => handleImageNameChange(itemValue)}
-                        >
-                            {availableImageNames.map((imageName, index) => (
-                                <Picker.Item key={index} label={imageName} value={imageName} />
-                            ))}
-                        </Picker>
                     </View>
                 </View>
                 <Button
