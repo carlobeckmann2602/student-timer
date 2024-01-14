@@ -26,7 +26,7 @@ export default function Profile() {
   const handleEditData = () => router.push("/profile/editData/");
   const handleEditPassword = () => router.push("/profile/editPassword/");
   const handleEditPicture = () => router.push("/profile/editPicture/");
-  const handleEditProfile = () => router.push("/profile/edit/");
+  const handleTest = () => router.push("/profile/pictureSliderTest/");
 
   return (
     <ScrollView>
@@ -52,6 +52,12 @@ export default function Profile() {
               backgroundColor={COLORTHEME.light.primary}
               textColor="#FFFFFF"
               onPress={handleEditPicture}
+          />
+          <Button
+              text="Test"
+              backgroundColor={COLORTHEME.light.primary}
+              textColor="#FFFFFF"
+              onPress={handleTest}
           />
         </View>
         <View>
