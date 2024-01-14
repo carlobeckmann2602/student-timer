@@ -99,17 +99,6 @@ export default function EditPicture() {
                             onSelect={handleImageNameChange}
                         />
                     </View>
-                    <View style={{width: width, alignItems: 'center', justifyContent: 'center' }}>
-                        <Picker
-                            style={{ width: width * 0.5 }}
-                            selectedValue={profilePictureName}
-                            onValueChange={(itemValue) => handleImageNameChange(itemValue)}
-                        >
-                            {Object.keys(profileImages).map((imageName, index) => (
-                                <Picker.Item key={index} label={imageName} value={imageName} />
-                            ))}
-                        </Picker>
-                    </View>
                 </View>
                 <Button
                     text="Speichern"

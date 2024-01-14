@@ -16,7 +16,6 @@ export const profileImages: ProfileImages = {
     "nils.png": require(`${profilePictureBasePath}nils.png`),
     "random.jpg": require(`${profilePictureBasePath}random.jpg`),
     "maxine.jpg": require(`${profilePictureBasePath}maxine.jpg`),
-    "default.jpg": require(`${profilePictureBasePath}${defaultPictureName}`),
     null: require(`${profilePictureBasePath}${defaultPictureName}`),
 };
 

@@ -38,7 +38,7 @@ export default function ProfilePictureSlider({
                     <Pressable onPress={() => handleImageSelect(index)}>
                         <Image
                             source={profileImages[item]}
-                            style={{ width: 100, height: 100, margin: 5, resizeMode: 'cover', backgroundColor: "lightgrey" }}
+                            style={{ width: 150, height: 150, margin: 5, resizeMode: 'cover', backgroundColor: "lightgrey" }}
                         />
                     </Pressable>
                 )}
