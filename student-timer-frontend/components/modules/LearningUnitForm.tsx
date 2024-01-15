@@ -1,6 +1,5 @@
 import { View, StyleSheet, Pressable } from "react-native";
 import { COLORTHEME } from "@/constants/Theme";
-import { useState } from "react";
 import DateTimePicker from "../DateTimePicker";
 import { LearningUnitType } from "@/types/LearningUnitType";
 import { LabelS, P } from "../StyledText";

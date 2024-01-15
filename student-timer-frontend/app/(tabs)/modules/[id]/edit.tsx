@@ -109,7 +109,7 @@ export default function EditModule() {
           type: "success",
         });
         fetchModules && (await fetchModules());
-        router.replace("/modules");
+        router.push("/modules");
       } catch (e) {
         toast.update(toastId, `Fehler beim Ändern des Moduls: ${e}`, {
           type: "danger",
