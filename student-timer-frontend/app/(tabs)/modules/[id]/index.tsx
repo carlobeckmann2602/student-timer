@@ -140,11 +140,10 @@ export default function ModulesDetailScreen() {
             textColor={COLORTHEME.light.primary}
             iconRight={<Pencil color={COLORTHEME.light.primary} />}
             style={{ flex: 1 }}
-            onPress={() =>
-              router.push({
-                pathname: `modules/${detailModule.id}/edit`,
-              } as never)
-            }
+            onPress={() => {
+              router.back();
+              router.push(`/modules/${detailModule.id}/edit`);
+            }}
           />
           <Button
             text="Löschen"
