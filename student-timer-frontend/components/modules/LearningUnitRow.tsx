@@ -35,7 +35,7 @@ export default function LearningUnitRow(props: learningUnitProps) {
       />
       <View style={styles.unitRowTitle}>
         <Subhead>{learningUnit.name}</Subhead>
-        <P>
+        <P style={{ textAlign: "left" }}>
           {learningUnit.name === LearningUnitEnum.SELBSTSTUDIUM
             ? `${selfLearningTime} Std. verbleibend`
             : computeModuleDetailUnitString(learningUnit)}

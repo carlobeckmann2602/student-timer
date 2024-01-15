@@ -105,24 +105,11 @@ export default function EditModule() {
           `/students/${authState?.user.id}/modules/${moduleToEditId}`,
           moduleDTO
         );
-        const createdModule: ModuleType | undefined = response?.data;
-        // learningUnits.forEach(async (unit: LearningUnitType) => {
-        //   await authAxios?.post(
-        //     `/students/${authState?.user.id}/modules/${createdModule?.id}/learningUnits`,
-        //     {
-        //       name: unit.name,
-        //       startDate: unit.startDate.toISOString().substring(0, 10),
-        //       endDate: unit.endDate.toISOString().substring(0, 10),
-        //       workloadPerWeek: unit.workloadPerWeek,
-        //     }
-        //   );
-        // });
-
         toast.update(toastId, "Änderungen erfolgreich gespeichert.", {
           type: "success",
         });
         fetchModules && (await fetchModules());
-        router.replace("/(tabs)/modules");
+        router.replace("/modules");
       } catch (e) {
         toast.update(toastId, `Fehler beim Ändern des Moduls: ${e}`, {
           type: "danger",
@@ -158,7 +145,7 @@ export default function EditModule() {
   const deleteLearningUnit = async (learningUnitId: number) => {
     let id = toast.show("Löschen...", { type: "loading" });
     try {
-      let response = await authAxios?.delete(
+      await authAxios?.delete(
         `/students/${authState?.user.id}/modules/${detailModule.id}/learningUnits/${learningUnitId}`
       );
       toast.update(id, "Lerneinheit erfolgreich gelöscht", { type: "success" });
