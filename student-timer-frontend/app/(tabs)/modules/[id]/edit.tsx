@@ -225,7 +225,14 @@ export default function EditModule() {
           </View>
         </View>
       </ScrollView>
-      <View style={{ flexDirection: "row", width: "100%", gap: 16 }}>
+      <View
+        style={{
+          flexDirection: "row",
+          width: "100%",
+          gap: 16,
+          marginBottom: BASE_STYLES.horizontalPadding,
+        }}
+      >
         {/* <Button
           text="Abbrechen"
           borderColor={COLORTHEME.light.danger}
@@ -272,6 +279,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     gap: 24,
     backgroundColor: COLORTHEME.light.background,
+    paddingVertical: BASE_STYLES.horizontalPadding,
   },
   scrollViewContainer: {
     flexGrow: 1,

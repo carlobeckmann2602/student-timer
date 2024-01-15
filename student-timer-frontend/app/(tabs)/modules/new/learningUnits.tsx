@@ -162,6 +162,7 @@ export default function NewModuleLearningUnits() {
         backgroundColor={COLORTHEME.light.primary}
         textColor={COLORTHEME.light.grey2}
         onPress={onCreateModule}
+        style={{ marginBottom: BASE_STYLES.horizontalPadding }}
       />
     </KeyboardAvoidingView>
   );
@@ -174,6 +175,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     gap: 24,
     backgroundColor: COLORTHEME.light.background,
+    paddingVertical: BASE_STYLES.horizontalPadding,
   },
   scrollViewContainer: {
     flexGrow: 1,

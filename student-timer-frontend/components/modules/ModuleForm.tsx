@@ -41,7 +41,7 @@ export default function ModuleForm(props: ModuleFormProps) {
   };
 
   return (
-    <View style={styles.outerWrapper}>
+    <View style={styles.container}>
       <View style={styles.row}>
         <InputField
           label="Name des Moduls"
@@ -139,10 +139,13 @@ export default function ModuleForm(props: ModuleFormProps) {
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
+    width: "100%",
+    backgroundColor: COLORTHEME.light.grey1,
+    borderRadius: 12,
     flexDirection: "column",
-    gap: 24,
-    backgroundColor: COLORTHEME.light.background,
+    justifyContent: "space-between",
+    padding: 24,
+    gap: 12,
   },
   scrollViewContainer: {
     flexGrow: 1,
@@ -162,15 +165,6 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
   },
   flatListContainer: {
-    gap: 12,
-  },
-  outerWrapper: {
-    width: "100%",
-    backgroundColor: COLORTHEME.light.grey1,
-    borderRadius: 12,
-    flexDirection: "column",
-    justifyContent: "space-between",
-    padding: 24,
     gap: 12,
   },
   row: {
