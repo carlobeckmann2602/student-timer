@@ -8,42 +8,42 @@ import { useModules } from "@/context/ModuleContext";
 import { LearningUnitType } from "@/types/LearningUnitType";
 import { ModuleType } from "@/types/ModuleType";
 import { useRouter } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { KeyboardAvoidingView, Platform, StyleSheet } from "react-native";
 import { useToast } from "react-native-toast-notifications";
 
 export type LearningUnitScreenProps = {
   moduleId: string;
-  learningUnitId?: string;
+  learningUnitId: string;
+  isEdit: boolean;
 };
 
 export default function NewModuleLearningUnits(props: LearningUnitScreenProps) {
-  const { moduleId, learningUnitId } = props;
+  const { moduleId, learningUnitId, isEdit } = props;
 
   const toast = useToast();
   const { authState } = useAuth();
   const { authAxios } = useAxios();
-  const { modules, fetchModules } = useModules();
+  const { modules, fetchModules, setModules } = useModules();
   const router = useRouter();
 
-  const findDetailModule = () => {
-    if (learningUnitId) {
-      if (modules && modules.length > 0) {
-        let filteredModule: ModuleType | undefined = modules.find(
-          (module) => module.id.toString() === moduleId
+  const findLearningUnit = () => {
+    if (isEdit) {
+      const detailModule =
+        modules?.find((module) => module.id.toString() === moduleId) ||
+        ({} as ModuleType);
+      if (detailModule) {
+        let learningUnitToEdit = detailModule.learningUnits.find(
+          (unit) => unit.id.toString() === learningUnitId
         );
-        if (filteredModule) {
-          let learningUnitToEdit = filteredModule.learningUnits.find(
-            (unit) => unit.id.toString() === learningUnitId
-          );
-          if (learningUnitToEdit) {
-            return learningUnitToEdit;
-          }
+        if (learningUnitToEdit) {
+          return learningUnitToEdit;
         }
       }
     }
+
     return {
-      id: Math.random(),
+      id: +learningUnitId,
       name: LearningUnitEnum.VORLESUNG,
       workloadPerWeek: 1,
       startDate: new Date(),
@@ -55,9 +55,42 @@ export default function NewModuleLearningUnits(props: LearningUnitScreenProps) {
     } as LearningUnitType;
   };
 
-  const [learningUnit, setLearningUnit] = useState<LearningUnitType>(
-    findDetailModule()
-  );
+  let learningUnit = findLearningUnit();
+
+  // useEffect(() => {
+  //   detailModule =
+  //     modules?.find((module) => module.id.toString() === moduleId) ||
+  //     ({} as ModuleType);
+
+  //   learningUnit = findLearningUnit();
+  // }, [modules]);
+
+  const handleUpdate = (createdUnit: LearningUnitType) => {
+    const detailModule =
+      modules?.find((module) => module.id.toString() === moduleId) ||
+      ({} as ModuleType);
+    let updatedModule = { ...detailModule };
+
+    if (
+      updatedModule.learningUnits.find((unit) => unit.id === createdUnit.id)
+    ) {
+      updatedModule.learningUnits = updatedModule.learningUnits.map((unit) =>
+        unit.id === createdUnit.id ? createdUnit : unit
+      );
+    } else {
+      updatedModule.learningUnits.push(createdUnit);
+    }
+
+    setModules &&
+      setModules((prevState) =>
+        prevState?.map((currentModule) => {
+          return currentModule.id === updatedModule.id
+            ? updatedModule
+            : currentModule;
+        })
+      );
+    console.log(updatedModule.learningUnits);
+  };
 
   const onUpdateLearningUnit = async () => {
     let totalWorkloadPerWeek = learningUnit.workloadPerWeekWholeHours
@@ -67,51 +100,7 @@ export default function NewModuleLearningUnits(props: LearningUnitScreenProps) {
       ? learningUnit.workloadPerWeekMinutes
       : 0;
 
-    setLearningUnit((prevLearningUnit) => ({
-      ...prevLearningUnit,
-      workloadPerWeek: totalWorkloadPerWeek,
-    }));
-
-    let toastId = toast.show(
-      learningUnitId ? "Aktualisieren..." : "Erstellen..."
-    );
-
-    try {
-      if (learningUnitId) {
-        await authAxios?.put(
-          `/students/${authState?.user.id}/modules/${moduleId}/learningUnits/${learningUnitId}`,
-          {
-            name: learningUnit.name,
-            startDate: learningUnit.startDate.toISOString().substring(0, 10),
-            endDate: learningUnit.endDate.toISOString().substring(0, 10),
-            workloadPerWeek: totalWorkloadPerWeek,
-          }
-        );
-        toast.update(toastId, "Lerneinheit erfolgreich aktualisiert.", {
-          type: "success",
-        });
-      } else {
-        await authAxios?.post(
-          `/students/${authState?.user.id}/modules/${moduleId}/learningUnits`,
-          {
-            name: learningUnit.name,
-            startDate: learningUnit.startDate.toISOString().substring(0, 10),
-            endDate: learningUnit.endDate.toISOString().substring(0, 10),
-            workloadPerWeek: totalWorkloadPerWeek,
-          }
-        );
-        toast.update(toastId, "Lerneinheit erfolgreich erstellt.", {
-          type: "success",
-        });
-      }
-
-      fetchModules && (await fetchModules());
-      router.back();
-    } catch (e) {
-      toast.update(toastId, `Fehler beim Speichern: ${e}`, {
-        type: "danger",
-      });
-    }
+    router.back();
   };
 
   return (
@@ -122,7 +111,7 @@ export default function NewModuleLearningUnits(props: LearningUnitScreenProps) {
       <LearningUnitForm
         key={learningUnit?.id}
         inputData={learningUnit}
-        onChange={(inputData) => setLearningUnit(inputData)}
+        onChange={(inputData) => handleUpdate(inputData)}
       />
       <Button
         text={

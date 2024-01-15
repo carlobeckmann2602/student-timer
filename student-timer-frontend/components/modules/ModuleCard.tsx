@@ -32,9 +32,10 @@ export function ModuleCard(props: moduleCardProps) {
   const toast = useToast();
   const { authState } = useAuth();
   const { authAxios } = useAxios();
-  const { fetchModules } = useModules();
+  const { fetchModules, resetUnitStatus } = useModules();
 
   const onEdit = () => {
+    resetUnitStatus && resetUnitStatus(moduleData);
     router.push({
       pathname: `modules/${moduleData.id}/edit`,
     } as never);

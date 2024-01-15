@@ -28,7 +28,7 @@ export default function ModulesDetailScreen() {
   const toast = useToast();
   const { authState } = useAuth();
   const { authAxios } = useAxios();
-  const { fetchModules } = useModules();
+  const { fetchModules, resetUnitStatus } = useModules();
 
   const detailModule =
     modules?.find((module) => module.id.toString() === id) ||
@@ -141,6 +141,7 @@ export default function ModulesDetailScreen() {
             iconRight={<Pencil color={COLORTHEME.light.primary} />}
             style={{ flex: 1 }}
             onPress={() => {
+              resetUnitStatus && resetUnitStatus(detailModule);
               router.back();
               router.push(`/modules/${detailModule.id}/edit`);
             }}
@@ -240,11 +241,12 @@ export default function ModulesDetailScreen() {
                       />
                     </View>
                     <Pressable
-                      onPress={() =>
+                      onPress={() => {
+                        router.back();
                         router.push({
-                          pathname: `modules/${detailModule.id}/learningSessions/${item.id}/edit`,
-                        } as never)
-                      }
+                          pathname: `/(tabs)/modules/${detailModule.id}/learningSessions/${item.id}/edit`,
+                        } as never);
+                      }}
                     >
                       <Pencil name="pencil" size={18} color="black" />
                     </Pressable>

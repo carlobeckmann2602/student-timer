@@ -11,7 +11,7 @@ import { useModules } from "@/context/ModuleContext";
 import { computeRemainingSessionTime } from "@/libs/moduleTypeHelper";
 import { LearningUnitType } from "@/types/LearningUnitType";
 import { ModuleType } from "@/types/ModuleType";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 import { Plus } from "lucide-react-native";
 import React from "react";
 import { useState } from "react";
@@ -33,7 +33,8 @@ export default function EditModule() {
   const toast = useToast();
   const { authState } = useAuth();
   const { authAxios } = useAxios();
-  const { modules, setModules, fetchModules } = useModules();
+  const { modules, setModules, fetchModules, unitStatus, setUnitStatus } =
+    useModules();
   const router = useRouter();
 
   const detailModule =
@@ -105,6 +106,59 @@ export default function EditModule() {
           `/students/${authState?.user.id}/modules/${moduleToEditId}`,
           moduleDTO
         );
+
+        console.log("Statusänderungen" + JSON.stringify(unitStatus, null, 2));
+        if (unitStatus)
+          for (let [key, value] of Object.entries(unitStatus)) {
+            switch (value) {
+              case "created":
+                const unitToCreate = detailModule.learningUnits.find(
+                  (unit) => unit.id.toString() === key
+                );
+                if (unitToCreate)
+                  await authAxios?.post(
+                    `/students/${authState?.user.id}/modules/${detailModule.id}/learningUnits`,
+                    {
+                      name: unitToCreate.name,
+                      startDate: unitToCreate.startDate
+                        .toISOString()
+                        .substring(0, 10),
+                      endDate: unitToCreate.endDate
+                        .toISOString()
+                        .substring(0, 10),
+                      workloadPerWeek: unitToCreate.workloadPerWeek,
+                    }
+                  );
+                break;
+              case "edit":
+                const unitToEdit = detailModule.learningUnits.find(
+                  (unit) => unit.id.toString() === key
+                );
+                if (unitToEdit)
+                  await authAxios?.put(
+                    `/students/${authState?.user.id}/modules/${detailModule.id}/learningUnits/${unitToEdit.id}`,
+                    {
+                      name: unitToEdit.name,
+                      startDate: unitToEdit.startDate
+                        .toISOString()
+                        .substring(0, 10),
+                      endDate: unitToEdit.endDate
+                        .toISOString()
+                        .substring(0, 10),
+                      workloadPerWeek: unitToEdit.workloadPerWeek,
+                    }
+                  );
+                break;
+              case "delete":
+                await authAxios?.delete(
+                  `/students/${authState?.user.id}/modules/${detailModule.id}/learningUnits/${key}`
+                );
+                break;
+              default:
+                break;
+            }
+          }
+
         toast.update(toastId, "Änderungen erfolgreich gespeichert.", {
           type: "success",
         });
@@ -133,7 +187,19 @@ export default function EditModule() {
         {
           text: "Löschen",
           onPress: () => {
-            deleteLearningUnit(learningUnitId);
+            setUnitStatus &&
+              setUnitStatus((prevState) => ({
+                ...prevState,
+                [learningUnitId]: "delete",
+              }));
+            const updatedModule = {
+              ...detailModule,
+              learningUnits: detailModule.learningUnits.filter(
+                (unit) => unit.id !== learningUnitId
+              ),
+            };
+            handleUpdate(updatedModule);
+            // deleteLearningUnit(learningUnitId);
           },
           style: "destructive",
         },
@@ -177,9 +243,21 @@ export default function EditModule() {
           <View style={styles.unitHeaderRow}>
             <H2 style={{ textAlign: "left" }}>Einheiten</H2>
             <Pressable
-              onPress={() =>
-                router.push(`/modules/${detailModule.id}/learningUnits/new`)
-              }
+              onPress={() => {
+                const newUnitId = Math.random();
+                setUnitStatus &&
+                  setUnitStatus((prevState) => ({
+                    ...prevState,
+                    [newUnitId]: "created",
+                  }));
+                router.push({
+                  pathname: `/modules/${detailModule.id}/learningUnits/new`,
+                  params: {
+                    id: detailModule.id,
+                    learningUnitId: newUnitId,
+                  },
+                });
+              }}
               style={styles.roundButton}
             >
               <Plus
@@ -213,11 +291,16 @@ export default function EditModule() {
                             ]
                           )
                     }
-                    onEdit={() =>
+                    onEdit={() => {
+                      setUnitStatus &&
+                        setUnitStatus((prevState) => ({
+                          ...prevState,
+                          [unit.id]: "edit",
+                        }));
                       router.push({
                         pathname: `modules/${detailModule.id}/learningUnits/${unit.id}/edit`,
-                      } as never)
-                    }
+                      } as never);
+                    }}
                   />
                 );
               }

@@ -8,6 +8,10 @@ export default function LearningUnitEditScreen() {
   }>();
 
   return (
-    <LearningUnitScreen moduleId={moduleId} learningUnitId={learningUnitId} />
+    <LearningUnitScreen
+      moduleId={moduleId}
+      learningUnitId={learningUnitId}
+      isEdit={true}
+    />
   );
 }

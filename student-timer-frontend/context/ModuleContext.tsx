@@ -17,6 +17,15 @@ type ModuleProps = {
   modules?: ModuleType[];
   fetchModules?: () => Promise<any>;
   setModules?: React.Dispatch<React.SetStateAction<ModuleType[] | undefined>>;
+  unitStatus?: {
+    [key: number]: null | "edit" | "delete" | "created";
+  };
+  setUnitStatus?: React.Dispatch<
+    React.SetStateAction<{
+      [key: number]: null | "edit" | "delete" | "created";
+    }>
+  >;
+  resetUnitStatus?: (module: ModuleType) => void;
 };
 
 export type ObjectKey = keyof typeof COLORS;
@@ -32,6 +41,9 @@ export const ModuleProvider = ({ children }: any) => {
   const authStateRef = useRef(authState);
   const { authAxios } = useAxios();
   const [modules, setModules] = useState<ModuleType[] | undefined>();
+  const [unitStatus, setUnitStatus] = useState<{
+    [key: number]: null | "edit" | "delete" | "created";
+  }>({});
 
   useEffect(() => {
     authStateRef.current = authState;
@@ -53,10 +65,25 @@ export const ModuleProvider = ({ children }: any) => {
     }
   };
 
+  const resetUnitStatus = (module: ModuleType) => {
+    let collectedUnitPairs: {
+      [key: number]: null | "edit" | "delete" | "created";
+    } = {};
+    module.learningUnits.forEach((unit) => {
+      collectedUnitPairs[unit.id] = null;
+    });
+    setUnitStatus && setUnitStatus(collectedUnitPairs);
+    console.log("Chekc");
+    console.log(unitStatus);
+  };
+
   const value = {
     modules,
     fetchModules,
     setModules,
+    unitStatus,
+    setUnitStatus,
+    resetUnitStatus,
   } as ModuleProps;
   return (
     <ModuleContext.Provider value={value}>{children}</ModuleContext.Provider>
