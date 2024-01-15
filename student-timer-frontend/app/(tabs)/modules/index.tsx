@@ -8,7 +8,7 @@ import Button from "@/components/Button";
 import { BASE_STYLES, COLORTHEME } from "@/constants/Theme";
 import React from "react";
 import { useModules } from "@/context/ModuleContext";
-import { H2 } from "@/components/StyledText";
+import { H3, P } from "@/components/StyledText";
 
 export default function ModulesScreen() {
   const router = useRouter();
@@ -35,17 +35,21 @@ export default function ModulesScreen() {
         renderItem={({ item }) => <ModuleCard moduleData={item} />}
         keyExtractor={(item: ModuleType) => item.id.toString()}
         contentContainerStyle={styles.flatListContainerContent}
+        ListEmptyComponent={
+          <View style={styles.emptyListContainer}>
+            <H3>Es sind noch keine Module vorhanden.</H3>
+            <P style={{ textAlign: "center" }}>
+              Erstelle dein erstes Modul oder swipe nach oben, um deine Module
+              zu laden.
+            </P>
+          </View>
+        }
         refreshControl={
           <RefreshControl
             colors={[COLORTHEME.light.primary]}
             refreshing={refreshing}
             onRefresh={onRefresh}
           />
-        }
-        ListEmptyComponent={
-          <View style={styles.emptyListContainer}>
-            <H2>Es sind noch keine Module vorhanden.</H2>
-          </View>
         }
       />
       <Button
@@ -74,9 +78,11 @@ const styles = StyleSheet.create({
     paddingBottom: 50 + BASE_STYLES.horizontalPadding,
   },
   emptyListContainer: {
-    flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    paddingHorizontal: 16,
+    gap: 20,
+    paddingVertical: 200,
   },
   button: {
     position: "absolute",
