@@ -15,22 +15,52 @@ export default function ModulesLayout() {
         headerLeft: () => {
           const pathname = usePathname();
           switch (pathname) {
-            case "/modules/new":
+            case pathname.match(/\d+\/learningUnits\/\d+\/edit/)?.input:
               return (
-                <Pressable onPress={() => router.push("/modules")}>
+                <Pressable
+                  onPress={() => {
+                    const dynamicPath = pathname.replace(
+                      /\/learningUnits\/\d+/,
+                      ""
+                    );
+                    console.log(dynamicPath);
+                    router.push(
+                      `/${dynamicPath.substring(1, dynamicPath.length)}`
+                    );
+                  }}
+                >
+                  <ChevronLeft />
+                </Pressable>
+              );
+            case pathname.match(/\d+\/learningUnits\/new/)?.input:
+              return (
+                <Pressable
+                  onPress={() => {
+                    const dynamicPath = pathname.replace(
+                      /\/learningUnits\/new/,
+                      "/edit"
+                    );
+                    router.push(
+                      `/${dynamicPath.substring(1, dynamicPath.length)}`
+                    );
+                  }}
+                >
+                  <ChevronLeft />
+                </Pressable>
+              );
+            case "/modules/new":
+            case pathname.match(/\d+\/edit/)?.input:
+              return (
+                <Pressable onPress={() => router.push("/(tabs)/modules")}>
                   <ChevronLeft />
                 </Pressable>
               );
             case "/modules/new/learningUnits":
-            case pathname.match(/\/modules\/\d+\/edit/)?.input:
-            case pathname.match(/\d+\/learningUnits\/\d+\/edit/)?.input:
-            case pathname.match(/\d+\/learningUnits\/new/)?.input:
               return (
-                <Pressable onPress={() => router.back()}>
+                <Pressable onPress={() => router.push("/modules/new")}>
                   <ChevronLeft />
                 </Pressable>
               );
-
             default:
               return null;
           }
