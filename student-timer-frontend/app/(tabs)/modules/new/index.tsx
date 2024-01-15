@@ -18,7 +18,7 @@ export default function NewModule() {
     id: -1,
     name: "",
     colorCode: COLORS.moduleColor1,
-    creditPoints: 0,
+    creditPoints: 1,
     examDate: new Date(),
     learningUnits: [],
     learningSessions: [],

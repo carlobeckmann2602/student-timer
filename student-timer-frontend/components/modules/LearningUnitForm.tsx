@@ -56,7 +56,7 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
           <InputFieldNumeric
             onChangeText={(value) => {
               handleChange({
-                workloadPerWeekWholeHours: Math.abs(+value * 60),
+                workloadPerWeekWholeHours: Math.round(Math.abs(+value * 60)),
               });
             }}
             value={
@@ -71,7 +71,9 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
           <InputFieldNumeric
             onChangeText={(value) => {
               let formattedValue =
-                Math.abs(+value) >= 60 ? 59 : Math.round(Math.abs(+value));
+                Math.round(Math.abs(+value)) >= 60
+                  ? 59
+                  : Math.round(Math.abs(+value));
               if (
                 formattedValue === 0 &&
                 inputData.workloadPerWeekWholeHours! <= 0

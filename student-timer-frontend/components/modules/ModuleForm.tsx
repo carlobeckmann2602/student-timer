@@ -79,7 +79,10 @@ export default function ModuleForm(props: ModuleFormProps) {
         <InputFieldNumeric
           label="Credit-Points"
           onChangeText={(value) => {
-            handleChange({ creditPoints: value });
+            let formattedValue = Math.round(Math.abs(+value));
+            handleChange({
+              creditPoints: formattedValue >= 1 ? formattedValue : 1,
+            });
           }}
           value={inputData.creditPoints.toString()}
           message={creditPointError}

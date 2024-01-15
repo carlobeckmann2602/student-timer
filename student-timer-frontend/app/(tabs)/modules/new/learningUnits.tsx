@@ -71,26 +71,7 @@ export default function NewModuleLearningUnits() {
     });
   };
 
-  // const validateInputs = () => {
-  //   var workloadPerWeekValid = true;
-  //   if (inputData.workloadPerWeek <= 0) {
-  //     setWorkloadError("Der Aufwand muss größer als 0 min. sein");
-  //     workloadPerWeekValid = false;
-  //   } else {
-  //     setWorkloadError("");
-  //   }
-  //   return workloadPerWeekValid;
-  // };
-
   const onCreateModule = async () => {
-    // if (!validateInputs()) {
-    //   toast.show(
-    //     "Überprüfe alle Eingaben auf ihre Gültigkeit. Erst dann kann das Modul angelegt werden.",
-    //     { type: "danger" }
-    //   );
-    //   return;
-    // }
-
     let id = toast.show("Erstellen...");
     let response;
     try {
@@ -116,13 +97,20 @@ export default function NewModuleLearningUnits() {
       );
       const createdModule: ModuleType | undefined = response?.data;
       learningUnits.forEach(async (unit: LearningUnitType) => {
+        let totalWorkloadPerWeek = unit.workloadPerWeekWholeHours
+          ? unit.workloadPerWeekWholeHours
+          : 0;
+        totalWorkloadPerWeek += unit.workloadPerWeekMinutes
+          ? unit.workloadPerWeekMinutes
+          : 0;
+
         await authAxios?.post(
           `/students/${authState?.user.id}/modules/${createdModule?.id}/learningUnits`,
           {
             name: unit.name,
             startDate: unit.startDate.toISOString().substring(0, 10),
             endDate: unit.endDate.toISOString().substring(0, 10),
-            workloadPerWeek: unit.workloadPerWeek,
+            workloadPerWeek: totalWorkloadPerWeek,
           }
         );
       });
