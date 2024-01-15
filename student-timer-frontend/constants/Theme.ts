@@ -34,6 +34,11 @@ const COLORS = {
   moduleColor8: "#AC56AE",
   // timer colors
   progressBarPauseColor: "#F5F56A",
+  // OS colors
+  iOSKeyboardLight: "#D1D1D6",
+  iOSKeyboardDark: "#636366",
+  iOSFontLight: "#000000",
+  iOSFontDark: "#FFFFFF",
 };
 
 const SIZES = {
@@ -57,6 +62,8 @@ const COLORTHEME = {
     grey2: COLORS.grey2,
     grey3: COLORS.grey3,
     danger: COLORS.danger,
+    iOSKeyboard: COLORS.iOSKeyboardLight,
+    iOSFont: COLORS.iOSFontLight,
   },
   dark: {
     text: COLORS.white,
@@ -67,6 +74,8 @@ const COLORTHEME = {
     grey2: COLORS.grey2,
     grey3: COLORS.grey3,
     danger: COLORS.danger,
+    iOSKeyboard: COLORS.iOSKeyboardDark,
+    iOSFont: COLORS.iOSFontDark,
   },
 };
 

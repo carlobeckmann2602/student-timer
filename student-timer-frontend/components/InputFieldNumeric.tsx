@@ -32,7 +32,9 @@ export default function InputFieldNumeric(
         <InputAccessoryView
           nativeID={inputAccessoryViewID}
           backgroundColor={
-            Appearance.getColorScheme() === "light" ? "#D1D1D6" : "#636366"
+            Appearance.getColorScheme() === "light"
+              ? COLORTHEME.light.iOSKeyboard
+              : COLORTHEME.dark.iOSKeyboard
           }
         >
           <View style={styles.AccessoryToolbarContainer}>
