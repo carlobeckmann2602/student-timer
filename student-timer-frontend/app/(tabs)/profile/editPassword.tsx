@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
-import { Alert } from "react-native";
 import { View, ScrollView } from "@/components/Themed";
+import Alert from "@/components/Alert";
 import { useRouter } from "expo-router";
 import {BASE_STYLES } from "@/constants/Theme";
 import { useAuth } from "@/context/AuthContext";
@@ -72,26 +72,12 @@ export default function EditPassword() {
 
     const onCancel = () => {
         if (isChanged) {
-            console.log("Alert für Änderung verwerfen aktiviert:", authState?.user.email)
-            Alert.alert(
+            Alert(
                 "Änderungen verwerfen?",
                 `Sie haben ungespeicherte Änderungen vorgenommen. Wenn Sie fortfahren, gehen alle ungespeicherten Daten verloren. Möchten Sie wirklich abbrechen?`,
-                [
-                    {
-                        text: "Nein",
-                        onPress: () => console.log("Alert closed"),
-                        style: "cancel",
-                    },
-                    {
-                        text: "Ja",
-                        onPress: () => {
-                            cancel();
-                        },
-                        style: "destructive",
-                    },
-                ],
-                { cancelable: false }
-            );
+                cancel,
+                "Nein",
+                "Ja")
         } else {
             cancel();
         }
