@@ -15,8 +15,17 @@ export const profileImages: ProfileImages = {
     "carlo.jpg": require(`${profilePictureBasePath}carlo.jpg`),
     "nils.png": require(`${profilePictureBasePath}nils.png`),
     "random.jpg": require(`${profilePictureBasePath}random.jpg`),
+    "apfel.jpg": require(`${profilePictureBasePath}apfel.jpg`),
+    "drache.jpg": require(`${profilePictureBasePath}drache.jpg`),
+    "monster.jpg": require(`${profilePictureBasePath}monster.jpg`),
+    "random1.jpg": require(`${profilePictureBasePath}random1.jpg`),
     "maxine.jpg": require(`${profilePictureBasePath}maxine.jpg`),
-    null: require(`${profilePictureBasePath}${defaultPictureName}`),
+    "random2.jpg": require(`${profilePictureBasePath}random2.jpg`),
+    "nico.jpg": require(`${profilePictureBasePath}nico.jpg`),
+    "tiger.jpg": require(`${profilePictureBasePath}tiger.jpg`),
+    "robby.jpg": require(`${profilePictureBasePath}robby.jpg`),
+    "papierschlacht.jpg": require(`${profilePictureBasePath}papierschlacht.jpg`),
+    "nerd.jpg": require(`${profilePictureBasePath}nerd.jpg`),
 };
 
 
