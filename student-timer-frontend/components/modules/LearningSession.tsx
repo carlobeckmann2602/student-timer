@@ -238,7 +238,7 @@ export default function LearningSession(props: { isEdit: boolean }) {
               Alert(
                 "Änderungen verwerfen?",
                 "Wenn du fortfährst, gehen alle Änderungen ungespeichert verloren. Bist du dir sicher?",
-                () => router.push(`/(tabs)/modules/${module?.id}/`)
+                () => router.back(),
               );
             } else {
               router.push("/(tabs)/(tracking)");
