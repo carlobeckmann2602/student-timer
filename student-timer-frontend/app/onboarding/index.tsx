@@ -9,7 +9,6 @@ import { onboardingData } from "@/constants/onboardingItems";
 import OnboardingContainer from "@/components/onboarding/OnboardingContainer";
 import OnboardingCard from "@/components/onboarding/OnboardingCard";
 import CardNavigation from "@/components/onboarding/CardNavigation";
-import { saveItem } from "@/libs/deviceStorage";
 
 export default function OnboardingScreen() {
   const { width } = useWindowDimensions();

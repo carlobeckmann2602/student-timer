@@ -1,21 +1,18 @@
 import React, { useEffect, useState } from "react";
-import {Alert, Dimensions, FlatList, Image, StyleSheet, TouchableOpacity} from "react-native";
+import {Alert} from "react-native";
 import { ScrollView, View } from "@/components/Themed";
 import { useRouter } from "expo-router";
 import { useAuth } from "@/context/AuthContext";
 import { useToast } from "react-native-toast-notifications";
 import { BASE_STYLES } from "@/constants/Theme";
 import ProfilePicture from "@/components/profile/ProfilePicture";
-import {H3, H4, P} from "@/components/StyledText";
+import {H3, H4} from "@/components/StyledText";
 import Pressable from "@/components/Pressable";
-import { Picker } from "@react-native-picker/picker";
 import Button from "@/components/Button";
 import { COLORTHEME } from '@/constants/Theme';
 import { Text } from '@/components/Themed';
 import {profileImages, useProfilePicture} from '@/components/profile/useProfilePicture';
 import ProfilePictureSlider from "@/components/profile/ProfilePictureSlider";
-
-const { width } = Dimensions.get('window');
 
 export default function EditPicture() {
 
@@ -30,7 +27,7 @@ export default function EditPicture() {
         setImagePath,
         getImagePath,
     } = useProfilePicture();
-    const [error, setError] = useState("");
+    const [, setError] = useState("");
 
     useEffect(() => {
         setImagePath(getImagePath(profilePictureName));

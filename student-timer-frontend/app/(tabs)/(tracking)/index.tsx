@@ -147,7 +147,7 @@ export default function Tracking() {
           onChangeText={(val) => {
             setRoundLen(Math.abs(roundNumber(val, 1)).toString());
           }}
-          inputUnit="min"
+          inputUnit="min."
           selectTextOnFocus
           editable={inputsEditable}
         />
@@ -158,7 +158,7 @@ export default function Tracking() {
           onChangeText={(val) => {
             setPauseLen(Math.abs(roundNumber(val, 1)).toString());
           }}
-          inputUnit="min"
+          inputUnit="min."
           selectTextOnFocus
           editable={inputsEditable}
         />

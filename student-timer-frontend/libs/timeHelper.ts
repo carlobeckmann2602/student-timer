@@ -40,7 +40,7 @@ export const formatTimeLearningSession = ({
 }): string => {
   return `${hours.toString().padStart(2, "0")}:${mins
     .toString()
-    .padStart(2, "0")}h`;
+    .padStart(2, "0")} Std.`;
 };
 
 export const convertMinutesToHours = (minutes: number) => {

@@ -81,7 +81,7 @@ export default function LearningSession(props: { isEdit: boolean }) {
                     hours: Math.abs(roundNumber(val, 0)),
                   }));
                 }}
-                inputUnit="std"
+                inputUnit="Std."
                 selectTextOnFocus
               />
               <InputFieldNumeric
@@ -94,7 +94,7 @@ export default function LearningSession(props: { isEdit: boolean }) {
                     mins: mins >= 60 ? 59 : mins,
                   }));
                 }}
-                inputUnit="min"
+                inputUnit="min."
                 selectTextOnFocus
               />
             </View>
@@ -117,7 +117,7 @@ export default function LearningSession(props: { isEdit: boolean }) {
                     hours: Math.abs(roundNumber(val, 0)),
                   }));
                 }}
-                inputUnit="std"
+                inputUnit="Std."
                 selectTextOnFocus
               />
               <InputFieldNumeric
@@ -130,7 +130,7 @@ export default function LearningSession(props: { isEdit: boolean }) {
                     mins: mins >= 60 ? 59 : mins,
                   }));
                 }}
-                inputUnit="min"
+                inputUnit="min."
                 selectTextOnFocus
               />
             </View>
