@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
-import { Alert } from "react-native";
 import { View, ScrollView } from "@/components/Themed";
+import Alert from "@/components/Alert";
 import { useRouter } from "expo-router";
 import { BASE_STYLES } from "@/constants/Theme";
 import { useAuth } from "@/context/AuthContext";
@@ -27,7 +27,7 @@ export default function EditData() {
     const [nameError, setNameError] = useState("");
     const [studyCourseError, setStudyCourseError] = useState("");
     const [emailError, setEmailError] = useState("");
-    const [error, setError] = useState("");
+    const [, setError] = useState("");
 
 
     const { profilePictureName, getProfilePictureName } = useProfilePicture();
@@ -36,17 +36,12 @@ export default function EditData() {
         getProfilePictureName();
     }, [authState]);
 
-    console.log("editData:", authState?.user.name)
-    console.log("#### useState:", profilePictureName, typeof profilePictureName);
-    console.log("authState?.user.profilePicture", authState?.user.profilePicture, typeof authState?.user.profilePicture);
-
     const handleInputChange = (setter: React.Dispatch<React.SetStateAction<string>>) => {
         return (value: string) => {
             setter(value);
             setIsChanged(true);
         };
     };
-
 
     const validateInput = () => {
         const nameError = validateName(userName);
@@ -112,52 +107,26 @@ export default function EditData() {
 
     const onCancel = () => {
         if (isChanged) {
-            console.log("Alert für Änderung verwerfen aktiviert:", authState?.user.email)
-            Alert.alert(
+            Alert(
                 "Änderungen verwerfen?",
                 `Sie haben ungespeicherte Änderungen vorgenommen. Wenn Sie fortfahren, gehen alle ungespeicherten Daten verloren. Möchten Sie wirklich abbrechen?`,
-                [
-                    {
-                        text: "Nein",
-                        onPress: () => console.log("Alert closed"),
-                        style: "cancel",
-                    },
-                    {
-                        text: "Ja",
-                        onPress: () => {
-                            cancel();
-                        },
-                        style: "destructive",
-                    },
-                ],
-                { cancelable: false }
-            );
+                cancel,
+                "Nein",
+                "Ja"
+            )
         } else {
             cancel();
         }
     };
 
     const onDelete = () => {
-        console.log("Alert für User-Löschung aktiviert:", authState?.user.email)
-        Alert.alert(
+        Alert(
             "Profil wirklich löschen?",
             `Möchtest du deinen Account mit der E-Mail-Adresse "${authState?.user.email}" wirklich unwiderruflich löschen? Alle zum Profil gehörenden Daten, Module, Lerneinheiten und Trackings werden dabei gelöscht.`,
-            [
-                {
-                    text: "Abbrechen",
-                    onPress: () => console.log("Alert closed"),
-                    style: "cancel",
-                },
-                {
-                    text: "Löschen",
-                    onPress: () => {
-                        removeUser();
-                    },
-                    style: "destructive",
-                },
-            ],
-            { cancelable: false }
-        );
+            removeUser,
+            "Abbrechen",
+            "Löschen",
+        )
     };
 
     return (

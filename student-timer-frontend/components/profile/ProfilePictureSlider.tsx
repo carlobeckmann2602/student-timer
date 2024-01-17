@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { View, FlatList, Image, Text, Dimensions, Pressable } from 'react-native';
+import { View, FlatList, Image, Dimensions, Pressable } from 'react-native';
 import { BASE_STYLES, COLORTHEME } from "@/constants/Theme";
-import {P} from "@/components/StyledText";
 import {ProfileImages} from "@/components/profile/useProfilePicture";
 
 type ProfilePictureSliderProps = {
@@ -17,7 +16,7 @@ export default function ProfilePictureSlider({
 }: ProfilePictureSliderProps): React.ReactElement {
     const availableImages = Object.keys(profileImages);
 
-    const [selectedIndex, setSelectedIndex] = useState(0);
+    const [, setSelectedIndex] = useState(0);
 
     const handleImageSelect = (index: number) => {
         setSelectedIndex(index);
@@ -43,11 +42,6 @@ export default function ProfilePictureSlider({
                     </Pressable>
                 )}
             />
-            {/*
-            <View style={{ alignItems: 'center', paddingBottom: 2 }}>
-                <P>Aktuelles Bild: {availableImages[selectedIndex]}</P>
-            </View>
-            */}
         </View>
     );
 }
