@@ -27,7 +27,7 @@ export default function EditData() {
     const [nameError, setNameError] = useState("");
     const [studyCourseError, setStudyCourseError] = useState("");
     const [emailError, setEmailError] = useState("");
-    const [error, setError] = useState("");
+    const [, setError] = useState("");
 
 
     const { profilePictureName, getProfilePictureName } = useProfilePicture();
@@ -36,17 +36,12 @@ export default function EditData() {
         getProfilePictureName();
     }, [authState]);
 
-    console.log("editData:", authState?.user.name)
-    console.log("#### useState:", profilePictureName, typeof profilePictureName);
-    console.log("authState?.user.profilePicture", authState?.user.profilePicture, typeof authState?.user.profilePicture);
-
     const handleInputChange = (setter: React.Dispatch<React.SetStateAction<string>>) => {
         return (value: string) => {
             setter(value);
             setIsChanged(true);
         };
     };
-
 
     const validateInput = () => {
         const nameError = validateName(userName);

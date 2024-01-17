@@ -36,9 +36,9 @@ export default function CardNavigation({
                     size={50}
                 />
             ))}
-            <TouchableOpacity onPress={onNextPress} disabled={reachedLastItem == true} >
+            <TouchableOpacity onPress={onNextPress} disabled={reachedLastItem} >
                 <ChevronRightCircle
-                    color={reachedLastItem == true ? COLORTHEME.light.grey1 : COLORTHEME.light.primary}
+                    color={reachedLastItem ? COLORTHEME.light.grey1 : COLORTHEME.light.primary}
                     size={50}
                 />
             </TouchableOpacity>

@@ -20,7 +20,7 @@ export default function EditPassword() {
     const [userPassword, setUserPassword] = useState("");
     const [userCheckPassword, setUserCheckPassword] = useState("");
     const [passwordError, setPasswordError] = useState("");
-    const [error, setError] = useState("");
+    const [, setError] = useState("");
     const { profilePictureName, getProfilePictureName } = useProfilePicture();
 
     useEffect(() => {

@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import {View, StyleSheet, Image} from "react-native";
+import React, { useEffect } from "react";
+import {View, StyleSheet} from "react-native";
 import Button from "@/components/Button";
 import { ScrollView } from "@/components/Themed";
 import Pressable from "@/components/Pressable";
