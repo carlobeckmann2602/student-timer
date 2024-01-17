@@ -8,8 +8,6 @@ import { ModuleType } from "@/types/ModuleType";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { KeyboardAvoidingView, Platform, StyleSheet } from "react-native";
-import { isWeakMap } from "util/types";
-import { P } from "../StyledText";
 import { computeDateDifference } from "@/libs/moduleTypeHelper";
 
 export type LearningUnitScreenProps = {
@@ -33,26 +31,21 @@ export default function LearningUnitSreen(props: LearningUnitScreenProps) {
     totalLearningTime: 0,
     colorCode: COLORS.VORLESUNG,
     workloadPerWeekMinutes: 1,
-    workloadPerWeekWholeHours: 0,
+    workloadPerWeekHours: 0,
   } as LearningUnitType);
 
   useEffect(() => {
-    const findLearningUnit = () => {
-      if (isEdit) {
-        const detailModule =
-          modules?.find((module) => module.id.toString() === moduleId) ||
-          ({} as ModuleType);
-        let learningUnitToEdit = detailModule.learningUnits.find(
-          (unit) => unit.id.toString() === learningUnitId
-        );
-        if (learningUnitToEdit) {
-          setNewUnitState({ ...learningUnitToEdit });
-          return;
-        }
-      }
-    };
+    if (isEdit) {
+      const detailModule =
+        modules?.find((module) => module.id.toString() === moduleId) ||
+        ({} as ModuleType);
 
-    findLearningUnit();
+      let learningUnitToEdit = detailModule.learningUnits.find(
+        (unit) => unit.id.toString() === learningUnitId
+      );
+
+      learningUnitToEdit && setNewUnitState({ ...learningUnitToEdit });
+    }
   }, []);
 
   const handleUpdate = (createdUnit: LearningUnitType) => {
@@ -65,31 +58,23 @@ export default function LearningUnitSreen(props: LearningUnitScreenProps) {
       ({} as ModuleType);
     let updatedModule = { ...detailModule };
 
+    const updatedUnitLearningTime =
+      newUnitState.workloadPerWeek *
+      computeDateDifference(newUnitState.endDate, newUnitState.startDate, true);
+
     if (isEdit) {
       updatedModule.learningUnits = updatedModule.learningUnits.map((unit) =>
         unit.id === newUnitState.id
           ? {
               ...newUnitState,
-              totalLearningTime:
-                newUnitState.workloadPerWeek *
-                computeDateDifference(
-                  newUnitState.endDate,
-                  newUnitState.startDate,
-                  true
-                ),
+              totalLearningTime: updatedUnitLearningTime,
             }
           : unit
       );
     } else {
       updatedModule.learningUnits.push({
         ...newUnitState,
-        totalLearningTime:
-          newUnitState.workloadPerWeek *
-          computeDateDifference(
-            newUnitState.endDate,
-            newUnitState.startDate,
-            true
-          ),
+        totalLearningTime: updatedUnitLearningTime,
       });
     }
 
@@ -115,9 +100,7 @@ export default function LearningUnitSreen(props: LearningUnitScreenProps) {
         onChange={(inputData) => handleUpdate(inputData)}
       />
       <Button
-        text={
-          learningUnitId ? "Lerneinheit aktualisieren" : "Lerneinheit anlegen"
-        }
+        text={isEdit ? "Lerneinheit aktualisieren" : "Lerneinheit anlegen"}
         backgroundColor={COLORTHEME.light.primary}
         textColor={COLORTHEME.light.grey2}
         onPress={onSave}
@@ -135,15 +118,5 @@ const styles = StyleSheet.create({
     gap: 24,
     backgroundColor: COLORTHEME.light.background,
     paddingVertical: BASE_STYLES.horizontalPadding,
-  },
-  scrollViewContainer: {
-    flexGrow: 1,
-    flexDirection: "column",
-    borderRadius: BASE_STYLES.borderRadius,
-    gap: 24,
-  },
-  scrollViewContainerStyle: {
-    justifyContent: "space-around",
-    gap: 16,
   },
 });

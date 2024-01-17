@@ -9,6 +9,6 @@ export type LearningUnitType = {
   totalLearningTime: number;
 
   colorCode?: string;
-  workloadPerWeekWholeHours?: number;
+  workloadPerWeekHours?: number;
   workloadPerWeekMinutes?: number;
 };

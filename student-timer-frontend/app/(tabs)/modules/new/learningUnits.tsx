@@ -97,8 +97,8 @@ export default function NewModuleLearningUnits() {
       );
       const createdModule: ModuleType | undefined = response?.data;
       learningUnits.forEach(async (unit: LearningUnitType) => {
-        let totalWorkloadPerWeek = unit.workloadPerWeekWholeHours
-          ? unit.workloadPerWeekWholeHours
+        let totalWorkloadPerWeek = unit.workloadPerWeekHours
+          ? unit.workloadPerWeekHours
           : 0;
         totalWorkloadPerWeek += unit.workloadPerWeekMinutes
           ? unit.workloadPerWeekMinutes
