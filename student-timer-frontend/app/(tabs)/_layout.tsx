@@ -64,6 +64,7 @@ export default function TabLayout() {
         options={{
           headerShown: false,
           href: "/modules",
+          title: "Module",
           tabBarIcon: ({ color }) => <LayoutList name="module" color={color} />,
         }}
       />

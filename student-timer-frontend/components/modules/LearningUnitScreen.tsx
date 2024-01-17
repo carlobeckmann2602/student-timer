@@ -6,8 +6,10 @@ import { useModules } from "@/context/ModuleContext";
 import { LearningUnitType } from "@/types/LearningUnitType";
 import { ModuleType } from "@/types/ModuleType";
 import { useRouter } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { KeyboardAvoidingView, Platform, StyleSheet } from "react-native";
+import { isWeakMap } from "util/types";
+import { P } from "../StyledText";
 
 export type LearningUnitScreenProps = {
   moduleId: string;
@@ -15,66 +17,59 @@ export type LearningUnitScreenProps = {
   isEdit: boolean;
 };
 
-export default function NewModuleLearningUnits(props: LearningUnitScreenProps) {
+export default function LearningUnitSreen(props: LearningUnitScreenProps) {
   const { moduleId, learningUnitId, isEdit } = props;
 
   const { modules, setModules } = useModules();
   const router = useRouter();
 
-  const findLearningUnit = () => {
-    if (isEdit) {
-      const detailModule =
-        modules?.find((module) => module.id.toString() === moduleId) ||
-        ({} as ModuleType);
-      if (detailModule) {
+  const [newUnitState, setNewUnitState] = useState<LearningUnitType>({
+    id: +learningUnitId,
+    name: LearningUnitEnum.VORLESUNG,
+    workloadPerWeek: 1,
+    startDate: new Date(),
+    endDate: new Date(),
+    totalLearningTime: 0,
+    colorCode: COLORS.VORLESUNG,
+    workloadPerWeekMinutes: 1,
+    workloadPerWeekWholeHours: 0,
+  } as LearningUnitType);
+
+  useEffect(() => {
+    const findLearningUnit = () => {
+      if (isEdit) {
+        const detailModule =
+          modules?.find((module) => module.id.toString() === moduleId) ||
+          ({} as ModuleType);
         let learningUnitToEdit = detailModule.learningUnits.find(
           (unit) => unit.id.toString() === learningUnitId
         );
         if (learningUnitToEdit) {
-          return learningUnitToEdit;
+          setNewUnitState({ ...learningUnitToEdit });
+          return;
         }
       }
-    }
+    };
 
-    const [newUnitState] = useState<LearningUnitType>({
-      id: +learningUnitId,
-      name: LearningUnitEnum.VORLESUNG,
-      workloadPerWeek: 1,
-      startDate: new Date(),
-      endDate: new Date(),
-      totalLearningTime: 0,
-      colorCode: COLORS.VORLESUNG,
-      workloadPerWeekMinutes: 1,
-      workloadPerWeekWholeHours: 0,
-    } as LearningUnitType);
-
-    return newUnitState;
-  };
-
-  let learningUnitState = findLearningUnit();
-
-  // useEffect(() => {
-  //   detailModule =
-  //     modules?.find((module) => module.id.toString() === moduleId) ||
-  //     ({} as ModuleType);
-
-  //   learningUnit = findLearningUnit();
-  // }, [modules]);
+    findLearningUnit();
+  }, []);
 
   const handleUpdate = (createdUnit: LearningUnitType) => {
+    setNewUnitState(createdUnit);
+  };
+
+  const onSave = async () => {
     const detailModule =
       modules?.find((module) => module.id.toString() === moduleId) ||
       ({} as ModuleType);
     let updatedModule = { ...detailModule };
 
-    if (
-      updatedModule.learningUnits.find((unit) => unit.id === createdUnit.id)
-    ) {
+    if (isEdit) {
       updatedModule.learningUnits = updatedModule.learningUnits.map((unit) =>
-        unit.id === createdUnit.id ? createdUnit : unit
+        unit.id === newUnitState.id ? { ...newUnitState } : unit
       );
     } else {
-      updatedModule.learningUnits.push(createdUnit);
+      updatedModule.learningUnits.push({ ...newUnitState });
     }
 
     setModules &&
@@ -85,9 +80,6 @@ export default function NewModuleLearningUnits(props: LearningUnitScreenProps) {
             : currentModule;
         })
       );
-  };
-
-  const onSave = async () => {
     router.back();
   };
 
@@ -97,8 +89,8 @@ export default function NewModuleLearningUnits(props: LearningUnitScreenProps) {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <LearningUnitForm
-        key={learningUnitState?.id}
-        inputData={learningUnitState}
+        key={newUnitState?.id}
+        inputData={newUnitState}
         onChange={(inputData) => handleUpdate(inputData)}
       />
       <Button

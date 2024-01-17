@@ -1,11 +1,13 @@
 import { View, StyleSheet, Pressable } from "react-native";
-import { COLORTHEME } from "@/constants/Theme";
+import { COLORS, COLORTHEME } from "@/constants/Theme";
 import DateTimePicker from "../DateTimePicker";
 import { LearningUnitType } from "@/types/LearningUnitType";
 import { LabelS, P } from "../StyledText";
 import UnitPicker from "./UnitPicker";
 import { Trash2 } from "lucide-react-native";
 import InputFieldNumeric from "../InputFieldNumeric";
+import { LearningUnitEnum } from "@/constants/LearningUnitEnum";
+import { ObjectKey } from "@/context/ModuleContext";
 
 type LearningUnitFormProps = {
   inputData: LearningUnitType;
@@ -36,6 +38,7 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
     let updatedTotalWorkloadPerWeek =
       formattedHourValue + updatedWorkloadPerWeekMinutes;
 
+    console.log(formattedHourValue);
     handleChange({
       workloadPerWeekMinutes: updatedWorkloadPerWeekMinutes,
       workloadPerWeekHours: formattedHourValue,
@@ -72,7 +75,17 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
         <UnitPicker
           label="Typ der Lerneinheit"
           value={inputData.name}
-          onValueChange={(value) => handleChange({ name: value })}
+          onValueChange={(value) =>
+            handleChange({
+              name: value,
+              colorCode:
+                COLORS[
+                  Object.keys(LearningUnitEnum)[
+                    Object.values(LearningUnitEnum).indexOf(value)
+                  ] as ObjectKey
+                ],
+            })
+          }
         />
       </View>
       <View style={styles.dateRowWrapper}>

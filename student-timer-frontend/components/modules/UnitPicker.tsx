@@ -9,16 +9,12 @@ import { LearningUnitEnum } from "@/constants/LearningUnitEnum";
 
 export type UnitPickerProps = {
   label?: string;
-  value?: LearningUnitEnum;
+  value: LearningUnitEnum;
   onValueChange: (value: LearningUnitEnum) => void;
 };
 
 export default function UnitPicker(props: UnitPickerProps) {
   const { label, value, onValueChange } = props;
-
-  const [selectedUnit, setSelectedUnit] = useState<LearningUnitEnum>(
-    value ? value : LearningUnitEnum.VORLESUNG
-  );
 
   const unitValues = Object.values(LearningUnitEnum).filter(
     (item) => item !== LearningUnitEnum.SELBSTSTUDIUM
@@ -32,10 +28,10 @@ export default function UnitPicker(props: UnitPickerProps) {
           style={[
             styles.unitIndicator,
             {
-              backgroundColor: selectedUnit
+              backgroundColor: value
                 ? COLORS[
                     Object.keys(LearningUnitEnum)[
-                      Object.values(LearningUnitEnum).indexOf(selectedUnit)
+                      Object.values(LearningUnitEnum).indexOf(value)
                     ] as ObjectKey
                   ]
                 : "transparent",
@@ -50,7 +46,7 @@ export default function UnitPicker(props: UnitPickerProps) {
             inputIOS: { paddingHorizontal: 10 },
           }}
           placeholder={{}}
-          value={selectedUnit?.toString()}
+          value={value?.toString()}
           items={unitValues.map((item) => {
             return {
               key: item,
@@ -58,9 +54,8 @@ export default function UnitPicker(props: UnitPickerProps) {
               value: item,
             } as Item;
           })}
-          onValueChange={(moduleIdString: LearningUnitEnum) => {
-            setSelectedUnit(moduleIdString);
-            onValueChange && onValueChange(moduleIdString);
+          onValueChange={(unitEnumValue: LearningUnitEnum) => {
+            onValueChange && onValueChange(unitEnumValue);
           }}
           //@ts-ignore
           InputAccessoryView={() => null}
