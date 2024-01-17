@@ -23,7 +23,6 @@ export default function ModulesLayout() {
                       /\/learningUnits\/\d+/,
                       ""
                     );
-                    console.log(dynamicPath);
                     router.push(
                       `/${dynamicPath.substring(1, dynamicPath.length)}`
                     );

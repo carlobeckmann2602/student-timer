@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { KeyboardAvoidingView, Platform, StyleSheet } from "react-native";
 import { isWeakMap } from "util/types";
 import { P } from "../StyledText";
+import { computeDateDifference } from "@/libs/moduleTypeHelper";
 
 export type LearningUnitScreenProps = {
   moduleId: string;
@@ -66,10 +67,30 @@ export default function LearningUnitSreen(props: LearningUnitScreenProps) {
 
     if (isEdit) {
       updatedModule.learningUnits = updatedModule.learningUnits.map((unit) =>
-        unit.id === newUnitState.id ? { ...newUnitState } : unit
+        unit.id === newUnitState.id
+          ? {
+              ...newUnitState,
+              totalLearningTime:
+                newUnitState.workloadPerWeek *
+                computeDateDifference(
+                  newUnitState.endDate,
+                  newUnitState.startDate,
+                  true
+                ),
+            }
+          : unit
       );
     } else {
-      updatedModule.learningUnits.push({ ...newUnitState });
+      updatedModule.learningUnits.push({
+        ...newUnitState,
+        totalLearningTime:
+          newUnitState.workloadPerWeek *
+          computeDateDifference(
+            newUnitState.endDate,
+            newUnitState.startDate,
+            true
+          ),
+      });
     }
 
     setModules &&

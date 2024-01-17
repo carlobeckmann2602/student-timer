@@ -41,8 +41,8 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
     console.log(formattedHourValue);
     handleChange({
       workloadPerWeekMinutes: updatedWorkloadPerWeekMinutes,
-      workloadPerWeekHours: formattedHourValue,
-      totalWorkloadPerWeek: updatedTotalWorkloadPerWeek,
+      workloadPerWeekWholeHours: formattedHourValue,
+      workloadPerWeek: updatedTotalWorkloadPerWeek,
     });
   };
 
@@ -65,7 +65,7 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
 
     handleChange({
       workloadPerWeekMinutes: formattedValue,
-      totalWorkloadPerWeek: updatedTotalWorkloadPerWeek,
+      workloadPerWeek: updatedTotalWorkloadPerWeek,
     });
   };
 
