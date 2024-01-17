@@ -18,11 +18,11 @@ type ModuleProps = {
   fetchModules?: () => Promise<any>;
   setModules?: React.Dispatch<React.SetStateAction<ModuleType[] | undefined>>;
   unitStatus?: {
-    [key: number]: null | "edit" | "delete" | "created";
+    [key: number]: null | "edit" | "delete" | "create";
   };
   setUnitStatus?: React.Dispatch<
     React.SetStateAction<{
-      [key: number]: null | "edit" | "delete" | "created";
+      [key: number]: null | "edit" | "delete" | "create";
     }>
   >;
   resetUnitStatus?: (module: ModuleType) => void;
@@ -42,7 +42,7 @@ export const ModuleProvider = ({ children }: any) => {
   const { authAxios } = useAxios();
   const [modules, setModules] = useState<ModuleType[] | undefined>();
   const [unitStatus, setUnitStatus] = useState<{
-    [key: number]: null | "edit" | "delete" | "created";
+    [key: number]: null | "edit" | "delete" | "create";
   }>({});
 
   useEffect(() => {
@@ -67,14 +67,12 @@ export const ModuleProvider = ({ children }: any) => {
 
   const resetUnitStatus = (module: ModuleType) => {
     let collectedUnitPairs: {
-      [key: number]: null | "edit" | "delete" | "created";
+      [key: number]: null | "edit" | "delete" | "create";
     } = {};
     module.learningUnits.forEach((unit) => {
       collectedUnitPairs[unit.id] = null;
     });
     setUnitStatus && setUnitStatus(collectedUnitPairs);
-    console.log("Chekc");
-    console.log(unitStatus);
   };
 
   const value = {

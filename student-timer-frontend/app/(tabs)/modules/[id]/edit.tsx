@@ -11,7 +11,7 @@ import { useModules } from "@/context/ModuleContext";
 import { computeRemainingSessionTime } from "@/libs/moduleTypeHelper";
 import { LearningUnitType } from "@/types/LearningUnitType";
 import { ModuleType } from "@/types/ModuleType";
-import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { Plus } from "lucide-react-native";
 import React from "react";
 import { useState } from "react";
@@ -111,7 +111,7 @@ export default function EditModule() {
         if (unitStatus)
           for (let [key, value] of Object.entries(unitStatus)) {
             switch (value) {
-              case "created":
+              case "create":
                 const unitToCreate = detailModule.learningUnits.find(
                   (unit) => unit.id.toString() === key
                 );
@@ -199,28 +199,12 @@ export default function EditModule() {
               ),
             };
             handleUpdate(updatedModule);
-            // deleteLearningUnit(learningUnitId);
           },
           style: "destructive",
         },
       ],
       { cancelable: false }
     );
-  };
-
-  const deleteLearningUnit = async (learningUnitId: number) => {
-    let id = toast.show("Löschen...", { type: "loading" });
-    try {
-      await authAxios?.delete(
-        `/students/${authState?.user.id}/modules/${detailModule.id}/learningUnits/${learningUnitId}`
-      );
-      toast.update(id, "Lerneinheit erfolgreich gelöscht", { type: "success" });
-      fetchModules && (await fetchModules());
-    } catch (e) {
-      toast.update(id, `Fehler beim Löschen der Lerneinheit: ${e}`, {
-        type: "danger",
-      });
-    }
   };
 
   return (
@@ -248,7 +232,7 @@ export default function EditModule() {
                 setUnitStatus &&
                   setUnitStatus((prevState) => ({
                     ...prevState,
-                    [newUnitId]: "created",
+                    [newUnitId]: "create",
                   }));
                 router.push({
                   pathname: `/modules/${detailModule.id}/learningUnits/new`,

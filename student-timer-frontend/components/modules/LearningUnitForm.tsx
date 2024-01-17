@@ -20,6 +20,52 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
     onChange({ ...inputData, ...value });
   };
 
+  const updateWorkloadHours = (value: number) => {
+    let formattedHourValue = Math.round(Math.abs(+value * 60));
+    let updatedWorkloadPerWeekMinutes = 1;
+    if (
+      formattedHourValue === 0 &&
+      (!inputData.workloadPerWeekMinutes ||
+        inputData.workloadPerWeekMinutes <= 0)
+    ) {
+      updatedWorkloadPerWeekMinutes = 1;
+    } else {
+      updatedWorkloadPerWeekMinutes = inputData.workloadPerWeekMinutes!;
+    }
+
+    let updatedTotalWorkloadPerWeek =
+      formattedHourValue + updatedWorkloadPerWeekMinutes;
+
+    handleChange({
+      workloadPerWeekMinutes: updatedWorkloadPerWeekMinutes,
+      workloadPerWeekHours: formattedHourValue,
+      totalWorkloadPerWeek: updatedTotalWorkloadPerWeek,
+    });
+  };
+
+  const updateWorkloadMinutes = (value: number) => {
+    let formattedValue =
+      Math.round(Math.abs(+value)) >= 60 ? 59 : Math.round(Math.abs(+value));
+    if (
+      formattedValue === 0 &&
+      (!inputData.workloadPerWeekWholeHours ||
+        inputData.workloadPerWeekWholeHours <= 0)
+    ) {
+      formattedValue = 1;
+    }
+
+    let updatedTotalWorkloadPerWeek;
+    if (inputData.workloadPerWeekMinutes)
+      updatedTotalWorkloadPerWeek =
+        formattedValue + inputData.workloadPerWeekMinutes;
+    else updatedTotalWorkloadPerWeek = formattedValue;
+
+    handleChange({
+      workloadPerWeekMinutes: formattedValue,
+      totalWorkloadPerWeek: updatedTotalWorkloadPerWeek,
+    });
+  };
+
   return (
     <View style={styles.outerWrapper}>
       <View style={styles.row}>
@@ -53,11 +99,7 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
         </P>
         <View style={styles.row}>
           <InputFieldNumeric
-            onChangeText={(value) => {
-              handleChange({
-                workloadPerWeekWholeHours: Math.round(Math.abs(+value * 60)),
-              });
-            }}
+            onChangeText={(value) => updateWorkloadHours(+value)}
             value={
               inputData.workloadPerWeekWholeHours
                 ? Math.floor(
@@ -68,22 +110,7 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
             inputUnit="Std."
           />
           <InputFieldNumeric
-            onChangeText={(value) => {
-              let formattedValue =
-                Math.round(Math.abs(+value)) >= 60
-                  ? 59
-                  : Math.round(Math.abs(+value));
-              if (
-                formattedValue === 0 &&
-                inputData.workloadPerWeekWholeHours! <= 0
-              ) {
-                formattedValue = 1;
-              }
-
-              handleChange({
-                workloadPerWeekMinutes: formattedValue,
-              });
-            }}
+            onChangeText={(value) => updateWorkloadMinutes(+value)}
             value={
               inputData.workloadPerWeekMinutes
                 ? inputData.workloadPerWeekMinutes.toString()

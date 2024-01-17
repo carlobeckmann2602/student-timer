@@ -2,15 +2,12 @@ import Button from "@/components/Button";
 import { LearningUnitForm } from "@/components/modules/LearningUnitForm";
 import { LearningUnitEnum } from "@/constants/LearningUnitEnum";
 import { BASE_STYLES, COLORS, COLORTHEME } from "@/constants/Theme";
-import { useAuth } from "@/context/AuthContext";
-import { useAxios } from "@/context/AxiosContext";
 import { useModules } from "@/context/ModuleContext";
 import { LearningUnitType } from "@/types/LearningUnitType";
 import { ModuleType } from "@/types/ModuleType";
 import { useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { KeyboardAvoidingView, Platform, StyleSheet } from "react-native";
-import { useToast } from "react-native-toast-notifications";
 
 export type LearningUnitScreenProps = {
   moduleId: string;
@@ -21,10 +18,7 @@ export type LearningUnitScreenProps = {
 export default function NewModuleLearningUnits(props: LearningUnitScreenProps) {
   const { moduleId, learningUnitId, isEdit } = props;
 
-  const toast = useToast();
-  const { authState } = useAuth();
-  const { authAxios } = useAxios();
-  const { modules, fetchModules, setModules } = useModules();
+  const { modules, setModules } = useModules();
   const router = useRouter();
 
   const findLearningUnit = () => {
@@ -42,7 +36,7 @@ export default function NewModuleLearningUnits(props: LearningUnitScreenProps) {
       }
     }
 
-    return {
+    const [newUnitState] = useState<LearningUnitType>({
       id: +learningUnitId,
       name: LearningUnitEnum.VORLESUNG,
       workloadPerWeek: 1,
@@ -52,10 +46,12 @@ export default function NewModuleLearningUnits(props: LearningUnitScreenProps) {
       colorCode: COLORS.VORLESUNG,
       workloadPerWeekMinutes: 1,
       workloadPerWeekWholeHours: 0,
-    } as LearningUnitType;
+    } as LearningUnitType);
+
+    return newUnitState;
   };
 
-  let learningUnit = findLearningUnit();
+  let learningUnitState = findLearningUnit();
 
   // useEffect(() => {
   //   detailModule =
@@ -89,17 +85,9 @@ export default function NewModuleLearningUnits(props: LearningUnitScreenProps) {
             : currentModule;
         })
       );
-    console.log(updatedModule.learningUnits);
   };
 
-  const onUpdateLearningUnit = async () => {
-    let totalWorkloadPerWeek = learningUnit.workloadPerWeekWholeHours
-      ? learningUnit.workloadPerWeekWholeHours
-      : 0;
-    totalWorkloadPerWeek += learningUnit.workloadPerWeekMinutes
-      ? learningUnit.workloadPerWeekMinutes
-      : 0;
-
+  const onSave = async () => {
     router.back();
   };
 
@@ -109,8 +97,8 @@ export default function NewModuleLearningUnits(props: LearningUnitScreenProps) {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <LearningUnitForm
-        key={learningUnit?.id}
-        inputData={learningUnit}
+        key={learningUnitState?.id}
+        inputData={learningUnitState}
         onChange={(inputData) => handleUpdate(inputData)}
       />
       <Button
@@ -119,7 +107,7 @@ export default function NewModuleLearningUnits(props: LearningUnitScreenProps) {
         }
         backgroundColor={COLORTHEME.light.primary}
         textColor={COLORTHEME.light.grey2}
-        onPress={onUpdateLearningUnit}
+        onPress={onSave}
         style={{ marginBottom: BASE_STYLES.horizontalPadding }}
       />
     </KeyboardAvoidingView>
