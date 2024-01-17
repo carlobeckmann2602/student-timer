@@ -11,6 +11,8 @@ import OtherLogins from "@/components/auth/OtherLogins";
 import { useAuth } from "@/context/AuthContext";
 import { useToast } from "react-native-toast-notifications";
 import { Title } from "@/components/StyledText";
+import { validateName, validateEmail, validatePassword, validateStudyCourse, comparePasswords } from "@/components/auth/validationMethods"
+
 
 export default function SignupScreen() {
   const toast = useToast();
@@ -32,54 +34,34 @@ export default function SignupScreen() {
   const router = useRouter();
 
   const validateInput = () => {
-    let nameValid = false;
-    if (userName.length == 0) {
-      setNameError("Name ist erforderlich");
-    } else {
-      setNameError("");
-      nameValid = true;
-    }
+    const nameError = validateName(userName);
+    setNameError(nameError);
+    const nameValid = nameError === "";
 
-    let studyCourseValid = false;
-    if (userStudyCourse.length == 0) {
-      setStudyCourseError("Studienfach ist erforderlich");
-    } else {
-      setStudyCourseError("");
-      studyCourseValid = true;
-    }
+    const studyCourseError = validateStudyCourse(userStudyCourse);
+    setStudyCourseError(studyCourseError);
+    const studyCourseValid = studyCourseError === "";
 
-    let emailValid = false;
-    if (userEmail.length == 0) {
-      setEmailError("E-Mail ist erforderlich");
-    } else if (userEmail.length < 6) {
-      setEmailError("E-Mail sollte mindestens 6 Zeichen lang sein");
-    } else if (userEmail.indexOf(" ") >= 0) {
-      setEmailError("E-Mail kann keine Leerzeichen enthalten");
-    } else {
-      setEmailError("");
-      emailValid = true;
-    }
+    const emailError = validateEmail(userEmail);
+    setEmailError(emailError);
+    const emailValid = emailError === "";
 
     let passwordValid = false;
-    if (userPassword.length == 0) {
-      setPasswordError("Passwort ist erforderlich");
-    } else if (userPassword.length < 6) {
-      setPasswordError("Das Passwort sollte mindestens 6 Zeichen lang sein");
-    } else if (userPassword.indexOf(" ") >= 0) {
-      setPasswordError("Passwort kann keine Leerzeichen enthalten");
-    } else if (userPassword != userCheckPassword) {
-      setPasswordError("Passwörter stimmen nicht überein");
-    } else {
-      setPasswordError("");
+    let passwordError = validatePassword(userPassword);
+    if (passwordError === "" && userPassword !== userCheckPassword) {
+      passwordError = comparePasswords(userPassword, userCheckPassword);
+    }
+    setPasswordError(passwordError);
+    if (passwordError === "") {
       passwordValid = true;
     }
 
-    return emailValid && passwordValid;
+    return nameValid && studyCourseValid && emailValid && passwordValid;
   };
 
   const register = async () => {
-    let id = toast.show("Registierung...", { type: "loading" });
     if (validateInput()) {
+      let id = toast.show("Registierung...", { type: "loading" });
       const result = await onRegister!(
         userName,
         userStudyCourse,
@@ -93,9 +75,10 @@ export default function SignupScreen() {
       } else {
         toast.update(id, "Registierung erfolgreich", { type: "success" });
         router.push("/(tabs)/modules");
-        //toDo Popup dafür, dass man erst ein neues Modul anlegen muss? oder in Tracking?
       }
-    }
+    } else {
+    toast.show("Validierung fehlgeschlagen", { type: "warning" });
+  }
   };
 
   return (

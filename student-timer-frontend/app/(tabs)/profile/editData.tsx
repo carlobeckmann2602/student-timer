@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import { StyleSheet, Alert } from "react-native";
+import { Alert } from "react-native";
 import { View, ScrollView } from "@/components/Themed";
 import { useRouter } from "expo-router";
 import { BASE_STYLES } from "@/constants/Theme";
@@ -9,6 +9,7 @@ import Pressable from "@/components/Pressable";
 import { useToast } from "react-native-toast-notifications";
 import ProfilePicture from "@/components/profile/ProfilePicture";
 import {useProfilePicture} from "@/components/profile/useProfilePicture";
+import { validateName, validateStudyCourse, validateEmail } from "@/components/auth/validationMethods"
 
 export default function EditData() {
 
@@ -46,34 +47,20 @@ export default function EditData() {
         };
     };
 
+
     const validateInput = () => {
-        let nameValid = false;
-        if (userName.length == 0) {
-            setNameError("Name ist erforderlich");
-        } else {
-            setNameError("");
-            nameValid = true;
-        }
+        const nameError = validateName(userName);
+        setNameError(nameError);
+        const nameValid = nameError === "";
 
-        let studyCourseValid = false;
-        if (userStudyCourse.length == 0) {
-            setStudyCourseError("Studienfach ist erforderlich");
-        } else {
-            setStudyCourseError("");
-            studyCourseValid = true;
-        }
+        const studyCourseError = validateStudyCourse(userStudyCourse);
+        setStudyCourseError(studyCourseError);
+        const studyCourseValid = studyCourseError === "";
 
-        let emailValid = false;
-        if (userEmail.length == 0) {
-            setEmailError("E-Mail ist erforderlich");
-        } else if (userEmail.length < 6) {
-            setEmailError("E-Mail sollte mindestens 6 Zeichen lang sein");
-        } else if (userEmail.indexOf(" ") >= 0) {
-            setEmailError("E-Mail kann keine Leerzeichen enthalten");
-        } else {
-            setEmailError("");
-            emailValid = true;
-        }
+        const emailError = validateEmail(userEmail);
+        setEmailError(emailError);
+        const emailValid = emailError === "";
+
         return (nameValid && studyCourseValid && emailValid);
     };
 
