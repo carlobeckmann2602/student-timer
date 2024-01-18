@@ -1,8 +1,4 @@
-import { COLORS } from "@/constants/Theme";
-import { LearningUnitType } from "@/types/LearningUnitType";
 import { convertMinutesToHours } from "./timeHelper";
-
-type ObjectKey = keyof typeof COLORS;
 
 export const computeDateDifference = (
   date1: Date,
@@ -38,19 +34,6 @@ export const computeDeadline = (exam_date?: Date) => {
   return remaining_days > 6
     ? `${Math.floor(remaining_days / 7)} Woche(n)`
     : `${remaining_days} Tag(e)`;
-};
-
-/**
- * Returns the dedicated HEX-Code for a given learning unit
- * @param unit Learning unit from module
- * @returns String with HEX-Code from Constants for the given learning unit
- */
-export const computeLearningUnitColor = (
-  unit: LearningUnitType,
-  defaultColor: string
-) => {
-  let unit_color = COLORS[unit.name as ObjectKey];
-  return unit_color !== undefined ? unit_color : defaultColor;
 };
 
 export const computeRemainingSessionTime = (

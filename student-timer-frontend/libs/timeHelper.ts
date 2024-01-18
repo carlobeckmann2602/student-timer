@@ -43,8 +43,15 @@ export const formatTimeLearningSession = ({
     .padStart(2, "0")} Std.`;
 };
 
-export const convertMinutesToHours = (minutes: number) => {
-  return +(minutes / 60).toFixed(1);
+export const convertMinutesToHours = (
+  minutes: number,
+  nullable: boolean = true
+) => {
+  if (nullable) return +(minutes / 60).toFixed(1);
+  else {
+    const hourValue = +(minutes / 60).toFixed(1);
+    return hourValue > 0 ? hourValue : 0.1;
+  }
 };
 
 export const roundSecToMinInMs = (ms: number) =>

@@ -39,6 +39,8 @@ export default function NewModuleLearningUnits() {
       startDate: new Date(),
       endDate: new Date(),
       totalLearningTime: 0,
+      workloadPerWeekHours: 0,
+      workloadPerWeekMinutes: 1,
     },
   ]);
 
@@ -62,10 +64,12 @@ export default function NewModuleLearningUnits() {
       const newlearningUnit = {
         id: Math.random(),
         name: LearningUnitEnum.VORLESUNG,
-        workloadPerWeek: 0,
+        workloadPerWeek: 1,
         startDate: new Date(),
         endDate: new Date(),
         totalLearningTime: 0,
+        workloadPerWeekHours: 0,
+        workloadPerWeekMinutes: 1,
       };
       return [...prevLearningUnits, newlearningUnit];
     });

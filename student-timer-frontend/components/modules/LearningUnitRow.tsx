@@ -21,7 +21,8 @@ export default function LearningUnitRow(props: learningUnitProps) {
     let weekAmount = computeDateDifference(unit.endDate, unit.startDate, true);
 
     return `${convertMinutesToHours(
-      unit.workloadPerWeek
+      unit.workloadPerWeek,
+      false
     )} Std., ${weekAmount} Woche(n)`;
   };
 
