@@ -15,12 +15,15 @@ export default function TrackingModeToggle(props: {
         { label: "Stoppuhr", value: true },
         { label: "Timer", value: false },
       ]}
+      style={{
+        opacity: disabled ? 0.5 : undefined,
+      }}
       initial={0}
       onPress={onPress}
       backgroundColor={COLORTHEME.light.primary}
-      buttonColor={`${COLORS.white}${disabled ? "B2" : "FF"}`}
+      buttonColor={COLORS.white}
       selectedColor={COLORTHEME.light.primary}
-      textColor={`${COLORS.white}${disabled ? "B2" : "FF"}`}
+      textColor={COLORS.white}
       hasPadding
       valuePadding={4}
       borderWidth={0}
