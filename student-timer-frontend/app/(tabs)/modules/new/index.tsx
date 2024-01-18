@@ -1,19 +1,15 @@
+import Alert from "@/components/Alert";
 import Button from "@/components/Button";
 import ModuleForm from "@/components/modules/ModuleForm";
 import { BASE_STYLES, COLORS, COLORTHEME } from "@/constants/Theme";
 import { ModuleType } from "@/types/ModuleType";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import {
-  Alert,
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-  View,
-} from "react-native";
+import { StyleSheet, View } from "react-native";
 
 export default function NewModule() {
   const router = useRouter();
+  const [openChanges, setOpenChanges] = useState(false);
 
   const [newModule, setNewModule] = useState<ModuleType>({
     id: -1,
@@ -58,6 +54,7 @@ export default function NewModule() {
   const handleUpdate = (module: ModuleType, disabledStatus?: boolean) => {
     if (module) setNewModule(module);
     if (disabledStatus != undefined) setDateDisabled(disabledStatus);
+    if (!openChanges) setOpenChanges(true);
   };
 
   const onContinue = () => {
@@ -85,32 +82,8 @@ export default function NewModule() {
     }
   };
 
-  /*   const onAbort = () => {
-    Alert.alert(
-      "Erstellung abbrechen?",
-      "Alle Eingaben gehen ungespeichert verloren.",
-      [
-        {
-          text: "Abbrechen",
-          style: "destructive",
-        },
-        {
-          text: "Fortfahren",
-          onPress: () => {
-            router.replace("/modules");
-          },
-          style: "default",
-        },
-      ],
-      { cancelable: false }
-    );
-  }; */
-
   return (
-    <View
-      style={styles.container}
-      // behavior={Platform.OS === "ios" ? "padding" : "height"}
-    >
+    <View style={styles.container}>
       <ModuleForm
         inputData={newModule}
         onChange={handleUpdate}
@@ -124,13 +97,21 @@ export default function NewModule() {
         textColor={COLORTHEME.light.grey2}
         onPress={onContinue}
       />
-      {/* <Button
+      <Button
         text="Abbrechen"
         borderColor={COLORTHEME.light.danger}
         backgroundColor={COLORTHEME.light.background}
         textColor={COLORTHEME.light.danger}
-        onPress={onAbort}
-      /> */}
+        onPress={() =>
+          openChanges
+            ? Alert(
+                "Eingaben verwerfen?",
+                "Wenn du fortfährst, gehen alle Eingaben verloren. Bist du dir sicher?",
+                () => router.push("/modules")
+              )
+            : router.push("/modules")
+        }
+      />
     </View>
   );
 }

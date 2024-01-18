@@ -9,6 +9,8 @@ import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { KeyboardAvoidingView, Platform, StyleSheet } from "react-native";
 import { computeDateDifference } from "@/libs/moduleTypeHelper";
+import { View } from "../Themed";
+import Alert from "../Alert";
 
 export type LearningUnitScreenProps = {
   moduleId: string;
@@ -21,6 +23,7 @@ export default function LearningUnitSreen(props: LearningUnitScreenProps) {
 
   const { modules, setModules } = useModules();
   const router = useRouter();
+  const [openChanges, setOpenChanges] = useState(false);
 
   const [newUnitState, setNewUnitState] = useState<LearningUnitType>({
     id: +learningUnitId,
@@ -50,6 +53,7 @@ export default function LearningUnitSreen(props: LearningUnitScreenProps) {
 
   const handleUpdate = (createdUnit: LearningUnitType) => {
     setNewUnitState(createdUnit);
+    if (!openChanges) setOpenChanges(true);
   };
 
   const onSave = async () => {
@@ -99,13 +103,31 @@ export default function LearningUnitSreen(props: LearningUnitScreenProps) {
         inputData={newUnitState}
         onChange={(inputData) => handleUpdate(inputData)}
       />
-      <Button
-        text={isEdit ? "Lerneinheit aktualisieren" : "Lerneinheit anlegen"}
-        backgroundColor={COLORTHEME.light.primary}
-        textColor={COLORTHEME.light.grey2}
-        onPress={onSave}
-        style={{ marginBottom: BASE_STYLES.horizontalPadding }}
-      />
+      <View style={styles.buttonRowWrapper}>
+        <Button
+          text="Zurück"
+          borderColor={COLORTHEME.light.danger}
+          backgroundColor={COLORTHEME.light.background}
+          textColor={COLORTHEME.light.danger}
+          style={{ flex: 1 }}
+          onPress={() =>
+            openChanges
+              ? Alert(
+                  "Änderungen verwerfen?",
+                  "Wenn du fortfährst, gehen die Änderungen verloren. Bist du dir sicher?",
+                  () => router.back()
+                )
+              : router.back()
+          }
+        />
+        <Button
+          text={isEdit ? "Lerneinheit aktualisieren" : "Lerneinheit anlegen"}
+          backgroundColor={COLORTHEME.light.primary}
+          textColor={COLORTHEME.light.grey2}
+          style={{ flex: 1 }}
+          onPress={onSave}
+        />
+      </View>
     </KeyboardAvoidingView>
   );
 }
@@ -118,5 +140,11 @@ const styles = StyleSheet.create({
     gap: 24,
     backgroundColor: COLORTHEME.light.background,
     paddingVertical: BASE_STYLES.horizontalPadding,
+  },
+  buttonRowWrapper: {
+    flexDirection: "row",
+    width: "100%",
+    gap: 16,
+    marginBottom: BASE_STYLES.horizontalPadding,
   },
 });

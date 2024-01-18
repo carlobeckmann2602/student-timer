@@ -1,3 +1,4 @@
+import Alert from "@/components/Alert";
 import Button from "@/components/Button";
 import { H2 } from "@/components/StyledText";
 import { View } from "@/components/Themed";
@@ -16,8 +17,8 @@ import { Plus } from "lucide-react-native";
 import React from "react";
 import { useState } from "react";
 import {
-  Alert,
   KeyboardAvoidingView,
+  Alert as ReactAlert,
   Platform,
   Pressable,
   ScrollView,
@@ -36,6 +37,7 @@ export default function EditModule() {
   const { modules, setModules, fetchModules, unitStatus, setUnitStatus } =
     useModules();
   const router = useRouter();
+  const [openChanges, setOpenChanges] = useState(false);
 
   const detailModule =
     modules?.find((module) => module.id.toString() === moduleToEditId) ||
@@ -78,6 +80,7 @@ export default function EditModule() {
         })
       );
     if (disabledStatus != undefined) setDateDisabled(disabledStatus);
+    if (!openChanges) setOpenChanges(true);
   };
 
   const onSave = async () => {
@@ -173,37 +176,28 @@ export default function EditModule() {
   };
 
   const onDelete = (learningUnitId: number) => {
-    Alert.alert(
+    Alert(
       "Lerneinheit wirklich löschen?",
-      `Möchtest du die Lerneinheit ${
+      `Alle zur Lerneinheit ${
         detailModule.learningUnits.find((unit) => unit.id === learningUnitId)
           ?.name
-      } wirklich unwiederuflich löschen?`,
-      [
-        {
-          text: "Abbrechen",
-          style: "cancel",
-        },
-        {
-          text: "Löschen",
-          onPress: () => {
-            setUnitStatus &&
-              setUnitStatus((prevState) => ({
-                ...prevState,
-                [learningUnitId]: "delete",
-              }));
-            const updatedModule = {
-              ...detailModule,
-              learningUnits: detailModule.learningUnits.filter(
-                (unit) => unit.id !== learningUnitId
-              ),
-            };
-            handleUpdate(updatedModule);
-          },
-          style: "destructive",
-        },
-      ],
-      { cancelable: false }
+      } gehörenden Angaben werden dabei gelöscht.`,
+      () => {
+        setUnitStatus &&
+          setUnitStatus((prevState) => ({
+            ...prevState,
+            [learningUnitId]: "delete",
+          }));
+        const updatedModule = {
+          ...detailModule,
+          learningUnits: detailModule.learningUnits.filter(
+            (unit) => unit.id !== learningUnitId
+          ),
+        };
+        handleUpdate(updatedModule);
+      },
+      "Abbrechen",
+      "Löschen"
     );
   };
 
@@ -264,7 +258,7 @@ export default function EditModule() {
                     onDelete={() =>
                       detailModule.learningUnits.length > 2
                         ? onDelete(unit.id)
-                        : Alert.alert(
+                        : ReactAlert.alert(
                             "Entfernen nicht möglich",
                             `Ein Modul muss mindestens eine Lerneinheit besitzen.`,
                             [
@@ -292,47 +286,29 @@ export default function EditModule() {
           </View>
         </View>
       </ScrollView>
-      <View
-        style={{
-          flexDirection: "row",
-          width: "100%",
-          gap: 16,
-          marginBottom: BASE_STYLES.horizontalPadding,
-        }}
-      >
-        {/* <Button
+      <View style={styles.buttonRowWrapper}>
+        <Button
           text="Abbrechen"
           borderColor={COLORTHEME.light.danger}
           backgroundColor={COLORTHEME.light.background}
           textColor={COLORTHEME.light.danger}
           style={{ flex: 1 }}
-          onPress={() => {
-            Alert.alert(
-              "Änderungen verwerfen?",
-              `Wenn du fortfährst, gehen die Änderungen am Modul ungespeichert verloren.`,
-              [
-                {
-                  text: "Abbrechen",
-                  style: "default",
-                },
-                {
-                  text: "Verwerfen",
-                  onPress: () => {
-                    router.push("/modules");
-                  },
-                  style: "destructive",
-                },
-              ],
-              { cancelable: false }
-            );
-          }}
-        /> */}
+          onPress={() =>
+            openChanges
+              ? Alert(
+                  "Änderungen verwerfen?",
+                  "Wenn du fortfährst, gehen alle Änderungen verloren. Bist du dir sicher?",
+                  () => router.push("/modules")
+                )
+              : router.push("/modules")
+          }
+        />
         <Button
-          text="Fertig"
+          text="Speichern"
           backgroundColor={COLORTHEME.light.primary}
           textColor={COLORTHEME.light.grey2}
-          onPress={onSave}
           style={{ flex: 1 }}
+          onPress={onSave}
         />
       </View>
     </KeyboardAvoidingView>
@@ -361,78 +337,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     gap: 24,
   },
-  section: {
-    width: "100%",
-    gap: 12,
-    backgroundColor: "transparent",
-  },
-  flatListContainer: {
-    gap: 12,
-  },
-  outerWrapper: {
-    width: "100%",
-    backgroundColor: COLORTHEME.light.grey1,
-    borderRadius: 12,
-    flexDirection: "column",
-    justifyContent: "space-between",
-    padding: 24,
-    gap: 12,
-  },
-  row: {
-    flexDirection: "row",
-    justifyContent: "flex-start",
-    backgroundColor: "transparent",
-    gap: 16,
-  },
-  dateRowContainer: {
-    gap: 5,
-    flexDirection: "column",
-    backgroundColor: "transparent",
-  },
-  buttons: {
-    flexDirection: "column",
-    alignItems: "center",
-    gap: 16,
-  },
-  colorWrapper: {
-    flexDirection: "column",
-    justifyContent: "flex-start",
-    alignItems: "flex-start",
-    width: "100%",
-    backgroundColor: "transparent",
-    gap: 4,
-  },
-  inputLabelText: {
-    color: COLORTHEME.light.primary,
-  },
-  colorOptionWrapper: {
-    justifyContent: "center",
-    alignItems: "center",
-    width: 60,
-    height: 60,
-  },
-  colorOptionIndicator: {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: [{ translateX: -26 }, { translateY: -26 }],
-    width: 52,
-    height: 52,
-    backgroundColor: "transparent",
-    borderRadius: 1000,
-    borderWidth: 4,
-  },
-  colorOption: {
-    width: 40,
-    height: 40,
-    borderRadius: 1000,
-  },
-  discardLink: {
-    fontSize: 16,
-    textAlign: "center",
-    textDecorationLine: "underline",
-    marginBottom: 20,
-  },
   unitWrapper: {
     width: "100%",
     flexDirection: "column",
@@ -453,5 +357,11 @@ const styles = StyleSheet.create({
     height: 40,
     width: 40,
     backgroundColor: COLORTHEME.light.primary,
+  },
+  buttonRowWrapper: {
+    flexDirection: "row",
+    width: "100%",
+    gap: 16,
+    marginBottom: BASE_STYLES.horizontalPadding,
   },
 });
