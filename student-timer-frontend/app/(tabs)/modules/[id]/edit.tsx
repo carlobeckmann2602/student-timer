@@ -37,7 +37,6 @@ export default function EditModule() {
   const { modules, setModules, fetchModules, unitStatus, setUnitStatus } =
     useModules();
   const router = useRouter();
-  const [openChanges, setOpenChanges] = useState(false);
 
   const detailModule =
     modules?.find((module) => module.id.toString() === moduleToEditId) ||
@@ -80,7 +79,6 @@ export default function EditModule() {
         })
       );
     if (disabledStatus != undefined) setDateDisabled(disabledStatus);
-    if (!openChanges) setOpenChanges(true);
   };
 
   const onSave = async () => {
@@ -183,11 +181,19 @@ export default function EditModule() {
           ?.name
       } gehörenden Angaben werden dabei gelöscht.`,
       () => {
-        setUnitStatus &&
-          setUnitStatus((prevState) => ({
-            ...prevState,
-            [learningUnitId]: "delete",
-          }));
+        if (unitStatus && unitStatus[learningUnitId] === "create") {
+          setUnitStatus &&
+            setUnitStatus((prevState) => ({
+              ...prevState,
+              [learningUnitId]: null,
+            }));
+        } else {
+          setUnitStatus &&
+            setUnitStatus((prevState) => ({
+              ...prevState,
+              [learningUnitId]: "delete",
+            }));
+        }
         const updatedModule = {
           ...detailModule,
           learningUnits: detailModule.learningUnits.filter(
@@ -270,11 +276,13 @@ export default function EditModule() {
                           )
                     }
                     onEdit={() => {
-                      setUnitStatus &&
-                        setUnitStatus((prevState) => ({
-                          ...prevState,
-                          [unit.id]: "edit",
-                        }));
+                      if (unitStatus && unitStatus[unit.id] != "create") {
+                        setUnitStatus &&
+                          setUnitStatus((prevState) => ({
+                            ...prevState,
+                            [unit.id]: "edit",
+                          }));
+                      }
                       router.push({
                         pathname: `modules/${detailModule.id}/learningUnits/${unit.id}/edit`,
                       } as never);
@@ -294,13 +302,11 @@ export default function EditModule() {
           textColor={COLORTHEME.light.danger}
           style={{ flex: 1 }}
           onPress={() =>
-            openChanges
-              ? Alert(
-                  "Änderungen verwerfen?",
-                  "Wenn du fortfährst, gehen alle Änderungen verloren. Bist du dir sicher?",
-                  () => router.push("/modules")
-                )
-              : router.push("/modules")
+            Alert(
+              "Änderungen verwerfen?",
+              "Wenn du fortfährst, gehen alle Änderungen verloren. Bist du dir sicher?",
+              () => router.push("/modules")
+            )
           }
         />
         <Button

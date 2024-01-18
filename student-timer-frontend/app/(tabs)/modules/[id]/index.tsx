@@ -41,7 +41,6 @@ export default function ModulesDetailScreen() {
       [
         {
           text: "Abbrechen",
-          onPress: () => console.log("Alert closed"),
           style: "cancel",
         },
         {
@@ -63,13 +62,14 @@ export default function ModulesDetailScreen() {
         `/students/${authState?.user.id}/modules/${detailModule.id}`
       );
       toast.update(id, "Modul erfolgreich gelöscht", { type: "success" });
+
+      // Navigate back before fetching, as the modal is still open and would throw an error if displayed module doesn't exist anymore
+      router.back();
       fetchModules && (await fetchModules());
     } catch (e) {
       toast.update(id, `Fehler beim Löschen des Moduls: ${e}`, {
         type: "danger",
       });
-    } finally {
-      router.push("/(tabs)/modules");
     }
   };
 

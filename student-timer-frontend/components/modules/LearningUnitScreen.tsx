@@ -53,7 +53,6 @@ export default function LearningUnitSreen(props: LearningUnitScreenProps) {
 
   const handleUpdate = (createdUnit: LearningUnitType) => {
     setNewUnitState(createdUnit);
-    if (!openChanges) setOpenChanges(true);
   };
 
   const onSave = async () => {
@@ -101,7 +100,10 @@ export default function LearningUnitSreen(props: LearningUnitScreenProps) {
       <LearningUnitForm
         key={newUnitState?.id}
         inputData={newUnitState}
-        onChange={(inputData) => handleUpdate(inputData)}
+        onChange={(inputData) => {
+          if (!openChanges) setOpenChanges(true);
+          handleUpdate(inputData);
+        }}
       />
       <View style={styles.buttonRowWrapper}>
         <Button

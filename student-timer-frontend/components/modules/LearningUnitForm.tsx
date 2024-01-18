@@ -18,7 +18,7 @@ type LearningUnitFormProps = {
 export function LearningUnitForm(props: LearningUnitFormProps) {
   const { inputData, onDelete, onChange } = props;
 
-  const handleChange = (value: any) => {
+  const handleChange = (value: LearningUnitType) => {
     onChange({ ...inputData, ...value });
   };
 
@@ -41,9 +41,9 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
     console.log(formattedHourValue);
     handleChange({
       workloadPerWeekMinutes: updatedWorkloadPerWeekMinutes,
-      workloadPerWeekWholeHours: formattedHourValue,
+      workloadPerWeekHours: formattedHourValue,
       workloadPerWeek: updatedTotalWorkloadPerWeek,
-    });
+    } as LearningUnitType);
   };
 
   const updateWorkloadMinutes = (value: number) => {
@@ -57,15 +57,15 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
     }
 
     let updatedTotalWorkloadPerWeek;
-    if (inputData.workloadPerWeekMinutes)
+    if (inputData.workloadPerWeekHours)
       updatedTotalWorkloadPerWeek =
-        formattedValue + inputData.workloadPerWeekMinutes;
+        formattedValue + inputData.workloadPerWeekHours;
     else updatedTotalWorkloadPerWeek = formattedValue;
 
     handleChange({
       workloadPerWeekMinutes: formattedValue,
       workloadPerWeek: updatedTotalWorkloadPerWeek,
-    });
+    } as LearningUnitType);
   };
 
   return (
@@ -83,7 +83,7 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
                     Object.values(LearningUnitEnum).indexOf(value)
                   ] as ObjectKey
                 ],
-            })
+            } as LearningUnitType)
           }
         />
       </View>
@@ -93,14 +93,16 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
             label="Startdatum"
             value={inputData.startDate}
             onChangeDate={(value) => {
-              handleChange({ startDate: value });
+              handleChange({ startDate: value } as LearningUnitType);
             }}
             maximumDate={inputData.endDate}
           />
           <DateTimePicker
             label="Enddatum"
             value={inputData.endDate}
-            onChangeDate={(value) => handleChange({ endDate: value })}
+            onChangeDate={(value) =>
+              handleChange({ endDate: value } as LearningUnitType)
+            }
             minimumDate={inputData.startDate}
           />
         </View>
