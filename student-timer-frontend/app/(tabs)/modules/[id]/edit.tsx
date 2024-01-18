@@ -108,7 +108,6 @@ export default function EditModule() {
           moduleDTO
         );
 
-        console.log("Statusänderungen" + JSON.stringify(unitStatus, null, 2));
         if (unitStatus)
           for (let [key, value] of Object.entries(unitStatus)) {
             switch (value) {
