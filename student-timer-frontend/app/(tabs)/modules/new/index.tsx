@@ -91,27 +91,31 @@ export default function NewModule() {
         moduleNameError={moduleNameError}
         creditPointError={creditPointError}
       />
-      <Button
-        text="Weiter"
-        backgroundColor={COLORTHEME.light.primary}
-        textColor={COLORTHEME.light.grey2}
-        onPress={onContinue}
-      />
-      <Button
-        text="Abbrechen"
-        borderColor={COLORTHEME.light.danger}
-        backgroundColor={COLORTHEME.light.background}
-        textColor={COLORTHEME.light.danger}
-        onPress={() =>
-          openChanges
-            ? Alert(
-                "Eingaben verwerfen?",
-                "Wenn du fortfährst, gehen alle Eingaben verloren. Bist du dir sicher?",
-                () => router.push("/modules")
-              )
-            : router.push("/modules")
-        }
-      />
+      <View style={styles.buttonRowWrapper}>
+        <Button
+          text="Abbrechen"
+          borderColor={COLORTHEME.light.danger}
+          backgroundColor={COLORTHEME.light.background}
+          textColor={COLORTHEME.light.danger}
+          style={{ flex: 1 }}
+          onPress={() =>
+            openChanges
+              ? Alert(
+                  "Eingaben verwerfen?",
+                  "Wenn du fortfährst, gehen alle Eingaben verloren. Bist du dir sicher?",
+                  () => router.push("/modules")
+                )
+              : router.push("/modules")
+          }
+        />
+        <Button
+          text="Weiter"
+          backgroundColor={COLORTHEME.light.primary}
+          textColor={COLORTHEME.light.grey2}
+          style={{ flex: 1 }}
+          onPress={onContinue}
+        />
+      </View>
     </View>
   );
 }
@@ -122,5 +126,11 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     backgroundColor: COLORTHEME.light.background,
     paddingVertical: BASE_STYLES.horizontalPadding,
+  },
+  buttonRowWrapper: {
+    flexDirection: "row",
+    width: "100%",
+    gap: 16,
+    marginBottom: BASE_STYLES.horizontalPadding,
   },
 });
