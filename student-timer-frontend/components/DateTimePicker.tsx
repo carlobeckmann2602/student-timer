@@ -43,7 +43,6 @@ export default function DateTimePicker(props: DateTimerPickerProps) {
   const onChangeDateFromText = (inputString: string) => {
     const inputDate = Date.parse(inputString);
     if (inputDate) onChangeDate(new Date(inputDate));
-    else console.log(`Failed to parse Date from InputField ${label}`);
   };
 
   const showDatepicker = () => {

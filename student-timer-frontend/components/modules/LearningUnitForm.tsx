@@ -38,7 +38,6 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
     let updatedTotalWorkloadPerWeek =
       formattedHourValue + updatedWorkloadPerWeekMinutes;
 
-    console.log(formattedHourValue);
     handleChange({
       workloadPerWeekMinutes: updatedWorkloadPerWeekMinutes,
       workloadPerWeekHours: formattedHourValue,

@@ -48,7 +48,6 @@ export function ModuleCard(props: moduleCardProps) {
       [
         {
           text: "Abbrechen",
-          onPress: () => console.log("Alert closed"),
           style: "cancel",
         },
         {
