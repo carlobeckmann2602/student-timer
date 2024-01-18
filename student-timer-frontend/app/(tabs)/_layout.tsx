@@ -10,6 +10,7 @@ import {
   User2,
 } from "lucide-react-native";
 import { Pressable } from "react-native";
+import Alert from "@/components/Alert";
 
 export default function TabLayout() {
   // const colorScheme = useColorScheme();
@@ -40,7 +41,15 @@ export default function TabLayout() {
             case "/profile/editPassword":
             case "/profile/editPicture":
               return (
-                <Pressable onPress={() => router.push("/profile")}>
+                <Pressable
+                  onPress={() => {
+                    Alert(
+                      "Änderungen verwerfen?",
+                      "Wenn du fortfährst, gehen die Änderungen verloren. Bist du dir sicher?",
+                      () => router.push("/profile")
+                    );
+                  }}
+                >
                   <ChevronLeft />
                 </Pressable>
               );

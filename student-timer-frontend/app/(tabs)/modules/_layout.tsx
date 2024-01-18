@@ -1,3 +1,4 @@
+import Alert from "@/components/Alert";
 import { BASE_STYLES, COLORTHEME, SIZES } from "@/constants/Theme";
 import { Stack, router, usePathname } from "expo-router";
 import { ChevronLeft } from "lucide-react-native";
@@ -19,12 +20,18 @@ export default function ModulesLayout() {
               return (
                 <Pressable
                   onPress={() => {
-                    const dynamicPath = pathname.replace(
-                      /\/learningUnits\/\d+/,
-                      ""
-                    );
-                    router.push(
-                      `/${dynamicPath.substring(1, dynamicPath.length)}`
+                    Alert(
+                      "Änderungen verwerfen?",
+                      "Wenn du fortfährst, gehen die Änderungen verloren. Bist du dir sicher?",
+                      () => {
+                        const dynamicPath = pathname.replace(
+                          /\/learningUnits\/\d+/,
+                          ""
+                        );
+                        router.push(
+                          `/${dynamicPath.substring(1, dynamicPath.length)}`
+                        );
+                      }
                     );
                   }}
                 >
@@ -35,12 +42,18 @@ export default function ModulesLayout() {
               return (
                 <Pressable
                   onPress={() => {
-                    const dynamicPath = pathname.replace(
-                      /\/learningUnits\/new/,
-                      "/edit"
-                    );
-                    router.push(
-                      `/${dynamicPath.substring(1, dynamicPath.length)}`
+                    Alert(
+                      "Änderungen verwerfen?",
+                      "Wenn du fortfährst, gehen die Änderungen verloren. Bist du dir sicher?",
+                      () => {
+                        const dynamicPath = pathname.replace(
+                          /\/learningUnits\/new/,
+                          "/edit"
+                        );
+                        router.push(
+                          `/${dynamicPath.substring(1, dynamicPath.length)}`
+                        );
+                      }
                     );
                   }}
                 >
@@ -50,13 +63,29 @@ export default function ModulesLayout() {
             case "/modules/new":
             case pathname.match(/\d+\/edit/)?.input:
               return (
-                <Pressable onPress={() => router.push("/(tabs)/modules")}>
+                <Pressable
+                  onPress={() => {
+                    Alert(
+                      "Änderungen verwerfen?",
+                      "Wenn du fortfährst, gehen die Änderungen verloren. Bist du dir sicher?",
+                      () => router.push("/(tabs)/modules")
+                    );
+                  }}
+                >
                   <ChevronLeft />
                 </Pressable>
               );
             case "/modules/new/learningUnits":
               return (
-                <Pressable onPress={() => router.push("/modules/new")}>
+                <Pressable
+                  onPress={() => {
+                    Alert(
+                      "Änderungen verwerfen?",
+                      "Wenn du fortfährst, gehen die Änderungen verloren. Bist du dir sicher?",
+                      () => router.push("/modules/new")
+                    );
+                  }}
+                >
                   <ChevronLeft />
                 </Pressable>
               );
