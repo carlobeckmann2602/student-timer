@@ -5,7 +5,6 @@ import com.github.philippvogel92.studenttimerbackend.module.Module;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 @Table
@@ -44,10 +43,6 @@ public class LearningSession {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public Integer getTotalDuration() {
         return totalDuration;
     }
@@ -82,10 +77,6 @@ public class LearningSession {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
     }
 
     public String getDescription() {

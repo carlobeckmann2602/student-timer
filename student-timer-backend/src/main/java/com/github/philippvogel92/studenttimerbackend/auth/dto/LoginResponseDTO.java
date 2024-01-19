@@ -5,15 +5,15 @@ import jakarta.validation.constraints.NotBlank;
 
 public class LoginResponseDTO {
     @NotBlank
-    private String accessToken;
+    private final String accessToken;
     @NotBlank
-    private String refreshToken;
+    private final String refreshToken;
     @NotBlank
-    private Long studentId;
+    private final Long studentId;
     @NotBlank
     @Email
-    private String email;
-    private String tokenType;
+    private final String email;
+    private final String tokenType;
 
 
     public LoginResponseDTO(String accessToken, String refreshToken, Long studentId, String email) {
@@ -28,39 +28,20 @@ public class LoginResponseDTO {
         return accessToken;
     }
 
-    public void setAccessToken(String accessToken) {
-        this.accessToken = accessToken;
-    }
-
     public String getRefreshToken() {
         return refreshToken;
-    }
-
-    public void setRefreshToken(String refreshToken) {
-        this.refreshToken = refreshToken;
     }
 
     public Long getStudentId() {
         return studentId;
     }
 
-    public void setStudentId(Long studentId) {
-        this.studentId = studentId;
-    }
-
     public String getEmail() {
         return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getTokenType() {
         return tokenType;
     }
 
-    public void setTokenType(String tokenType) {
-        this.tokenType = tokenType;
-    }
 }

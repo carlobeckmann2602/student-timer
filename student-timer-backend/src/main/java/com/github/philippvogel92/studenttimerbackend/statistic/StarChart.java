@@ -14,7 +14,4 @@ public class StarChart extends Chart {
         return stars;
     }
 
-    public void setStars(List<Star> stars) {
-        this.stars = stars;
-    }
 }

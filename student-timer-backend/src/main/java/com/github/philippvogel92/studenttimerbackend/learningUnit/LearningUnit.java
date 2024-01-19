@@ -44,15 +44,10 @@ public class LearningUnit {
     }
 
     public LearningUnit() {
-
     }
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public LearningUnitEnum getName() {
