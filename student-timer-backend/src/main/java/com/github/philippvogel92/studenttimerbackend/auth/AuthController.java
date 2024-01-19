@@ -1,6 +1,5 @@
 package com.github.philippvogel92.studenttimerbackend.auth;
 
-import com.auth0.jwt.interfaces.DecodedJWT;
 import com.github.philippvogel92.studenttimerbackend.auth.OAuth2.Provider;
 import com.github.philippvogel92.studenttimerbackend.auth.dto.*;
 import com.github.philippvogel92.studenttimerbackend.auth.jwt.accessToken.AccessTokenService;
@@ -82,7 +81,7 @@ public class AuthController {
     public RefreshTokenResponseDTO createNewAccessToken(@RequestBody String refreshToken) {
         return refreshTokenService.createNewAccessToken(refreshToken);
     }
-    
+
 
     @Operation(summary = "Sign up a new student and create it in database")
     @ApiResponses(value = {
