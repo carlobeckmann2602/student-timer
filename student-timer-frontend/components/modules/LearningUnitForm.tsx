@@ -1,137 +1,157 @@
-import { View, StyleSheet } from "react-native";
-import { COLORTHEME } from "@/constants/Theme";
-import { useRouter } from "expo-router";
-import InputField from "../InputField";
-import { useState } from "react";
+import { View, StyleSheet, Pressable } from "react-native";
+import { COLORS, COLORTHEME } from "@/constants/Theme";
 import DateTimePicker from "../DateTimePicker";
 import { LearningUnitType } from "@/types/LearningUnitType";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { LabelS } from "../StyledText";
+import { LabelS, P } from "../StyledText";
 import UnitPicker from "./UnitPicker";
+import { Trash2 } from "lucide-react-native";
+import InputFieldNumeric from "../InputFieldNumeric";
 import { LearningUnitEnum } from "@/constants/LearningUnitEnum";
+import { ObjectKey } from "@/context/ModuleContext";
 
 type LearningUnitFormProps = {
   inputData: LearningUnitType;
-  onDelete: (id: number) => void;
-  onChange: (changedUnit: LearningUnitType) => void;
-  setValidationErrorCallback: React.Dispatch<React.SetStateAction<boolean>>;
+  onDelete?: (id: number) => void | undefined;
+  onChange: (vaules: LearningUnitType) => void;
 };
 
 export function LearningUnitForm(props: LearningUnitFormProps) {
-  const { inputData, onDelete, onChange, setValidationErrorCallback } = props;
+  const { inputData, onDelete, onChange } = props;
 
-  const router = useRouter();
-
-  const [selectedUnit, setSelectedUnit] = useState<
-    LearningUnitEnum | undefined
-  >();
-  const [startDate, setStartDate] = useState(inputData.startDate);
-  const [endDate, setEndDate] = useState(inputData.endDate);
-  const [workloadPerWeek, setWorkloadPerWeek] = useState(
-    inputData.workloadPerWeek
-  );
-
-  const [workLoadError, setWorkloadError] = useState("");
-  const [endDateError, setEndDateError] = useState("");
-
-  const onNewInput = () => {
-    if (validateInputs())
-      onChange({
-        id: inputData.id,
-        name: selectedUnit,
-        startDate: startDate,
-        endDate: endDate,
-        workloadPerWeek: workloadPerWeek,
-        totalLearningTime: 0,
-      } as LearningUnitType);
+  const handleChange = (value: LearningUnitType) => {
+    onChange({ ...inputData, ...value });
   };
 
-  const validateInputs = () => {
-    var datesValid = true;
-    if (endDate.getTime() - startDate.getTime() <= 0) {
-      setEndDateError("Das Enddatum muss nach dem Startdatum liegen");
-      datesValid = false;
+  const updateWorkloadHours = (value: number) => {
+    let formattedHourValue = Math.round(Math.abs(+value * 60));
+    let updatedWorkloadPerWeekMinutes = 1;
+    if (
+      formattedHourValue === 0 &&
+      (!inputData.workloadPerWeekMinutes ||
+        inputData.workloadPerWeekMinutes <= 0)
+    ) {
+      updatedWorkloadPerWeekMinutes = 1;
     } else {
-      setEndDateError("");
+      updatedWorkloadPerWeekMinutes = inputData.workloadPerWeekMinutes!;
     }
 
-    var workloadPerWeekValid = true;
-    if (workloadPerWeek <= 0) {
-      setWorkloadError("Der Aufwand muss größer als 0 Std. sein");
-      workloadPerWeekValid = false;
-    } else {
-      setWorkloadError("");
+    let updatedTotalWorkloadPerWeek =
+      formattedHourValue + updatedWorkloadPerWeekMinutes;
+
+    handleChange({
+      workloadPerWeekMinutes: updatedWorkloadPerWeekMinutes,
+      workloadPerWeekHours: formattedHourValue,
+      workloadPerWeek: updatedTotalWorkloadPerWeek,
+    } as LearningUnitType);
+  };
+
+  const updateWorkloadMinutes = (value: number) => {
+    let formattedValue =
+      Math.round(Math.abs(+value)) >= 60 ? 59 : Math.round(Math.abs(+value));
+    if (
+      formattedValue === 0 &&
+      (!inputData.workloadPerWeekHours || inputData.workloadPerWeekHours <= 0)
+    ) {
+      formattedValue = 1;
     }
 
-    if (datesValid && workloadPerWeek) {
-      setValidationErrorCallback(false);
-      return true;
-    } else {
-      setValidationErrorCallback(true);
-      return false;
-    }
+    let updatedTotalWorkloadPerWeek;
+    if (inputData.workloadPerWeekHours)
+      updatedTotalWorkloadPerWeek =
+        formattedValue + inputData.workloadPerWeekHours;
+    else updatedTotalWorkloadPerWeek = formattedValue;
+
+    handleChange({
+      workloadPerWeekMinutes: formattedValue,
+      workloadPerWeek: updatedTotalWorkloadPerWeek,
+    } as LearningUnitType);
   };
 
   return (
     <View style={styles.outerWrapper}>
-      <View style={styles.row}></View>
       <View style={styles.row}>
         <UnitPicker
-          label="Typ der Lerneinheit*"
-          onValueChange={(value: LearningUnitEnum) => {
-            setSelectedUnit(value);
-            onNewInput();
-          }}
+          label="Typ der Lerneinheit"
+          value={inputData.name}
+          onValueChange={(value) =>
+            handleChange({
+              name: value,
+              colorCode:
+                COLORS[
+                  Object.keys(LearningUnitEnum)[
+                    Object.values(LearningUnitEnum).indexOf(value)
+                  ] as ObjectKey
+                ],
+            } as LearningUnitType)
+          }
         />
       </View>
-      <View style={styles.row}>
-        <DateTimePicker
-          label="Startdatum*"
-          value={startDate}
-          onChangeDate={(selectedDate) => {
-            if (selectedDate) {
-              setStartDate(selectedDate);
-              onNewInput();
+      <View style={styles.dateRowWrapper}>
+        <View style={styles.row}>
+          <DateTimePicker
+            label="Startdatum"
+            value={inputData.startDate}
+            onChangeDate={(value) => {
+              handleChange({ startDate: value } as LearningUnitType);
+            }}
+            maximumDate={inputData.endDate}
+          />
+          <DateTimePicker
+            label="Enddatum"
+            value={inputData.endDate}
+            onChangeDate={(value) =>
+              handleChange({ endDate: value } as LearningUnitType)
             }
-          }}
-        />
-        <DateTimePicker
-          label="Enddatum*"
-          value={endDate}
-          onChangeDate={(selectedDate) => {
-            if (selectedDate) {
-              setEndDate(selectedDate);
-              onNewInput();
+            minimumDate={inputData.startDate}
+          />
+        </View>
+      </View>
+      <View style={styles.workloadRowContainer}>
+        <P style={{ color: COLORTHEME.light.primary }}>
+          {"Arbeitsaufwand pro Woche"}
+        </P>
+        <View style={styles.row}>
+          <InputFieldNumeric
+            onChangeText={(value) => updateWorkloadHours(+value)}
+            value={
+              inputData.workloadPerWeekHours
+                ? Math.floor(inputData.workloadPerWeekHours / 60).toString()
+                : "0"
             }
-          }}
-          minimumDate={startDate}
-          message={endDateError}
-          messageColor="red"
-        />
+            inputUnit="Std."
+          />
+          <InputFieldNumeric
+            onChangeText={(value) => updateWorkloadMinutes(+value)}
+            value={
+              inputData.workloadPerWeekMinutes
+                ? inputData.workloadPerWeekMinutes.toString()
+                : "0"
+            }
+            inputUnit="min."
+          />
+        </View>
       </View>
-      <View style={styles.row}>
-        <InputField
-          label="Arbeitsaufwand pro Woche*"
-          onChangeText={(value) => {
-            +value ? setWorkloadPerWeek(+value) : setWorkloadPerWeek(0);
-            onNewInput();
-          }}
-          value={workloadPerWeek.toString()}
-          message={workLoadError}
-          messageColor="red"
-          inputMode="numeric"
-          inputUnit="Std."
-        />
-      </View>
-      <View style={styles.row}>
-        <TouchableOpacity onPress={() => onDelete(inputData.id)}>
-          <LabelS
-            style={[styles.errorMessage, { textDecorationLine: "underline" }]}
+      {onDelete && (
+        <View
+          style={[
+            styles.row,
+            { justifyContent: "flex-end", paddingTop: 4, paddingBottom: -8 },
+          ]}
+        >
+          <View style={{ flex: 1 }} />
+          <Pressable
+            style={styles.options}
+            onPress={() => onDelete(inputData.id)}
           >
-            Entfernen
-          </LabelS>
-        </TouchableOpacity>
-      </View>
+            <LabelS
+              style={[styles.errorMessage, { textDecorationLine: "underline" }]}
+            >
+              Lerneinheit entfernen
+            </LabelS>
+            <Trash2 size={14} color={COLORTHEME.light.danger} />
+          </Pressable>
+        </View>
+      )}
     </View>
   );
 }
@@ -152,10 +172,28 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
     gap: 16,
   },
+  options: {
+    gap: 8,
+    padding: 8,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  dateRowWrapper: {
+    flexGrow: 1,
+    flexBasis: 65,
+    flexDirection: "column",
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
+  },
+  workloadRowContainer: {
+    gap: 5,
+    flexDirection: "column",
+    backgroundColor: "transparent",
+  },
   errorMessage: {
-    color: "red",
-    fontSize: 14,
-    textAlign: "center",
-    width: "100%",
+    color: COLORTHEME.light.danger,
+    fontSize: 12,
+    textAlign: "left",
   },
 });

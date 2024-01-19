@@ -7,16 +7,14 @@ export const msToTimeObject = (
   return { hours, mins, secs };
 };
 
-export const timeObjectToSeconds = ({
+export const timeObjectToMinutes = ({
   hours,
   mins,
-  secs,
 }: {
   hours: number;
   mins: number;
-  secs: number;
 }): number => {
-  return hours * 3600 + mins * 60 + secs;
+  return hours * 60 + mins;
 };
 
 export const formatTime = ({
@@ -33,6 +31,28 @@ export const formatTime = ({
     .padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
 };
 
-export const convertMinutesToHours = (minutes: number) => {
-  return +(minutes / 60).toFixed(1);
+export const formatTimeLearningSession = ({
+  hours,
+  mins,
+}: {
+  hours: number;
+  mins: number;
+}): string => {
+  return `${hours.toString().padStart(2, "0")}:${mins
+    .toString()
+    .padStart(2, "0")} Std.`;
 };
+
+export const convertMinutesToHours = (
+  minutes: number,
+  nullable: boolean = true
+) => {
+  if (nullable) return +(minutes / 60).toFixed(1);
+  else {
+    const hourValue = +(minutes / 60).toFixed(1);
+    return hourValue > 0 ? hourValue : 0.1;
+  }
+};
+
+export const roundSecToMinInMs = (ms: number) =>
+  (Math.round(ms / 60000) || 1) * 60000;

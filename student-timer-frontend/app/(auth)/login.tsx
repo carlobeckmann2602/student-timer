@@ -10,6 +10,8 @@ import OtherLogins from "@/components/auth/OtherLogins";
 import InputField from "@/components/InputField";
 import { useAuth } from "@/context/AuthContext";
 import { useToast } from "react-native-toast-notifications";
+import { validateEmail, validatePassword } from "@/components/auth/validationMethods"
+
 
 export default function Login() {
 
@@ -27,31 +29,15 @@ export default function Login() {
   const router = useRouter();
 
   const validateInput = () => {
-    let emailValid = false;
-    if (email.length == 0) {
-      setEmailError("E-Mail ist erforderlich");
-    } else if (email.length < 6) {
-      setEmailError("E-Mail sollte mindestens 6 Zeichen lang sein");
-    } else if (email.indexOf(" ") >= 0) {
-      setEmailError("E-Mail kann keine Leerzeichen enthalten");
-    } else {
-      setEmailError("");
-      emailValid = true;
-    }
+    const emailError = validateEmail(email);
+    setEmailError(emailError);
+    const emailValid = emailError === "";
 
-    let passwordValid = false;
-    if (password.length == 0) {
-      setPasswordError("Passwort ist erforderlich");
-    } else if (password.length < 6) {
-      setPasswordError("Das Passwort sollte mindestens 6 Zeichen lang sein");
-    } else if (password.indexOf(" ") >= 0) {
-      setPasswordError("Passwort kann keine Leerzeichen enthalten");
-    } else {
-      setPasswordError("");
-      passwordValid = true;
-    }
+    const passwordError = validatePassword(password);
+    setPasswordError(passwordError);
+    const passwordValid = passwordError === "";
 
-    return (emailValid && passwordValid)
+    return emailValid && passwordValid;
   };
 
   const login = async () => {

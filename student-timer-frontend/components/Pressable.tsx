@@ -1,10 +1,10 @@
 import React from 'react';
-import { Pressable as RNPressable, Text, TextStyle, StyleProp, ViewStyle, StyleSheet } from 'react-native';
+import { Pressable as RNPressable, Text, StyleProp, ViewStyle, StyleSheet } from 'react-native';
 
 type PressableProps = {
     text: string;
     textColor?: string;
-    accessibilityLabel: string;
+    ariaLabel: string;
     accessibilityRole: 'none' | 'button' | 'link' | 'search' | 'image' | 'keyboardkey' | 'text' | 'adjustable' | 'imagebutton' | 'header' | 'summary' | 'alert' | 'checkbox' | 'combobox' | 'menu' | 'menubar' | 'menuitem' | 'progressbar' | 'radio' | 'radiogroup' | 'scrollbar' | 'spinbutton' | 'switch' | 'tab' | 'tablist' | 'timer' | 'toolbar';
     onPress?: (val?: any) => void;
     style?: StyleProp<ViewStyle>;
@@ -16,7 +16,7 @@ export type PressablePropsType = PressableProps;
 export default function Pressable({
                                       text,
                                       textColor,
-                                      accessibilityLabel,
+                                      ariaLabel,
                                       accessibilityRole,
                                       onPress,
                                       style,
@@ -25,7 +25,7 @@ export default function Pressable({
     return (
         <RNPressable
             accessible={true}
-            accessibilityLabel={accessibilityLabel}
+            aria-label={ariaLabel}
             accessibilityRole={accessibilityRole}
             style={({ pressed }) => [
                 {

@@ -1,39 +1,45 @@
-import { MoreVertical, Pencil, Trash2 } from "lucide-react-native";
-import { View, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import { Pencil, Trash2 } from "lucide-react-native";
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Alert,
+  Pressable,
+} from "react-native";
 import { ModuleChart } from "./ModuleChart";
 import { H4, P, Subhead } from "../StyledText";
 import { COLORTHEME } from "@/constants/Theme";
 import { useRouter } from "expo-router";
 import { ModuleType } from "@/types/ModuleType";
-import { computeDeadline } from "@/libs/moduleTypeHelper";
+import {
+  computeDeadline,
+  computeRemainingSessionTime,
+} from "@/libs/moduleTypeHelper";
 import { convertMinutesToHours } from "@/libs/timeHelper";
 import { useToast } from "react-native-toast-notifications";
 import { useAuth } from "@/context/AuthContext";
 import { useAxios } from "@/context/AxiosContext";
 import { useModules } from "@/context/ModuleContext";
 
-type ModuleCardProps = {
+type moduleCardProps = {
   moduleData: ModuleType;
-  contextMenuOpen: number;
-  setContextMenuOpen: (value: any) => void;
 };
 
-export function ModuleCard(props: ModuleCardProps) {
-  const { moduleData, contextMenuOpen, setContextMenuOpen } = props;
-
-  const remainingSessionTime = Math.round(
-    convertMinutesToHours(
-      moduleData.totalModuleTime - moduleData.totalLearningTime
-    )
-  );
+export function ModuleCard(props: moduleCardProps) {
+  const { moduleData } = props;
 
   const router = useRouter();
   const toast = useToast();
   const { authState } = useAuth();
   const { authAxios } = useAxios();
-  const { fetchModules } = useModules();
+  const { fetchModules, resetUnitStatus } = useModules();
 
-  const onEdit = () => {};
+  const onEdit = () => {
+    resetUnitStatus && resetUnitStatus(moduleData);
+    router.push({
+      pathname: `modules/${moduleData.id}/edit`,
+    } as never);
+  };
 
   const onDelete = () => {
     Alert.alert(
@@ -42,7 +48,6 @@ export function ModuleCard(props: ModuleCardProps) {
       [
         {
           text: "Abbrechen",
-          onPress: () => console.log("Alert closed"),
           style: "cancel",
         },
         {
@@ -77,42 +82,33 @@ export function ModuleCard(props: ModuleCardProps) {
   return (
     <TouchableOpacity
       onPress={() => {
-        if (contextMenuOpen === moduleData.id) setContextMenuOpen(-1);
-        else {
-          router.push({
-            pathname: `modules/${moduleData.id}`,
-          } as never);
-        }
+        router.push({
+          pathname: `modules/${moduleData.id}`,
+        } as never);
       }}
     >
       <View style={styles.outerWrapper}>
-        {contextMenuOpen === moduleData.id && (
-          <View style={styles.contextMenuWrapper}>
-            <TouchableOpacity onPress={onEdit} style={styles.contextMenuRow}>
-              <P>Bearbeiten</P>
-              <Pencil name="pencil" size={18} color="black" />
-            </TouchableOpacity>
-            <View style={styles.separatorH} />
-            <TouchableOpacity onPress={onDelete} style={styles.contextMenuRow}>
-              <P style={{ color: "red" }}>Löschen</P>
-              <Trash2 size={18} name="trash2" color="red" />
-            </TouchableOpacity>
-          </View>
-        )}
         {/* Header Row */}
         <View style={styles.headerRow}>
-          <View style={styles.headerTextRow}>
+          <View style={styles.headerRowInnerWrapper}>
             <View
               style={[
                 styles.moduleIndicatorM,
                 { backgroundColor: moduleData.colorCode },
               ]}
             />
-            <H4>{moduleData.name}</H4>
+            <H4 style={{ textAlign: "left", overflow: "hidden" }}>
+              {moduleData.name}
+            </H4>
           </View>
-          <TouchableOpacity onPress={() => setContextMenuOpen(moduleData.id)}>
-            <MoreVertical color="" size={28} fill="black" strokeWidth={1} />
-          </TouchableOpacity>
+          <View style={styles.headerRowInnerWrapper}>
+            <Pressable onPress={onEdit} style={{ width: 28 }}>
+              <Pencil size={20} color="black" />
+            </Pressable>
+            <Pressable onPress={onDelete} style={{ width: 28 }}>
+              <Trash2 size={20} color="red" />
+            </Pressable>
+          </View>
         </View>
         {/* Statistics */}
         <View style={styles.statisticsContainer}>
@@ -128,7 +124,7 @@ export function ModuleCard(props: ModuleCardProps) {
           <View style={styles.statisticsUnitContainer}>
             {moduleData.learningUnits.map((unit) => {
               return (
-                <View key={unit.id} style={styles.headerTextRow}>
+                <View key={unit.id} style={styles.headerRowInnerWrapper}>
                   <View
                     style={[
                       styles.moduleIndicatorS,
@@ -153,7 +149,10 @@ export function ModuleCard(props: ModuleCardProps) {
             <Subhead>
               {`${convertMinutesToHours(
                 moduleData.totalLearningSessionTime
-              )} von ${remainingSessionTime} Std.`}
+              )} von ${computeRemainingSessionTime(
+                moduleData.totalModuleTime,
+                moduleData.totalLearningTime
+              )} Std.`}
             </Subhead>
           </View>
         </View>
@@ -172,38 +171,9 @@ const styles = StyleSheet.create({
     padding: "8%",
     gap: 16,
   },
-  contextMenuWrapper: {
-    position: "absolute",
-    right: 60,
-    top: 30,
-    zIndex: 1,
-    borderRadius: 12,
-    flexDirection: "column",
-    justifyContent: "space-between",
-    padding: "8%",
-    backgroundColor: COLORTHEME.light.grey2,
-    shadowColor: "black",
-    shadowOffset: { width: -1, height: 1 },
-    shadowOpacity: 0.5,
-    elevation: 0.5,
-    shadowRadius: 5,
-  },
-  contextMenuRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  contextMenuIcon: {
-    color: "red",
-  },
   separatorV: {
     height: "100%",
     width: 1,
-    backgroundColor: "#909090",
-  },
-  separatorH: {
-    width: "100%",
-    height: 1,
     backgroundColor: "#909090",
   },
   headerRow: {
@@ -222,7 +192,7 @@ const styles = StyleSheet.create({
     height: 16,
     borderRadius: 1000,
   },
-  headerTextRow: {
+  headerRowInnerWrapper: {
     flexDirection: "row",
     alignItems: "center",
     gap: 8,

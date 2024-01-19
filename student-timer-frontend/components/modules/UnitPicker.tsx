@@ -7,14 +7,14 @@ import { COLORS, COLORTHEME } from "@/constants/Theme";
 import { View, Text } from "@/components/Themed";
 import { LearningUnitEnum } from "@/constants/LearningUnitEnum";
 
-export default function UnitPicker(props: {
+export type UnitPickerProps = {
   label?: string;
+  value: LearningUnitEnum;
   onValueChange: (value: LearningUnitEnum) => void;
-}) {
-  const { label, onValueChange } = props;
-  const [selectedUnit, setSelectedUnit] = useState<LearningUnitEnum>(
-    LearningUnitEnum.VORLESUNG
-  );
+};
+
+export default function UnitPicker(props: UnitPickerProps) {
+  const { label, value, onValueChange } = props;
 
   const unitValues = Object.values(LearningUnitEnum).filter(
     (item) => item !== LearningUnitEnum.SELBSTSTUDIUM
@@ -28,10 +28,10 @@ export default function UnitPicker(props: {
           style={[
             styles.unitIndicator,
             {
-              backgroundColor: selectedUnit
+              backgroundColor: value
                 ? COLORS[
                     Object.keys(LearningUnitEnum)[
-                      Object.values(LearningUnitEnum).indexOf(selectedUnit)
+                      Object.values(LearningUnitEnum).indexOf(value)
                     ] as ObjectKey
                   ]
                 : "transparent",
@@ -46,7 +46,7 @@ export default function UnitPicker(props: {
             inputIOS: { paddingHorizontal: 10 },
           }}
           placeholder={{}}
-          value={selectedUnit?.toString()}
+          value={value?.toString()}
           items={unitValues.map((item) => {
             return {
               key: item,
@@ -54,9 +54,8 @@ export default function UnitPicker(props: {
               value: item,
             } as Item;
           })}
-          onValueChange={(moduleIdString: LearningUnitEnum) => {
-            setSelectedUnit(moduleIdString);
-            onValueChange && onValueChange(moduleIdString);
+          onValueChange={(unitEnumValue: LearningUnitEnum) => {
+            onValueChange && onValueChange(unitEnumValue);
           }}
           //@ts-ignore
           InputAccessoryView={() => null}

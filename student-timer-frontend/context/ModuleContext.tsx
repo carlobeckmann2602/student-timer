@@ -16,6 +16,16 @@ import { LearningUnitEnum } from "@/constants/LearningUnitEnum";
 type ModuleProps = {
   modules?: ModuleType[];
   fetchModules?: () => Promise<any>;
+  setModules?: React.Dispatch<React.SetStateAction<ModuleType[] | undefined>>;
+  unitStatus?: {
+    [key: number]: null | "edit" | "delete" | "create";
+  };
+  setUnitStatus?: React.Dispatch<
+    React.SetStateAction<{
+      [key: number]: null | "edit" | "delete" | "create";
+    }>
+  >;
+  resetUnitStatus?: (module: ModuleType) => void;
 };
 
 export type ObjectKey = keyof typeof COLORS;
@@ -31,6 +41,9 @@ export const ModuleProvider = ({ children }: any) => {
   const authStateRef = useRef(authState);
   const { authAxios } = useAxios();
   const [modules, setModules] = useState<ModuleType[] | undefined>();
+  const [unitStatus, setUnitStatus] = useState<{
+    [key: number]: null | "edit" | "delete" | "create";
+  }>({});
 
   useEffect(() => {
     authStateRef.current = authState;
@@ -52,9 +65,23 @@ export const ModuleProvider = ({ children }: any) => {
     }
   };
 
+  const resetUnitStatus = (module: ModuleType) => {
+    let collectedUnitPairs: {
+      [key: number]: null | "edit" | "delete" | "create";
+    } = {};
+    module.learningUnits.forEach((unit) => {
+      collectedUnitPairs[unit.id] = null;
+    });
+    setUnitStatus && setUnitStatus(collectedUnitPairs);
+  };
+
   const value = {
     modules,
     fetchModules,
+    setModules,
+    unitStatus,
+    setUnitStatus,
+    resetUnitStatus,
   } as ModuleProps;
   return (
     <ModuleContext.Provider value={value}>{children}</ModuleContext.Provider>
@@ -63,6 +90,11 @@ export const ModuleProvider = ({ children }: any) => {
 
 const preprocessFetchedModule = (module: ModuleType) => {
   convertInputTypes(module);
+
+  module.learningUnits = module.learningUnits.sort((firstUnit, secondUnit) =>
+    firstUnit.name.localeCompare(secondUnit.name)
+  );
+
   addSessionLearningUnit(module);
 };
 
@@ -76,6 +108,8 @@ const convertInputTypes = (module: ModuleType) => {
     computeLearningUnitColor(unit, module.colorCode);
     unit.startDate = new Date(unit.startDate);
     unit.endDate = new Date(unit.endDate);
+    unit.workloadPerWeekHours = Math.floor(unit.workloadPerWeek / 60) * 60;
+    unit.workloadPerWeekMinutes = Math.round(unit.workloadPerWeek % 60);
   });
 
   module.learningSessions = module.learningSessions as LearningSessionType[];
@@ -107,6 +141,8 @@ const addSessionLearningUnit = (module: ModuleType) => {
     endDate: new Date(),
     totalLearningTime: module.totalLearningSessionTime,
     colorCode: module.colorCode,
+    workloadPerWeekHours: Math.floor(module.totalLearningSessionTime / 60) * 60,
+    workloadPerWeekMinutes: module.totalLearningSessionTime % 60,
   };
 
   module.learningUnits.push(sessionLearningUnit);

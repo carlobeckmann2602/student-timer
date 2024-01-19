@@ -253,11 +253,12 @@ export default function StatisticsScreen() {
       const response = await authAxios?.get(
         `/students/${authState?.user.id}/statistics`
       );
-      setStatistics(
-        Object.values(response?.data) as Array<
-          HBarChartProps | VBarChartProps | VLineChartProps | StarChartProps
-        >
-      );
+      const statisticArray = Object.values(response?.data) as Array<
+        HBarChartProps | VBarChartProps | VLineChartProps | StarChartProps
+      >;
+      if (!statisticArray.every((item) => item === null)) {
+        setStatistics(statisticArray.filter((item) => item !== null));
+      }
     };
     getStatistics();
   }, []);

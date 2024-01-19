@@ -8,13 +8,13 @@ import { useModules } from "@/context/ModuleContext";
 import { LearningUnitType } from "@/types/LearningUnitType";
 import { ModuleType } from "@/types/ModuleType";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { Plus } from "lucide-react-native";
 import { useState } from "react";
 import {
+  FlatList,
   KeyboardAvoidingView,
   Platform,
-  ScrollView,
   StyleSheet,
-  View,
 } from "react-native";
 import { useToast } from "react-native-toast-notifications";
 
@@ -26,8 +26,6 @@ export default function NewModuleLearningUnits() {
     examDate?: string;
   }>();
 
-  const [validationError, setValidationError] = useState(true);
-
   const toast = useToast();
   const { authState } = useAuth();
   const { authAxios } = useAxios();
@@ -37,22 +35,21 @@ export default function NewModuleLearningUnits() {
     {
       id: Math.random(),
       name: LearningUnitEnum.VORLESUNG,
-      workloadPerWeek: 0,
+      workloadPerWeek: 1,
       startDate: new Date(),
       endDate: new Date(),
       totalLearningTime: 0,
+      workloadPerWeekHours: 0,
+      workloadPerWeekMinutes: 1,
     },
   ]);
 
   const router = useRouter();
 
-  const onLearningUnitChange = (changedUnit: LearningUnitType) => {
-    setLearningUnits((prevLearningUnits) => {
-      const newlearningUnits = prevLearningUnits.map((current) => {
-        return current.id === changedUnit.id ? changedUnit : current;
-      });
-      return newlearningUnits;
-    });
+  const handleUpdate = (learningUnit: LearningUnitType, index: number) => {
+    const newLearningUnits = [...learningUnits];
+    newLearningUnits[index] = learningUnit;
+    setLearningUnits(newLearningUnits);
   };
 
   const onDeleteLearningUnit = (id: number) => {
@@ -67,18 +64,18 @@ export default function NewModuleLearningUnits() {
       const newlearningUnit = {
         id: Math.random(),
         name: LearningUnitEnum.VORLESUNG,
-        workloadPerWeek: 0,
+        workloadPerWeek: 1,
         startDate: new Date(),
         endDate: new Date(),
         totalLearningTime: 0,
+        workloadPerWeekHours: 0,
+        workloadPerWeekMinutes: 1,
       };
       return [...prevLearningUnits, newlearningUnit];
     });
   };
 
   const onCreateModule = async () => {
-    if (validationError) return;
-
     let id = toast.show("Erstellen...");
     let response;
     try {
@@ -102,92 +99,96 @@ export default function NewModuleLearningUnits() {
         `/students/${authState?.user.id}/modules`,
         moduleDTO
       );
-
       const createdModule: ModuleType | undefined = response?.data;
-      learningUnits.forEach(async (unit) => {
-        // Multiply workloadPerWeek with 60 (minutes per hour) as the input is given in hours but the backend expects minutes
+      learningUnits.forEach(async (unit: LearningUnitType) => {
+        let totalWorkloadPerWeek = unit.workloadPerWeekHours
+          ? unit.workloadPerWeekHours
+          : 0;
+        totalWorkloadPerWeek += unit.workloadPerWeekMinutes
+          ? unit.workloadPerWeekMinutes
+          : 0;
+
         await authAxios?.post(
           `/students/${authState?.user.id}/modules/${createdModule?.id}/learningUnits`,
           {
             name: unit.name,
             startDate: unit.startDate.toISOString().substring(0, 10),
             endDate: unit.endDate.toISOString().substring(0, 10),
-            workloadPerWeek: unit.workloadPerWeek * 60,
+            workloadPerWeek: totalWorkloadPerWeek,
           }
         );
       });
 
       toast.update(id, "Modul erfolgreich angelegt.", { type: "success" });
       fetchModules && (await fetchModules());
+      router.push("/(tabs)/modules");
     } catch (e) {
       toast.update(id, `Fehler beim Erstellen des Moduls: ${e}`, {
         type: "danger",
-      });
-    } finally {
-      router.replace({
-        pathname: "/(tabs)/modules/",
-        params: {
-          moduleSaved: response?.status === 200 ? 1 : 0,
-        },
       });
     }
   };
 
   return (
     <KeyboardAvoidingView
+      style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={{ flex: 1, backgroundColor: COLORTHEME.light.background }}
     >
-      <ScrollView
-        style={styles.scrollViewContainer}
-        contentContainerStyle={styles.scrollViewContainerStyle}
-      >
-        {learningUnits.map((unit) => (
+      <FlatList
+        data={learningUnits}
+        renderItem={({ item, index }) => (
           <LearningUnitForm
-            inputData={unit}
-            onDelete={onDeleteLearningUnit}
-            onChange={onLearningUnitChange}
-            setValidationErrorCallback={setValidationError}
-            key={unit.id}
+            key={index}
+            inputData={item}
+            onDelete={
+              learningUnits.length > 1 ? onDeleteLearningUnit : undefined
+            }
+            onChange={(inputData) => handleUpdate(inputData, index)}
           />
-        ))}
-        <View style={styles.buttons}>
+        )}
+        keyExtractor={(item: LearningUnitType) => item.id.toString()}
+        contentContainerStyle={styles.scrollViewContainerStyle}
+        style={styles.scrollViewContainer}
+        ListFooterComponent={
           <Button
             text="Lerneinheit hinzufügen"
-            backgroundColor={COLORTHEME.light.primary}
-            textColor={COLORTHEME.light.grey2}
+            borderColor={COLORTHEME.light.primary}
+            backgroundColor={COLORTHEME.light.background}
+            textColor={COLORTHEME.light.primary}
             onPress={onAddLearningUnit}
-            style={{ width: 200 }}
+            iconRight={<Plus color={COLORTHEME.light.primary} />}
+            style={{ width: "50%" }}
           />
-          <Button
-            text="Fertig"
-            backgroundColor={COLORTHEME.light.primary}
-            textColor={COLORTHEME.light.grey2}
-            onPress={onCreateModule}
-            style={{ width: 200 }}
-            disabled={validationError}
-          />
-        </View>
-      </ScrollView>
+        }
+      />
+      <Button
+        text="Erstellung abschließen"
+        backgroundColor={COLORTHEME.light.primary}
+        textColor={COLORTHEME.light.grey2}
+        onPress={onCreateModule}
+        style={{ marginBottom: BASE_STYLES.horizontalPadding }}
+      />
     </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
-  scrollViewContainer: {
+  container: {
+    flex: 1,
     flexDirection: "column",
+    justifyContent: "space-between",
     gap: 24,
+    backgroundColor: COLORTHEME.light.background,
+    paddingVertical: BASE_STYLES.horizontalPadding,
+  },
+  scrollViewContainer: {
+    flexGrow: 1,
+    flexDirection: "column",
     borderRadius: BASE_STYLES.borderRadius,
+    gap: 24,
   },
   scrollViewContainerStyle: {
-    alignItems: "center",
     justifyContent: "space-around",
     gap: 16,
-  },
-  buttons: {
-    flexDirection: "column",
-    alignItems: "center",
-    gap: 15,
-    paddingBottom: 46,
   },
 });

@@ -2,10 +2,10 @@ import { VictoryLabel, VictoryPie } from "victory-native";
 import { View } from "../Themed";
 import { StyleSheet } from "react-native";
 import Svg from "react-native-svg";
-import { ModuleType } from "@/types/ModuleType";
 import { SIZES } from "@/constants/Theme";
 import { LearningUnitType } from "@/types/LearningUnitType";
 import { useEffect, useState } from "react";
+import { LearningUnitEnum } from "@/constants/LearningUnitEnum";
 
 type ModuleChartProps = {
   inputData: LearningUnitType[];
@@ -22,23 +22,22 @@ export function ModuleChart(moduleChartProp: ModuleChartProps) {
 
   const [inputDataExtended, setInputDataExtended] = useState<
     LearningUnitType[]
-  >([]);
+  >([
+    ...inputData,
+    {
+      id: -1,
+      name: LearningUnitEnum.SELBSTSTUDIUM,
+      workloadPerWeek: 0,
+      startDate: new Date(),
+      endDate: new Date(),
+      totalLearningTime: (totalAmount - totalAmountDone) * 60,
+      colorCode: "transparent",
+    } as LearningUnitType,
+  ]);
   const [endAngle, setEndAngle] = useState(0);
 
   useEffect(() => {
     setTimeout(() => {
-      setInputDataExtended([
-        ...inputData,
-        {
-          id: -1,
-          name: "",
-          workloadPerWeek: 0,
-          startDate: new Date(),
-          endDate: new Date(),
-          totalLearningTime: (totalAmount - totalAmountDone) * 60,
-          colorCode: "transparent",
-        } as LearningUnitType,
-      ]);
       setEndAngle(360);
     }, 100);
   }, []);

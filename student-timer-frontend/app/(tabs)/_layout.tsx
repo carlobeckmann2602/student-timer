@@ -1,4 +1,5 @@
 import { Tabs, router, usePathname } from "expo-router";
+import { Platform } from "react-native";
 
 import { BASE_STYLES, COLORTHEME, SIZES } from "@/constants/Theme";
 import {
@@ -9,6 +10,7 @@ import {
   User2,
 } from "lucide-react-native";
 import { Pressable } from "react-native";
+import Alert from "@/components/Alert";
 
 export default function TabLayout() {
   // const colorScheme = useColorScheme();
@@ -26,34 +28,31 @@ export default function TabLayout() {
           fontSize: SIZES.xLarge,
           fontWeight: "500",
         },
+        headerTitleAlign: "center",
         headerShadowVisible: false,
         tabBarStyle: {
           borderTopWidth: 1,
-          paddingBottom: 15,
+          paddingBottom: Platform.OS === "ios" ? 15 : undefined,
         },
         headerLeft: () => {
           const pathname = usePathname();
           switch (pathname) {
-            case "/modules/new":
+            case "/profile/editData":
+            case "/profile/editPassword":
+            case "/profile/editPicture":
               return (
-                <Pressable onPress={() => router.push("/modules")}>
+                <Pressable
+                  onPress={() => {
+                    Alert(
+                      "Änderungen verwerfen?",
+                      "Wenn du fortfährst, gehen die Änderungen verloren. Bist du dir sicher?",
+                      () => router.push("/profile")
+                    );
+                  }}
+                >
                   <ChevronLeft />
                 </Pressable>
               );
-            case "/modules/new/learningUnits":
-              return (
-                <Pressable onPress={() => router.back()}>
-                  <ChevronLeft />
-                </Pressable>
-              );
-
-            case "/profile/edit":
-              return (
-                <Pressable onPress={() => router.push("/profile")}>
-                  <ChevronLeft />
-                </Pressable>
-              );
-
             default:
               return null;
           }
@@ -72,8 +71,9 @@ export default function TabLayout() {
       <Tabs.Screen
         name="modules"
         options={{
-          title: "Module",
+          headerShown: false,
           href: "/modules",
+          title: "Module",
           tabBarIcon: ({ color }) => <LayoutList name="module" color={color} />,
         }}
       />

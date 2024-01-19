@@ -9,32 +9,36 @@ const COLORS = {
   icon: "#292D32",
   // CI colors
   primary: "#958AAA",
-  // secondary: "#000000",
-  // tertiary: "#000000",
   warning: "#D16E6E",
   success: "#51C93E",
   danger: "#D32F2F",
   rating: "#D0D400",
   // Module units
-  VORLESUNG: "#F9D477",
-  PRAKTIKUM: "#6FB9E2",
-  PROJEKT: "#D16E6E",
-  MEETING: "#58CEB9",
-  SEMINAR: "#95E988",
-  ÜBUNG: "#88A795",
-  NACHHILFE: "#AB5761",
-  TUTORIUM: "#5D7CB9",
-  EXKURSION: "#FBC2B5",
-  // selectable course colors
-  course1: "#88A795",
-  course2: "#AB5761",
-  course3: "#5D7CB9",
-  course4: "#FBC2B5",
-  course5: "#073B3A",
-  course6: "#243119",
-  course7: "#FA7921",
+  EXKURSION: "#B62020",
+  MEETING: "#FF522B",
+  NACHHILFE: "#E86E7D",
+  PRAKTIKUM: "#F9D477",
+  PROJEKT: "#95E988",
+  SEMINAR: "#20663D",
+  TUTORIUM: "#2FFFDA",
+  ÜBUNG: "#D39AFF",
+  VORLESUNG: "#11409C",
+  // selectable module colors
+  moduleColor1: "#3AAF6B",
+  moduleColor2: "#52EBAB",
+  moduleColor3: "#88A7F5",
+  moduleColor4: "#5D7CB9",
+  moduleColor5: "#D8C839",
+  moduleColor6: "#FA7921",
+  moduleColor7: "#C93C1C",
+  moduleColor8: "#AC56AE",
   // timer colors
   progressBarPauseColor: "#F5F56A",
+  // OS colors
+  iOSKeyboardLight: "#D1D1D6",
+  iOSKeyboardDark: "#636366",
+  iOSFontLight: "#000000",
+  iOSFontDark: "#FFFFFF",
 };
 
 const SIZES = {
@@ -57,6 +61,9 @@ const COLORTHEME = {
     grey1: COLORS.grey1,
     grey2: COLORS.grey2,
     grey3: COLORS.grey3,
+    danger: COLORS.danger,
+    iOSKeyboard: COLORS.iOSKeyboardLight,
+    iOSFont: COLORS.iOSFontLight,
   },
   dark: {
     text: COLORS.white,
@@ -66,6 +73,9 @@ const COLORTHEME = {
     grey1: COLORS.grey1,
     grey2: COLORS.grey2,
     grey3: COLORS.grey3,
+    danger: COLORS.danger,
+    iOSKeyboard: COLORS.iOSKeyboardDark,
+    iOSFont: COLORS.iOSFontDark,
   },
 };
 

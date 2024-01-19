@@ -1,7 +1,7 @@
 //@ts-ignore
 import SwitchSelector from "react-native-switch-selector";
 
-import { COLORTHEME } from "@/constants/Theme";
+import { COLORTHEME, COLORS } from "@/constants/Theme";
 
 export default function TrackingModeToggle(props: {
   onPress: React.Dispatch<React.SetStateAction<any>>;
@@ -15,12 +15,15 @@ export default function TrackingModeToggle(props: {
         { label: "Stoppuhr", value: true },
         { label: "Timer", value: false },
       ]}
+      style={{
+        opacity: disabled ? 0.5 : undefined,
+      }}
       initial={0}
       onPress={onPress}
       backgroundColor={COLORTHEME.light.primary}
-      buttonColor={"#ffffff"}
+      buttonColor={COLORS.white}
       selectedColor={COLORTHEME.light.primary}
-      textColor={"#ffffff"}
+      textColor={COLORS.white}
       hasPadding
       valuePadding={4}
       borderWidth={0}

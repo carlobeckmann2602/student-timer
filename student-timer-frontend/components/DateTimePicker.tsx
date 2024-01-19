@@ -43,7 +43,6 @@ export default function DateTimePicker(props: DateTimerPickerProps) {
   const onChangeDateFromText = (inputString: string) => {
     const inputDate = Date.parse(inputString);
     if (inputDate) onChangeDate(new Date(inputDate));
-    else console.log(`Failed to parse Date from InputField ${label}`);
   };
 
   const showDatepicker = () => {
@@ -62,7 +61,11 @@ export default function DateTimePicker(props: DateTimerPickerProps) {
           return (
             <InputField
               label={label}
-              value={value.toLocaleDateString()}
+              value={value.toLocaleDateString("de-DE", {
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+              })}
               onChangeText={onChangeDateFromText}
               placeholder={placeholder}
               message={message}
@@ -73,14 +76,17 @@ export default function DateTimePicker(props: DateTimerPickerProps) {
         } else if (Platform.OS === "android") {
           return (
             <Pressable
-              // style={styles.innerContainer}
               onPress={() => {
                 if (!disabled) showDatepicker();
               }}
             >
               <InputField
                 label={label}
-                value={value.toLocaleDateString("de-DE")}
+                value={value.toLocaleDateString("de-DE", {
+                  year: "numeric",
+                  month: "2-digit",
+                  day: "2-digit",
+                })}
                 onChangeText={onChangeDateFromText}
                 placeholder={placeholder}
                 message={message}
@@ -108,9 +114,13 @@ export default function DateTimePicker(props: DateTimerPickerProps) {
                   style={[styles.RNDateTimerPickerStyle, inputStyle]}
                 />
               </View>
-              <Text style={[{ color: props.messageColor }, styles.messageText]}>
-                {props.message}
-              </Text>
+              {props.message && (
+                <Text
+                  style={[{ color: props.messageColor }, styles.messageText]}
+                >
+                  {props.message}
+                </Text>
+              )}
             </View>
           );
         }
@@ -147,7 +157,7 @@ const styles = StyleSheet.create({
     color: COLORTHEME.light.primary,
   },
   RNDateTimerPickerStyle: {
-    marginHorizontal: -15,
+    marginHorizontal: -25,
   },
   messageText: {
     fontSize: 12,

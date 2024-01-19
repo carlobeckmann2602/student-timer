@@ -1,5 +1,4 @@
-import { StyleSheet } from "react-native";
-
+import { RefreshControl, StyleSheet } from "react-native";
 import { View } from "@/components/Themed";
 import { FlatList } from "react-native-gesture-handler";
 import { ModuleCard } from "@/components/modules/ModuleCard";
@@ -7,61 +6,57 @@ import { useFocusEffect, useRouter } from "expo-router";
 import { ModuleType } from "@/types/ModuleType";
 import Button from "@/components/Button";
 import { BASE_STYLES, COLORTHEME } from "@/constants/Theme";
-import React, { useState } from "react";
+import React from "react";
 import { useModules } from "@/context/ModuleContext";
-import { H2 } from "@/components/StyledText";
+import { H3, P } from "@/components/StyledText";
 
 export default function ModulesScreen() {
   const router = useRouter();
+  const { modules, fetchModules } = useModules();
+  const [refreshing, setRefreshing] = React.useState(false);
 
-  const [contextMenuOpen, setContextMenuOpen] = useState(-1);
-  const { modules: fetchedModules, fetchModules } = useModules();
-  const [modules, setModules] = useState<ModuleType[] | undefined>(
-    fetchedModules
-  );
-
-  useFocusEffect(
-    React.useCallback(() => {
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
       (async () => {
         fetchModules && (await fetchModules());
-        if (fetchedModules?.length) {
-          setModules(fetchedModules);
-        }
       })();
-    }, [])
-  );
+      setRefreshing(false);
+    }, 300);
+  }, []);
 
-  // TODO?
-  const isLoading = false;
-  const error = false;
-
-  const onNewModulePress = () => router.push("/modules/new");
+  useFocusEffect(onRefresh);
 
   return (
     <View style={styles.container}>
       <FlatList
         data={modules}
         style={styles.flatListContainer}
-        renderItem={({ item }) => (
-          <ModuleCard
-            moduleData={item}
-            contextMenuOpen={contextMenuOpen}
-            setContextMenuOpen={setContextMenuOpen}
-          />
-        )}
+        renderItem={({ item }) => <ModuleCard moduleData={item} />}
         keyExtractor={(item: ModuleType) => item.id.toString()}
         contentContainerStyle={styles.flatListContainerContent}
         ListEmptyComponent={
           <View style={styles.emptyListContainer}>
-            <H2>Es sind noch keine Module vorhanden.</H2>
+            <H3>Es sind noch keine Module vorhanden.</H3>
+            <P style={{ textAlign: "center" }}>
+              Erstelle dein erstes Modul oder swipe nach oben, um deine Module
+              zu laden.
+            </P>
           </View>
+        }
+        refreshControl={
+          <RefreshControl
+            colors={[COLORTHEME.light.primary]}
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
         }
       />
       <Button
         text={"Neues Modul anlegen"}
         backgroundColor={COLORTHEME.light.primary}
         textColor={COLORTHEME.light.grey2}
-        onPress={onNewModulePress}
+        onPress={() => router.push("/modules/new")}
         style={styles.button}
       />
     </View>
@@ -83,9 +78,11 @@ const styles = StyleSheet.create({
     paddingBottom: 50 + BASE_STYLES.horizontalPadding,
   },
   emptyListContainer: {
-    flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    paddingHorizontal: 16,
+    gap: 20,
+    paddingVertical: 200,
   },
   button: {
     position: "absolute",

@@ -5,6 +5,7 @@ import { useToast } from "react-native-toast-notifications";
 
 import Button from "@/components/Button";
 import InputField from "@/components/InputField";
+import Alert from "@/components/Alert";
 import { Text, View } from "@/components/Themed";
 import { BASE_STYLES, COLORS, COLORTHEME } from "@/constants/Theme";
 import { useAuth } from "@/context/AuthContext";
@@ -12,11 +13,12 @@ import { useAxios } from "@/context/AxiosContext";
 import { useModules } from "@/context/ModuleContext";
 import {
   msToTimeObject,
-  formatTime,
-  timeObjectToSeconds,
+  timeObjectToMinutes,
+  formatTimeLearningSession,
 } from "@/libs/timeHelper";
 import StarRating from "@/components/StarRating";
 import { roundNumber } from "@/libs/generalHelper";
+import InputFieldNumeric from "../InputFieldNumeric";
 
 export default function LearningSession(props: { isEdit: boolean }) {
   const { isEdit } = props;
@@ -39,13 +41,13 @@ export default function LearningSession(props: { isEdit: boolean }) {
     learningSession?.description || ""
   );
   const [focusDuration, setFocusDuration] = useState(
-    msToTimeObject((learningSession?.focusDuration || 0) * 1000)
+    msToTimeObject((learningSession?.focusDuration || 0) * (1000 * 60))
   );
   const [pauseDuration, setPauseDuration] = useState(
     msToTimeObject(
       ((learningSession?.totalDuration || 0) -
         (learningSession?.focusDuration || 0)) *
-        1000
+        (1000 * 60)
     )
   );
 
@@ -70,7 +72,7 @@ export default function LearningSession(props: { isEdit: boolean }) {
           <Text>Fokuszeit</Text>
           {isEdit ? (
             <View style={styles.timeEdit}>
-              <InputField
+              <InputFieldNumeric
                 style={styles.input}
                 value={focusDuration.hours.toString()}
                 onChangeText={(val) => {
@@ -79,11 +81,10 @@ export default function LearningSession(props: { isEdit: boolean }) {
                     hours: Math.abs(roundNumber(val, 0)),
                   }));
                 }}
-                keyboardType="numeric"
-                inputUnit="std"
+                inputUnit="Std."
                 selectTextOnFocus
               />
-              <InputField
+              <InputFieldNumeric
                 style={styles.input}
                 value={focusDuration.mins.toString()}
                 onChangeText={(val) => {
@@ -93,28 +94,13 @@ export default function LearningSession(props: { isEdit: boolean }) {
                     mins: mins >= 60 ? 59 : mins,
                   }));
                 }}
-                keyboardType="numeric"
-                inputUnit="min"
-                selectTextOnFocus
-              />
-              <InputField
-                style={styles.input}
-                value={focusDuration.secs.toString()}
-                onChangeText={(val) => {
-                  let secs = Math.abs(roundNumber(val, 0));
-                  setFocusDuration((prevState) => ({
-                    ...prevState,
-                    secs: secs >= 60 ? 59 : secs,
-                  }));
-                }}
-                keyboardType="numeric"
-                inputUnit="sec"
+                inputUnit="min."
                 selectTextOnFocus
               />
             </View>
           ) : (
             <Text style={styles.timeText}>
-              {formatTime(msToTimeObject(Number(focusTime)))}h
+              {formatTimeLearningSession(msToTimeObject(Number(focusTime)))}
             </Text>
           )}
         </View>
@@ -122,7 +108,7 @@ export default function LearningSession(props: { isEdit: boolean }) {
           <Text>Pausenzeit</Text>
           {isEdit ? (
             <View style={styles.timeEdit}>
-              <InputField
+              <InputFieldNumeric
                 style={styles.input}
                 value={pauseDuration.hours.toString()}
                 onChangeText={(val) => {
@@ -131,11 +117,10 @@ export default function LearningSession(props: { isEdit: boolean }) {
                     hours: Math.abs(roundNumber(val, 0)),
                   }));
                 }}
-                keyboardType="numeric"
-                inputUnit="std"
+                inputUnit="Std."
                 selectTextOnFocus
               />
-              <InputField
+              <InputFieldNumeric
                 style={styles.input}
                 value={pauseDuration.mins.toString()}
                 onChangeText={(val) => {
@@ -145,28 +130,13 @@ export default function LearningSession(props: { isEdit: boolean }) {
                     mins: mins >= 60 ? 59 : mins,
                   }));
                 }}
-                keyboardType="numeric"
-                inputUnit="min"
-                selectTextOnFocus
-              />
-              <InputField
-                style={styles.input}
-                value={pauseDuration.secs.toString()}
-                onChangeText={(val) => {
-                  let secs = Math.abs(roundNumber(val, 0));
-                  setPauseDuration((prevState) => ({
-                    ...prevState,
-                    secs: secs >= 60 ? 59 : secs,
-                  }));
-                }}
-                keyboardType="numeric"
-                inputUnit="sec"
+                inputUnit="min."
                 selectTextOnFocus
               />
             </View>
           ) : (
             <Text style={styles.timeText}>
-              {formatTime(msToTimeObject(Number(pauseTime)))}h
+              {formatTimeLearningSession(msToTimeObject(Number(pauseTime)))}
             </Text>
           )}
         </View>
@@ -189,12 +159,17 @@ export default function LearningSession(props: { isEdit: boolean }) {
           <Text
             style={styles.discardLink}
             onPress={() => {
-              router.push({
-                pathname: "/(tabs)/(tracking)/",
-                params: {
-                  discard: 1,
-                },
-              });
+              Alert(
+                "Tracking verwerfen?",
+                "Wenn du fortfährst, wird das Tracking gelöscht. Bist du dir sicher?",
+                () =>
+                  router.push({
+                    pathname: "/(tabs)/(tracking)/",
+                    params: {
+                      discard: 1,
+                    },
+                  })
+              );
             }}
           >
             Verwerfen
@@ -212,8 +187,8 @@ export default function LearningSession(props: { isEdit: boolean }) {
             };
             try {
               if (isEdit) {
-                let focusTime = timeObjectToSeconds(focusDuration);
-                let pauseTime = timeObjectToSeconds(pauseDuration);
+                let focusTime = timeObjectToMinutes(focusDuration);
+                let pauseTime = timeObjectToMinutes(pauseDuration);
                 await authAxios?.put(
                   `/students/${authState?.user.id}/modules/${module?.id}/learningSessions/${learningSession?.id}`,
                   {
@@ -227,11 +202,10 @@ export default function LearningSession(props: { isEdit: boolean }) {
                   `/students/${authState?.user.id}/modules/${module?.id}/learningSessions`,
                   {
                     ...body,
-                    createdAt: new Date().toISOString().replace("Z", ""),
                     totalDuration:
-                      Math.floor(Number(focusTime) / 1000) +
-                      Math.floor(Number(pauseTime) / 1000),
-                    focusDuration: Math.floor(Number(focusTime) / 1000),
+                      Math.floor(Number(focusTime) / (1000 * 60)) +
+                      Math.floor(Number(pauseTime) / (1000 * 60)),
+                    focusDuration: Math.floor(Number(focusTime) / (1000 * 60)),
                   }
                 );
               }
@@ -259,11 +233,17 @@ export default function LearningSession(props: { isEdit: boolean }) {
           text={isEdit ? "Abbrechen" : "Tracking fortsetzen"}
           backgroundColor={COLORS.white}
           textColor={module?.colorCode}
-          onPress={() =>
-            router.push(
-              isEdit ? `/(tabs)/modules/${module?.id}/` : "/(tabs)/(tracking)"
-            )
-          }
+          onPress={() => {
+            if (isEdit) {
+              Alert(
+                "Änderungen verwerfen?",
+                "Wenn du fortfährst, gehen alle Änderungen ungespeichert verloren. Bist du dir sicher?",
+                () => router.back(),
+              );
+            } else {
+              router.push("/(tabs)/(tracking)");
+            }
+          }}
         />
       </View>
     </KeyboardAvoidingView>
