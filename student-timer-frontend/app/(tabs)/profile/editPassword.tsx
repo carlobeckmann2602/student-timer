@@ -72,16 +72,16 @@ export default function EditPassword() {
 
     const onCancel = () => {
         if (isChanged) {
-            Alert(
-                "Änderungen verwerfen?",
-                `Sie haben ungespeicherte Änderungen vorgenommen. Wenn Sie fortfahren, gehen alle ungespeicherten Daten verloren. Möchten Sie wirklich abbrechen?`,
-                cancel,
-                "Nein",
-                "Ja")
+            Alert({
+                title: "Änderungen verwerfen?",
+                message: "Sie haben Änderungen an Ihrem Passwort vorgenommen. Wenn Sie fortfahren, wird Ihr Passwort nicht geändert. Möchten Sie Ihre Änderungen wirklich verwerfen?",
+                onPressConfirm: cancel,
+            });
         } else {
             cancel();
         }
     };
+
 
     return (
         <ScrollView contentContainerStyle={{borderRadius: BASE_STYLES.borderRadius}}>

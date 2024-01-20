@@ -107,26 +107,23 @@ export default function EditData() {
 
     const onCancel = () => {
         if (isChanged) {
-            Alert(
-                "Änderungen verwerfen?",
-                `Sie haben ungespeicherte Änderungen vorgenommen. Wenn Sie fortfahren, gehen alle ungespeicherten Daten verloren. Möchten Sie wirklich abbrechen?`,
-                cancel,
-                "Nein",
-                "Ja"
-            )
+            Alert({
+                title: "Änderungen verwerfen?",
+                message: "Sie haben Änderungen vorgenommen. Wenn Sie fortfahren, gehen alle ungespeicherten Daten verloren. Möchten Sie Ihre Änderungen wirklich verwerfen?",
+                onPressConfirm: cancel,
+            });
         } else {
             cancel();
         }
     };
 
     const onDelete = () => {
-        Alert(
-            "Profil wirklich löschen?",
-            `Möchtest du deinen Account mit der E-Mail-Adresse "${authState?.user.email}" wirklich unwiderruflich löschen? Alle zum Profil gehörenden Daten, Module, Lerneinheiten und Trackings werden dabei gelöscht.`,
-            removeUser,
-            "Abbrechen",
-            "Löschen",
-        )
+        Alert({
+            title: "Profil wirklich löschen?",
+            message: `Möchtest du deinen Account mit der E-Mail-Adresse "${authState?.user.email}" wirklich unwiderruflich löschen? Alle zum Profil gehörenden Daten, Module, Lerneinheiten und Trackings werden dabei gelöscht.`,
+            onPressConfirm: removeUser,
+            confirmText: "Löschen",
+        });
     };
 
     return (
