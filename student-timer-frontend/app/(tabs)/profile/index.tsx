@@ -17,11 +17,6 @@ export default function Profile() {
     setProfilePictureName(getProfilePictureName());
   }, [authState]);
 
-  console.log("index:", authState?.user.name)
-  console.log("#### useState:", profilePictureName, typeof profilePictureName);
-  console.log("authState?.user.profilePicture", authState?.user.profilePicture, typeof authState?.user.profilePicture);
-
-
   const handleEditData = () => router.push("/profile/editData/");
   const handleEditPassword = () => router.push("/profile/editPassword/");
   const handleEditPicture = () => router.push("/profile/editPicture/");
