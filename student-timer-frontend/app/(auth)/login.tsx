@@ -92,7 +92,7 @@ export default function Login() {
           {error && <Text style={styles.errorMessage}>{error}</Text>}
 
           <Text>
-            Sie haben kein Konto?{" "}
+            Du hast kein Konto?{" "}
             <Link href="/signup" style={{ textDecorationLine: "underline" }}>
               Account erstellen
             </Link>
