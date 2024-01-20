@@ -12,7 +12,7 @@ export default function Home() {
 
   useEffect(() => {
     const loadOnboarding = async () => {
-      const onboardingDoneString = await getStoredItem("onbarding");
+      const onboardingDoneString = await getStoredItem("onboarding");
       if (onboardingDoneString)
         setOnboardingDone(JSON.parse(onboardingDoneString));
       if (onboardingDone) router.push("/(auth)/login");
