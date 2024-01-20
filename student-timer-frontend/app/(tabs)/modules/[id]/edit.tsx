@@ -173,38 +173,37 @@ export default function EditModule() {
   };
 
   const onDelete = (learningUnitId: number) => {
-    Alert(
-      "Lerneinheit wirklich löschen?",
-      `Alle zur Lerneinheit ${
-        detailModule.learningUnits.find((unit) => unit.id === learningUnitId)
-          ?.name
+    Alert({
+      title: "Lerneinheit wirklich löschen?",
+      message: `Alle zur Lerneinheit ${
+          detailModule.learningUnits.find((unit) => unit.id === learningUnitId)?.name
       } gehörenden Angaben werden dabei gelöscht.`,
-      () => {
+      onPressConfirm: () => {
         if (unitStatus && unitStatus[learningUnitId] === "create") {
           setUnitStatus &&
-            setUnitStatus((prevState) => ({
-              ...prevState,
-              [learningUnitId]: null,
-            }));
+          setUnitStatus((prevState) => ({
+            ...prevState,
+            [learningUnitId]: null,
+          }));
         } else {
           setUnitStatus &&
-            setUnitStatus((prevState) => ({
-              ...prevState,
-              [learningUnitId]: "delete",
-            }));
+          setUnitStatus((prevState) => ({
+            ...prevState,
+            [learningUnitId]: "delete",
+          }));
         }
         const updatedModule = {
           ...detailModule,
           learningUnits: detailModule.learningUnits.filter(
-            (unit) => unit.id !== learningUnitId
+              (unit) => unit.id !== learningUnitId
           ),
         };
         handleUpdate(updatedModule);
       },
-      "Abbrechen",
-      "Löschen"
-    );
+      confirmText: "Löschen"
+    });
   };
+
 
   return (
     <KeyboardAvoidingView
@@ -301,12 +300,13 @@ export default function EditModule() {
           textColor={COLORTHEME.light.danger}
           style={{ flex: 1 }}
           onPress={() =>
-            Alert(
-              "Änderungen verwerfen?",
-              "Wenn du fortfährst, gehen alle Änderungen verloren. Bist du dir sicher?",
-              () => router.push("/modules")
-            )
+              Alert({
+                title: "Änderungen verwerfen?",
+                message: "Wenn du fortfährst, gehen alle Änderungen verloren. Bist du dir sicher?",
+                onPressConfirm: () => router.push("/modules"),
+              })
           }
+
         />
         <Button
           text="Speichern"

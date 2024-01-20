@@ -99,13 +99,13 @@ export default function NewModule() {
           textColor={COLORTHEME.light.danger}
           style={{ flex: 1 }}
           onPress={() =>
-            openChanges
-              ? Alert(
-                  "Eingaben verwerfen?",
-                  "Wenn du fortfährst, gehen alle Eingaben verloren. Bist du dir sicher?",
-                  () => router.push("/modules")
-                )
-              : router.push("/modules")
+              openChanges
+                  ? Alert({
+                    title: "Eingaben verwerfen?",
+                    message: "Wenn du fortfährst, gehen alle Eingaben verloren. Bist du dir sicher?",
+                    onPressConfirm: () => router.push("/modules"),
+                  })
+                  : router.push("/modules")
           }
         />
         <Button

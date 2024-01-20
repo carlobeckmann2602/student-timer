@@ -20,19 +20,19 @@ export default function ModulesLayout() {
               return (
                 <Pressable
                   onPress={() => {
-                    Alert(
-                      "Änderungen verwerfen?",
-                      "Wenn du fortfährst, gehen die Änderungen verloren. Bist du dir sicher?",
-                      () => {
-                        const dynamicPath = pathname.replace(
-                          /\/learningUnits\/\d+/,
-                          ""
-                        );
-                        router.push(
-                          `/${dynamicPath.substring(1, dynamicPath.length)}`
-                        );
-                      }
-                    );
+                      Alert({
+                          title: "Änderungen verwerfen?",
+                          message: "Wenn du fortfährst, gehen die Änderungen verloren. Bist du dir sicher?",
+                          onPressConfirm: () => {
+                              const dynamicPath = pathname.replace(
+                                  /\/learningUnits\/\d+/,
+                                  ""
+                              );
+                              router.push(
+                                  `/${dynamicPath.substring(1, dynamicPath.length)}`
+                              );
+                          }
+                      });
                   }}
                 >
                   <ChevronLeft />
@@ -41,21 +41,21 @@ export default function ModulesLayout() {
             case pathname.match(/\d+\/learningUnits\/new/)?.input:
               return (
                 <Pressable
-                  onPress={() => {
-                    Alert(
-                      "Änderungen verwerfen?",
-                      "Wenn du fortfährst, gehen die Änderungen verloren. Bist du dir sicher?",
-                      () => {
-                        const dynamicPath = pathname.replace(
-                          /\/learningUnits\/new/,
-                          "/edit"
-                        );
-                        router.push(
-                          `/${dynamicPath.substring(1, dynamicPath.length)}`
-                        );
-                      }
-                    );
-                  }}
+                    onPress={() => {
+                        Alert({
+                            title: "Änderungen verwerfen?",
+                            message: "Wenn du fortfährst, gehen die Änderungen verloren. Bist du dir sicher?",
+                            onPressConfirm: () => {
+                                const dynamicPath = pathname.replace(
+                                    /\/learningUnits\/new/,
+                                    "/edit"
+                                );
+                                router.push(
+                                    `/${dynamicPath.substring(1, dynamicPath.length)}`
+                                );
+                            }
+                        });
+                    }}
                 >
                   <ChevronLeft />
                 </Pressable>
@@ -64,13 +64,13 @@ export default function ModulesLayout() {
             case pathname.match(/\d+\/edit/)?.input:
               return (
                 <Pressable
-                  onPress={() => {
-                    Alert(
-                      "Änderungen verwerfen?",
-                      "Wenn du fortfährst, gehen die Änderungen verloren. Bist du dir sicher?",
-                      () => router.push("/(tabs)/modules")
-                    );
-                  }}
+                    onPress={() => {
+                        Alert({
+                            title: "Änderungen verwerfen?",
+                            message: "Wenn du fortfährst, gehen die Änderungen verloren. Bist du dir sicher?",
+                            onPressConfirm: () => router.push("/(tabs)/modules")
+                        });
+                    }}
                 >
                   <ChevronLeft />
                 </Pressable>
@@ -78,13 +78,13 @@ export default function ModulesLayout() {
             case "/modules/new/learningUnits":
               return (
                 <Pressable
-                  onPress={() => {
-                    Alert(
-                      "Änderungen verwerfen?",
-                      "Wenn du fortfährst, gehen die Änderungen verloren. Bist du dir sicher?",
-                      () => router.push("/modules/new")
-                    );
-                  }}
+                    onPress={() => {
+                        Alert({
+                            title: "Änderungen verwerfen?",
+                            message: "Wenn du fortfährst, gehen die Änderungen verloren. Bist du dir sicher?",
+                            onPressConfirm: () => router.push("/modules/new")
+                        });
+                    }}
                 >
                   <ChevronLeft />
                 </Pressable>

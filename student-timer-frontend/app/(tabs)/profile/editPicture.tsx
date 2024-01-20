@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {Alert} from "react-native";
+import Alert from "@/components/Alert";
 import { ScrollView, View } from "@/components/Themed";
 import { useRouter } from "expo-router";
 import { useAuth } from "@/context/AuthContext";
@@ -51,30 +51,15 @@ export default function EditPicture() {
 
     const cancel = () => {
         router.push("/profile/");
-        console.log("Abbrechen");
     };
+
     const onCancel = () => {
         if (isChanged) {
-            console.log("Alert für Änderung verwerfen aktiviert:", authState?.user.email)
-            Alert.alert(
-                "Änderungen verwerfen?",
-                `Sie haben ungespeicherte Änderungen vorgenommen. Wenn Sie fortfahren, gehen alle ungespeicherten Daten verloren. Möchten Sie wirklich abbrechen?`,
-                [
-                    {
-                        text: "Nein",
-                        onPress: () => console.log("Alert closed"),
-                        style: "cancel",
-                    },
-                    {
-                        text: "Ja",
-                        onPress: () => {
-                            cancel();
-                        },
-                        style: "destructive",
-                    },
-                ],
-                { cancelable: false }
-            );
+            Alert({
+                title: "Änderungen verwerfen?",
+                message: "Du hast dein Profilbild geändert. Wenn Du fortfährst, gehen alle ungespeicherten Änderungen verloren. Möchten Du die Änderung wirklich verwerfen?",
+                onPressConfirm: cancel,
+            });
         } else {
             cancel();
         }
