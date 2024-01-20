@@ -23,6 +23,7 @@ import InputFieldNumeric from "../InputFieldNumeric";
 export default function LearningSession(props: { isEdit: boolean }) {
   const { isEdit } = props;
   const toast = useToast();
+  const { fetchModules } = useModules();
   const { authState } = useAuth();
   const { authAxios } = useAxios();
   const { modules } = useModules();
@@ -224,6 +225,7 @@ export default function LearningSession(props: { isEdit: boolean }) {
                     focusDuration: focusTime,
                   }
                 );
+                fetchModules && (await fetchModules());
               } else {
                 await authAxios?.post(
                   `/students/${authState?.user.id}/modules/${module?.id}/learningSessions`,
