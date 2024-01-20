@@ -1,14 +1,17 @@
 import React, { useState, useRef } from "react";
-import { Link, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { StyleSheet, useWindowDimensions, Platform } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import Button from "@/components/Button";
 import { BASE_STYLES, COLORTHEME } from "@/constants/Theme";
-import { Text, View } from "@/components/Themed";
+import { View } from "@/components/Themed";
 import { onboardingData } from "@/constants/onboardingItems";
 import OnboardingContainer from "@/components/onboarding/OnboardingContainer";
 import OnboardingCard from "@/components/onboarding/OnboardingCard";
 import CardNavigation from "@/components/onboarding/CardNavigation";
+import {saveItem} from "@/libs/deviceStorage";
+import {useAuth} from "@/context/AuthContext";
+import Pressable from "@/components/Pressable";
 
 export default function OnboardingScreen() {
   const { width } = useWindowDimensions();
@@ -16,15 +19,19 @@ export default function OnboardingScreen() {
   const [reachedLastItem, setReachedLastItem] = useState(false);
   const router = useRouter();
   const scrollViewRef = useRef<ScrollView | null>(null);
+  const { authState } = useAuth();
 
   const isSwipeEnabled = () => {
     return Platform.OS === "android" || Platform.OS === "ios";
   };
 
-  const navigateToAuthentication = () => {
-    //saveItem("onbarding", JSON.stringify(true));
-    router.push("/(auth)/signup");
-  };
+  const navigateToApp = () =>{
+    if (authState?.authenticated) {
+      router.push("/(tabs)/(tracking)/");
+    } else {
+      saveItem("onboarding", JSON.stringify(true));
+      router.push("/(auth)/signup");    }
+  }
 
   const onPrevPress = () => {
     if (activeIndex > 0) {
@@ -35,6 +42,7 @@ export default function OnboardingScreen() {
           animated: true,
         });
       }
+      setReachedLastItem(false);
     }
   };
 
@@ -48,7 +56,7 @@ export default function OnboardingScreen() {
         });
       }
     } else {
-      navigateToAuthentication();
+      navigateToApp();
     }
   };
 
@@ -100,18 +108,20 @@ export default function OnboardingScreen() {
       />
       {reachedLastItem ? (
         <Button
-          text="zur Registrierung"
+          text={
+            authState?.authenticated
+                ? "zum Tracking"
+                : "zur Registrierung"
+          }
           backgroundColor={COLORTHEME.light.primary}
           textColor="#FFFFFF"
-          onPress={navigateToAuthentication}
+          onPress={navigateToApp}
           style={{ width: 300, marginVertical: 20, height: 50 }}
         />
       ) : (
-        <Text style={{ marginVertical: 20, height: 50 }}>
-          <Link href="/signup" style={{ textDecorationLine: "underline" }}>
-            Überspringen
-          </Link>
-        </Text>
+        <View style={{ marginTop: 10, marginBottom: 30, height: 50 }}>
+          <Pressable text={"Überspringen"} accessibilityRole={"link"} onPress={navigateToApp}/>
+        </View>
       )}
     </ScrollView>
   );
@@ -122,6 +132,6 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: "flex-start",
     alignItems: "center",
-    backgroundColor: "white", //toDo ScrollView in Themed.tsx reparieren und stattdessen importieren
+    backgroundColor: "white",
   },
 });
