@@ -144,7 +144,7 @@ export default function EditData() {
                     cancelAction={onCancel}
                 />
             </View>
-            <View style={{ alignItems: "center", marginBottom: 40  }}>
+            <View style={{ alignItems: "center", marginTop: 10, marginBottom: 40  }}>
                 <Pressable
                     text={"Konto löschen"}
                     textColor={'#F00'}
