@@ -51,8 +51,8 @@ export default function EditPicture() {
 
     const cancel = () => {
         router.push("/profile/");
-        console.log("Abbrechen");
     };
+
     const onCancel = () => {
         if (isChanged) {
             Alert({

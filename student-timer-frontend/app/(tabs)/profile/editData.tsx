@@ -61,7 +61,6 @@ export default function EditData() {
 
     const cancel = () => {
         router.push("/profile/");
-        console.log("Abbrechen");
     };
 
     const update = async () => {
@@ -72,7 +71,6 @@ export default function EditData() {
                 userStudyCourse,
                 userEmail,
             );
-            console.log("validateInput");
             if (result && result.error) {
                 setError(result.msg);
                 toast.update(id, result.msg, { type: "danger" });
@@ -89,13 +87,11 @@ export default function EditData() {
 
 
     const removeUser = async () => {
-        console.log("User removed:", authState?.user.email)
         let id = toast.show("Löschen...", { type: "loading" });
         if (authState?.user.id) {
             const result = await onRemove!(
                 authState?.user.id
             );
-            console.log("remove")
             if (result && result.error) {
                 setError(result.msg);
             } else {

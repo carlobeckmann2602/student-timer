@@ -36,7 +36,6 @@ export default function EditPassword() {
 
     const cancel = () => {
         router.push("/profile/");
-        console.log("Abbrechen");
     };
 
 
