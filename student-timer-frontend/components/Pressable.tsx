@@ -40,12 +40,9 @@ export default function Pressable({
 const styles = StyleSheet.create({
     button: {
         width: 200,
-        padding: 10,
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 5,
-        marginTop: 10,
-        marginBottom: 10
     },
     text: {
         textDecorationLine: 'underline'
