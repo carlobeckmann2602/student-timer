@@ -25,9 +25,7 @@ export default function Pressable({
             accessibilityLabel={text}
             accessibilityRole={accessibilityRole}
             style={({ pressed }) => [
-                {
-                    backgroundColor: pressed ? 'grey' : 'transparent',
-                },
+                {backgroundColor: 'transparent'},
                 styles.button,
                 style
             ]}
