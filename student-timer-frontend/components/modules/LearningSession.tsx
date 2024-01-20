@@ -17,7 +17,7 @@ import {
   formatTimeLearningSession,
 } from "@/libs/timeHelper";
 import StarRating from "@/components/StarRating";
-import { roundNumber } from "@/libs/generalHelper";
+import { debounce, roundNumber, validateNumber } from "@/libs/generalHelper";
 import InputFieldNumeric from "../InputFieldNumeric";
 
 export default function LearningSession(props: { isEdit: boolean }) {
@@ -41,10 +41,14 @@ export default function LearningSession(props: { isEdit: boolean }) {
   const [description, setDescription] = useState(
     learningSession?.description || ""
   );
-  const [focusDuration, setFocusDuration] = useState(
-    msToTimeObject((learningSession?.focusDuration || 0) * (1000 * 60))
-  );
-  const [pauseDuration, setPauseDuration] = useState(
+  const [focusDuration, setFocusDuration] = useState<{
+    hours: number | string;
+    mins: number | string;
+  }>(msToTimeObject((learningSession?.focusDuration || 0) * (1000 * 60)));
+  const [pauseDuration, setPauseDuration] = useState<{
+    hours: number | string;
+    mins: number | string;
+  }>(
     msToTimeObject(
       ((learningSession?.totalDuration || 0) -
         (learningSession?.focusDuration || 0)) *
@@ -52,6 +56,34 @@ export default function LearningSession(props: { isEdit: boolean }) {
     )
   );
   const [changesMade, setChangesMade] = useState(false);
+  const [debounceWaiting, setDebounceWaiting] = useState(false);
+  const debounceDuration = React.useCallback(
+    debounce(
+      (
+        setState: React.Dispatch<
+          React.SetStateAction<{
+            hours: number | string;
+            mins: number | string;
+          }>
+        >,
+        val: string,
+        isHours: boolean
+      ) => {
+        const number = validateNumber(val, isHours ? 0 : 1);
+        setState((prevState) => ({
+          ...prevState,
+          [isHours ? "hours" : "mins"]: isHours
+            ? number
+            : number >= 60
+            ? 59
+            : number,
+        }));
+        setDebounceWaiting(false);
+      },
+      1000
+    ),
+    []
+  );
 
   return (
     <KeyboardAvoidingView
@@ -87,9 +119,11 @@ export default function LearningSession(props: { isEdit: boolean }) {
                 onChangeText={(val) => {
                   setFocusDuration((prevState) => ({
                     ...prevState,
-                    hours: Math.abs(roundNumber(val, 0)),
+                    hours: val,
                   }));
                   setChangesMade(true);
+                  setDebounceWaiting(true);
+                  debounceDuration(setFocusDuration, val, true);
                 }}
                 inputUnit="Std."
                 selectTextOnFocus
@@ -98,12 +132,13 @@ export default function LearningSession(props: { isEdit: boolean }) {
                 style={styles.input}
                 value={focusDuration.mins.toString()}
                 onChangeText={(val) => {
-                  let mins = Math.abs(roundNumber(val, 0));
                   setFocusDuration((prevState) => ({
                     ...prevState,
-                    mins: mins >= 60 ? 59 : mins,
+                    mins: val,
                   }));
                   setChangesMade(true);
+                  setDebounceWaiting(true);
+                  debounceDuration(setFocusDuration, val, false);
                 }}
                 inputUnit="min."
                 selectTextOnFocus
@@ -125,9 +160,11 @@ export default function LearningSession(props: { isEdit: boolean }) {
                 onChangeText={(val) => {
                   setPauseDuration((prevState) => ({
                     ...prevState,
-                    hours: Math.abs(roundNumber(val, 0)),
+                    hours: val,
                   }));
                   setChangesMade(true);
+                  setDebounceWaiting(true);
+                  debounceDuration(setPauseDuration, val, true);
                 }}
                 inputUnit="Std."
                 selectTextOnFocus
@@ -136,12 +173,13 @@ export default function LearningSession(props: { isEdit: boolean }) {
                 style={styles.input}
                 value={pauseDuration.mins.toString()}
                 onChangeText={(val) => {
-                  let mins = Math.abs(roundNumber(val, 0));
                   setPauseDuration((prevState) => ({
                     ...prevState,
-                    mins: mins >= 60 ? 59 : mins,
+                    mins: val,
                   }));
                   setChangesMade(true);
+                  setDebounceWaiting(true);
+                  debounceDuration(setPauseDuration, val, false);
                 }}
                 inputUnit="min."
                 selectTextOnFocus
@@ -207,6 +245,7 @@ export default function LearningSession(props: { isEdit: boolean }) {
           text={isEdit ? "Speichern" : "Abschließen"}
           backgroundColor={module?.colorCode || ""}
           textColor="#FFFFFF"
+          disabled={isEdit ? debounceWaiting : false}
           onPress={async () => {
             let id = toast.show("Speichern...", { type: "loading" });
             let body = {

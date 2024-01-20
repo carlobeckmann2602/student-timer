@@ -17,26 +17,47 @@ import {
   enableLocalNotification,
   sendPushNotification,
 } from "@/libs/handleLocalNotification";
-import { roundNumber } from "@/libs/generalHelper";
+import { debounce, validateNumber } from "@/libs/generalHelper";
 import { roundSecToMinInMs } from "@/libs/timeHelper";
 
 export default function Tracking() {
   const [isStopwatch, setIsStopwatch] = useState(true);
   const [rounds, setRounds] = useState("2");
+  const [inputRounds, setInputRounds] = useState("2");
   const [pauseLen, setPauseLen] = useState("20");
+  const [inputPauseLen, setInputPauseLen] = useState("20");
   const [roundLen, setRoundLen] = useState("40");
+  const [inputRoundLen, setInputRoundLen] = useState("40");
   const [trackingIsActive, setTrackingIsActive] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [startTime, setStartTime] = useState(0);
   const [selectedModule, setSelectedModule] = useState({} as ModuleType);
   const [timerIsDone, setTimerIsDone] = useState(false);
   const [isFirstFocus, setIsFirstFocus] = useState(true);
+  const [debounceWaiting, setDebounceWaiting] = useState(false);
   const { trackingSaved, discard } = useLocalSearchParams<{
     trackingSaved: string;
     discard: string;
   }>();
   const { modules } = useModules();
   const inputsEditable = !trackingIsActive && startTime === 0;
+  const debounceInput = React.useCallback(
+    debounce(
+      (
+        setState: React.Dispatch<React.SetStateAction<string>>,
+        setInputState: React.Dispatch<React.SetStateAction<string>>,
+        val: string,
+        defaultNumber = 1
+      ) => {
+        val = validateNumber(val, defaultNumber).toString();
+        setState(val);
+        setInputState(val);
+        setDebounceWaiting(false);
+      },
+      1000
+    ),
+    []
+  );
   useFocusEffect(
     React.useCallback(() => {
       if (isFirstFocus) {
@@ -132,9 +153,11 @@ export default function Tracking() {
           <InputFieldNumeric
             style={styles.input}
             label="Runden"
-            value={rounds}
+            value={inputRounds}
             onChangeText={(val) => {
-              setRounds(Math.abs(roundNumber(val, 1)).toString());
+              setInputRounds(val);
+              setDebounceWaiting(true);
+              debounceInput(setRounds, setInputRounds, val, 2);
             }}
             selectTextOnFocus
             editable={inputsEditable}
@@ -143,9 +166,11 @@ export default function Tracking() {
         <InputFieldNumeric
           style={styles.input}
           label="Rundenlänge"
-          value={roundLen}
+          value={inputRoundLen}
           onChangeText={(val) => {
-            setRoundLen(Math.abs(roundNumber(val, 1)).toString());
+            setInputRoundLen(val);
+            setDebounceWaiting(true);
+            debounceInput(setRoundLen, setInputRoundLen, val);
           }}
           inputUnit="min."
           selectTextOnFocus
@@ -154,9 +179,11 @@ export default function Tracking() {
         <InputFieldNumeric
           style={styles.input}
           label="Pausenlänge"
-          value={pauseLen}
+          value={inputPauseLen}
           onChangeText={(val) => {
-            setPauseLen(Math.abs(roundNumber(val, 1)).toString());
+            setInputPauseLen(val);
+            setDebounceWaiting(true);
+            debounceInput(setPauseLen, setInputPauseLen, val);
           }}
           inputUnit="min."
           selectTextOnFocus
@@ -188,6 +215,7 @@ export default function Tracking() {
             ) : startTime === 0 ? (
               <Button
                 text="Tracking starten"
+                disabled={debounceWaiting}
                 backgroundColor={COLORTHEME.light.primary}
                 textColor="#FFFFFF"
                 onPress={toggleTracking}

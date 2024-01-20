@@ -11,10 +11,10 @@ export const timeObjectToMinutes = ({
   hours,
   mins,
 }: {
-  hours: number;
-  mins: number;
+  hours: number | string;
+  mins: number | string;
 }): number => {
-  return hours * 60 + mins;
+  return Number(hours) * 60 + Number(mins);
 };
 
 export const formatTime = ({
