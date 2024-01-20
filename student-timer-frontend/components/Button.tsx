@@ -46,7 +46,7 @@ export default function Button(props: ButtonProps) {
       ]}
       onPress={onPress}
       disabled={disabled}
-      aria-label={accessibilityLabel}
+      accessibilityLabel={accessibilityLabel}
       role="button"
     >
       {iconLeft ? <View style={styles.icon}>{iconLeft}</View> : null}

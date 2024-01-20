@@ -19,25 +19,25 @@ export default function ProfilePicture({
 }: ProfilePictureProps) {
 
     const imagePath = profileImages[imageName] || profileImages[defaultPictureName];
-    const ariaLabel = onPress
+    const accessibilityLabel = onPress
         ? "Profilbild ändern"
         : "Aktuelles Profilbild";
-    const role = onPress
+    const accessibilityRole  = onPress
         ? "button"
-        : "img"
+        : "image"
 
     return (
 
         <View style={styles.profileImageContainer}>
             <Pressable
                 onPress={onPress}
-                aria-label={ariaLabel}
-                role={role}
+                accessibilityLabel={accessibilityLabel}
+                accessibilityRole ={accessibilityRole }
             >
             {imagePath ? (
-                <Image source={imagePath} style={styles.profileImage} aria-label={"Aktuelles Profilbild"} />
+                <Image source={imagePath} style={styles.profileImage} accessibilityLabel={"Aktuelles Profilbild"} />
             ) : (
-                <User2 size={100} color={COLORTHEME.light.primary} aria-label={"Standard-Profilbild"} />
+                <User2 size={100} color={COLORTHEME.light.primary} />
             )}
             {editStyle && (
                 <View style={styles.editIcon}>
