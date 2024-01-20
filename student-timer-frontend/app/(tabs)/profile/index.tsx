@@ -29,9 +29,7 @@ export default function Profile() {
   return (
     <ScrollView>
       <View style={{ alignItems: "center" }}>
-        <Pressable onPress={handleEditPicture}>
-          <ProfilePicture imageName={profilePictureName} editMode={true} />
-        </Pressable>
+        <ProfilePicture imageName={profilePictureName} editStyle={true} onPress={handleEditPicture} />
         <H2>{authState?.user.name}</H2>
         <H3>{authState?.user.studyCourse}</H3>
         <View style={styles.actionContainer}>
