@@ -30,7 +30,6 @@ export default function ProfilePictureSlider({
                 style={{ borderRadius: BASE_STYLES.borderRadius }}
                 data={availableImages}
                 horizontal
-                pagingEnabled
                 showsHorizontalScrollIndicator={true}
                 keyExtractor={(item) => item}
                 renderItem={({ item, index }) => (

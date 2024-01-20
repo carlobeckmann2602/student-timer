@@ -1,14 +1,13 @@
 import React, { useEffect } from "react";
-import {View, StyleSheet} from "react-native";
+import { View, StyleSheet } from "react-native";
 import Button from "@/components/Button";
 import { ScrollView } from "@/components/Themed";
-import Pressable from "@/components/Pressable";
-import { COLORTHEME } from "@/constants/Theme";
+import { COLORS, COLORTHEME } from "@/constants/Theme";
 import { router } from "expo-router";
 import { useAuth } from "@/context/AuthContext";
 import ProfilePicture from "@/components/profile/ProfilePicture";
 import { useProfilePicture } from '@/components/profile/useProfilePicture';
-import {H2, H3} from "@/components/StyledText";
+import { H2, H3 } from "@/components/StyledText";
 
 export default function Profile() {
   const { onLogout, authState } = useAuth();
@@ -18,11 +17,6 @@ export default function Profile() {
     setProfilePictureName(getProfilePictureName());
   }, [authState]);
 
-  console.log("index:", authState?.user.name)
-  console.log("#### useState:", profilePictureName, typeof profilePictureName);
-  console.log("authState?.user.profilePicture", authState?.user.profilePicture, typeof authState?.user.profilePicture);
-
-
   const handleEditData = () => router.push("/profile/editData/");
   const handleEditPassword = () => router.push("/profile/editPassword/");
   const handleEditPicture = () => router.push("/profile/editPicture/");
@@ -30,7 +24,7 @@ export default function Profile() {
   return (
     <ScrollView>
       <View style={{ alignItems: "center" }}>
-        <ProfilePicture imageName={profilePictureName} />
+        <ProfilePicture imageName={profilePictureName} editStyle={true} onPress={handleEditPicture} />
         <H2>{authState?.user.name}</H2>
         <H3>{authState?.user.studyCourse}</H3>
         <View style={styles.actionContainer}>
@@ -46,21 +40,14 @@ export default function Profile() {
               textColor="#FFFFFF"
               onPress={handleEditPassword}
           />
-          <Button
-              text="Profilbild wechseln"
-              backgroundColor={COLORTHEME.light.primary}
-              textColor="#FFFFFF"
-              onPress={handleEditPicture}
-          />
         </View>
-        <View>
-          <Pressable
-              text={"Logout"}
-              ariaLabel={"Logout"}
-              accessibilityRole={"button"}
-              onPress={onLogout}
-          />
-        </View>
+        <Button style={{width: 200}}
+            text="Logout"
+            backgroundColor={COLORS.white}
+            borderColor={COLORTHEME.light.primary}
+            textColor={COLORTHEME.light.grey3}
+            onPress={onLogout}
+        />
       </View>
     </ScrollView>
   );

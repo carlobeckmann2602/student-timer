@@ -30,6 +30,7 @@ export default function Button(props: ButtonProps) {
     style,
     disabled,
   } = props;
+  const accessibilityLabel = `${text} Button`;
   return (
     <Pressable
       style={[
@@ -45,6 +46,8 @@ export default function Button(props: ButtonProps) {
       ]}
       onPress={onPress}
       disabled={disabled}
+      accessibilityLabel={accessibilityLabel}
+      role="button"
     >
       {iconLeft ? <View style={styles.icon}>{iconLeft}</View> : null}
       <Text style={[{ color: textColor }, styles.buttonText]}>{text}</Text>
