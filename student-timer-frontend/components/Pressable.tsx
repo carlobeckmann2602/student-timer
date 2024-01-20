@@ -4,7 +4,6 @@ import { Pressable as RNPressable, Text, StyleProp, ViewStyle, StyleSheet } from
 type PressableProps = {
     text: string;
     textColor?: string;
-    ariaLabel: string;
     accessibilityRole: 'none' | 'button' | 'link' | 'search' | 'image' | 'keyboardkey' | 'text' | 'adjustable' | 'imagebutton' | 'header' | 'summary' | 'alert' | 'checkbox' | 'combobox' | 'menu' | 'menubar' | 'menuitem' | 'progressbar' | 'radio' | 'radiogroup' | 'scrollbar' | 'spinbutton' | 'switch' | 'tab' | 'tablist' | 'timer' | 'toolbar';
     onPress?: (val?: any) => void;
     style?: StyleProp<ViewStyle>;
@@ -16,7 +15,6 @@ export type PressablePropsType = PressableProps;
 export default function Pressable({
                                       text,
                                       textColor,
-                                      ariaLabel,
                                       accessibilityRole,
                                       onPress,
                                       style,
@@ -24,13 +22,10 @@ export default function Pressable({
                                   }: PressablePropsType) {
     return (
         <RNPressable
-            accessible={true}
-            aria-label={ariaLabel}
+            accessibilityLabel={text}
             accessibilityRole={accessibilityRole}
             style={({ pressed }) => [
-                {
-                    backgroundColor: pressed ? 'grey' : 'transparent',
-                },
+                {backgroundColor: 'transparent'},
                 styles.button,
                 style
             ]}

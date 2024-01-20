@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import { View, ScrollView } from "@/components/Themed";
 import Alert from "@/components/Alert";
 import { useRouter } from "expo-router";
-import { BASE_STYLES } from "@/constants/Theme";
+import {BASE_STYLES} from "@/constants/Theme";
 import { useAuth } from "@/context/AuthContext";
 import UserDetailsInput from "@/components/userInput/UserDetailsInput";
 import Pressable from "@/components/Pressable";
@@ -155,7 +155,6 @@ export default function EditData() {
                 <Pressable
                     text={"Konto löschen"}
                     textColor={'#F00'}
-                    ariaLabel={"Konto löschen"}
                     accessibilityRole={"button"}
                     onPress={onDelete}
                 />
