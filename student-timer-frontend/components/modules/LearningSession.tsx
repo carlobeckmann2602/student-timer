@@ -183,22 +183,24 @@ export default function LearningSession(props: { isEdit: boolean }) {
       </View>
       <View style={styles.actions}>
         {!isEdit && (
-          <Text
-            style={styles.discardLink}
-            onPress={() => {
-              Alert(
-                "Tracking verwerfen?",
-                "Wenn du fortfährst, wird das Tracking gelöscht. Bist du dir sicher?",
-                () =>
-                  router.push({
-                    pathname: "/(tabs)/(tracking)/",
-                    params: {
-                      discard: 1,
-                    },
-                  })
-              );
-            }}
-          >
+            <Text
+                style={styles.discardLink}
+                onPress={() => {
+                  Alert({
+                    title: "Tracking verwerfen?",
+                    message: "Wenn du fortfährst, wird das Tracking gelöscht. Bist du dir sicher?",
+                    onPressConfirm: () =>
+                        router.push({
+                          pathname: "/(tabs)/(tracking)/",
+                          params: {
+                            discard: 1,
+                          },
+                        }),
+                    cancelText: "Abbrechen",
+                    confirmText: "Ja"
+                  });
+                }}
+            >
             Verwerfen
           </Text>
         )}
@@ -256,24 +258,25 @@ export default function LearningSession(props: { isEdit: boolean }) {
           }}
         />
         <Button
-          style={[styles.buttonBorder, { borderColor: module?.colorCode }]}
-          text={isEdit ? "Abbrechen" : "Tracking fortsetzen"}
-          backgroundColor={COLORS.white}
-          textColor={module?.colorCode}
-          onPress={() => {
-            if (isEdit) {
-              changesMade
-                ? Alert(
-                    "Änderungen verwerfen?",
-                    "Wenn du fortfährst, gehen alle Änderungen ungespeichert verloren. Bist du dir sicher?",
-                    () => router.push(`/(tabs)/modules/${module?.id}/`)
-                  )
-                : router.push(`/(tabs)/modules/${module?.id}/`);
-            } else {
-              router.push("/(tabs)/(tracking)");
-            }
-          }}
+            style={[styles.buttonBorder, { borderColor: module?.colorCode }]}
+            text={isEdit ? "Abbrechen" : "Tracking fortsetzen"}
+            backgroundColor={COLORS.white}
+            textColor={module?.colorCode}
+            onPress={() => {
+              if (isEdit) {
+                changesMade
+                    ? Alert({
+                      title: "Änderungen verwerfen?",
+                      message: "Wenn du fortfährst, gehen alle Änderungen ungespeichert verloren. Bist du dir sicher?",
+                      onPressConfirm: () => router.push(`/(tabs)/modules/${module?.id}/`),
+                    })
+                    : router.push(`/(tabs)/modules/${module?.id}/`);
+              } else {
+                router.push("/(tabs)/(tracking)");
+              }
+            }}
         />
+
       </View>
     </KeyboardAvoidingView>
   );

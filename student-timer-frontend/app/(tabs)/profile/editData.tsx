@@ -61,7 +61,6 @@ export default function EditData() {
 
     const cancel = () => {
         router.push("/profile/");
-        console.log("Abbrechen");
     };
 
     const update = async () => {
@@ -72,7 +71,6 @@ export default function EditData() {
                 userStudyCourse,
                 userEmail,
             );
-            console.log("validateInput");
             if (result && result.error) {
                 setError(result.msg);
                 toast.update(id, result.msg, { type: "danger" });
@@ -89,13 +87,11 @@ export default function EditData() {
 
 
     const removeUser = async () => {
-        console.log("User removed:", authState?.user.email)
         let id = toast.show("Löschen...", { type: "loading" });
         if (authState?.user.id) {
             const result = await onRemove!(
                 authState?.user.id
             );
-            console.log("remove")
             if (result && result.error) {
                 setError(result.msg);
             } else {
@@ -107,26 +103,23 @@ export default function EditData() {
 
     const onCancel = () => {
         if (isChanged) {
-            Alert(
-                "Änderungen verwerfen?",
-                `Sie haben ungespeicherte Änderungen vorgenommen. Wenn Sie fortfahren, gehen alle ungespeicherten Daten verloren. Möchten Sie wirklich abbrechen?`,
-                cancel,
-                "Nein",
-                "Ja"
-            )
+            Alert({
+                title: "Änderungen verwerfen?",
+                message: "Sie haben Änderungen vorgenommen. Wenn Sie fortfahren, gehen alle ungespeicherten Daten verloren. Möchten Sie Ihre Änderungen wirklich verwerfen?",
+                onPressConfirm: cancel,
+            });
         } else {
             cancel();
         }
     };
 
     const onDelete = () => {
-        Alert(
-            "Profil wirklich löschen?",
-            `Möchtest du deinen Account mit der E-Mail-Adresse "${authState?.user.email}" wirklich unwiderruflich löschen? Alle zum Profil gehörenden Daten, Module, Lerneinheiten und Trackings werden dabei gelöscht.`,
-            removeUser,
-            "Abbrechen",
-            "Löschen",
-        )
+        Alert({
+            title: "Profil wirklich löschen?",
+            message: `Möchtest du deinen Account mit der E-Mail-Adresse "${authState?.user.email}" wirklich unwiderruflich löschen? Alle zum Profil gehörenden Daten, Module, Lerneinheiten und Trackings werden dabei gelöscht.`,
+            onPressConfirm: removeUser,
+            confirmText: "Löschen",
+        });
     };
 
     return (

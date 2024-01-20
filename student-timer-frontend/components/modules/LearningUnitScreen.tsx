@@ -113,13 +113,15 @@ export default function LearningUnitSreen(props: LearningUnitScreenProps) {
           textColor={COLORTHEME.light.danger}
           style={{ flex: 1 }}
           onPress={() =>
-            openChanges
-              ? Alert(
-                  "Änderungen verwerfen?",
-                  "Wenn du fortfährst, gehen die Änderungen verloren. Bist du dir sicher?",
-                  () => router.back()
-                )
-              : router.back()
+              openChanges
+                  ? Alert({
+                    title: "Eingaben verwerfen?",
+                    message: "Wenn du fortfährst, gehen alle Eingaben verloren. Bist du dir sicher?",
+                    onPressConfirm: () => router.push("/modules"),
+                    cancelText: "Abbrechen",
+                    confirmText: "Ja"
+                  })
+                  : router.push("/modules")
           }
         />
         <Button
