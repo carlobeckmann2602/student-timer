@@ -36,15 +36,15 @@ export default function ModulesDetailScreen() {
     ({} as ModuleType);
 
   const onDeleteModule = () => {
-    Alert(
-      "Modul wirklich löschen?",
-      `Möchtest du das Modul "${detailModule.name}" wirklich unwiederuflich löschen?\n Auch die zugehörigen Lerneinheiten und Trackings werden dabei gelöscht.`,
-      () => {
+    Alert({
+      title: "Modul wirklich löschen?",
+      message: `Möchtest du das Modul "${detailModule.name}" wirklich unwiederuflich löschen?\n Auch die zugehörigen Lerneinheiten und Trackings werden dabei gelöscht.`,
+      onPressConfirm: () => {
         deleteModule();
       },
-      "Abbrechen",
-      "Löschen"
-    );
+      cancelText: "Abbrechen",
+      confirmText: "Löschen",
+    });
   };
 
   const deleteModule = async () => {
@@ -66,15 +66,15 @@ export default function ModulesDetailScreen() {
   };
 
   const onDeleteTracking = (trackingSessionId: number) => {
-    Alert(
-      "Tracking wirklich löschen?",
-      "Möchtest du das Tracking wirklich unwiederuflich löschen?",
-      () => {
+    Alert({
+      title: "Tracking wirklich löschen?",
+      message: "Möchtest du das Tracking wirklich unwiederuflich löschen?",
+      onPressConfirm: () => {
         deleteLearningSession(trackingSessionId);
       },
-      "Abbrechen",
-      "Löschen"
-    );
+      cancelText: "Abbrechen",
+      confirmText: "Löschen",
+    });
   };
 
   const deleteLearningSession = async (trackingSessionId: number) => {
