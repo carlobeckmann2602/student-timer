@@ -25,6 +25,7 @@ export default function ProfilePicture({
     const accessibilityRole  = onPress
         ? "button"
         : "image"
+    const imageWidth = 120
 
     return (
 
@@ -49,11 +50,12 @@ export default function ProfilePicture({
     );
 };
 
+const imageWidth = 120
 const styles = StyleSheet.create({
     profileImageContainer: {
-        width: 140,
-        height: 140,
-        borderRadius: 70,
+        width: imageWidth,
+        height: imageWidth,
+        borderRadius: imageWidth/2,
         backgroundColor: '#EEEAEA',
         justifyContent: 'center',
         alignItems: 'center',
@@ -61,9 +63,9 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     profileImage: {
-        width: 140,
-        height: 140,
-        borderRadius: 70,
+        width: imageWidth,
+        height: imageWidth,
+        borderRadius: imageWidth/2,
         borderColor: COLORTHEME.light.primary,
         borderWidth: 5,
     },
