@@ -1,9 +1,8 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
 import InputField from "@/components/InputField";
-import {BASE_STYLES, COLORS, COLORTHEME} from "@/constants/Theme";
+import { BASE_STYLES, COLORS, COLORTHEME } from "@/constants/Theme";
 import Button from "@/components/Button";
-import Pressable from "@/components/Pressable";
 import { H3 } from "@/components/StyledText";
 
 export default function UserDetailsInput(props: {

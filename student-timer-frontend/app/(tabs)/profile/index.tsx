@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
-import {View, StyleSheet, Pressable} from "react-native";
+import { View, StyleSheet } from "react-native";
 import Button from "@/components/Button";
 import { ScrollView } from "@/components/Themed";
-import {COLORS, COLORTHEME} from "@/constants/Theme";
+import { COLORS, COLORTHEME } from "@/constants/Theme";
 import { router } from "expo-router";
 import { useAuth } from "@/context/AuthContext";
 import ProfilePicture from "@/components/profile/ProfilePicture";
 import { useProfilePicture } from '@/components/profile/useProfilePicture';
-import {H2, H3} from "@/components/StyledText";
+import { H2, H3 } from "@/components/StyledText";
 
 export default function Profile() {
   const { onLogout, authState } = useAuth();
