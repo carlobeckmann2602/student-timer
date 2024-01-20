@@ -1,5 +1,5 @@
 import { KeyboardAvoidingView, Platform, StyleSheet } from "react-native";
-import { useState } from "react";
+import React, { useState } from "react";
 import { router, useLocalSearchParams } from "expo-router";
 import { useToast } from "react-native-toast-notifications";
 
@@ -50,6 +50,7 @@ export default function LearningSession(props: { isEdit: boolean }) {
         (1000 * 60)
     )
   );
+  const [changesMade, setChangesMade] = useState(false);
 
   return (
     <KeyboardAvoidingView
@@ -60,7 +61,14 @@ export default function LearningSession(props: { isEdit: boolean }) {
         <StarRating
           interactive
           starAmount={starAmount}
-          setStarAmount={setStarAmount}
+          setStarAmount={
+            isEdit
+              ? (starAmount: React.SetStateAction<number>) => {
+                  setStarAmount(starAmount);
+                  setChangesMade(true);
+                }
+              : setStarAmount
+          }
           color={module?.colorCode}
         />
       </View>
@@ -80,6 +88,7 @@ export default function LearningSession(props: { isEdit: boolean }) {
                     ...prevState,
                     hours: Math.abs(roundNumber(val, 0)),
                   }));
+                  setChangesMade(true);
                 }}
                 inputUnit="Std."
                 selectTextOnFocus
@@ -93,6 +102,7 @@ export default function LearningSession(props: { isEdit: boolean }) {
                     ...prevState,
                     mins: mins >= 60 ? 59 : mins,
                   }));
+                  setChangesMade(true);
                 }}
                 inputUnit="min."
                 selectTextOnFocus
@@ -116,6 +126,7 @@ export default function LearningSession(props: { isEdit: boolean }) {
                     ...prevState,
                     hours: Math.abs(roundNumber(val, 0)),
                   }));
+                  setChangesMade(true);
                 }}
                 inputUnit="Std."
                 selectTextOnFocus
@@ -129,6 +140,7 @@ export default function LearningSession(props: { isEdit: boolean }) {
                     ...prevState,
                     mins: mins >= 60 ? 59 : mins,
                   }));
+                  setChangesMade(true);
                 }}
                 inputUnit="min."
                 selectTextOnFocus
@@ -141,37 +153,54 @@ export default function LearningSession(props: { isEdit: boolean }) {
           )}
         </View>
       </View>
-      <View>
-        <Text>Modul</Text>
-        <Text style={{ color: module?.colorCode }}>{module?.name}</Text>
+      <View style={styles.moduleContainer}>
+        <Text style={styles.moduleLabel}>Modul</Text>
+        <View style={styles.colorContainer}>
+          <View
+            style={[
+              styles.colorCircle,
+              { backgroundColor: module?.colorCode || "transparent" },
+            ]}
+          />
+          <Text>{module?.name}</Text>
+        </View>
       </View>
       <View>
         <InputField
           label="Beschreibung"
           value={description}
-          onChangeText={setDescription}
+          onChangeText={
+            isEdit
+              ? (text: string) => {
+                  setDescription(text);
+                  setChangesMade(true);
+                }
+              : setDescription
+          }
           placeholder="..."
           style={styles.input}
         />
       </View>
       <View style={styles.actions}>
         {!isEdit && (
-          <Text
-            style={styles.discardLink}
-            onPress={() => {
-              Alert({
-                title: "Tracking verwerfen?",
-                message: "Wenn du fortfährst, wird das Tracking gelöscht. Bist du dir sicher?",
-                onPressConfirm: () =>
-                    router.push({
-                      pathname: "/(tabs)/(tracking)/",
-                      params: {
-                        discard: 1,
-                      },
-                    })
-              });
-            }}
-          >
+            <Text
+                style={styles.discardLink}
+                onPress={() => {
+                  Alert({
+                    title: "Tracking verwerfen?",
+                    message: "Wenn du fortfährst, wird das Tracking gelöscht. Bist du dir sicher?",
+                    onPressConfirm: () =>
+                        router.push({
+                          pathname: "/(tabs)/(tracking)/",
+                          params: {
+                            discard: 1,
+                          },
+                        }),
+                    cancelText: "Abbrechen",
+                    confirmText: "Ja"
+                  });
+                }}
+            >
             Verwerfen
           </Text>
         )}
@@ -235,16 +264,19 @@ export default function LearningSession(props: { isEdit: boolean }) {
             textColor={module?.colorCode}
             onPress={() => {
               if (isEdit) {
-                Alert({
-                  title: "Änderungen verwerfen?",
-                  message: "Wenn du fortfährst, gehen alle Änderungen ungespeichert verloren. Bist du dir sicher?",
-                  onPressConfirm: () => router.back(),
-                });
+                changesMade
+                    ? Alert({
+                      title: "Änderungen verwerfen?",
+                      message: "Wenn du fortfährst, gehen alle Änderungen ungespeichert verloren. Bist du dir sicher?",
+                      onPressConfirm: () => router.push(`/(tabs)/modules/${module?.id}/`),
+                    })
+                    : router.push(`/(tabs)/modules/${module?.id}/`);
               } else {
                 router.push("/(tabs)/(tracking)");
               }
             }}
         />
+
       </View>
     </KeyboardAvoidingView>
   );
@@ -271,6 +303,26 @@ const styles = StyleSheet.create({
   timeLabelContainer: {
     alignItems: "center",
     gap: 10,
+  },
+  moduleContainer: {
+    gap: 5,
+  },
+  moduleLabel: {
+    color: COLORTHEME.light.primary,
+  },
+  colorContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: COLORTHEME.light.grey2,
+    borderRadius: 12,
+    height: 40,
+    paddingHorizontal: 10,
+    gap: 8,
+  },
+  colorCircle: {
+    width: 16,
+    height: 16,
+    borderRadius: 8,
   },
   timeEdit: {
     flexDirection: "row",
