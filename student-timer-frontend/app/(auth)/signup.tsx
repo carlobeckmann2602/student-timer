@@ -142,7 +142,7 @@ export default function SignupScreen() {
 
           {error && <Text style={styles.errorMessage}>{error}</Text>}
           <Text>
-            Sie haben bereits ein Konto?{" "}
+            Du hast bereits ein Konto?{" "}
             <Link href="/login" style={{ textDecorationLine: "underline" }}>
               Anmelden
             </Link>
