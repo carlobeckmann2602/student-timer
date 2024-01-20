@@ -242,7 +242,6 @@ export default function ModulesDetailScreen() {
                     </View>
                     <Pressable
                       onPress={() => {
-                        router.back();
                         router.push({
                           pathname: `/(tabs)/modules/${detailModule.id}/learningSessions/${item.id}/edit`,
                         } as never);

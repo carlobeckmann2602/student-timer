@@ -1,5 +1,5 @@
 import { KeyboardAvoidingView, Platform, StyleSheet } from "react-native";
-import { useState } from "react";
+import React, { useState } from "react";
 import { router, useLocalSearchParams } from "expo-router";
 import { useToast } from "react-native-toast-notifications";
 
@@ -50,6 +50,7 @@ export default function LearningSession(props: { isEdit: boolean }) {
         (1000 * 60)
     )
   );
+  const [changesMade, setChangesMade] = useState(false);
 
   return (
     <KeyboardAvoidingView
@@ -60,7 +61,14 @@ export default function LearningSession(props: { isEdit: boolean }) {
         <StarRating
           interactive
           starAmount={starAmount}
-          setStarAmount={setStarAmount}
+          setStarAmount={
+            isEdit
+              ? (starAmount: React.SetStateAction<number>) => {
+                  setStarAmount(starAmount);
+                  setChangesMade(true);
+                }
+              : setStarAmount
+          }
           color={module?.colorCode}
         />
       </View>
@@ -80,6 +88,7 @@ export default function LearningSession(props: { isEdit: boolean }) {
                     ...prevState,
                     hours: Math.abs(roundNumber(val, 0)),
                   }));
+                  setChangesMade(true);
                 }}
                 inputUnit="Std."
                 selectTextOnFocus
@@ -93,6 +102,7 @@ export default function LearningSession(props: { isEdit: boolean }) {
                     ...prevState,
                     mins: mins >= 60 ? 59 : mins,
                   }));
+                  setChangesMade(true);
                 }}
                 inputUnit="min."
                 selectTextOnFocus
@@ -116,6 +126,7 @@ export default function LearningSession(props: { isEdit: boolean }) {
                     ...prevState,
                     hours: Math.abs(roundNumber(val, 0)),
                   }));
+                  setChangesMade(true);
                 }}
                 inputUnit="Std."
                 selectTextOnFocus
@@ -129,6 +140,7 @@ export default function LearningSession(props: { isEdit: boolean }) {
                     ...prevState,
                     mins: mins >= 60 ? 59 : mins,
                   }));
+                  setChangesMade(true);
                 }}
                 inputUnit="min."
                 selectTextOnFocus
@@ -157,7 +169,14 @@ export default function LearningSession(props: { isEdit: boolean }) {
         <InputField
           label="Beschreibung"
           value={description}
-          onChangeText={setDescription}
+          onChangeText={
+            isEdit
+              ? (text: string) => {
+                  setDescription(text);
+                  setChangesMade(true);
+                }
+              : setDescription
+          }
           placeholder="..."
           style={styles.input}
         />
@@ -243,11 +262,13 @@ export default function LearningSession(props: { isEdit: boolean }) {
           textColor={module?.colorCode}
           onPress={() => {
             if (isEdit) {
-              Alert(
-                "Änderungen verwerfen?",
-                "Wenn du fortfährst, gehen alle Änderungen ungespeichert verloren. Bist du dir sicher?",
-                () => router.back()
-              );
+              changesMade
+                ? Alert(
+                    "Änderungen verwerfen?",
+                    "Wenn du fortfährst, gehen alle Änderungen ungespeichert verloren. Bist du dir sicher?",
+                    () => router.push(`/(tabs)/modules/${module?.id}/`)
+                  )
+                : router.push(`/(tabs)/modules/${module?.id}/`);
             } else {
               router.push("/(tabs)/(tracking)");
             }
