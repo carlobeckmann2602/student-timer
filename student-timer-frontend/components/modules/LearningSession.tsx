@@ -141,9 +141,17 @@ export default function LearningSession(props: { isEdit: boolean }) {
           )}
         </View>
       </View>
-      <View>
-        <Text>Modul</Text>
-        <Text style={{ color: module?.colorCode }}>{module?.name}</Text>
+      <View style={styles.moduleContainer}>
+        <Text style={styles.moduleLabel}>Modul</Text>
+        <View style={styles.colorContainer}>
+          <View
+            style={[
+              styles.colorCircle,
+              { backgroundColor: module?.colorCode || "transparent" },
+            ]}
+          />
+          <Text>{module?.name}</Text>
+        </View>
       </View>
       <View>
         <InputField
@@ -238,7 +246,7 @@ export default function LearningSession(props: { isEdit: boolean }) {
               Alert(
                 "Änderungen verwerfen?",
                 "Wenn du fortfährst, gehen alle Änderungen ungespeichert verloren. Bist du dir sicher?",
-                () => router.back(),
+                () => router.back()
               );
             } else {
               router.push("/(tabs)/(tracking)");
@@ -271,6 +279,26 @@ const styles = StyleSheet.create({
   timeLabelContainer: {
     alignItems: "center",
     gap: 10,
+  },
+  moduleContainer: {
+    gap: 5,
+  },
+  moduleLabel: {
+    color: COLORTHEME.light.primary,
+  },
+  colorContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: COLORTHEME.light.grey2,
+    borderRadius: 12,
+    height: 40,
+    paddingHorizontal: 10,
+    gap: 8,
+  },
+  colorCircle: {
+    width: 16,
+    height: 16,
+    borderRadius: 8,
   },
   timeEdit: {
     flexDirection: "row",
