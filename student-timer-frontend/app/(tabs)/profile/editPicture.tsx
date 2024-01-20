@@ -4,13 +4,11 @@ import { ScrollView, View } from "@/components/Themed";
 import { useRouter } from "expo-router";
 import { useAuth } from "@/context/AuthContext";
 import { useToast } from "react-native-toast-notifications";
-import { BASE_STYLES } from "@/constants/Theme";
+import { BASE_STYLES, COLORS } from "@/constants/Theme";
 import ProfilePicture from "@/components/profile/ProfilePicture";
 import {H3, H4} from "@/components/StyledText";
-import Pressable from "@/components/Pressable";
 import Button from "@/components/Button";
 import { COLORTHEME } from '@/constants/Theme';
-import { Text } from '@/components/Themed';
 import {profileImages, useProfilePicture} from '@/components/profile/useProfilePicture';
 import ProfilePictureSlider from "@/components/profile/ProfilePictureSlider";
 
@@ -87,30 +85,33 @@ export default function EditPicture() {
             <View style={{ alignItems: 'center', justifyContent: 'center' }}>
                 <ProfilePicture imageName={profilePictureName} />
                 <H3>Profilbild ändern</H3>
-                <Text>{profilePictureName}</Text>
                 <View style={{marginVertical: 20}}>
                     <H4>Bildauswahl</H4>
-                    <View>
+                    <View style={{marginTop: 5}}>
                         <ProfilePictureSlider
                             profileImages={profileImages}
                             onSelect={handleImageNameChange}
                         />
                     </View>
                 </View>
-                <Button
-                    text="Speichern"
-                    backgroundColor={COLORTHEME.light.primary}
-                    textColor={COLORTHEME.light.grey2}
-                    onPress={changePicture}
-                    style={{ width: 200 }}
-                    disabled={!isChanged}
-                />
-                <Pressable
-                    text={"Abbrechen"}
-                    ariaLabel={"Abbrechen"}
-                    accessibilityRole={"button"}
-                    onPress={onCancel}
-                />
+                <View style={{gap: 15}}>
+                    <Button
+                        text="Speichern"
+                        backgroundColor={COLORTHEME.light.primary}
+                        textColor={COLORTHEME.light.grey2}
+                        onPress={changePicture}
+                        style={{ width: 200 }}
+                        disabled={!isChanged}
+                    />
+                    <Button
+                        text="Abbrechen"
+                        backgroundColor={COLORS.white}
+                        borderColor={COLORTHEME.light.primary}
+                        textColor={COLORTHEME.light.grey3}
+                        style={{ width: 200 }}
+                        onPress={onCancel}
+                    />
+                </View>
             </View>
         </ScrollView>
     );

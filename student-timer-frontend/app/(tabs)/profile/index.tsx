@@ -41,15 +41,13 @@ export default function Profile() {
               onPress={handleEditPassword}
           />
         </View>
-        <View style={styles.logout}>
-          <Button
-              text="Logout"
-              backgroundColor={COLORS.white}
-              borderColor={COLORTHEME.light.primary}
-              textColor={COLORTHEME.light.grey3}
-              onPress={onLogout}
-          />
-        </View>
+        <Button style={{width: 200}}
+            text="Logout"
+            backgroundColor={COLORS.white}
+            borderColor={COLORTHEME.light.primary}
+            textColor={COLORTHEME.light.grey3}
+            onPress={onLogout}
+        />
       </View>
     </ScrollView>
   );
@@ -67,7 +65,4 @@ const styles = StyleSheet.create({
     gap: 15,
     marginVertical: 40,
   },
-  logout: {
-    width: 200,
-  }
 });
