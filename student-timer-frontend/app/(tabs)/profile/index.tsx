@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     marginVertical: 30,
   },
   logout: {
-    marginTop: 10,
+    marginTop: 20,
   },
   tour: {
     alignItems: "center",

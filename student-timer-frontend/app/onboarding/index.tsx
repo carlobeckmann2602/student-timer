@@ -119,7 +119,7 @@ export default function OnboardingScreen() {
           style={{ width: 300, marginVertical: 20, height: 50 }}
         />
       ) : (
-        <View style={{ marginTop: 10, marginBottom: 30, height: 50 }}>
+        <View style={styles.skip}>
           <Pressable text={"Überspringen"} accessibilityRole={"link"} onPress={navigateToApp}/>
         </View>
       )}
@@ -134,4 +134,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "white",
   },
+  skip: {
+    marginTop: 10, marginBottom: 30, height: 50
+  }
 });
