@@ -1,9 +1,8 @@
 import React, { useEffect } from "react";
-import {View, StyleSheet} from "react-native";
+import {View, StyleSheet, Pressable} from "react-native";
 import Button from "@/components/Button";
 import { ScrollView } from "@/components/Themed";
-import Pressable from "@/components/Pressable";
-import { COLORTHEME } from "@/constants/Theme";
+import {COLORS, COLORTHEME} from "@/constants/Theme";
 import { router } from "expo-router";
 import { useAuth } from "@/context/AuthContext";
 import ProfilePicture from "@/components/profile/ProfilePicture";
@@ -30,7 +29,9 @@ export default function Profile() {
   return (
     <ScrollView>
       <View style={{ alignItems: "center" }}>
-        <ProfilePicture imageName={profilePictureName} />
+        <Pressable onPress={handleEditPicture}>
+          <ProfilePicture imageName={profilePictureName} editMode={true} />
+        </Pressable>
         <H2>{authState?.user.name}</H2>
         <H3>{authState?.user.studyCourse}</H3>
         <View style={styles.actionContainer}>
@@ -46,18 +47,13 @@ export default function Profile() {
               textColor="#FFFFFF"
               onPress={handleEditPassword}
           />
-          <Button
-              text="Profilbild wechseln"
-              backgroundColor={COLORTHEME.light.primary}
-              textColor="#FFFFFF"
-              onPress={handleEditPicture}
-          />
         </View>
-        <View>
-          <Pressable
-              text={"Logout"}
-              ariaLabel={"Logout"}
-              accessibilityRole={"button"}
+        <View style={styles.logout}>
+          <Button
+              text="Logout"
+              backgroundColor={COLORS.white}
+              borderColor={COLORTHEME.light.primary}
+              textColor={COLORTHEME.light.grey3}
               onPress={onLogout}
           />
         </View>
@@ -78,4 +74,7 @@ const styles = StyleSheet.create({
     gap: 15,
     marginVertical: 40,
   },
+  logout: {
+    width: 200,
+  }
 });

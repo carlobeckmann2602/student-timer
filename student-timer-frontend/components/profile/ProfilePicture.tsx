@@ -14,13 +14,13 @@ type ProfilePictureProps = {
 export default function ProfilePicture({
     imageName,
     editMode = false,
-    style
 }: ProfilePictureProps) {
 
     const imagePath = profileImages[imageName] || profileImages["default.jpg"];
 
     return (
-        <View style={[styles.profileImageContainer, style]}>
+
+        <View style={styles.profileImageContainer}>
             {imagePath ? (
                 <Image source={imagePath} style={styles.profileImage} />
             ) : (

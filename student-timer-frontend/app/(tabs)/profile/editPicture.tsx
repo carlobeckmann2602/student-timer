@@ -85,7 +85,7 @@ export default function EditPicture() {
     return (
         <ScrollView contentContainerStyle={{ borderRadius: BASE_STYLES.borderRadius }}>
             <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                <ProfilePicture imageName={profilePictureName} editMode={true} />
+                <ProfilePicture imageName={profilePictureName} />
                 <H3>Profilbild ändern</H3>
                 <Text>{profilePictureName}</Text>
                 <View style={{marginVertical: 20}}>
