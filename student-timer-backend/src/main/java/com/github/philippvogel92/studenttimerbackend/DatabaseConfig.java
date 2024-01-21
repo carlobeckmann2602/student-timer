@@ -32,7 +32,7 @@ public class DatabaseConfig {
         return args -> {
             Student student1 = new Student("Philipp", "Master Medieninformatik", "phil.jpg", "phil@test.de",
                     passwordEncoder.encode("string"));
-            Student student2 = new Student("Alex", "Bachelor Medientechnologie", "alex.jpg", "alex@test.de",
+            Student student2 = new Student("Alex", "Bachelor Medientechnologie", "elephant.jpg", "alex@test.de",
                     passwordEncoder.encode("string"));
 
             Module module1 = new Module("Datenbanksysteme 1", "#3AAF6B", 15, LocalDate.of(2023, Month.JUNE, 10),
