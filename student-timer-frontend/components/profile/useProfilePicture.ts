@@ -46,7 +46,7 @@ export const profileImages: ProfileImages = {
     "bollywood.jpg": require(`${profilePictureBasePath}bollywood.jpg`),
     "profil.jpg": require(`${profilePictureBasePath}profil.jpg`),
     "neutral.jpg": require(`${profilePictureBasePath}neutral.jpg`),
-    "punk_neutral.jpg": require(`${profilePictureBasePath}punk_neutral.jpg`),
+    "punk.jpg": require(`${profilePictureBasePath}punk.jpg`),
 };
 
 
