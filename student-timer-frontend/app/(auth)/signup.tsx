@@ -11,8 +11,13 @@ import OtherLogins from "@/components/auth/OtherLogins";
 import { useAuth } from "@/context/AuthContext";
 import { useToast } from "react-native-toast-notifications";
 import { Title } from "@/components/StyledText";
-import { validateName, validateEmail, validatePassword, validateStudyCourse, comparePasswords } from "@/components/auth/validationMethods"
-
+import {
+  validateName,
+  validateEmail,
+  validatePassword,
+  validateStudyCourse,
+  comparePasswords,
+} from "@/components/auth/validationMethods";
 
 export default function SignupScreen() {
   const toast = useToast();
@@ -77,8 +82,8 @@ export default function SignupScreen() {
         router.push("/(tabs)/modules");
       }
     } else {
-    toast.show("Validierung fehlgeschlagen", { type: "warning" });
-  }
+      toast.show("Validierung fehlgeschlagen", { type: "warning" });
+    }
   };
 
   return (
@@ -122,7 +127,7 @@ export default function SignupScreen() {
             messageColor="red"
           />
           <InputField
-            label="Passwort wiederholen"
+            label="Passwort wdh."
             onChangeText={setUserCheckPassword}
             value={userCheckPassword}
             keyboardType="default"
@@ -160,7 +165,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "space-evenly",
-    gap: 35,
   },
   outerWrapper: {
     width: "100%",
@@ -180,7 +184,7 @@ const styles = StyleSheet.create({
   buttons: {
     flexDirection: "column",
     alignItems: "center",
-    gap: 25,
+    gap: 15,
   },
   buttonText: {
     flexDirection: "column",

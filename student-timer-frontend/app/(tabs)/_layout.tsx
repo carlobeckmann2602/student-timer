@@ -1,5 +1,5 @@
 import { Tabs, router, usePathname } from "expo-router";
-import { Platform } from "react-native";
+import { Dimensions, Platform } from "react-native";
 
 import { BASE_STYLES, COLORTHEME, SIZES } from "@/constants/Theme";
 import {
@@ -32,7 +32,10 @@ export default function TabLayout() {
         headerShadowVisible: false,
         tabBarStyle: {
           borderTopWidth: 1,
-          paddingBottom: Platform.OS === "ios" ? 15 : undefined,
+          paddingBottom:
+            Platform.OS === "ios" && Dimensions.get("window").height >= 1350
+              ? 15
+              : 5,
         },
         headerLeft: () => {
           const pathname = usePathname();
@@ -41,18 +44,18 @@ export default function TabLayout() {
             case "/profile/editPassword":
             case "/profile/editPicture":
               return (
-                  <Pressable
-                      onPress={() => {
-                          Alert({
-                              title: "Änderungen verwerfen?",
-                              message: "Wenn du fortfährst, gehen die Änderungen verloren. Bist du dir sicher?",
-                              onPressConfirm: () => router.push("/profile")
-                          });
-                      }}
-                  >
-                      <ChevronLeft />
-                  </Pressable>
-
+                <Pressable
+                  onPress={() => {
+                    Alert({
+                      title: "Änderungen verwerfen?",
+                      message:
+                        "Wenn du fortfährst, gehen die Änderungen verloren. Bist du dir sicher?",
+                      onPressConfirm: () => router.push("/profile"),
+                    });
+                  }}
+                >
+                  <ChevronLeft />
+                </Pressable>
               );
             default:
               return null;

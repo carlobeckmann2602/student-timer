@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Alert from "@/components/Alert";
 import { ScrollView, View } from "@/components/Themed";
+import { StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
 import { useAuth } from "@/context/AuthContext";
 import { useToast } from "react-native-toast-notifications";
@@ -69,10 +70,10 @@ export default function EditPicture() {
   };
 
   return (
-    <View style={{ alignItems: "center", flex: 1 }}>
+    <View style={styles.container}>
       <ProfilePicture imageName={profilePictureName} />
-      <H3>Profilbild ändern</H3>
-      <View style={{ marginVertical: 20 }}>
+      <H3 style={styles.title}>Profilbild ändern</H3>
+      <View style={{ marginVertical: 15 }}>
         <H4>Bildauswahl</H4>
         <View style={{ marginTop: 5 }}>
           <ProfilePictureSlider
@@ -81,7 +82,7 @@ export default function EditPicture() {
           />
         </View>
       </View>
-      <View style={{ gap: 15 }}>
+      <View style={styles.actionContainer}>
         <Button
           text="Speichern"
           backgroundColor={COLORTHEME.light.primary}
@@ -102,3 +103,19 @@ export default function EditPicture() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    alignItems: "center",
+    justifyContent: "flex-start",
+    padding: BASE_STYLES.horizontalPadding,
+    flex: 1,
+  },
+  actionContainer: {
+    flexDirection: "column",
+    gap: 10,
+  },
+  title: {
+    paddingVertical: 10,
+  },
+});

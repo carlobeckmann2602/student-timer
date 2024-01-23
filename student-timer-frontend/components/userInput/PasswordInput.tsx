@@ -38,16 +38,16 @@ export default function PasswordInput(props: {
               label="Passwort"
               onChangeText={setUserPassword}
               value={userPassword}
-              placeholder="neues Passwort"
+              placeholder="Neues Passwort"
               keyboardType="default"
               secureTextEntry={true}
               message={passwordError}
               messageColor="red"
             />
             <InputField
-              label="Passwort wiederholen"
+              label="Passwort wdh."
               onChangeText={setUserCheckPassword}
-              placeholder="neues Passwort"
+              placeholder="Neues Passwort"
               value={userCheckPassword}
               keyboardType="default"
               secureTextEntry={true}
@@ -65,12 +65,12 @@ export default function PasswordInput(props: {
           disabled={disabled}
         />
         <Button
-            text="Abbrechen"
-            backgroundColor={COLORS.white}
-            borderColor={COLORTHEME.light.primary}
-            textColor={COLORTHEME.light.grey3}
-            style={{ width: 200 }}
-            onPress={cancelAction}
+          text="Abbrechen"
+          backgroundColor={COLORS.white}
+          borderColor={COLORTHEME.light.primary}
+          textColor={COLORTHEME.light.grey3}
+          style={{ width: 200 }}
+          onPress={cancelAction}
         />
       </View>
     </>
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: "center",
     justifyContent: "space-around",
-    marginVertical: 20,
+    marginVertical: 10,
     gap: 10,
   },
   outerWrapper: {
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     padding: 24,
     gap: 5,
-    marginVertical: 10,
+    marginVertical: 5,
   },
   row: {
     flexGrow: 1,

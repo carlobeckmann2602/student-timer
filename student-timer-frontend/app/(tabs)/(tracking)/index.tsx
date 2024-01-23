@@ -262,7 +262,7 @@ export default function Tracking() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "space-around",
+    justifyContent: "space-between",
     backgroundColor: COLORS.white,
     paddingVertical: BASE_STYLES.horizontalPadding,
   },
@@ -276,6 +276,8 @@ const styles = StyleSheet.create({
   trackerButtons: {
     flexDirection: "row",
     gap: 10,
+    marginTop: 10,
+    marginBottom: BASE_STYLES.horizontalPadding,
     backgroundColor: "transparent",
   },
   button: {

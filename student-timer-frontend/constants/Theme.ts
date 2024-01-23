@@ -49,7 +49,7 @@ const SIZES = {
   large: 20,
   xLarge: 24,
   xxLarge: 32,
-  xxxLarge: 48,
+  xxxLarge: 38,
 };
 
 const COLORTHEME = {

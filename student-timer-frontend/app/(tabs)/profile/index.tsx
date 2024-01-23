@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { StyleSheet } from "react-native";
 import Button from "@/components/Button";
 import { ScrollView, Text, View } from "@/components/Themed";
-import { COLORS, COLORTHEME } from "@/constants/Theme";
+import { BASE_STYLES, COLORS, COLORTHEME } from "@/constants/Theme";
 import { router } from "expo-router";
 import { useAuth } from "@/context/AuthContext";
 import ProfilePicture from "@/components/profile/ProfilePicture";
@@ -32,23 +32,26 @@ export default function Profile() {
         editStyle={true}
         onPress={handleEditPicture}
       />
-      <H2>{authState?.user.name}</H2>
-      <H3>{authState?.user.studyCourse}</H3>
-      <View style={styles.actionContainer}>
+      <View style={styles.title}>
+        <H2>{authState?.user.name}</H2>
+        <H3>{authState?.user.studyCourse}</H3>
+      </View>
+      <View style={styles.buttonContainer}>
+        <View style={styles.actionContainer}>
+          <Button
+            text="Profildaten bearbeiten"
+            backgroundColor={COLORTHEME.light.primary}
+            textColor="#FFFFFF"
+            onPress={handleEditData}
+          />
+          <Button
+            text="Passwort ändern"
+            backgroundColor={COLORTHEME.light.primary}
+            textColor="#FFFFFF"
+            onPress={handleEditPassword}
+          />
+        </View>
         <Button
-          text="Profildaten bearbeiten"
-          backgroundColor={COLORTHEME.light.primary}
-          textColor="#FFFFFF"
-          onPress={handleEditData}
-        />
-        <Button
-          text="Passwort ändern"
-          backgroundColor={COLORTHEME.light.primary}
-          textColor="#FFFFFF"
-          onPress={handleEditPassword}
-        />
-        <Button
-          style={styles.logout}
           text="Logout"
           backgroundColor={COLORS.white}
           borderColor={COLORTHEME.light.primary}
@@ -72,25 +75,23 @@ export default function Profile() {
 const styles = StyleSheet.create({
   container: {
     alignItems: "center",
+    justifyContent: "space-between",
+    padding: BASE_STYLES.horizontalPadding,
     flex: 1,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 8,
   },
   actionContainer: {
     flexDirection: "column",
-    width: 200,
-    gap: 15,
-    marginVertical: 30,
+    gap: 10,
   },
-  logout: {
-    marginTop: 20,
+  buttonContainer: {
+    flexDirection: "column",
+    width: 200,
+    gap: 25,
   },
   tour: {
     alignItems: "center",
-    marginTop: 20,
-    marginBottom: 50,
+  },
+  title: {
+    paddingVertical: 15,
   },
 });

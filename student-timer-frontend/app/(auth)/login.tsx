@@ -10,11 +10,12 @@ import OtherLogins from "@/components/auth/OtherLogins";
 import InputField from "@/components/InputField";
 import { useAuth } from "@/context/AuthContext";
 import { useToast } from "react-native-toast-notifications";
-import { validateEmail, validatePassword } from "@/components/auth/validationMethods"
-
+import {
+  validateEmail,
+  validatePassword,
+} from "@/components/auth/validationMethods";
 
 export default function Login() {
-
   const toast = useToast();
 
   const [email, setEmail] = useState("");
@@ -109,7 +110,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "space-evenly",
-    gap: 45,
   },
   inputs: {
     flexDirection: "column",
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
   buttons: {
     flexDirection: "column",
     alignItems: "center",
-    gap: 25,
+    gap: 15,
   },
   buttonText: {
     flexDirection: "column",

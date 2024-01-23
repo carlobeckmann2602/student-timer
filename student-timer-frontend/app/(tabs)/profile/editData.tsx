@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, ScrollView } from "@/components/Themed";
 import Alert from "@/components/Alert";
 import { useRouter } from "expo-router";
+import { StyleSheet } from "react-native";
 import { BASE_STYLES } from "@/constants/Theme";
 import { useAuth } from "@/context/AuthContext";
 import UserDetailsInput from "@/components/userInput/UserDetailsInput";
@@ -124,28 +125,26 @@ export default function EditData() {
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.container}>
       <View style={{ alignItems: "center" }}>
         <ProfilePicture imageName={profilePictureName} />
       </View>
-      <View>
-        <UserDetailsInput
-          title={"Daten bearbeiten"}
-          userName={userName}
-          setUserName={handleInputChange(setUserName)}
-          nameError={nameError}
-          userStudyCourse={userStudyCourse}
-          setUserStudyCourse={handleInputChange(setUserStudyCourse)}
-          studyCourseError={studyCourseError}
-          userEmail={userEmail}
-          setUserEmail={handleInputChange(setUserEmail)}
-          emailError={emailError}
-          buttonAction={update}
-          disabled={!isChanged}
-          cancelAction={onCancel}
-        />
-      </View>
-      <View style={{ alignItems: "center", marginTop: 10, marginBottom: 40 }}>
+      <UserDetailsInput
+        title={"Daten bearbeiten"}
+        userName={userName}
+        setUserName={handleInputChange(setUserName)}
+        nameError={nameError}
+        userStudyCourse={userStudyCourse}
+        setUserStudyCourse={handleInputChange(setUserStudyCourse)}
+        studyCourseError={studyCourseError}
+        userEmail={userEmail}
+        setUserEmail={handleInputChange(setUserEmail)}
+        emailError={emailError}
+        buttonAction={update}
+        disabled={!isChanged}
+        cancelAction={onCancel}
+      />
+      <View style={{ alignItems: "center", marginTop: 10 }}>
         <Pressable
           text={"Konto löschen"}
           textColor={"#F00"}
@@ -156,3 +155,11 @@ export default function EditData() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    justifyContent: "flex-start",
+    padding: BASE_STYLES.horizontalPadding,
+    flex: 1,
+  },
+});

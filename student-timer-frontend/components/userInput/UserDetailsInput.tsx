@@ -37,55 +37,53 @@ export default function UserDetailsInput(props: {
   } = props;
 
   return (
-    <>
-      <View style={styles.container}>
-        <H3>{title}</H3>
-        <View style={styles.outerWrapper}>
-          <View style={styles.row}>
-            <InputField
-              label="Name"
-              value={userName}
-              onChangeText={setUserName}
-              message={nameError}
-              messageColor="red"
-            />
-            <InputField
-              label="Studienfach"
-              onChangeText={setUserStudyCourse}
-              value={userStudyCourse}
-              message={studyCourseError}
-              messageColor="red"
-            />
-          </View>
-          <View style={styles.row}>
-            <InputField
-              label="E-Mail"
-              onChangeText={setUserEmail}
-              value={userEmail}
-              keyboardType="email-address"
-              message={emailError}
-              messageColor="red"
-            />
-          </View>
+    <View style={styles.container}>
+      <H3>{title}</H3>
+      <View style={styles.outerWrapper}>
+        <View style={styles.row}>
+          <InputField
+            label="Name"
+            value={userName}
+            onChangeText={setUserName}
+            message={nameError}
+            messageColor="red"
+          />
+          <InputField
+            label="Studienfach"
+            onChangeText={setUserStudyCourse}
+            value={userStudyCourse}
+            message={studyCourseError}
+            messageColor="red"
+          />
         </View>
-        <Button
-          text="Speichern"
-          backgroundColor={COLORTHEME.light.primary}
-          textColor={COLORTHEME.light.grey2}
-          onPress={buttonAction}
-          style={{ width: 200 }}
-          disabled={disabled}
-        />
-        <Button
-            text="Abbrechen"
-            backgroundColor={COLORS.white}
-            borderColor={COLORTHEME.light.primary}
-            textColor={COLORTHEME.light.grey3}
-            style={{ width: 200 }}
-            onPress={cancelAction}
-        />
+        <View style={styles.row}>
+          <InputField
+            label="E-Mail"
+            onChangeText={setUserEmail}
+            value={userEmail}
+            keyboardType="email-address"
+            message={emailError}
+            messageColor="red"
+          />
+        </View>
       </View>
-    </>
+      <Button
+        text="Speichern"
+        backgroundColor={COLORTHEME.light.primary}
+        textColor={COLORTHEME.light.grey2}
+        onPress={buttonAction}
+        style={{ width: 200 }}
+        disabled={disabled}
+      />
+      <Button
+        text="Abbrechen"
+        backgroundColor={COLORS.white}
+        borderColor={COLORTHEME.light.primary}
+        textColor={COLORTHEME.light.grey3}
+        style={{ width: 200 }}
+        onPress={cancelAction}
+      />
+    </View>
   );
 }
 
@@ -93,7 +91,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: "center",
     justifyContent: "space-around",
-    marginVertical: 20,
+    marginVertical: 10,
     gap: 10,
   },
   outerWrapper: {
@@ -104,7 +102,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     padding: 24,
     gap: 5,
-    marginVertical: 10,
+    marginVertical: 5,
   },
   row: {
     flexGrow: 1,
