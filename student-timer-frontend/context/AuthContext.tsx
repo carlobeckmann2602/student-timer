@@ -366,7 +366,7 @@ export const AuthProvider = ({ children }: any) => {
       },
     });
     toast.show("Logout erfolgreich", { type: "success" });
-    router.push("/(auth)/login");
+    router.replace("/(auth)/login");
   };
 
   const newToken = async (token: TokenType) => {
