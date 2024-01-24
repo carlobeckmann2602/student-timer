@@ -32,7 +32,7 @@ public class DatabaseConfig {
         return args -> {
             Student student1 = new Student("Philipp", "Master Medieninformatik", "phil.jpg", "phil@test.de",
                     passwordEncoder.encode("string"));
-            Student student2 = new Student("Alex", "Bachelor Medientechnologie", "elephant.jpg", "alex@test.de",
+            Student student2 = new Student("Kim", "Bachelor Medientechnologie", "elephant.jpg", "kim@test.de",
                     passwordEncoder.encode("string"));
 
             Module module1 = new Module("Datenbanksysteme 1", "#3AAF6B", 15, LocalDate.of(2023, Month.JUNE, 10),
@@ -46,7 +46,7 @@ public class DatabaseConfig {
                     Month.APRIL, 10),
                     LocalDate.of(2023, Month.SEPTEMBER, 2), 240.0, module1);
             LearningUnit learningUnit2 = new LearningUnit(LearningUnitEnum.Praktikum, LocalDate.of(2023, Month.MAY, 2),
-                    LocalDate.of(2023, Month.AUGUST, 1), 120.0, module1);
+                    LocalDate.of(2023, Month.AUGUST, 12), 120.0, module1);
             LearningUnit learningUnit3 = new LearningUnit(LearningUnitEnum.Meeting, LocalDate.of(2023, Month.FEBRUARY
                     , 6),
                     LocalDate.of(2023, Month.SEPTEMBER, 22), 98.7, module1);
@@ -54,7 +54,7 @@ public class DatabaseConfig {
 
             LearningUnit learningUnit5 = new LearningUnit(LearningUnitEnum.Exkursion, LocalDate.of(2023, Month.APRIL,
                     1),
-                    LocalDate.of(2023, Month.SEPTEMBER, 20), 45.0, module2);
+                    LocalDate.of(2023, Month.OCTOBER, 5), 45.0, module2);
             LearningUnit learningUnit6 = new LearningUnit(LearningUnitEnum.Nachhilfe, LocalDate.of(2023, Month.MARCH,
                     12),
                     LocalDate.of(2023, Month.JULY, 22), 180.0, module2);
@@ -89,56 +89,56 @@ public class DatabaseConfig {
                     learningUnit12));
             module4.setLearningUnits(List.of(learningUnit13, learningUnit14, learningUnit15));
 
-            LearningSession learningSession1 = new LearningSession(620, 270, 3, LocalDateTime.now().minusDays(4),
+            LearningSession learningSession1 = new LearningSession(620, 270, 3, LocalDateTime.now().minusDays(4).minusMonths(2),
                     "Heute lernen" +
                             " wir angewandte Mathematik", module1);
             LearningSession learningSession2 = new LearningSession(420, 370, 5, LocalDateTime.now().minusDays(3),
                     "Heute lernen" +
                             " wir Informatik", module1);
-            LearningSession learningSession3 = new LearningSession(15, 10, 1, LocalDateTime.now().minusDays(8),
+            LearningSession learningSession3 = new LearningSession(15, 10, 1, LocalDateTime.now().minusDays(8).minusMonths(1),
                     "Heute lernen" +
                             " wir den Satz des Pythagoras", module1);
-            LearningSession learningSession4 = new LearningSession(720, 600, 4, LocalDateTime.now().minusDays(9),
+            LearningSession learningSession4 = new LearningSession(720, 600, 4, LocalDateTime.now().minusDays(9).minusMonths(4),
                     "Heute lernen" +
                             " wir Java Spring Boot", module1);
 
             LearningSession learningSession5 = new LearningSession(420, 70, 1, LocalDateTime.now().minusDays(12),
                     "Heute lernen" +
                             " wir angewandte Mathematik 2", module2);
-            LearningSession learningSession6 = new LearningSession(280, 70, 5, LocalDateTime.now().minusDays(16),
+            LearningSession learningSession6 = new LearningSession(280, 70, 5, LocalDateTime.now().minusDays(16).minusMonths(2),
                     "Heute lernen" +
                             " wir Informatik 2", module2);
             LearningSession learningSession7 = new LearningSession(500, 400, 1, LocalDateTime.now().minusDays(15),
                     "Heute lernen" +
                             " wir Javascript", module2);
-            LearningSession learningSession8 = new LearningSession(230, 130, 4, LocalDateTime.now().minusDays(3),
+            LearningSession learningSession8 = new LearningSession(230, 130, 4, LocalDateTime.now().minusDays(3).minusMonths(1),
                     "Heute lernen" +
                             " wir Next.js", module2);
 
-            LearningSession learningSession9 = new LearningSession(400, 347, 3, LocalDateTime.now().minusDays(18),
+            LearningSession learningSession9 = new LearningSession(400, 347, 3, LocalDateTime.now().minusDays(18).minusMonths(1),
                     "Heute lernen" +
                     " wir Restklassenringe kennen", module3);
-            LearningSession learningSession10 = new LearningSession(123, 100, 5, LocalDateTime.now().minusDays(20),
+            LearningSession learningSession10 = new LearningSession(123, 100, 5, LocalDateTime.now().minusDays(20).minusMonths(3),
                     "Heute lernen" +
                     " wir etwas über polynomielle Reduktionen.", module3);
 
-            LearningSession learningSession11 = new LearningSession(220, 110, 2, LocalDateTime.now(), "Heute lernen" +
+            LearningSession learningSession11 = new LearningSession(220, 110, 2, LocalDateTime.now().minusDays(4).minusMonths(1), "Heute lernen" +
                     " wir, was passiert, wenn in der Beschreibung ein seeeeeehr langer Text steht und dieser gut " +
                     "lesbar.", module4);
-            LearningSession learningSession12 = new LearningSession(480, 70, 4, LocalDateTime.now(), "Heute lernen" +
+            LearningSession learningSession12 = new LearningSession(480, 70, 4, LocalDateTime.now().minusDays(3).minusMonths(1), "Heute lernen" +
                     " wir Differenzialgleichungen kennen.", module4);
-            LearningSession learningSession13 = new LearningSession(140, 84, 2, LocalDateTime.now(), "Heute lernen" +
+            LearningSession learningSession13 = new LearningSession(140, 84, 2, LocalDateTime.now().minusDays(4).minusMonths(2), "Heute lernen" +
                     " wir Ableitungen kennen.", module4);
-            LearningSession learningSession14 = new LearningSession(500, 45, 5, LocalDateTime.now(), "Heute lernen" +
+            LearningSession learningSession14 = new LearningSession(500, 45, 5, LocalDateTime.now().minusDays(2).minusMonths(1), "Heute lernen" +
                     " wir Monoide kennen.", module4);
-            LearningSession learningSession15 = new LearningSession(220, 110, 2, LocalDateTime.now(), "Heute lernen" +
+            LearningSession learningSession15 = new LearningSession(220, 110, 2, LocalDateTime.now().minusDays(10), "Heute lernen" +
                     " wir, was passiert, wenn in der Beschreibung ein seeeeeehr langer Text steht und dieser gut " +
                     "lesbar.", module4);
-            LearningSession learningSession16 = new LearningSession(480, 70, 4, LocalDateTime.now(), "Heute lernen" +
+            LearningSession learningSession16 = new LearningSession(480, 70, 4, LocalDateTime.now().minusDays(4).minusMonths(5), "Heute lernen" +
                     " wir Differenzialgleichungen kennen.", module4);
-            LearningSession learningSession17 = new LearningSession(140, 84, 2, LocalDateTime.now(), "Heute lernen" +
+            LearningSession learningSession17 = new LearningSession(140, 84, 2, LocalDateTime.now().minusDays(3).minusMonths(1), "Heute lernen" +
                     " wir Ableitungen kennen.", module4);
-            LearningSession learningSession18 = new LearningSession(500, 45, 5, LocalDateTime.now(), "Heute lernen" +
+            LearningSession learningSession18 = new LearningSession(500, 45, 5, LocalDateTime.now().minusDays(5).minusMonths(1), "Heute lernen" +
                     " wir Monoide kennen.", module4);
 
             module1.setLearningSessions(List.of(learningSession1, learningSession2, learningSession3,
