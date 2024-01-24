@@ -33,7 +33,9 @@ export default function HBarChart({ title, xTotal, bars }: HBarChartProps) {
           y="value"
           x="name"
           labels={({ datum }) => [
-            Number(datum.value.toFixed(1)) + (datum.average && " Ø"),
+            `${Number(datum.value.toFixed(1))}${
+              /* datum.average ? " Ø" : "" */ " Ø" //uncomment if more statistics without average values are created
+            }`,
             datum.unit,
           ]}
           labelComponent={
