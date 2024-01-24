@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
-import { StyleSheet } from "react-native";
-import { VictoryPie, VictoryLabel } from "victory-native";
-import { Svg } from "react-native-svg";
+import { Dimensions, StyleSheet } from "react-native";
+import { VictoryPie, VictoryLabel, VictoryContainer } from "victory-native";
 
 import { View } from "@/components/Themed";
 import { COLORTHEME, COLORS } from "@/constants/Theme";
 import { msToTimeObject, formatTime } from "@/libs/timeHelper";
 import { sendPushNotification } from "@/libs/handleLocalNotification";
+import { normalize } from "@/components/StyledText";
+
+const SCREEN_WIDTH: number = Dimensions.get("window").width;
 
 export default function Timer(props: {
   isStopwatch: boolean;
@@ -196,42 +198,45 @@ export default function Timer(props: {
 
   return (
     <View style={styles.container}>
-      <Svg viewBox="50 50 300 300" width={300} height={300}>
+      <VictoryContainer width={SCREEN_WIDTH - 90} height={SCREEN_WIDTH - 90}>
         <VictoryPie
-          width={400}
-          height={400}
+          width={SCREEN_WIDTH - 90}
+          height={SCREEN_WIDTH - 90}
           standalone={false}
           animate={
             trackingIsActive || startTime !== 0
               ? false
               : { duration: 1000, easing: "circle" }
           }
-          innerRadius={120}
+          innerRadius={(SCREEN_WIDTH - 160) / 2}
           labels={() => null}
           data={progress.data}
           style={{ data: { fill: (entry) => entry.datum.color } }}
+          padding={{ left: 10, right: 10, bottom: 10, top: 10 }}
         />
         <VictoryLabel
           textAnchor="middle"
           verticalAnchor="middle"
-          x={200}
-          y={200}
+          x={(SCREEN_WIDTH - 90) / 2}
+          y={(SCREEN_WIDTH - 90) / 2}
           text={formatTime(displayTime)}
           style={styles.timerText}
         />
-        {(trackingIsActive || startTime !== 0) && !isLastRound && (
-          <VictoryLabel
-            textAnchor="middle"
-            verticalAnchor="middle"
-            x={200}
-            y={250}
-            text={`Pause ${isPause ? "vorbei " : ""}in ${formatTime(
-              displayPauseTime
-            )}`}
-            style={styles.pauseText}
-          />
-        )}
-      </Svg>
+        <>
+          {(trackingIsActive || startTime !== 0) && !isLastRound && (
+            <VictoryLabel
+              textAnchor="middle"
+              verticalAnchor="middle"
+              x={(SCREEN_WIDTH - 90) / 2}
+              y={(SCREEN_WIDTH - 90) / 2 + 40}
+              text={`Pause ${isPause ? "vorbei " : ""}in ${formatTime(
+                displayPauseTime
+              )}`}
+              style={styles.pauseText}
+            />
+          )}
+        </>
+      </VictoryContainer>
     </View>
   );
 }
@@ -242,10 +247,10 @@ const styles = StyleSheet.create({
   },
   timerText: {
     fontFamily: "OpenSans_Bold",
-    fontSize: 50,
+    fontSize: normalize(40),
   },
   pauseText: {
     fontFamily: "OpenSans_SemiBold",
-    fontSize: 18,
+    fontSize: normalize(14),
   },
 });

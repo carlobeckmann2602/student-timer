@@ -18,6 +18,6 @@ const styles = StyleSheet.create({
   buttons: {
     flexDirection: "column",
     width: 200,
-    gap: 15,
+    gap: 5,
   },
 });

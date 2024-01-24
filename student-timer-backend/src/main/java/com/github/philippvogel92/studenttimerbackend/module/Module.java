@@ -84,7 +84,6 @@ public class Module {
     }
 
     public Module() {
-
     }
 
     public Student getStudent() {
@@ -97,10 +96,6 @@ public class Module {
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {

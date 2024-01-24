@@ -1,38 +1,42 @@
 import React, { useEffect } from "react";
-import {View, StyleSheet} from "react-native";
+import { StyleSheet } from "react-native";
 import Button from "@/components/Button";
-import { ScrollView } from "@/components/Themed";
-import Pressable from "@/components/Pressable";
-import { COLORTHEME } from "@/constants/Theme";
+import { ScrollView, Text, View } from "@/components/Themed";
+import { BASE_STYLES, COLORS, COLORTHEME } from "@/constants/Theme";
 import { router } from "expo-router";
 import { useAuth } from "@/context/AuthContext";
 import ProfilePicture from "@/components/profile/ProfilePicture";
-import { useProfilePicture } from '@/components/profile/useProfilePicture';
-import {H2, H3} from "@/components/StyledText";
+import { useProfilePicture } from "@/components/profile/useProfilePicture";
+import { H2, H3 } from "@/components/StyledText";
+import Separator from "@/components/Separator";
+import Pressable from "@/components/Pressable";
 
 export default function Profile() {
   const { onLogout, authState } = useAuth();
-  const { profilePictureName, getProfilePictureName, setProfilePictureName } = useProfilePicture();
+  const { profilePictureName, getProfilePictureName, setProfilePictureName } =
+    useProfilePicture();
 
   useEffect(() => {
     setProfilePictureName(getProfilePictureName());
   }, [authState]);
 
-  console.log("index:", authState?.user.name)
-  console.log("#### useState:", profilePictureName, typeof profilePictureName);
-  console.log("authState?.user.profilePicture", authState?.user.profilePicture, typeof authState?.user.profilePicture);
-
-
   const handleEditData = () => router.push("/profile/editData/");
   const handleEditPassword = () => router.push("/profile/editPassword/");
   const handleEditPicture = () => router.push("/profile/editPicture/");
+  const handleStartOnboardingTour = () => router.push("/onboarding");
 
   return (
-    <ScrollView>
-      <View style={{ alignItems: "center" }}>
-        <ProfilePicture imageName={profilePictureName} />
+    <View style={styles.container}>
+      <ProfilePicture
+        imageName={profilePictureName}
+        editStyle={true}
+        onPress={handleEditPicture}
+      />
+      <View style={styles.title}>
         <H2>{authState?.user.name}</H2>
         <H3>{authState?.user.studyCourse}</H3>
+      </View>
+      <View style={styles.buttonContainer}>
         <View style={styles.actionContainer}>
           <Button
             text="Profildaten bearbeiten"
@@ -41,41 +45,53 @@ export default function Profile() {
             onPress={handleEditData}
           />
           <Button
-              text="Passwort ändern"
-              backgroundColor={COLORTHEME.light.primary}
-              textColor="#FFFFFF"
-              onPress={handleEditPassword}
-          />
-          <Button
-              text="Profilbild wechseln"
-              backgroundColor={COLORTHEME.light.primary}
-              textColor="#FFFFFF"
-              onPress={handleEditPicture}
+            text="Passwort ändern"
+            backgroundColor={COLORTHEME.light.primary}
+            textColor="#FFFFFF"
+            onPress={handleEditPassword}
           />
         </View>
-        <View>
-          <Pressable
-              text={"Logout"}
-              ariaLabel={"Logout"}
-              accessibilityRole={"button"}
-              onPress={onLogout}
-          />
-        </View>
+        <Button
+          text="Logout"
+          backgroundColor={COLORS.white}
+          borderColor={COLORTHEME.light.primary}
+          textColor={COLORTHEME.light.grey3}
+          onPress={onLogout}
+        />
       </View>
-    </ScrollView>
+      <Separator text="oder" />
+      <View style={styles.tour}>
+        <Text>Möchtest Du eine Student-Timer-Tour?{"\n "}</Text>
+        <Pressable
+          text="Tour starten"
+          accessibilityRole="link"
+          onPress={handleStartOnboardingTour}
+        />
+      </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 8,
+  container: {
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: BASE_STYLES.horizontalPadding,
+    flex: 1,
   },
   actionContainer: {
     flexDirection: "column",
+    gap: 10,
+  },
+  buttonContainer: {
+    flexDirection: "column",
     width: 200,
-    gap: 15,
-    marginVertical: 40,
+    gap: 25,
+  },
+  tour: {
+    alignItems: "center",
+  },
+  title: {
+    paddingVertical: 15,
   },
 });

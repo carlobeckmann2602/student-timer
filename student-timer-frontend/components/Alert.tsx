@@ -1,26 +1,37 @@
-import { Alert as BaseAlert } from "react-native";
+import { Alert as BaseAlert, AlertButton } from "react-native";
 
-export default function Alert(
-    title: string,
-    message: string,
-    onPressPrimaryButton?: () => any,
-    cancelText: string = "Abbrechen",
-    confirmText: string = "Verwerfen"
-) {
-    BaseAlert.alert(
-        title,
-        message,
-        [
-            {
-                text: cancelText,
-                style: "cancel",
-            },
-            {
-                text: confirmText,
-                onPress: onPressPrimaryButton,
-                style: "destructive",
-            },
-        ],
-        { cancelable: false }
-    );
+type AlertProps = {
+  title: string;
+  message: string;
+  onPressConfirm?: () => any;
+  cancelText?: string;
+  cancelStyle?: AlertButton["style"];
+  confirmText?: string;
+  confirmStyle?: AlertButton["style"];
+};
+export default function Alert({
+  title,
+  message,
+  onPressConfirm,
+  cancelText = "Abbrechen",
+  cancelStyle = "cancel",
+  confirmText = "Verwerfen",
+  confirmStyle = "destructive",
+}: AlertProps) {
+  BaseAlert.alert(
+    title,
+    message,
+    [
+      {
+        text: cancelText,
+        style: cancelStyle,
+      },
+      {
+        text: confirmText,
+        onPress: onPressConfirm,
+        style: confirmStyle,
+      },
+    ],
+    { cancelable: false }
+  );
 }

@@ -4,9 +4,6 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.hibernate.validator.constraints.Length;
-
-import java.time.LocalDateTime;
 
 public class LearningSessionCreateDTO {
     @NotNull(message = "TotalDuration cannot be null")
@@ -24,32 +21,16 @@ public class LearningSessionCreateDTO {
         return totalDuration;
     }
 
-    public void setTotalDuration(Integer totalDuration) {
-        this.totalDuration = totalDuration;
-    }
-
     public Integer getFocusDuration() {
         return focusDuration;
-    }
-
-    public void setFocusDuration(Integer focusDuration) {
-        this.focusDuration = focusDuration;
     }
 
     public Integer getRating() {
         return rating;
     }
 
-    public void setRating(Integer rating) {
-        this.rating = rating;
-    }
-
-
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
 }

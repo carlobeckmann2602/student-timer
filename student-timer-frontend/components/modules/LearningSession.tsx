@@ -1,5 +1,5 @@
 import { KeyboardAvoidingView, Platform, StyleSheet } from "react-native";
-import { useState } from "react";
+import React, { useState } from "react";
 import { router, useLocalSearchParams } from "expo-router";
 import { useToast } from "react-native-toast-notifications";
 
@@ -17,12 +17,13 @@ import {
   formatTimeLearningSession,
 } from "@/libs/timeHelper";
 import StarRating from "@/components/StarRating";
-import { roundNumber } from "@/libs/generalHelper";
+import { debounce, roundNumber, validateNumber } from "@/libs/generalHelper";
 import InputFieldNumeric from "../InputFieldNumeric";
 
 export default function LearningSession(props: { isEdit: boolean }) {
   const { isEdit } = props;
   const toast = useToast();
+  const { fetchModules } = useModules();
   const { authState } = useAuth();
   const { authAxios } = useAxios();
   const { modules } = useModules();
@@ -40,15 +41,48 @@ export default function LearningSession(props: { isEdit: boolean }) {
   const [description, setDescription] = useState(
     learningSession?.description || ""
   );
-  const [focusDuration, setFocusDuration] = useState(
-    msToTimeObject((learningSession?.focusDuration || 0) * (1000 * 60))
-  );
-  const [pauseDuration, setPauseDuration] = useState(
+  const [focusDuration, setFocusDuration] = useState<{
+    hours: number | string;
+    mins: number | string;
+  }>(msToTimeObject((learningSession?.focusDuration || 0) * (1000 * 60)));
+  const [pauseDuration, setPauseDuration] = useState<{
+    hours: number | string;
+    mins: number | string;
+  }>(
     msToTimeObject(
       ((learningSession?.totalDuration || 0) -
         (learningSession?.focusDuration || 0)) *
         (1000 * 60)
     )
+  );
+  const [changesMade, setChangesMade] = useState(false);
+  const [debounceWaiting, setDebounceWaiting] = useState(false);
+  const debounceDuration = React.useCallback(
+    debounce(
+      (
+        setState: React.Dispatch<
+          React.SetStateAction<{
+            hours: number | string;
+            mins: number | string;
+          }>
+        >,
+        val: string,
+        isHours: boolean
+      ) => {
+        const number = validateNumber(val, isHours ? 0 : 1);
+        setState((prevState) => ({
+          ...prevState,
+          [isHours ? "hours" : "mins"]: isHours
+            ? number
+            : number >= 60
+            ? 59
+            : number,
+        }));
+        setDebounceWaiting(false);
+      },
+      1000
+    ),
+    []
   );
 
   return (
@@ -60,7 +94,14 @@ export default function LearningSession(props: { isEdit: boolean }) {
         <StarRating
           interactive
           starAmount={starAmount}
-          setStarAmount={setStarAmount}
+          setStarAmount={
+            isEdit
+              ? (starAmount: React.SetStateAction<number>) => {
+                  setStarAmount(starAmount);
+                  setChangesMade(true);
+                }
+              : setStarAmount
+          }
           color={module?.colorCode}
         />
       </View>
@@ -78,8 +119,11 @@ export default function LearningSession(props: { isEdit: boolean }) {
                 onChangeText={(val) => {
                   setFocusDuration((prevState) => ({
                     ...prevState,
-                    hours: Math.abs(roundNumber(val, 0)),
+                    hours: val,
                   }));
+                  setChangesMade(true);
+                  setDebounceWaiting(true);
+                  debounceDuration(setFocusDuration, val, true);
                 }}
                 inputUnit="Std."
                 selectTextOnFocus
@@ -88,11 +132,13 @@ export default function LearningSession(props: { isEdit: boolean }) {
                 style={styles.input}
                 value={focusDuration.mins.toString()}
                 onChangeText={(val) => {
-                  let mins = Math.abs(roundNumber(val, 0));
                   setFocusDuration((prevState) => ({
                     ...prevState,
-                    mins: mins >= 60 ? 59 : mins,
+                    mins: val,
                   }));
+                  setChangesMade(true);
+                  setDebounceWaiting(true);
+                  debounceDuration(setFocusDuration, val, false);
                 }}
                 inputUnit="min."
                 selectTextOnFocus
@@ -114,8 +160,11 @@ export default function LearningSession(props: { isEdit: boolean }) {
                 onChangeText={(val) => {
                   setPauseDuration((prevState) => ({
                     ...prevState,
-                    hours: Math.abs(roundNumber(val, 0)),
+                    hours: val,
                   }));
+                  setChangesMade(true);
+                  setDebounceWaiting(true);
+                  debounceDuration(setPauseDuration, val, true);
                 }}
                 inputUnit="Std."
                 selectTextOnFocus
@@ -124,11 +173,13 @@ export default function LearningSession(props: { isEdit: boolean }) {
                 style={styles.input}
                 value={pauseDuration.mins.toString()}
                 onChangeText={(val) => {
-                  let mins = Math.abs(roundNumber(val, 0));
                   setPauseDuration((prevState) => ({
                     ...prevState,
-                    mins: mins >= 60 ? 59 : mins,
+                    mins: val,
                   }));
+                  setChangesMade(true);
+                  setDebounceWaiting(true);
+                  debounceDuration(setPauseDuration, val, false);
                 }}
                 inputUnit="min."
                 selectTextOnFocus
@@ -141,15 +192,30 @@ export default function LearningSession(props: { isEdit: boolean }) {
           )}
         </View>
       </View>
-      <View>
-        <Text>Modul</Text>
-        <Text style={{ color: module?.colorCode }}>{module?.name}</Text>
+      <View style={styles.moduleContainer}>
+        <Text style={styles.moduleLabel}>Modul</Text>
+        <View style={styles.colorContainer}>
+          <View
+            style={[
+              styles.colorCircle,
+              { backgroundColor: module?.colorCode || "transparent" },
+            ]}
+          />
+          <Text>{module?.name}</Text>
+        </View>
       </View>
       <View>
         <InputField
           label="Beschreibung"
           value={description}
-          onChangeText={setDescription}
+          onChangeText={
+            isEdit
+              ? (text: string) => {
+                  setDescription(text);
+                  setChangesMade(true);
+                }
+              : setDescription
+          }
           placeholder="..."
           style={styles.input}
         />
@@ -159,17 +225,20 @@ export default function LearningSession(props: { isEdit: boolean }) {
           <Text
             style={styles.discardLink}
             onPress={() => {
-              Alert(
-                "Tracking verwerfen?",
-                "Wenn du fortfährst, wird das Tracking gelöscht. Bist du dir sicher?",
-                () =>
+              Alert({
+                title: "Tracking verwerfen?",
+                message:
+                  "Wenn du fortfährst, wird das Tracking gelöscht. Bist du dir sicher?",
+                onPressConfirm: () =>
                   router.push({
                     pathname: "/(tabs)/(tracking)/",
                     params: {
                       discard: 1,
                     },
-                  })
-              );
+                  }),
+                cancelText: "Abbrechen",
+                confirmText: "Ja",
+              });
             }}
           >
             Verwerfen
@@ -179,6 +248,7 @@ export default function LearningSession(props: { isEdit: boolean }) {
           text={isEdit ? "Speichern" : "Abschließen"}
           backgroundColor={module?.colorCode || ""}
           textColor="#FFFFFF"
+          disabled={isEdit ? debounceWaiting : false}
           onPress={async () => {
             let id = toast.show("Speichern...", { type: "loading" });
             let body = {
@@ -197,6 +267,7 @@ export default function LearningSession(props: { isEdit: boolean }) {
                     focusDuration: focusTime,
                   }
                 );
+                fetchModules && (await fetchModules());
               } else {
                 await authAxios?.post(
                   `/students/${authState?.user.id}/modules/${module?.id}/learningSessions`,
@@ -235,11 +306,15 @@ export default function LearningSession(props: { isEdit: boolean }) {
           textColor={module?.colorCode}
           onPress={() => {
             if (isEdit) {
-              Alert(
-                "Änderungen verwerfen?",
-                "Wenn du fortfährst, gehen alle Änderungen ungespeichert verloren. Bist du dir sicher?",
-                () => router.back(),
-              );
+              changesMade
+                ? Alert({
+                    title: "Änderungen verwerfen?",
+                    message:
+                      "Wenn du fortfährst, gehen alle Änderungen ungespeichert verloren. Bist du dir sicher?",
+                    onPressConfirm: () =>
+                      router.push(`/(tabs)/modules/${module?.id}/`),
+                  })
+                : router.push(`/(tabs)/modules/${module?.id}/`);
             } else {
               router.push("/(tabs)/(tracking)");
             }
@@ -271,6 +346,26 @@ const styles = StyleSheet.create({
   timeLabelContainer: {
     alignItems: "center",
     gap: 10,
+  },
+  moduleContainer: {
+    gap: 5,
+  },
+  moduleLabel: {
+    color: COLORTHEME.light.primary,
+  },
+  colorContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: COLORTHEME.light.grey2,
+    borderRadius: 12,
+    height: 40,
+    paddingHorizontal: 10,
+    gap: 8,
+  },
+  colorCircle: {
+    width: 16,
+    height: 16,
+    borderRadius: 8,
   },
   timeEdit: {
     flexDirection: "row",

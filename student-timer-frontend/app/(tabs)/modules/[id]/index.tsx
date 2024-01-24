@@ -1,4 +1,4 @@
-import { Alert, Pressable, ScrollView, StyleSheet } from "react-native";
+import { Pressable, ScrollView, StyleSheet } from "react-native";
 import { View } from "@/components/Themed";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { ModuleType } from "@/types/ModuleType";
@@ -17,6 +17,7 @@ import { useAxios } from "@/context/AxiosContext";
 import LearningUnitRow from "@/components/modules/LearningUnitRow";
 import Button from "@/components/Button";
 import { computeRemainingSessionTime } from "@/libs/moduleTypeHelper";
+import Alert from "@/components/Alert";
 
 export default function ModulesDetailScreen() {
   const { id } = useLocalSearchParams<{
@@ -35,24 +36,15 @@ export default function ModulesDetailScreen() {
     ({} as ModuleType);
 
   const onDeleteModule = () => {
-    Alert.alert(
-      "Modul wirklich löschen?",
-      `Möchtest du das Modul "${detailModule.name}" wirklich unwiederuflich löschen?\n Auch die zugehörigen Lerneinheiten und Trackings werden dabei gelöscht.`,
-      [
-        {
-          text: "Abbrechen",
-          style: "cancel",
-        },
-        {
-          text: "Löschen",
-          onPress: () => {
-            deleteModule();
-          },
-          style: "destructive",
-        },
-      ],
-      { cancelable: false }
-    );
+    Alert({
+      title: "Modul wirklich löschen?",
+      message: `Möchtest du das Modul "${detailModule.name}" wirklich unwiederuflich löschen?\n Auch die zugehörigen Lerneinheiten und Trackings werden dabei gelöscht.`,
+      onPressConfirm: () => {
+        deleteModule();
+      },
+      cancelText: "Abbrechen",
+      confirmText: "Löschen",
+    });
   };
 
   const deleteModule = async () => {
@@ -74,24 +66,15 @@ export default function ModulesDetailScreen() {
   };
 
   const onDeleteTracking = (trackingSessionId: number) => {
-    Alert.alert(
-      "Tracking wirklich löschen?",
-      "Möchtest du das Tracking wirklich unwiederuflich löschen?",
-      [
-        {
-          text: "Abbrechen",
-          style: "cancel",
-        },
-        {
-          text: "Löschen",
-          onPress: () => {
-            deleteLearningSession(trackingSessionId);
-          },
-          style: "destructive",
-        },
-      ],
-      { cancelable: false }
-    );
+    Alert({
+      title: "Tracking wirklich löschen?",
+      message: "Möchtest du das Tracking wirklich unwiederuflich löschen?",
+      onPressConfirm: () => {
+        deleteLearningSession(trackingSessionId);
+      },
+      cancelText: "Abbrechen",
+      confirmText: "Löschen",
+    });
   };
 
   const deleteLearningSession = async (trackingSessionId: number) => {
@@ -242,7 +225,6 @@ export default function ModulesDetailScreen() {
                     </View>
                     <Pressable
                       onPress={() => {
-                        router.back();
                         router.push({
                           pathname: `/(tabs)/modules/${detailModule.id}/learningSessions/${item.id}/edit`,
                         } as never);

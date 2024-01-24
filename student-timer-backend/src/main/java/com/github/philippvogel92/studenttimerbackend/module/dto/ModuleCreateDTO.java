@@ -18,31 +18,16 @@ public class ModuleCreateDTO {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public LocalDate getExamDate() {
         return examDate;
-    }
-
-    public void setExamDate(LocalDate examDate) {
-        this.examDate = examDate;
     }
 
     public String getColorCode() {
         return colorCode;
     }
 
-    public void setColorCode(String colorCode) {
-        this.colorCode = colorCode;
-    }
-
     public Integer getCreditpoints() {
         return creditpoints;
     }
 
-    public void setCreditpoints(Integer creditpoints) {
-        this.creditpoints = creditpoints;
-    }
 }

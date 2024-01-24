@@ -1,6 +1,5 @@
 package com.github.philippvogel92.studenttimerbackend.auth;
 
-import com.auth0.jwt.interfaces.DecodedJWT;
 import com.github.philippvogel92.studenttimerbackend.auth.OAuth2.Provider;
 import com.github.philippvogel92.studenttimerbackend.auth.dto.*;
 import com.github.philippvogel92.studenttimerbackend.auth.jwt.accessToken.AccessTokenService;
@@ -83,33 +82,6 @@ public class AuthController {
         return refreshTokenService.createNewAccessToken(refreshToken);
     }
 
-    @Operation(summary = "ONLY FOR TESTING - Validate access token")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Token is valid",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(type = "studentId"))}),
-            @ApiResponse(responseCode = "401", description = "Token is invalid",
-                    content = @Content),
-    })
-    @PostMapping(path = "/verifyAccessToken")
-    public String verifyAccessToken(@RequestBody String jwt) {
-        DecodedJWT decoder = accessTokenService.verifyAccessToken(jwt);
-        return decoder.getSubject();
-    }
-
-    @Operation(summary = "ONLY FOR TESTING - Validate refresh token")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Token is valid",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(name = "studentId", type = "string"))}),
-            @ApiResponse(responseCode = "401", description = "Token is invalid or wrong request body",
-                    content = @Content),
-    })
-    @PostMapping(path = "/verifyRefreshToken")
-    public String verifyRefreshToken(@RequestBody String jwt) {
-        DecodedJWT decoder = refreshTokenService.verifyRefreshToken(jwt);
-        return decoder.getSubject();
-    }
 
     @Operation(summary = "Sign up a new student and create it in database")
     @ApiResponses(value = {

@@ -1,6 +1,5 @@
 package com.github.philippvogel92.studenttimerbackend.statistic;
 
-import com.github.philippvogel92.studenttimerbackend.student.Student;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

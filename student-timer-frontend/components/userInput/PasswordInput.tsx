@@ -1,9 +1,8 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
 import InputField from "@/components/InputField";
-import { BASE_STYLES, COLORTHEME } from "@/constants/Theme";
+import { BASE_STYLES, COLORS, COLORTHEME } from "@/constants/Theme";
 import Button from "@/components/Button";
-import Pressable from "@/components/Pressable";
 import { H3 } from "@/components/StyledText";
 
 export default function PasswordInput(props: {
@@ -39,16 +38,16 @@ export default function PasswordInput(props: {
               label="Passwort"
               onChangeText={setUserPassword}
               value={userPassword}
-              placeholder="neues Passwort"
+              placeholder="Neues Passwort"
               keyboardType="default"
               secureTextEntry={true}
               message={passwordError}
               messageColor="red"
             />
             <InputField
-              label="Passwort wiederholen"
+              label="Passwort wdh."
               onChangeText={setUserCheckPassword}
-              placeholder="neues Passwort"
+              placeholder="Neues Passwort"
               value={userCheckPassword}
               keyboardType="default"
               secureTextEntry={true}
@@ -61,14 +60,16 @@ export default function PasswordInput(props: {
           text="Passwort ändern"
           backgroundColor={COLORTHEME.light.primary}
           textColor={COLORTHEME.light.grey2}
+          style={{ width: 200 }}
           onPress={buttonAction}
           disabled={disabled}
-          style={{ width: 200 }}
         />
-        <Pressable
-          text={"Abbrechen"}
-          ariaLabel={"Abbrechen"}
-          accessibilityRole={"button"}
+        <Button
+          text="Abbrechen"
+          backgroundColor={COLORS.white}
+          borderColor={COLORTHEME.light.primary}
+          textColor={COLORTHEME.light.grey3}
+          style={{ width: 200 }}
           onPress={cancelAction}
         />
       </View>
@@ -80,7 +81,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: "center",
     justifyContent: "space-around",
-    marginVertical: 20,
+    marginVertical: 10,
     gap: 10,
   },
   outerWrapper: {
@@ -91,7 +92,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     padding: 24,
     gap: 5,
-    marginVertical: 10,
+    marginVertical: 5,
   },
   row: {
     flexGrow: 1,
