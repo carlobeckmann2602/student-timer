@@ -257,7 +257,6 @@ export default function StatisticsScreen() {
         HBarChartProps | VBarChartProps | VLineChartProps | StarChartProps
       >;
       if (!statisticArray.every((item) => item === null)) {
-        console.log("Response : ", JSON.stringify(statisticArray, null, 2));
         setStatistics(statisticArray.filter((item) => item !== null));
       }
     };
