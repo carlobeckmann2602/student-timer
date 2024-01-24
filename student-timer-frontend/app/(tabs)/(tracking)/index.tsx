@@ -17,7 +17,6 @@ import {
   enableLocalNotification,
   sendPushNotification,
 } from "@/libs/handleLocalNotification";
-import { debounce, validateNumber } from "@/libs/generalHelper";
 import { roundSecToMinInMs } from "@/libs/timeHelper";
 
 export default function Tracking() {
@@ -34,37 +33,45 @@ export default function Tracking() {
   const [selectedModule, setSelectedModule] = useState({} as ModuleType);
   const [timerIsDone, setTimerIsDone] = useState(false);
   const [isFirstFocus, setIsFirstFocus] = useState(true);
-  const [debounceWaiting, setDebounceWaiting] = useState(false);
+  const [validInputs, setValidInputs] = useState({
+    rounds: true,
+    roundLen: true,
+    pauseLen: true,
+  });
   const { trackingSaved, discard } = useLocalSearchParams<{
     trackingSaved: string;
     discard: string;
   }>();
   const { modules } = useModules();
   const inputsEditable = !trackingIsActive && startTime === 0;
-  const debounceInput = React.useCallback(
-    debounce(
-      (
-        setState: React.Dispatch<React.SetStateAction<string>>,
-        setInputState: React.Dispatch<React.SetStateAction<string>>,
-        val: string,
-        defaultNumber = 1
-      ) => {
-        val = validateNumber(val, defaultNumber).toString();
-        setState(val);
-        setInputState(val);
-        setDebounceWaiting(false);
-      },
-      1000
-    ),
-    []
-  );
+  const validateInput = (
+    val: string,
+    setState: React.Dispatch<React.SetStateAction<string>>,
+    setInputState: React.Dispatch<React.SetStateAction<string>>,
+    key: keyof typeof validInputs,
+    minValue: number,
+  ) => {
+    setInputState(val);
+    let valid = false;
+    if (val !== "" && !val.includes(".")) {
+      valid = Number(val) >= minValue;
+    }
+    setValidInputs((prevState) => ({
+      ...prevState,
+      [key]: valid,
+    }));
+    if (valid) {
+      setState(val);
+    }
+  };
+
   useFocusEffect(
     React.useCallback(() => {
       if (isFirstFocus) {
         enableLocalNotification();
         setIsFirstFocus(false);
       }
-    }, [isFirstFocus])
+    }, [isFirstFocus]),
   );
 
   useEffect(() => {
@@ -155,12 +162,11 @@ export default function Tracking() {
             label="Runden"
             value={inputRounds}
             onChangeText={(val) => {
-              setInputRounds(val);
-              setDebounceWaiting(true);
-              debounceInput(setRounds, setInputRounds, val, 2);
+              validateInput(val, setRounds, setInputRounds, "rounds", 1);
             }}
             selectTextOnFocus
             editable={inputsEditable}
+            showErrorBorder={!validInputs.rounds}
           />
         )}
         <InputFieldNumeric
@@ -168,26 +174,24 @@ export default function Tracking() {
           label="Rundenlänge"
           value={inputRoundLen}
           onChangeText={(val) => {
-            setInputRoundLen(val);
-            setDebounceWaiting(true);
-            debounceInput(setRoundLen, setInputRoundLen, val);
+            validateInput(val, setRoundLen, setInputRoundLen, "roundLen", 1);
           }}
           inputUnit="min."
           selectTextOnFocus
           editable={inputsEditable}
+          showErrorBorder={!validInputs.roundLen}
         />
         <InputFieldNumeric
           style={styles.input}
           label="Pausenlänge"
           value={inputPauseLen}
           onChangeText={(val) => {
-            setInputPauseLen(val);
-            setDebounceWaiting(true);
-            debounceInput(setPauseLen, setInputPauseLen, val);
+            validateInput(val, setPauseLen, setInputPauseLen, "pauseLen", 0);
           }}
           inputUnit="min."
           selectTextOnFocus
           editable={inputsEditable}
+          showErrorBorder={!validInputs.pauseLen}
         />
       </View>
       {modules?.length ? (
@@ -215,7 +219,7 @@ export default function Tracking() {
             ) : startTime === 0 ? (
               <Button
                 text="Tracking starten"
-                disabled={debounceWaiting}
+                disabled={Object.values(validInputs).includes(false)}
                 backgroundColor={COLORTHEME.light.primary}
                 textColor="#FFFFFF"
                 onPress={toggleTracking}
