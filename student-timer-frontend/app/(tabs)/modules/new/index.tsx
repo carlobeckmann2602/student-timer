@@ -94,9 +94,9 @@ export default function NewModule() {
       <View style={styles.buttonRowWrapper}>
         <Button
           text="Abbrechen"
-          borderColor={COLORTHEME.light.danger}
+          borderColor={COLORTHEME.light.primary}
           backgroundColor={COLORTHEME.light.background}
-          textColor={COLORTHEME.light.danger}
+          textColor={COLORTHEME.light.primary}
           style={{ flex: 1 }}
           onPress={() =>
             openChanges
