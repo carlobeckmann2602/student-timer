@@ -6,7 +6,7 @@ import { SIZES } from "@/constants/Theme";
 const SCREEN_WIDTH: number = Dimensions.get("window").width;
 
 // based on iphone 5s's scale
-const scale = SCREEN_WIDTH / 320;
+const scale = SCREEN_WIDTH / 380;
 
 export function normalize(size: number) {
   const newSize = size * scale;
