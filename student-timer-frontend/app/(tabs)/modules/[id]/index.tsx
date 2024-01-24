@@ -134,6 +134,15 @@ export default function ModulesDetailScreen() {
         />
         <View style={styles.buttonWrapper}>
           <Button
+            text="Löschen"
+            borderColor={COLORS.danger}
+            backgroundColor={COLORTHEME.light.background}
+            textColor={COLORS.danger}
+            iconRight={<Trash2 color={COLORS.danger} />}
+            style={{ flex: 1 }}
+            onPress={onDeleteModule}
+          />
+          <Button
             text="Bearbeiten"
             borderColor={COLORTHEME.light.primary}
             backgroundColor={COLORTHEME.light.background}
@@ -145,15 +154,6 @@ export default function ModulesDetailScreen() {
               router.back();
               router.push(`/modules/${detailModule.id}/edit`);
             }}
-          />
-          <Button
-            text="Löschen"
-            borderColor={COLORS.danger}
-            backgroundColor={COLORTHEME.light.background}
-            textColor={COLORS.danger}
-            iconRight={<Trash2 color={COLORS.danger} />}
-            style={{ flex: 1 }}
-            onPress={onDeleteModule}
           />
         </View>
         <View style={styles.unitWrapper}>

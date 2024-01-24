@@ -296,9 +296,9 @@ export default function EditModule() {
       <View style={styles.buttonRowWrapper}>
         <Button
           text="Abbrechen"
-          borderColor={COLORTHEME.light.danger}
+          borderColor={COLORTHEME.light.primary}
           backgroundColor={COLORTHEME.light.background}
-          textColor={COLORTHEME.light.danger}
+          textColor={COLORTHEME.light.primary}
           style={{ flex: 1 }}
           onPress={() =>
             Alert(
@@ -325,7 +325,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     justifyContent: "space-between",
-    gap: 24,
+    gap: 12,
     backgroundColor: COLORTHEME.light.background,
     paddingVertical: BASE_STYLES.horizontalPadding,
   },

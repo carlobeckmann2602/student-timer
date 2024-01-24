@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     justifyContent: "space-between",
-    gap: 24,
+    gap: 12,
     backgroundColor: COLORTHEME.light.background,
     paddingVertical: BASE_STYLES.horizontalPadding,
   },
