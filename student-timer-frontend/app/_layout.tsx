@@ -102,6 +102,7 @@ function RootLayoutNav() {
                           fontWeight: "500",
                         },
                         headerBackTitleVisible: false,
+                        headerBackVisible: false,
                         contentStyle: {
                           paddingHorizontal: BASE_STYLES.horizontalPadding,
                           backgroundColor: COLORTHEME.light.background,

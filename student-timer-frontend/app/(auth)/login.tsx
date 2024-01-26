@@ -96,7 +96,11 @@ export default function Login() {
 
           <Text>
             Du hast kein Konto?{" "}
-            <Link href="/signup" style={{ textDecorationLine: "underline" }}>
+            <Link
+              href="/signup"
+              style={{ textDecorationLine: "underline" }}
+              replace
+            >
               Account erstellen
             </Link>
           </Text>
