@@ -8,7 +8,7 @@ export default function OtherLogins() {
   // uncomment Google Button in development (Google does not work in Expo Go)
   return (
     <View style={styles.buttons}>
-      {/* <GoogleButton /> */}
+      <GoogleButton />
       <AppleButton />
     </View>
   );
@@ -17,7 +17,7 @@ export default function OtherLogins() {
 const styles = StyleSheet.create({
   buttons: {
     flexDirection: "column",
-    width: 200,
+    width: 250,
     gap: 5,
   },
 });

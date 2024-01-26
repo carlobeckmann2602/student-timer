@@ -89,7 +89,7 @@ export default function Login() {
             backgroundColor={COLORTHEME.light.primary}
             textColor={COLORTHEME.light.grey2}
             onPress={login}
-            style={{ width: 200 }}
+            style={{ width: 250 }}
           />
 
           {error && <Text style={styles.errorMessage}>{error}</Text>}

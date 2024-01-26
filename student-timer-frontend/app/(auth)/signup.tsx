@@ -151,7 +151,7 @@ export default function SignupScreen() {
               backgroundColor={COLORTHEME.light.primary}
               textColor={COLORTHEME.light.grey2}
               onPress={register}
-              style={{ width: 200 }}
+              style={{ width: 250 }}
             />
 
             {error && <Text style={styles.errorMessage}>{error}</Text>}

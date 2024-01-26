@@ -49,7 +49,7 @@ export default function Tracking() {
     setState: React.Dispatch<React.SetStateAction<string>>,
     setInputState: React.Dispatch<React.SetStateAction<string>>,
     key: keyof typeof validInputs,
-    minValue: number,
+    minValue: number
   ) => {
     setInputState(val);
     let valid = false;
@@ -71,7 +71,7 @@ export default function Tracking() {
         enableLocalNotification();
         setIsFirstFocus(false);
       }
-    }, [isFirstFocus]),
+    }, [isFirstFocus])
   );
 
   useEffect(() => {
@@ -250,13 +250,15 @@ export default function Tracking() {
       ) : (
         <View style={styles.modulesMissing}>
           <H4>Du hast noch keine Module</H4>
-          <Button
-            text="Neues Modul anlegen"
-            backgroundColor={COLORTHEME.light.primary}
-            textColor={COLORTHEME.light.grey2}
-            onPress={() => router.push("/modules/new/")}
-            style={styles.button}
-          />
+          <View style={styles.trackerButtons}>
+            <Button
+              text="Neues Modul anlegen"
+              backgroundColor={COLORTHEME.light.primary}
+              textColor={COLORTHEME.light.grey2}
+              onPress={() => router.push("/modules/new/")}
+              style={styles.button}
+            />
+          </View>
         </View>
       )}
     </KeyboardAvoidingView>
