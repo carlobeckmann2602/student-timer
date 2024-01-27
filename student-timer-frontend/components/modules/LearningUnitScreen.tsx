@@ -24,6 +24,7 @@ export default function LearningUnitSreen(props: LearningUnitScreenProps) {
   const { modules, setModules } = useModules();
   const router = useRouter();
   const [openChanges, setOpenChanges] = useState(false);
+  const [saveDisabled, setSaveDisabled] = useState(false);
 
   const [newUnitState, setNewUnitState] = useState<LearningUnitType>({
     id: +learningUnitId,
@@ -53,6 +54,10 @@ export default function LearningUnitSreen(props: LearningUnitScreenProps) {
 
   const handleUpdate = (createdUnit: LearningUnitType) => {
     setNewUnitState(createdUnit);
+  };
+
+  const handleValidationError = (unitId: number, errorOccured: boolean) => {
+    setSaveDisabled(errorOccured);
   };
 
   const onSave = async () => {
@@ -104,24 +109,28 @@ export default function LearningUnitSreen(props: LearningUnitScreenProps) {
           if (!openChanges) setOpenChanges(true);
           handleUpdate(inputData);
         }}
+        onValidationError={(errorOccured) =>
+          handleValidationError(newUnitState.id, errorOccured)
+        }
       />
       <View style={styles.buttonRowWrapper}>
         <Button
           text="Zurück"
-          borderColor={COLORTHEME.light.danger}
+          borderColor={COLORTHEME.light.primary}
           backgroundColor={COLORTHEME.light.background}
-          textColor={COLORTHEME.light.danger}
+          textColor={COLORTHEME.light.primary}
           style={{ flex: 1 }}
           onPress={() =>
-              openChanges
-                  ? Alert({
-                    title: "Eingaben verwerfen?",
-                    message: "Wenn du fortfährst, gehen alle Eingaben verloren. Bist du dir sicher?",
-                    onPressConfirm: () => router.push("/modules"),
-                    cancelText: "Abbrechen",
-                    confirmText: "Ja"
-                  })
-                  : router.push("/modules")
+            openChanges
+              ? Alert({
+                  title: "Eingaben verwerfen?",
+                  message:
+                    "Wenn du fortfährst, gehen alle Eingaben verloren. Bist du dir sicher?",
+                  onPressConfirm: () => router.push("/modules"),
+                  cancelText: "Abbrechen",
+                  confirmText: "Ja",
+                })
+              : router.push("/modules")
           }
         />
         <Button
@@ -130,6 +139,7 @@ export default function LearningUnitSreen(props: LearningUnitScreenProps) {
           textColor={COLORTHEME.light.grey2}
           style={{ flex: 1 }}
           onPress={onSave}
+          disabled={saveDisabled}
         />
       </View>
     </KeyboardAvoidingView>

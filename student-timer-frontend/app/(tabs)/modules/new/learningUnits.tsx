@@ -31,16 +31,17 @@ export default function NewModuleLearningUnits() {
   const { authAxios } = useAxios();
   const { fetchModules } = useModules();
 
+  const [saveDisabled, setSaveDisabled] = useState<Set<string>>(new Set());
   const [learningUnits, setLearningUnits] = useState<LearningUnitType[]>([
     {
       id: Math.random(),
       name: LearningUnitEnum.VORLESUNG,
-      workloadPerWeek: 1,
+      workloadPerWeek: 60,
       startDate: new Date(),
       endDate: new Date(),
       totalLearningTime: 0,
-      workloadPerWeekHours: 0,
-      workloadPerWeekMinutes: 1,
+      workloadPerWeekHours: 60,
+      workloadPerWeekMinutes: 0,
     },
   ]);
 
@@ -59,17 +60,29 @@ export default function NewModuleLearningUnits() {
       });
   };
 
+  const handleValidationError = (unitId: number, errorOccured: boolean) => {
+    if (errorOccured) {
+      setSaveDisabled((prevSet) => new Set([...prevSet, unitId.toString()]));
+    } else {
+      setSaveDisabled((prevSet) => {
+        const updatedSet = new Set<string>(prevSet);
+        updatedSet.delete(unitId.toString());
+        return updatedSet;
+      });
+    }
+  };
+
   const onAddLearningUnit = () => {
     setLearningUnits((prevLearningUnits) => {
       const newlearningUnit = {
         id: Math.random(),
         name: LearningUnitEnum.VORLESUNG,
-        workloadPerWeek: 1,
+        workloadPerWeek: 60,
         startDate: new Date(),
         endDate: new Date(),
         totalLearningTime: 0,
-        workloadPerWeekHours: 0,
-        workloadPerWeekMinutes: 1,
+        workloadPerWeekHours: 60,
+        workloadPerWeekMinutes: 0,
       };
       return [...prevLearningUnits, newlearningUnit];
     });
@@ -144,6 +157,9 @@ export default function NewModuleLearningUnits() {
               learningUnits.length > 1 ? onDeleteLearningUnit : undefined
             }
             onChange={(inputData) => handleUpdate(inputData, index)}
+            onValidationError={(errorOccured) =>
+              handleValidationError(item.id, errorOccured)
+            }
           />
         )}
         keyExtractor={(item: LearningUnitType) => item.id.toString()}
@@ -157,7 +173,7 @@ export default function NewModuleLearningUnits() {
             textColor={COLORTHEME.light.primary}
             onPress={onAddLearningUnit}
             iconRight={<Plus color={COLORTHEME.light.primary} />}
-            style={{ width: "50%" }}
+            style={{ width: "50%", alignSelf: "flex-end" }}
           />
         }
       />
@@ -167,6 +183,7 @@ export default function NewModuleLearningUnits() {
         textColor={COLORTHEME.light.grey2}
         onPress={onCreateModule}
         style={{ marginBottom: BASE_STYLES.horizontalPadding }}
+        disabled={saveDisabled.size != 0}
       />
     </KeyboardAvoidingView>
   );

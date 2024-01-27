@@ -8,63 +8,93 @@ import { Trash2 } from "lucide-react-native";
 import InputFieldNumeric from "../InputFieldNumeric";
 import { LearningUnitEnum } from "@/constants/LearningUnitEnum";
 import { ObjectKey } from "@/context/ModuleContext";
+import { useState } from "react";
 
 type LearningUnitFormProps = {
   inputData: LearningUnitType;
   onDelete?: (id: number) => void | undefined;
-  onChange: (vaules: LearningUnitType) => void;
+  onChange: (values: LearningUnitType) => void;
+  onValidationError: (errorOccured: boolean) => void;
 };
 
 export function LearningUnitForm(props: LearningUnitFormProps) {
-  const { inputData, onDelete, onChange } = props;
+  const {
+    inputData,
+    onDelete,
+    onChange,
+    onValidationError: onErrorDetection,
+  } = props;
 
   const handleChange = (value: LearningUnitType) => {
     onChange({ ...inputData, ...value });
   };
 
+  const [workloadError, setWorkloadError] = useState(false);
+
   const updateWorkloadHours = (value: number) => {
-    let formattedHourValue = Math.round(Math.abs(+value * 60));
-    let updatedWorkloadPerWeekMinutes = 1;
-    if (
-      formattedHourValue === 0 &&
-      (!inputData.workloadPerWeekMinutes ||
-        inputData.workloadPerWeekMinutes <= 0)
-    ) {
-      updatedWorkloadPerWeekMinutes = 1;
-    } else {
-      updatedWorkloadPerWeekMinutes = inputData.workloadPerWeekMinutes!;
+    if (isNaN(value)) {
+      return;
     }
 
-    let updatedTotalWorkloadPerWeek =
-      formattedHourValue + updatedWorkloadPerWeekMinutes;
+    let formattedValue = Math.round(Math.abs(+value * 60));
+
+    if (
+      formattedValue <= 0 &&
+      (inputData.workloadPerWeekMinutes === undefined ||
+        inputData.workloadPerWeekMinutes <= 0)
+    ) {
+      handleChange({
+        workloadPerWeekHours: 0,
+      } as LearningUnitType);
+      setWorkloadError(true);
+      onErrorDetection(true);
+      return;
+    }
+
+    let updatedTotalWorkloadPerWeek = formattedValue;
+
+    if (inputData.workloadPerWeekMinutes)
+      updatedTotalWorkloadPerWeek += inputData.workloadPerWeekMinutes;
 
     handleChange({
-      workloadPerWeekMinutes: updatedWorkloadPerWeekMinutes,
-      workloadPerWeekHours: formattedHourValue,
+      workloadPerWeekHours: formattedValue,
       workloadPerWeek: updatedTotalWorkloadPerWeek,
     } as LearningUnitType);
+    setWorkloadError(false);
+    onErrorDetection(false);
   };
 
   const updateWorkloadMinutes = (value: number) => {
-    let formattedValue =
-      Math.round(Math.abs(+value)) >= 60 ? 59 : Math.round(Math.abs(+value));
-    if (
-      formattedValue === 0 &&
-      (!inputData.workloadPerWeekHours || inputData.workloadPerWeekHours <= 0)
-    ) {
-      formattedValue = 1;
+    if (isNaN(value)) {
+      return;
     }
 
-    let updatedTotalWorkloadPerWeek;
+    let formattedValue =
+      Math.round(Math.abs(+value)) >= 60 ? 59 : Math.round(Math.abs(+value));
+
+    if (
+      formattedValue <= 0 &&
+      (inputData.workloadPerWeekHours === undefined ||
+        inputData.workloadPerWeekHours <= 0)
+    ) {
+      handleChange({
+        workloadPerWeekMinutes: 0,
+      } as LearningUnitType);
+      setWorkloadError(true);
+      onErrorDetection(true);
+      return;
+    }
+
+    let updatedTotalWorkloadPerWeek = formattedValue;
     if (inputData.workloadPerWeekHours)
-      updatedTotalWorkloadPerWeek =
-        formattedValue + inputData.workloadPerWeekHours;
-    else updatedTotalWorkloadPerWeek = formattedValue;
+      updatedTotalWorkloadPerWeek += inputData.workloadPerWeekHours;
 
     handleChange({
       workloadPerWeekMinutes: formattedValue,
       workloadPerWeek: updatedTotalWorkloadPerWeek,
     } as LearningUnitType);
+    setWorkloadError(false);
+    onErrorDetection(false);
   };
 
   return (
@@ -130,6 +160,9 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
             inputUnit="min."
           />
         </View>
+        {workloadError && (
+          <P style={styles.errorMessage}>Bitte gebe den Arbeitsaufwand an.</P>
+        )}
       </View>
       {onDelete && (
         <View
