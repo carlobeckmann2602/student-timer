@@ -7,23 +7,17 @@ import { P } from "../StyledText";
 import { View } from "../Themed";
 import { COLORS, COLORTHEME } from "@/constants/Theme";
 import { ModuleType } from "@/types/ModuleType";
+import { useState } from "react";
 
 type ModuleFormProps = {
   inputData: ModuleType;
   dateDiabled: boolean;
-  moduleNameError: string;
-  creditPointError: string;
   onChange: (values: ModuleType, newDateDisabledState?: boolean) => void;
+  onValidationError: (errorType: string, errorOccured: boolean) => void;
 };
 
 export default function ModuleForm(props: ModuleFormProps) {
-  const {
-    inputData,
-    dateDiabled,
-    moduleNameError,
-    creditPointError,
-    onChange,
-  } = props;
+  const { inputData, dateDiabled, onChange, onValidationError } = props;
 
   const selectableColors: string[] = [
     COLORS.moduleColor1,
@@ -36,6 +30,9 @@ export default function ModuleForm(props: ModuleFormProps) {
     COLORS.moduleColor8,
   ];
 
+  const [moduleNameError, setModuleNameError] = useState("");
+  const [creditPointError, setCreditPointError] = useState("");
+
   const handleChange = (value?: any, newDateDisabledState?: boolean) => {
     onChange({ ...inputData, ...value }, newDateDisabledState);
   };
@@ -46,11 +43,19 @@ export default function ModuleForm(props: ModuleFormProps) {
         <InputField
           label="Name des Moduls"
           onChangeText={(value) => {
-            handleChange({ name: value });
+            if (value.trim().length == 0) {
+              setModuleNameError("Der Modulname ist erforderlich");
+              onValidationError("name", true);
+            } else {
+              setModuleNameError("");
+              onValidationError("name", false);
+            }
+            handleChange({ name: value.trim() });
           }}
           value={inputData.name}
           message={moduleNameError}
           messageColor={COLORTHEME.light.danger}
+          placeholder="Modulname"
         />
       </View>
       <View style={styles.dateRowContainer}>
@@ -80,14 +85,25 @@ export default function ModuleForm(props: ModuleFormProps) {
           label="Credit-Points"
           onChangeText={(value) => {
             let formattedValue = Math.round(Math.abs(+value));
+
+            if (!formattedValue || formattedValue <= 0) {
+              setCreditPointError(
+                "Das Feld muss einen Wert größer 0 enthalten"
+              );
+              onValidationError("cp", true);
+            } else {
+              setCreditPointError("");
+              onValidationError("cp", false);
+            }
             handleChange({
-              creditPoints: formattedValue >= 1 ? formattedValue : 1,
+              creditPoints: formattedValue,
             });
           }}
           value={inputData.creditPoints.toString()}
           message={creditPointError}
           messageColor={COLORTHEME.light.danger}
           inputUnit="CP"
+          placeholder="Anzahl Credit-Points"
         />
         <View style={{ width: "50%", backgroundColor: "transparent" }} />
       </View>

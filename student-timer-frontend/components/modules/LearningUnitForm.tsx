@@ -18,12 +18,7 @@ type LearningUnitFormProps = {
 };
 
 export function LearningUnitForm(props: LearningUnitFormProps) {
-  const {
-    inputData,
-    onDelete,
-    onChange,
-    onValidationError: onErrorDetection,
-  } = props;
+  const { inputData, onDelete, onChange, onValidationError } = props;
 
   const handleChange = (value: LearningUnitType) => {
     onChange({ ...inputData, ...value });
@@ -47,7 +42,7 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
         workloadPerWeekHours: 0,
       } as LearningUnitType);
       setWorkloadError(true);
-      onErrorDetection(true);
+      onValidationError(true);
       return;
     }
 
@@ -61,7 +56,7 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
       workloadPerWeek: updatedTotalWorkloadPerWeek,
     } as LearningUnitType);
     setWorkloadError(false);
-    onErrorDetection(false);
+    onValidationError(false);
   };
 
   const updateWorkloadMinutes = (value: number) => {
@@ -81,7 +76,7 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
         workloadPerWeekMinutes: 0,
       } as LearningUnitType);
       setWorkloadError(true);
-      onErrorDetection(true);
+      onValidationError(true);
       return;
     }
 
@@ -94,7 +89,7 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
       workloadPerWeek: updatedTotalWorkloadPerWeek,
     } as LearningUnitType);
     setWorkloadError(false);
-    onErrorDetection(false);
+    onValidationError(false);
   };
 
   return (
