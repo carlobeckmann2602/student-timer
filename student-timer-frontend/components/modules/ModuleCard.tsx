@@ -1,20 +1,11 @@
 import { Pencil, Trash2 } from "lucide-react-native";
-import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  Alert,
-  Pressable,
-} from "react-native";
+import { View, StyleSheet, TouchableOpacity, Alert, Pressable } from "react-native";
 import { ModuleChart } from "./ModuleChart";
 import { H4, P, Subhead } from "../StyledText";
-import { COLORTHEME } from "@/constants/Theme";
+import { BASE_STYLES, COLORTHEME } from "@/constants/Theme";
 import { useRouter } from "expo-router";
 import { ModuleType } from "@/types/ModuleType";
-import {
-  computeDeadline,
-  computeRemainingSessionTime,
-} from "@/libs/moduleTypeHelper";
+import { computeDeadline, computeRemainingSessionTime } from "@/libs/moduleTypeHelper";
 import { convertMinutesToHours } from "@/libs/timeHelper";
 import { useToast } from "react-native-toast-notifications";
 import { useAuth } from "@/context/AuthContext";
@@ -65,9 +56,7 @@ export function ModuleCard(props: moduleCardProps) {
   const handleDelete = async () => {
     let id = toast.show("Löschen...", { type: "loading" });
     try {
-      await authAxios?.delete(
-        `/students/${authState?.user.id}/modules/${moduleData.id}`
-      );
+      await authAxios?.delete(`/students/${authState?.user.id}/modules/${moduleData.id}`);
       toast.update(id, "Modul erfolgreich gelöscht", { type: "success" });
       fetchModules && (await fetchModules());
     } catch (e) {
@@ -86,75 +75,63 @@ export function ModuleCard(props: moduleCardProps) {
           pathname: `modules/${moduleData.id}`,
         } as never);
       }}
+      style={styles.outerWrapper}
     >
-      <View style={styles.outerWrapper}>
-        {/* Header Row */}
-        <View style={styles.headerRow}>
-          <View style={styles.headerRowInnerWrapper}>
-            <View
-              style={[
-                styles.moduleIndicatorM,
-                { backgroundColor: moduleData.colorCode },
-              ]}
-            />
-            <H4 style={{ textAlign: "left", overflow: "hidden" }}>
-              {moduleData.name}
-            </H4>
-          </View>
-          <View style={styles.headerRowInnerWrapper}>
-            <Pressable onPress={onEdit} style={{ width: 28 }}>
-              <Pencil size={20} color="black" />
-            </Pressable>
-            <Pressable onPress={onDelete} style={{ width: 28 }}>
-              <Trash2 size={20} color="red" />
-            </Pressable>
-          </View>
+      {/* Header Row */}
+      <View style={styles.headerRow}>
+        <View style={styles.headerRowInnerWrapper}>
+          <View style={[styles.moduleIndicatorM, { backgroundColor: moduleData.colorCode }]} />
+          <H4 style={{ textAlign: "left", flexWrap: "nowrap", flexShrink: 1 }} numberOfLines={2}>
+            {moduleData.name}
+          </H4>
+          {/* </View> */}
         </View>
-        {/* Statistics */}
-        <View style={styles.statisticsContainer}>
-          <ModuleChart
-            inputData={moduleData.learningUnits}
-            totalAmount={convertMinutesToHours(moduleData.totalModuleTime)}
-            totalAmountDone={convertMinutesToHours(
+        <View style={styles.optionWrapper}>
+          <Pressable onPress={onEdit} style={{ padding: 6 }}>
+            <Pencil size={22} color="black" />
+          </Pressable>
+          <Pressable onPress={onDelete} style={{ padding: 6 }}>
+            <Trash2 size={22} color="red" />
+          </Pressable>
+        </View>
+      </View>
+      {/* Statistics */}
+      <View style={styles.statisticsContainer}>
+        <ModuleChart
+          inputData={moduleData.learningUnits}
+          totalAmount={convertMinutesToHours(moduleData.totalModuleTime)}
+          totalAmountDone={convertMinutesToHours(moduleData.totalLearningTime)}
+          width={100}
+          height={100}
+        />
+        <View style={styles.statisticsUnitContainer}>
+          {moduleData.learningUnits.map((unit) => {
+            return (
+              <View key={unit.id} style={styles.headerRowInnerWrapper}>
+                <View style={[styles.moduleIndicatorS, { backgroundColor: unit.colorCode }]} />
+                <P>{unit.name}</P>
+              </View>
+            );
+          })}
+        </View>
+      </View>
+      {/* Results */}
+      <View style={styles.headerRow}>
+        <View style={styles.resultColumn}>
+          <P style={{ textAlign: "center" }}>Zeit bis zur Prüfung</P>
+          <Subhead>{computeDeadline(moduleData.examDate)}</Subhead>
+        </View>
+        <View style={styles.separatorV} />
+        <View style={styles.resultColumn}>
+          <P style={{ textAlign: "center" }}>Selbststudium</P>
+          <Subhead>
+            {`${convertMinutesToHours(
+              moduleData.totalLearningSessionTime
+            )} von ${computeRemainingSessionTime(
+              moduleData.totalModuleTime,
               moduleData.totalLearningTime
-            )}
-            width={100}
-            height={100}
-          />
-          <View style={styles.statisticsUnitContainer}>
-            {moduleData.learningUnits.map((unit) => {
-              return (
-                <View key={unit.id} style={styles.headerRowInnerWrapper}>
-                  <View
-                    style={[
-                      styles.moduleIndicatorS,
-                      { backgroundColor: unit.colorCode },
-                    ]}
-                  />
-                  <P>{unit.name}</P>
-                </View>
-              );
-            })}
-          </View>
-        </View>
-        {/* Results */}
-        <View style={styles.headerRow}>
-          <View style={styles.resultColumn}>
-            <P style={{ textAlign: "center" }}>Zeit bis zur Prüfung</P>
-            <Subhead>{computeDeadline(moduleData.examDate)}</Subhead>
-          </View>
-          <View style={styles.separatorV} />
-          <View style={styles.resultColumn}>
-            <P style={{ textAlign: "center" }}>Selbststudium</P>
-            <Subhead>
-              {`${convertMinutesToHours(
-                moduleData.totalLearningSessionTime
-              )} von ${computeRemainingSessionTime(
-                moduleData.totalModuleTime,
-                moduleData.totalLearningTime
-              )} Std.`}
-            </Subhead>
-          </View>
+            )} Std.`}
+          </Subhead>
         </View>
       </View>
     </TouchableOpacity>
@@ -165,10 +142,10 @@ const styles = StyleSheet.create({
   outerWrapper: {
     width: "100%",
     backgroundColor: COLORTHEME.light.grey2,
-    borderRadius: 12,
+    borderRadius: BASE_STYLES.borderRadius,
     flexDirection: "column",
     justifyContent: "space-between",
-    padding: "8%",
+    padding: "6%",
     gap: 16,
   },
   separatorV: {
@@ -178,9 +155,11 @@ const styles = StyleSheet.create({
   },
   headerRow: {
     width: "100%",
+    flex: 1,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    gap: 16,
   },
   moduleIndicatorM: {
     width: 24,
@@ -196,6 +175,15 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
+    flexShrink: 1,
+  },
+  optionWrapper: {
+    minWidth: 50,
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    alignItems: "center",
+    gap: 4,
+    flexBasis: 72,
   },
   resultColumn: {
     width: "45%",

@@ -20,20 +20,12 @@ export default function LearningUnitRow(props: learningUnitProps) {
   const computeModuleDetailUnitString = (unit: LearningUnitType) => {
     let weekAmount = computeDateDifference(unit.endDate, unit.startDate, true);
 
-    return `${convertMinutesToHours(
-      unit.workloadPerWeek,
-      false
-    )} Std., ${weekAmount} Woche(n)`;
+    return `${convertMinutesToHours(unit.workloadPerWeek, false)} Std., ${weekAmount} Woche(n)`;
   };
 
   return (
     <View key={learningUnit.id} style={styles.unitRow}>
-      <View
-        style={[
-          styles.moduleIndicatorM,
-          { backgroundColor: learningUnit.colorCode },
-        ]}
-      />
+      <View style={[styles.moduleIndicatorM, { backgroundColor: learningUnit.colorCode }]} />
       <View style={styles.unitRowTitle}>
         <Subhead>{learningUnit.name}</Subhead>
         <P style={{ textAlign: "left" }}>
@@ -42,19 +34,19 @@ export default function LearningUnitRow(props: learningUnitProps) {
             : computeModuleDetailUnitString(learningUnit)}
         </P>
       </View>
-      <Subhead>
-        {convertMinutesToHours(learningUnit.totalLearningTime)} Std.
-      </Subhead>
-      {onEdit && (
-        <Pressable onPress={onEdit}>
-          <Pencil name="pencil" size={18} color="black" />
-        </Pressable>
-      )}
-      {onDelete && (
-        <Pressable onPress={onDelete}>
-          <Trash2 size={18} name="trash2" color="red" />
-        </Pressable>
-      )}
+      <Subhead>{convertMinutesToHours(learningUnit.totalLearningTime)} Std.</Subhead>
+      <View style={styles.optionWrapper}>
+        {onEdit && (
+          <Pressable onPress={onEdit} style={{ padding: 6 }}>
+            <Pencil name="pencil" size={22} color="black" />
+          </Pressable>
+        )}
+        {onDelete && (
+          <Pressable onPress={onDelete} style={{ padding: 6 }}>
+            <Trash2 size={22} name="trash2" color="red" />
+          </Pressable>
+        )}
+      </View>
     </View>
   );
 }
@@ -76,7 +68,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    gap: 12,
+    gap: 8,
     paddingRight: 8,
+  },
+  optionWrapper: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    alignItems: "center",
   },
 });

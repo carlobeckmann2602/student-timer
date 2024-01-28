@@ -31,9 +31,7 @@ export default function ModulesDetailScreen() {
   const { authAxios } = useAxios();
   const { fetchModules, resetUnitStatus } = useModules();
 
-  const detailModule =
-    modules?.find((module) => module.id.toString() === id) ||
-    ({} as ModuleType);
+  const detailModule = modules?.find((module) => module.id.toString() === id) || ({} as ModuleType);
 
   const onDeleteModule = () => {
     Alert({
@@ -50,9 +48,7 @@ export default function ModulesDetailScreen() {
   const deleteModule = async () => {
     let id = toast.show("Löschen...", { type: "loading" });
     try {
-      await authAxios?.delete(
-        `/students/${authState?.user.id}/modules/${detailModule.id}`
-      );
+      await authAxios?.delete(`/students/${authState?.user.id}/modules/${detailModule.id}`);
       toast.update(id, "Modul erfolgreich gelöscht", { type: "success" });
 
       // Navigate back before fetching, as the modal is still open and would throw an error if displayed module doesn't exist anymore
@@ -109,9 +105,7 @@ export default function ModulesDetailScreen() {
         <ModuleChart
           inputData={detailModule.learningUnits}
           totalAmount={convertMinutesToHours(detailModule.totalModuleTime)}
-          totalAmountDone={convertMinutesToHours(
-            detailModule.totalLearningTime
-          )}
+          totalAmountDone={convertMinutesToHours(detailModule.totalLearningTime)}
           width={200}
           height={200}
         />
@@ -162,9 +156,7 @@ export default function ModulesDetailScreen() {
               darkColor={COLORTHEME.dark.text}
             />
             <Subhead>
-              {`Gesamt: ${convertMinutesToHours(
-                detailModule.totalLearningTime
-              )} Std.`}
+              {`Gesamt: ${convertMinutesToHours(detailModule.totalLearningTime)} Std.`}
             </Subhead>
           </View>
         </View>
@@ -189,10 +181,7 @@ export default function ModulesDetailScreen() {
                 <View key={item.id}>
                   <View style={styles.unitRow}>
                     <View
-                      style={[
-                        styles.moduleIndicatorM,
-                        { backgroundColor: detailModule.colorCode },
-                      ]}
+                      style={[styles.moduleIndicatorM, { backgroundColor: detailModule.colorCode }]}
                     />
                     <View style={styles.unitRowTitle}>
                       <Subhead>
@@ -206,9 +195,7 @@ export default function ModulesDetailScreen() {
                         {item.description}
                       </P>
                     </View>
-                    <Subhead>
-                      {convertMinutesToHours(item.totalDuration)} Std.
-                    </Subhead>
+                    <Subhead>{convertMinutesToHours(item.totalDuration)} Std.</Subhead>
                     <View
                       style={{
                         flexDirection: "row",
@@ -217,24 +204,23 @@ export default function ModulesDetailScreen() {
                       }}
                     >
                       <Subhead>{item.rating}</Subhead>
-                      <StarIcon
-                        color=""
-                        fill={COLORTHEME.light.text}
-                        size={20}
-                      />
+                      <StarIcon color="" fill={COLORTHEME.light.text} size={20} />
                     </View>
-                    <Pressable
-                      onPress={() => {
-                        router.push({
-                          pathname: `/(tabs)/modules/${detailModule.id}/learningSessions/${item.id}/edit`,
-                        } as never);
-                      }}
-                    >
-                      <Pencil name="pencil" size={18} color="black" />
-                    </Pressable>
-                    <Pressable onPress={() => onDeleteTracking(item.id)}>
-                      <Trash2 size={18} name="trash2" color="red" />
-                    </Pressable>
+                    <View style={styles.optionWrapper}>
+                      <Pressable
+                        style={{ padding: 6 }}
+                        onPress={() => {
+                          router.push({
+                            pathname: `/(tabs)/modules/${detailModule.id}/learningSessions/${item.id}/edit`,
+                          } as never);
+                        }}
+                      >
+                        <Pencil name="pencil" size={22} color="black" />
+                      </Pressable>
+                      <Pressable style={{ padding: 6 }} onPress={() => onDeleteTracking(item.id)}>
+                        <Trash2 size={22} name="trash2" color="red" />
+                      </Pressable>
+                    </View>
                   </View>
                 </View>
               );
@@ -284,14 +270,14 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "flex-start",
     flex: 1,
-    padding: 12,
+    padding: 8,
   },
   unitRow: {
     width: "100%",
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    gap: 12,
+    gap: 8,
   },
   moduleIndicatorM: {
     width: 24,
@@ -306,5 +292,10 @@ const styles = StyleSheet.create({
     marginVertical: 12,
     height: 1,
     width: "20%",
+  },
+  optionWrapper: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    alignItems: "center",
   },
 });
