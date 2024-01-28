@@ -7,17 +7,18 @@ import { P } from "../StyledText";
 import { View } from "../Themed";
 import { COLORS, COLORTHEME } from "@/constants/Theme";
 import { ModuleType } from "@/types/ModuleType";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type ModuleFormProps = {
   inputData: ModuleType;
   dateDiabled: boolean;
   onChange: (values: ModuleType, newDateDisabledState?: boolean) => void;
   onValidationError: (errorType: string, errorOccured: boolean) => void;
+  onSaveHandler?: boolean;
 };
 
 export default function ModuleForm(props: ModuleFormProps) {
-  const { inputData, dateDiabled, onChange, onValidationError } = props;
+  const { inputData, dateDiabled, onChange, onValidationError, onSaveHandler } = props;
 
   const selectableColors: string[] = [
     COLORS.moduleColor1,
@@ -37,19 +38,40 @@ export default function ModuleForm(props: ModuleFormProps) {
     onChange({ ...inputData, ...value }, newDateDisabledState);
   };
 
+  useEffect(() => {
+    if (onSaveHandler) {
+      validateModuleName(inputData.name);
+      validateCreditPoints(inputData.creditPoints);
+    }
+  }, [onSaveHandler]);
+
+  const validateModuleName = (value: string) => {
+    if (value.trim().length == 0) {
+      setModuleNameError("Der Modulname ist erforderlich");
+      onValidationError("name", true);
+    } else {
+      setModuleNameError("");
+      onValidationError("name", false);
+    }
+  };
+
+  const validateCreditPoints = (value: number) => {
+    if (!value || value <= 0) {
+      setCreditPointError("Das Feld muss einen Wert größer 0 enthalten");
+      onValidationError("cp", true);
+    } else {
+      setCreditPointError("");
+      onValidationError("cp", false);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.row}>
         <InputField
           label="Name des Moduls"
           onChangeText={(value) => {
-            if (value.trim().length == 0) {
-              setModuleNameError("Der Modulname ist erforderlich");
-              onValidationError("name", true);
-            } else {
-              setModuleNameError("");
-              onValidationError("name", false);
-            }
+            validateModuleName(value);
             handleChange({ name: value.trim() });
           }}
           value={inputData.name}
@@ -59,9 +81,7 @@ export default function ModuleForm(props: ModuleFormProps) {
         />
       </View>
       <View style={styles.dateRowContainer}>
-        <P style={{ color: COLORTHEME.light.primary }}>
-          {"Prüfungsdatum (optional)"}
-        </P>
+        <P style={{ color: COLORTHEME.light.primary }}>{"Prüfungsdatum (optional)"}</P>
         <View style={styles.row}>
           <DateTimePicker
             onChangeDate={(value) => {
@@ -80,32 +100,24 @@ export default function ModuleForm(props: ModuleFormProps) {
           />
         </View>
       </View>
-      <View style={styles.row}>
-        <InputFieldNumeric
-          label="Credit-Points"
-          onChangeText={(value) => {
-            let formattedValue = Math.round(Math.abs(+value));
-
-            if (!formattedValue || formattedValue <= 0) {
-              setCreditPointError(
-                "Das Feld muss einen Wert größer 0 enthalten"
-              );
-              onValidationError("cp", true);
-            } else {
-              setCreditPointError("");
-              onValidationError("cp", false);
-            }
-            handleChange({
-              creditPoints: formattedValue,
-            });
-          }}
-          value={inputData.creditPoints.toString()}
-          message={creditPointError}
-          messageColor={COLORTHEME.light.danger}
-          inputUnit="CP"
-          placeholder="Anzahl Credit-Points"
-        />
-        <View style={{ width: "50%", backgroundColor: "transparent" }} />
+      <View style={{ backgroundColor: "transparent", gap: 5 }}>
+        <View style={styles.row}>
+          <InputFieldNumeric
+            label="Credit-Points"
+            onChangeText={(value) => {
+              let formattedValue = Math.round(Math.abs(+value));
+              validateCreditPoints(formattedValue);
+              handleChange({
+                creditPoints: formattedValue,
+              });
+            }}
+            value={inputData.creditPoints === 0 ? "" : inputData.creditPoints.toString()}
+            inputUnit="CP"
+            placeholder="Anzahl"
+          />
+          <View style={{ width: "50%", backgroundColor: "transparent" }} />
+        </View>
+        {creditPointError && <P style={styles.errorMessage}>{creditPointError}</P>}
       </View>
       <View style={styles.row}>
         <View style={styles.colorWrapper}>
@@ -134,15 +146,11 @@ export default function ModuleForm(props: ModuleFormProps) {
                       styles.colorOptionIndicator,
                       {
                         borderColor:
-                          inputData.colorCode === color
-                            ? COLORTHEME.light.primary
-                            : "transparent",
+                          inputData.colorCode === color ? COLORTHEME.light.primary : "transparent",
                       },
                     ]}
                   />
-                  <View
-                    style={[styles.colorOption, { backgroundColor: color }]}
-                  />
+                  <View style={[styles.colorOption, { backgroundColor: color }]} />
                 </TouchableOpacity>
               );
             }}
@@ -243,5 +251,10 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "flex-start",
     gap: 16,
+  },
+  errorMessage: {
+    color: COLORTHEME.light.danger,
+    fontSize: 12,
+    textAlign: "left",
   },
 });

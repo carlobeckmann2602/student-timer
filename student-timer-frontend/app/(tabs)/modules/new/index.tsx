@@ -9,7 +9,6 @@ import { StyleSheet, View } from "react-native";
 
 export default function NewModule() {
   const router = useRouter();
-  const [openChanges, setOpenChanges] = useState(false);
 
   const [newModule, setNewModule] = useState<ModuleType>({
     id: -1,
@@ -25,10 +24,9 @@ export default function NewModule() {
     totalModuleTime: 0,
   } as ModuleType);
 
+  const [openChanges, setOpenChanges] = useState(false);
   const [dateDisabled, setDateDisabled] = useState(false);
-  const [saveDisabled, setSaveDisabled] = useState<Set<string>>(
-    new Set(["name", "cp"])
-  );
+  const [saveDisabled, setSaveDisabled] = useState<Set<string>>(new Set(["name", "cp"]));
 
   const handleUpdate = (module: ModuleType, disabledStatus?: boolean) => {
     if (module) setNewModule(module);
@@ -49,8 +47,10 @@ export default function NewModule() {
   };
 
   const onContinue = () => {
-    if (openChanges) {
-      handleUpdate({ ...newModule, name: "", creditPoints: 0 });
+    // Toggle openChanges to trigger validation in input fields
+    if (!openChanges) {
+      setOpenChanges(true);
+      return;
     }
 
     if (dateDisabled) {
@@ -82,6 +82,7 @@ export default function NewModule() {
         onChange={handleUpdate}
         dateDiabled={dateDisabled}
         onValidationError={handleValidationError}
+        onSaveHandler={openChanges}
       />
       <View style={styles.buttonRowWrapper}>
         <Button
@@ -94,8 +95,7 @@ export default function NewModule() {
             openChanges
               ? Alert({
                   title: "Eingaben verwerfen?",
-                  message:
-                    "Wenn du fortfährst, gehen alle Eingaben verloren. Bist du dir sicher?",
+                  message: "Wenn du fortfährst, gehen alle Eingaben verloren. Bist du dir sicher?",
                   onPressConfirm: () => router.push("/modules"),
                 })
               : router.push("/modules")
@@ -107,7 +107,7 @@ export default function NewModule() {
           textColor={COLORTHEME.light.grey2}
           style={{ flex: 1 }}
           onPress={onContinue}
-          disabled={saveDisabled.size != 0}
+          disabled={saveDisabled.size != 0 && openChanges}
         />
       </View>
     </View>
