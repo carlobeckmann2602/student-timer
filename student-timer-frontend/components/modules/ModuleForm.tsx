@@ -40,9 +40,9 @@ export default function ModuleForm(props: ModuleFormProps) {
 
   // This effect is only supposed to be triggered when the user clicks on the save button and no inputs were made before
   useEffect(() => {
-    if (onSaveHandler) {
-      if (inputData.name === "") validateModuleName(inputData.name);
-      if (inputData.creditPoints === 0) validateCreditPoints(inputData.creditPoints);
+    if (onSaveHandler && inputData.name === "" && inputData.creditPoints === 0) {
+      validateModuleName(inputData.name);
+      validateCreditPoints(inputData.creditPoints);
     }
   }, [onSaveHandler]);
 
@@ -78,6 +78,7 @@ export default function ModuleForm(props: ModuleFormProps) {
           value={inputData.name}
           message={moduleNameError}
           messageColor={COLORTHEME.light.danger}
+          showErrorBorder={moduleNameError != ""}
           placeholder="Modulname"
         />
       </View>
@@ -115,6 +116,7 @@ export default function ModuleForm(props: ModuleFormProps) {
             value={inputData.creditPoints === 0 ? "" : inputData.creditPoints.toString()}
             inputUnit="CP"
             placeholder="Anzahl"
+            showErrorBorder={creditPointError != ""}
           />
           <View style={{ width: "50%", backgroundColor: "transparent" }} />
         </View>

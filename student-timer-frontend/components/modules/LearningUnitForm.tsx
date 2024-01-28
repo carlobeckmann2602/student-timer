@@ -35,8 +35,7 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
 
     if (
       formattedValue <= 0 &&
-      (inputData.workloadPerWeekMinutes === undefined ||
-        inputData.workloadPerWeekMinutes <= 0)
+      (inputData.workloadPerWeekMinutes === undefined || inputData.workloadPerWeekMinutes <= 0)
     ) {
       handleChange({
         workloadPerWeekHours: 0,
@@ -64,13 +63,11 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
       return;
     }
 
-    let formattedValue =
-      Math.round(Math.abs(+value)) >= 60 ? 59 : Math.round(Math.abs(+value));
+    let formattedValue = Math.round(Math.abs(+value)) >= 60 ? 59 : Math.round(Math.abs(+value));
 
     if (
       formattedValue <= 0 &&
-      (inputData.workloadPerWeekHours === undefined ||
-        inputData.workloadPerWeekHours <= 0)
+      (inputData.workloadPerWeekHours === undefined || inputData.workloadPerWeekHours <= 0)
     ) {
       handleChange({
         workloadPerWeekMinutes: 0,
@@ -124,17 +121,13 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
           <DateTimePicker
             label="Enddatum"
             value={inputData.endDate}
-            onChangeDate={(value) =>
-              handleChange({ endDate: value } as LearningUnitType)
-            }
+            onChangeDate={(value) => handleChange({ endDate: value } as LearningUnitType)}
             minimumDate={inputData.startDate}
           />
         </View>
       </View>
       <View style={styles.workloadRowContainer}>
-        <P style={{ color: COLORTHEME.light.primary }}>
-          {"Arbeitsaufwand pro Woche"}
-        </P>
+        <P style={{ color: COLORTHEME.light.primary }}>{"Arbeitsaufwand pro Woche"}</P>
         <View style={styles.row}>
           <InputFieldNumeric
             onChangeText={(value) => updateWorkloadHours(+value)}
@@ -144,36 +137,26 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
                 : "0"
             }
             inputUnit="Std."
+            showErrorBorder={workloadError}
           />
           <InputFieldNumeric
             onChangeText={(value) => updateWorkloadMinutes(+value)}
             value={
-              inputData.workloadPerWeekMinutes
-                ? inputData.workloadPerWeekMinutes.toString()
-                : "0"
+              inputData.workloadPerWeekMinutes ? inputData.workloadPerWeekMinutes.toString() : "0"
             }
             inputUnit="min."
+            showErrorBorder={workloadError}
           />
         </View>
-        {workloadError && (
-          <P style={styles.errorMessage}>Bitte gebe den Arbeitsaufwand an.</P>
-        )}
+        {workloadError && <P style={styles.errorMessage}>Bitte gebe den Arbeitsaufwand an</P>}
       </View>
       {onDelete && (
         <View
-          style={[
-            styles.row,
-            { justifyContent: "flex-end", paddingTop: 4, paddingBottom: -8 },
-          ]}
+          style={[styles.row, { justifyContent: "flex-end", paddingTop: 4, paddingBottom: -8 }]}
         >
           <View style={{ flex: 1 }} />
-          <Pressable
-            style={styles.options}
-            onPress={() => onDelete(inputData.id)}
-          >
-            <LabelS
-              style={[styles.errorMessage, { textDecorationLine: "underline" }]}
-            >
+          <Pressable style={styles.options} onPress={() => onDelete(inputData.id)}>
+            <LabelS style={[styles.errorMessage, { textDecorationLine: "underline" }]}>
               Lerneinheit entfernen
             </LabelS>
             <Trash2 size={14} color={COLORTHEME.light.danger} />
