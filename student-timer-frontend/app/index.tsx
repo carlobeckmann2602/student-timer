@@ -8,14 +8,13 @@ export default function Home() {
   const { authState } = useAuth();
   const router = useRouter();
 
-  const [onboardingDone, setOnboardingDone] = useState(false);
-
   useEffect(() => {
     const loadOnboarding = async () => {
       const onboardingDoneString = await getStoredItem("onboarding");
-      if (onboardingDoneString)
-        setOnboardingDone(JSON.parse(onboardingDoneString));
-      if (onboardingDone) router.push("/(auth)/login");
+      console.log(JSON.stringify(onboardingDoneString));
+      if (JSON.stringify(onboardingDoneString)) {
+        router.push("/(auth)/login");
+      }
     };
     loadOnboarding();
   }, []);

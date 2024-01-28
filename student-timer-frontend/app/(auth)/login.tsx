@@ -58,27 +58,29 @@ export default function Login() {
     <View style={styles.container}>
       <Title>Student Time Tracker</Title>
       <View style={styles.inputs}>
-        <InputField
-          value={email}
-          onChangeText={setEmail}
-          placeholder="E-Mail"
-          label="E-Mail"
-          keyboardType="email-address"
-          message={emailError}
-          messageColor="red"
-          style={{ width: "100%" }}
-        />
-        <InputField
-          value={password}
-          onChangeText={setPassword}
-          placeholder="Passwort"
-          label="Passwort"
-          keyboardType="default"
-          secureTextEntry={true}
-          message={passwordError}
-          messageColor="red"
-          style={{ width: "100%" }}
-        />
+        <View style={styles.row}>
+          <InputField
+            label="E-Mail"
+            onChangeText={setEmail}
+            value={email}
+            placeholder="E-Mail"
+            keyboardType="email-address"
+            message={emailError}
+            messageColor="red"
+          />
+        </View>
+        <View style={styles.row}>
+          <InputField
+            value={password}
+            onChangeText={setPassword}
+            placeholder="Passwort"
+            label="Passwort"
+            keyboardType="default"
+            secureTextEntry={true}
+            message={passwordError}
+            messageColor="red"
+          />
+        </View>
       </View>
       <View style={styles.buttons}>
         <View style={styles.buttonText}>
@@ -87,14 +89,18 @@ export default function Login() {
             backgroundColor={COLORTHEME.light.primary}
             textColor={COLORTHEME.light.grey2}
             onPress={login}
-            style={{ width: 200 }}
+            style={{ width: 250 }}
           />
 
           {error && <Text style={styles.errorMessage}>{error}</Text>}
 
           <Text>
             Du hast kein Konto?{" "}
-            <Link href="/signup" style={{ textDecorationLine: "underline" }}>
+            <Link
+              href="/signup"
+              style={{ textDecorationLine: "underline" }}
+              replace
+            >
               Account erstellen
             </Link>
           </Text>
@@ -131,5 +137,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: "center",
     width: "100%",
+  },
+  row: {
+    flexGrow: 1,
+    flexDirection: "row",
+    backgroundColor: "transparent",
   },
 });

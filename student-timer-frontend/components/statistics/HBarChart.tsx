@@ -33,8 +33,12 @@ export default function HBarChart({ title, xTotal, bars }: HBarChartProps) {
           y="value"
           x="name"
           labels={({ datum }) => [
-            Number(datum.value.toFixed(1)) + (datum.average && " Ø"),
-            datum.unit,
+            datum.value > 0
+              ? `${Number(datum.value.toFixed(1))}${
+                  /* datum.average ? " Ø" : "" */ " Ø" //uncomment if more statistics without average values are created
+                }`
+              : "Keine Werte",
+            datum.value > 0 ? datum.unit : "",
           ]}
           labelComponent={
             <VictoryLabel
@@ -50,9 +54,9 @@ export default function HBarChart({ title, xTotal, bars }: HBarChartProps) {
                   fill: ({ datum }) => datum.color || COLORTHEME.light.primary,
                 },
               ]}
-              dy={5}
-              dx={45}
-              textAnchor="middle"
+              dy={({ datum }) => (datum.value > 0 ? 10 : 15)}
+              dx={({ datum }) => (datum.value > 0 ? 45 : 0)}
+              textAnchor={({ datum }) => (datum.value > 0 ? "middle" : "start")}
             />
           }
           height={bars.length * 75}

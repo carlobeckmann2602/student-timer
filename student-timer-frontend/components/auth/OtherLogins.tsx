@@ -17,7 +17,7 @@ export default function OtherLogins() {
 const styles = StyleSheet.create({
   buttons: {
     flexDirection: "column",
-    width: 200,
+    width: 250,
     gap: 5,
   },
 });

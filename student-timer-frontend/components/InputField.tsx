@@ -21,15 +21,22 @@ export type InputFieldProps = {
   messageColor?: string;
   style?: ViewStyle;
   inputUnit?: string;
+  showErrorBorder?: boolean;
 };
 
 export default function InputField(props: InputFieldProps & TextInputProps) {
-  const { label, style, inputUnit, message, messageColor } = props;
+  const { label, style, inputUnit, message, messageColor, showErrorBorder } =
+    props;
   return (
     <View style={[styles.inputLabelGroup, style]}>
       {label && <Text style={styles.inputLabelText}>{label}</Text>}
-      <View style={styles.inputUnitContainer}>
-        <View style={styles.inputContainer}>
+      <View
+        style={[
+          styles.inputUnitContainer,
+          { borderColor: showErrorBorder ? "red" : "transparent" },
+        ]}
+      >
+        <View style={[styles.inputContainer]}>
           <TextInput {...props} style={styles.input} />
         </View>
         {inputUnit && <Text style={styles.unit}>{inputUnit}</Text>}
@@ -63,6 +70,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     height: 40,
     paddingHorizontal: 10,
+    borderWidth: 1,
   },
   inputContainer: {
     flex: 1,

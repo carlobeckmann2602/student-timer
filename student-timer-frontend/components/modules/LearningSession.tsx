@@ -13,7 +13,6 @@ import { useAxios } from "@/context/AxiosContext";
 import { useModules } from "@/context/ModuleContext";
 import { msToTimeObject, timeObjectToMinutes, formatTimeLearningSession } from "@/libs/timeHelper";
 import StarRating from "@/components/StarRating";
-import { debounce, roundNumber, validateNumber } from "@/libs/generalHelper";
 import InputFieldNumeric from "../InputFieldNumeric";
 
 export default function LearningSession(props: { isEdit: boolean }) {
@@ -48,30 +47,65 @@ export default function LearningSession(props: { isEdit: boolean }) {
     )
   );
   const [changesMade, setChangesMade] = useState(false);
-  const [debounceWaiting, setDebounceWaiting] = useState(false);
-  const debounceDuration = React.useCallback(
-    debounce(
-      (
-        setState: React.Dispatch<
-          React.SetStateAction<{
-            hours: number | string;
-            mins: number | string;
-          }>
-        >,
-        val: string,
-        isHours: boolean
-      ) => {
-        const number = validateNumber(val, isHours ? 0 : 1);
-        setState((prevState) => ({
-          ...prevState,
-          [isHours ? "hours" : "mins"]: isHours ? number : number >= 60 ? 59 : number,
-        }));
-        setDebounceWaiting(false);
+  const [validInputs, setValidInputs] = useState({
+    focusDuration: {
+      hours: true,
+      mins: true,
+    },
+    pauseDuration: {
+      hours: true,
+      mins: true,
+    },
+  });
+
+  const validateInput = (
+    val: string,
+    currentState: {
+      hours: number | string;
+      mins: number | string;
+    },
+    setState: React.Dispatch<
+      React.SetStateAction<{
+        hours: number | string;
+        mins: number | string;
+      }>
+    >,
+    key: keyof typeof validInputs,
+    isHours: boolean
+  ) => {
+    let timeKey: "hours" | "mins" = isHours ? "hours" : "mins";
+    let reverseTimeKey: "hours" | "mins" = isHours ? "mins" : "hours";
+    setState((prevState) => ({
+      ...prevState,
+      [timeKey]: val,
+    }));
+    let otherVal = currentState[reverseTimeKey];
+    let valid = false;
+    let hoursMinsBothNotNull = true;
+    let number: number;
+    if (val !== "" && !val.includes(".")) {
+      number = Number(val);
+      hoursMinsBothNotNull =
+        number > 0 ||
+        isNaN(number) ||
+        otherVal === "" ||
+        Number(otherVal) > 0 ||
+        isNaN(Number(otherVal));
+      valid = Math.sign(number) >= 0 && (isHours ? true : number < 60) && hoursMinsBothNotNull;
+    }
+
+    setValidInputs((prevState) => ({
+      ...prevState,
+      [key]: {
+        ...prevState[key],
+        [timeKey]: valid,
+        [reverseTimeKey]:
+          valid || otherVal === "" || isNaN(Number(otherVal))
+            ? prevState[key][reverseTimeKey]
+            : hoursMinsBothNotNull,
       },
-      1000
-    ),
-    []
-  );
+    }));
+  };
 
   return (
     <KeyboardAvoidingView
@@ -105,31 +139,21 @@ export default function LearningSession(props: { isEdit: boolean }) {
                 style={styles.input}
                 value={focusDuration.hours.toString()}
                 onChangeText={(val) => {
-                  setFocusDuration((prevState) => ({
-                    ...prevState,
-                    hours: val,
-                  }));
-                  setChangesMade(true);
-                  setDebounceWaiting(true);
-                  debounceDuration(setFocusDuration, val, true);
+                  validateInput(val, focusDuration, setFocusDuration, "focusDuration", true);
                 }}
                 inputUnit="Std."
                 selectTextOnFocus
+                showErrorBorder={!validInputs.focusDuration.hours}
               />
               <InputFieldNumeric
                 style={styles.input}
                 value={focusDuration.mins.toString()}
                 onChangeText={(val) => {
-                  setFocusDuration((prevState) => ({
-                    ...prevState,
-                    mins: val,
-                  }));
-                  setChangesMade(true);
-                  setDebounceWaiting(true);
-                  debounceDuration(setFocusDuration, val, false);
+                  validateInput(val, focusDuration, setFocusDuration, "focusDuration", false);
                 }}
                 inputUnit="min."
                 selectTextOnFocus
+                showErrorBorder={!validInputs.focusDuration.mins}
               />
             </View>
           ) : (
@@ -146,31 +170,21 @@ export default function LearningSession(props: { isEdit: boolean }) {
                 style={styles.input}
                 value={pauseDuration.hours.toString()}
                 onChangeText={(val) => {
-                  setPauseDuration((prevState) => ({
-                    ...prevState,
-                    hours: val,
-                  }));
-                  setChangesMade(true);
-                  setDebounceWaiting(true);
-                  debounceDuration(setPauseDuration, val, true);
+                  validateInput(val, pauseDuration, setPauseDuration, "pauseDuration", true);
                 }}
                 inputUnit="Std."
                 selectTextOnFocus
+                showErrorBorder={!validInputs.pauseDuration.hours}
               />
               <InputFieldNumeric
                 style={styles.input}
                 value={pauseDuration.mins.toString()}
                 onChangeText={(val) => {
-                  setPauseDuration((prevState) => ({
-                    ...prevState,
-                    mins: val,
-                  }));
-                  setChangesMade(true);
-                  setDebounceWaiting(true);
-                  debounceDuration(setPauseDuration, val, false);
+                  validateInput(val, pauseDuration, setPauseDuration, "pauseDuration", false);
                 }}
                 inputUnit="min."
                 selectTextOnFocus
+                showErrorBorder={!validInputs.pauseDuration.mins}
               />
             </View>
           ) : (
@@ -230,7 +244,13 @@ export default function LearningSession(props: { isEdit: boolean }) {
           text={isEdit ? "Speichern" : "Abschließen"}
           backgroundColor={module?.colorCode || ""}
           textColor="#FFFFFF"
-          disabled={isEdit ? debounceWaiting : false}
+          disabled={
+            isEdit
+              ? Object.values(validInputs.focusDuration)
+                  .concat(Object.values(validInputs.pauseDuration))
+                  .includes(false)
+              : false
+          }
           onPress={async () => {
             let id = toast.show("Speichern...", { type: "loading" });
             let body = {
