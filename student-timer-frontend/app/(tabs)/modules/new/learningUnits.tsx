@@ -1,7 +1,7 @@
 import Button from "@/components/Button";
 import { LearningUnitForm } from "@/components/modules/LearningUnitForm";
 import { LearningUnitEnum } from "@/constants/LearningUnitEnum";
-import { BASE_STYLES, COLORTHEME } from "@/constants/Theme";
+import { BASE_STYLES, COLORS, COLORTHEME, SIZES } from "@/constants/Theme";
 import { useAuth } from "@/context/AuthContext";
 import { useAxios } from "@/context/AxiosContext";
 import { useModules } from "@/context/ModuleContext";
@@ -10,12 +10,7 @@ import { ModuleType } from "@/types/ModuleType";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Plus } from "lucide-react-native";
 import { useState } from "react";
-import {
-  FlatList,
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-} from "react-native";
+import { FlatList, KeyboardAvoidingView, Platform, StyleSheet } from "react-native";
 import { useToast } from "react-native-toast-notifications";
 
 export default function NewModuleLearningUnits() {
@@ -80,6 +75,7 @@ export default function NewModuleLearningUnits() {
         workloadPerWeek: 60,
         startDate: new Date(),
         endDate: new Date(),
+        colorCode: COLORS.VORLESUNG,
         totalLearningTime: 0,
         workloadPerWeekHours: 60,
         workloadPerWeekMinutes: 0,
@@ -108,18 +104,11 @@ export default function NewModuleLearningUnits() {
         };
       }
 
-      response = await authAxios?.post(
-        `/students/${authState?.user.id}/modules`,
-        moduleDTO
-      );
+      response = await authAxios?.post(`/students/${authState?.user.id}/modules`, moduleDTO);
       const createdModule: ModuleType | undefined = response?.data;
       learningUnits.forEach(async (unit: LearningUnitType) => {
-        let totalWorkloadPerWeek = unit.workloadPerWeekHours
-          ? unit.workloadPerWeekHours
-          : 0;
-        totalWorkloadPerWeek += unit.workloadPerWeekMinutes
-          ? unit.workloadPerWeekMinutes
-          : 0;
+        let totalWorkloadPerWeek = unit.workloadPerWeekHours ? unit.workloadPerWeekHours : 0;
+        totalWorkloadPerWeek += unit.workloadPerWeekMinutes ? unit.workloadPerWeekMinutes : 0;
 
         await authAxios?.post(
           `/students/${authState?.user.id}/modules/${createdModule?.id}/learningUnits`,
@@ -153,13 +142,9 @@ export default function NewModuleLearningUnits() {
           <LearningUnitForm
             key={index}
             inputData={item}
-            onDelete={
-              learningUnits.length > 1 ? onDeleteLearningUnit : undefined
-            }
+            onDelete={learningUnits.length > 1 ? onDeleteLearningUnit : undefined}
             onChange={(inputData) => handleUpdate(inputData, index)}
-            onValidationError={(errorOccured) =>
-              handleValidationError(item.id, errorOccured)
-            }
+            onValidationError={(errorOccured) => handleValidationError(item.id, errorOccured)}
           />
         )}
         keyExtractor={(item: LearningUnitType) => item.id.toString()}
@@ -173,6 +158,7 @@ export default function NewModuleLearningUnits() {
             textColor={COLORTHEME.light.primary}
             onPress={onAddLearningUnit}
             iconRight={<Plus color={COLORTHEME.light.primary} />}
+            textStyle={{ fontSize: SIZES.xsmall }}
             style={{ width: "50%", alignSelf: "flex-end" }}
           />
         }

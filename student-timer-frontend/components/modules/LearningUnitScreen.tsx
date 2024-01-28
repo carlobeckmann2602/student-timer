@@ -29,13 +29,13 @@ export default function LearningUnitSreen(props: LearningUnitScreenProps) {
   const [unitData, setUnitData] = useState<LearningUnitType>({
     id: +learningUnitId,
     name: LearningUnitEnum.VORLESUNG,
-    workloadPerWeek: 1,
+    workloadPerWeek: 60,
     startDate: new Date(),
     endDate: new Date(),
     totalLearningTime: 0,
     colorCode: COLORS.VORLESUNG,
-    workloadPerWeekMinutes: 1,
-    workloadPerWeekHours: 0,
+    workloadPerWeekHours: 60,
+    workloadPerWeekMinutes: 0,
   } as LearningUnitType);
 
   useEffect(() => {

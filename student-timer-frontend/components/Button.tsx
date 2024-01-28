@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import { Pressable, StyleProp, StyleSheet, ViewStyle } from "react-native";
+import { Pressable, StyleProp, StyleSheet, TextProps, ViewStyle } from "react-native";
 
 import { Text, View } from "./Themed";
 import { COLORTHEME } from "@/constants/Theme";
@@ -14,6 +14,7 @@ type Props = {
   iconLeft?: ReactNode;
   style?: StyleProp<ViewStyle>;
   disabled?: boolean;
+  textStyle?: TextProps["style"];
 };
 
 export type ButtonProps = Props;
@@ -29,6 +30,7 @@ export default function Button(props: ButtonProps) {
     iconLeft,
     style,
     disabled,
+    textStyle,
   } = props;
   const accessibilityLabel = `${text} Button`;
   return (
@@ -38,9 +40,7 @@ export default function Button(props: ButtonProps) {
           backgroundColor: backgroundColor,
           opacity: disabled ? 0.6 : 1,
         },
-        borderColor
-          ? { borderColor: borderColor, borderStyle: "solid", borderWidth: 3 }
-          : null,
+        borderColor ? { borderColor: borderColor, borderStyle: "solid", borderWidth: 3 } : null,
         styles.button,
         style,
       ]}
@@ -50,7 +50,7 @@ export default function Button(props: ButtonProps) {
       role="button"
     >
       {iconLeft ? <View style={styles.icon}>{iconLeft}</View> : null}
-      <Text style={[{ color: textColor }, styles.buttonText]}>{text}</Text>
+      <Text style={[{ color: textColor }, styles.buttonText, textStyle]}>{text}</Text>
       {iconRight ? <View style={styles.icon}>{iconRight}</View> : null}
     </Pressable>
   );

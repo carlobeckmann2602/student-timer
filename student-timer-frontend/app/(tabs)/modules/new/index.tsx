@@ -125,6 +125,5 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     width: "100%",
     gap: 16,
-    marginBottom: BASE_STYLES.horizontalPadding,
   },
 });
