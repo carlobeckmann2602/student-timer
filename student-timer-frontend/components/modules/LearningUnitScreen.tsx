@@ -116,8 +116,10 @@ export default function LearningUnitSreen(props: LearningUnitScreenProps) {
           onPress={() =>
             openChanges
               ? Alert({
-                  title: "Eingaben verwerfen?",
-                  message: "Wenn du fortfährst, gehen alle Eingaben verloren. Bist du dir sicher?",
+                  title: isEdit ? "Änderungen verwerfen?" : "Eingaben verwerfen?",
+                  message: isEdit
+                    ? "Wenn du fortfährst, gehen alle Änderungen verloren. Bist du dir sicher?"
+                    : "Wenn du fortfährst, gehen alle Eingaben verloren. Bist du dir sicher?",
                   onPressConfirm: () => router.back(),
                 })
               : router.back()

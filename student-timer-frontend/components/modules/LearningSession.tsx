@@ -11,11 +11,7 @@ import { BASE_STYLES, COLORS, COLORTHEME } from "@/constants/Theme";
 import { useAuth } from "@/context/AuthContext";
 import { useAxios } from "@/context/AxiosContext";
 import { useModules } from "@/context/ModuleContext";
-import {
-  msToTimeObject,
-  timeObjectToMinutes,
-  formatTimeLearningSession,
-} from "@/libs/timeHelper";
+import { msToTimeObject, timeObjectToMinutes, formatTimeLearningSession } from "@/libs/timeHelper";
 import StarRating from "@/components/StarRating";
 import { debounce, roundNumber, validateNumber } from "@/libs/generalHelper";
 import InputFieldNumeric from "../InputFieldNumeric";
@@ -38,9 +34,7 @@ export default function LearningSession(props: { isEdit: boolean }) {
     (session) => session.id === Number(learningSessionId)
   );
   const [starAmount, setStarAmount] = useState(learningSession?.rating || 1);
-  const [description, setDescription] = useState(
-    learningSession?.description || ""
-  );
+  const [description, setDescription] = useState(learningSession?.description || "");
   const [focusDuration, setFocusDuration] = useState<{
     hours: number | string;
     mins: number | string;
@@ -50,9 +44,7 @@ export default function LearningSession(props: { isEdit: boolean }) {
     mins: number | string;
   }>(
     msToTimeObject(
-      ((learningSession?.totalDuration || 0) -
-        (learningSession?.focusDuration || 0)) *
-        (1000 * 60)
+      ((learningSession?.totalDuration || 0) - (learningSession?.focusDuration || 0)) * (1000 * 60)
     )
   );
   const [changesMade, setChangesMade] = useState(false);
@@ -72,11 +64,7 @@ export default function LearningSession(props: { isEdit: boolean }) {
         const number = validateNumber(val, isHours ? 0 : 1);
         setState((prevState) => ({
           ...prevState,
-          [isHours ? "hours" : "mins"]: isHours
-            ? number
-            : number >= 60
-            ? 59
-            : number,
+          [isHours ? "hours" : "mins"]: isHours ? number : number >= 60 ? 59 : number,
         }));
         setDebounceWaiting(false);
       },
@@ -196,10 +184,7 @@ export default function LearningSession(props: { isEdit: boolean }) {
         <Text style={styles.moduleLabel}>Modul</Text>
         <View style={styles.colorContainer}>
           <View
-            style={[
-              styles.colorCircle,
-              { backgroundColor: module?.colorCode || "transparent" },
-            ]}
+            style={[styles.colorCircle, { backgroundColor: module?.colorCode || "transparent" }]}
           />
           <Text>{module?.name}</Text>
         </View>
@@ -227,8 +212,7 @@ export default function LearningSession(props: { isEdit: boolean }) {
             onPress={() => {
               Alert({
                 title: "Tracking verwerfen?",
-                message:
-                  "Wenn du fortfährst, wird das Tracking gelöscht. Bist du dir sicher?",
+                message: "Wenn du fortfährst, wird das Tracking gelöscht. Bist du dir sicher?",
                 onPressConfirm: () =>
                   router.push({
                     pathname: "/(tabs)/(tracking)/",
@@ -236,8 +220,6 @@ export default function LearningSession(props: { isEdit: boolean }) {
                       discard: 1,
                     },
                   }),
-                cancelText: "Abbrechen",
-                confirmText: "Ja",
               });
             }}
           >
@@ -311,8 +293,7 @@ export default function LearningSession(props: { isEdit: boolean }) {
                     title: "Änderungen verwerfen?",
                     message:
                       "Wenn du fortfährst, gehen alle Änderungen ungespeichert verloren. Bist du dir sicher?",
-                    onPressConfirm: () =>
-                      router.push(`/(tabs)/modules/${module?.id}/`),
+                    onPressConfirm: () => router.push(`/(tabs)/modules/${module?.id}/`),
                   })
                 : router.push(`/(tabs)/modules/${module?.id}/`);
             } else {
