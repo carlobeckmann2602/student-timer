@@ -38,10 +38,11 @@ export default function ModuleForm(props: ModuleFormProps) {
     onChange({ ...inputData, ...value }, newDateDisabledState);
   };
 
+  // This effect is only supposed to be triggered when the user clicks on the save button and no inputs were made before
   useEffect(() => {
     if (onSaveHandler) {
-      validateModuleName(inputData.name);
-      validateCreditPoints(inputData.creditPoints);
+      if (inputData.name === "") validateModuleName(inputData.name);
+      if (inputData.creditPoints === 0) validateCreditPoints(inputData.creditPoints);
     }
   }, [onSaveHandler]);
 
