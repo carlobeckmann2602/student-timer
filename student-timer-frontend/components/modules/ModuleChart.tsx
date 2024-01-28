@@ -4,7 +4,6 @@ import { SIZES } from "@/constants/Theme";
 import { LearningUnitType } from "@/types/LearningUnitType";
 import { useEffect, useState } from "react";
 import { LearningUnitEnum } from "@/constants/LearningUnitEnum";
-import { useFocusEffect } from "expo-router";
 
 type ModuleChartProps = {
   inputData: LearningUnitType[];

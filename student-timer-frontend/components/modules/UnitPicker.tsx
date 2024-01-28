@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { Platform, StyleSheet } from "react-native";
 import Picker, { Item } from "react-native-picker-select";
-
 import { ObjectKey } from "@/context/ModuleContext";
 import { COLORS, COLORTHEME } from "@/constants/Theme";
 import { View, Text } from "@/components/Themed";
