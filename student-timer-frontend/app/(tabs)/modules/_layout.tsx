@@ -93,6 +93,7 @@ export default function ModulesLayout() {
         name="index"
         options={{
           title: "Modulübersicht",
+          headerTitleAlign: "center",
         }}
       />
       <Stack.Screen
@@ -103,8 +104,20 @@ export default function ModulesLayout() {
           animation: "default",
         }}
       />
-      <Stack.Screen name="[id]/edit" options={{ title: "Modul bearbeiten" }} />
-      <Stack.Screen name="[id]/learningUnits/new" options={{ title: "Lerneinheit hinzufügen" }} />
+      <Stack.Screen
+          name="[id]/edit"
+          options={{
+              title: "Modul bearbeiten",
+              headerTitleAlign: "center",
+          }}
+      />
+      <Stack.Screen
+          name="[id]/learningUnits/new"
+          options={{
+            title: "Lerneinheit hinzufügen",
+            headerTitleAlign: "center",
+          }}
+      />
       <Stack.Screen
         name="[id]/learningSessions/[learningSessionId]/edit"
         options={{
@@ -113,12 +126,25 @@ export default function ModulesLayout() {
           animation: "default",
         }}
       />
-      <Stack.Screen name="new/index" options={{ title: "Neues Modul anlegen" }} />
-      <Stack.Screen name="new/learningUnits" options={{ title: "Lerneinheiten hinzufügen" }} />
+      <Stack.Screen
+        name="new/index"
+        options={{
+          title: "Neues Modul anlegen",
+          headerTitleAlign: "center",
+        }}
+      />
+      <Stack.Screen
+          name="new/learningUnits"
+          options={{
+            title: "Lerneinheiten hinzufügen",
+            headerTitleAlign: "center",
+          }}
+      />
       <Stack.Screen
         name="[id]/learningUnits/[learningUnitId]/edit"
         options={{
           title: "Lerneinheit bearbeiten",
+          headerTitleAlign: "center",
         }}
       />
     </Stack>

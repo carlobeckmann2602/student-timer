@@ -101,6 +101,7 @@ function RootLayoutNav() {
                           fontSize: SIZES.xLarge,
                           fontWeight: "500",
                         },
+                        headerTitleAlign: "center",
                         headerBackTitleVisible: false,
                         headerBackVisible: false,
                         contentStyle: {
@@ -117,6 +118,7 @@ function RootLayoutNav() {
                           fontSize: SIZES.xLarge,
                           fontWeight: "500",
                         },
+                        headerTitleAlign: "center",
                         headerBackTitleVisible: false,
                         contentStyle: {
                           paddingHorizontal: BASE_STYLES.horizontalPadding,
@@ -132,6 +134,7 @@ function RootLayoutNav() {
                           fontSize: SIZES.xLarge,
                           fontWeight: "500",
                         },
+                        headerTitleAlign: "center",
                         headerBackVisible: false,
                         contentStyle: {
                           paddingHorizontal: BASE_STYLES.horizontalPadding,
