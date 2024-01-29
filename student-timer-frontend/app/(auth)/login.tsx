@@ -47,6 +47,7 @@ export default function Login() {
       const result = await onLogin!(email, password);
       if (result && result.error) {
         setError(result.msg);
+        toast.update(id, "Login fehlgeschlagen. Bitte korrigiere Passwort und/oder E-Mail-Adresse.", { type: "danger" });
       } else {
         toast.update(id, "Login erfolgreich", { type: "success" });
         router.push("/(tabs)/(tracking)");
@@ -91,9 +92,6 @@ export default function Login() {
             onPress={login}
             style={{ width: 250 }}
           />
-
-          {error && <Text style={styles.errorMessage}>{error}</Text>}
-
           <Text>
             Du hast kein Konto?{" "}
             <Link
