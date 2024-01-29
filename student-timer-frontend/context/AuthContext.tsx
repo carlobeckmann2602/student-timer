@@ -228,6 +228,7 @@ export const AuthProvider = ({ children }: any) => {
         {
           name: userName,
           studyCourse: userStudyCourse,
+          profilePicture: authState.user.profilePicture,
           email: userEmail,
         },
         {
@@ -266,6 +267,7 @@ export const AuthProvider = ({ children }: any) => {
           name: authState.user.name,
           studyCourse: authState.user.studyCourse,
           email: authState.user.email,
+          profilePicture: authState.user.profilePicture,
           password: newPassword,
           password2: newPassword2,
         },
