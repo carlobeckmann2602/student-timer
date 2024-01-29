@@ -11,14 +11,18 @@ import {
 type ProfilePictureProps = {
   imageName: string;
   editStyle?: boolean;
+  miniature?: boolean;
   style?: object;
   onPress?: () => void;
+  color?: string;
 };
 
 export default function ProfilePicture({
   imageName,
   editStyle = false,
+  miniature = false,
   onPress,
+  color = COLORTHEME.light.primary,
 }: ProfilePictureProps) {
   const imagePath =
     profileImages[imageName] || profileImages[defaultPictureName];
@@ -26,10 +30,14 @@ export default function ProfilePicture({
     ? "Profilbild ändern"
     : "Aktuelles Profilbild";
   const accessibilityRole = onPress ? "button" : "image";
-  const imageWidth = 120;
+
+  const imageWidth = miniature ? 24 : 120;
 
   return (
-    <View style={styles.profileImageContainer}>
+    <View style={[
+        styles.profileImageContainer,
+        { width: imageWidth, height: imageWidth, borderRadius: imageWidth / 2 },
+    ]}>
       <Pressable
         onPress={onPress}
         accessibilityLabel={accessibilityLabel}
@@ -38,7 +46,7 @@ export default function ProfilePicture({
         {imagePath ? (
           <Image
             source={imagePath}
-            style={styles.profileImage}
+            style={{ width: imageWidth, height: imageWidth, borderRadius: imageWidth / 2, borderWidth: imageWidth/24, borderColor: color }}
             accessibilityLabel={"Aktuelles Profilbild"}
           />
         ) : (
@@ -54,22 +62,11 @@ export default function ProfilePicture({
   );
 }
 
-const imageWidth = 120;
 const styles = StyleSheet.create({
   profileImageContainer: {
-    width: imageWidth,
-    height: imageWidth,
-    borderRadius: imageWidth / 2,
     backgroundColor: "#EEEAEA",
     justifyContent: "center",
     alignItems: "center",
-  },
-  profileImage: {
-    width: imageWidth,
-    height: imageWidth,
-    borderRadius: imageWidth / 2,
-    borderColor: COLORTHEME.light.primary,
-    borderWidth: 5,
   },
   editIcon: {
     position: "absolute",
