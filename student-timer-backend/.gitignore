@@ -33,5 +33,5 @@ build/
 .vscode/
 
 ### Environment Variables ###
-.env
+.env_production
 !.env.example

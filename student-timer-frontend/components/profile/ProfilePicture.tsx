@@ -31,7 +31,7 @@ export default function ProfilePicture({
     : "Aktuelles Profilbild";
   const accessibilityRole = onPress ? "button" : "image";
 
-  const imageWidth = miniature ? 24 : 120;
+  const imageWidth = miniature ? 30 : 120;
 
   return (
     <View style={[

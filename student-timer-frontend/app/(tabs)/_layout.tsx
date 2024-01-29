@@ -15,6 +15,7 @@ import ProfilePicture from "@/components/profile/ProfilePicture";
 import {useProfilePicture} from "@/components/profile/useProfilePicture";
 import {useEffect} from "react";
 import {useAuth} from "@/context/AuthContext";
+import {View} from "@/components/Themed";
 
 export default function TabLayout() {
     // const colorScheme = useColorScheme();
@@ -26,6 +27,9 @@ export default function TabLayout() {
     useEffect(() => {
         setProfilePictureName(getProfilePictureName());
     }, [authState]);
+
+    const pathname = usePathname();
+
 
     return (
         <Tabs
@@ -49,8 +53,30 @@ export default function TabLayout() {
                             ? 15
                             : 5,
                 },
+                headerRight: () => {
+                    console.log(pathname)
+                    switch (pathname) {
+                        case "/":
+                        case "/modules":
+                        case "/statistics":
+                            return (
+                                <View
+                                    style={{
+                                        marginRight: BASE_STYLES.horizontalPadding,
+                                    }}
+                                >
+                                    <ProfilePicture
+                                        imageName={profilePictureName}
+                                        miniature={true}
+                                        onPress={() => router.push("/profile")}
+                                    />
+                                </View>
+                            );
+                        default:
+                            return null;
+                    }
+                },
                 headerLeft: () => {
-                    const pathname = usePathname();
                     switch (pathname) {
                         case "/profile/editData":
                         case "/profile/editPassword":
@@ -87,7 +113,6 @@ export default function TabLayout() {
             <Tabs.Screen
                 name="modules"
                 options={{
-                    headerShown: false,
                     href: "/modules",
                     title: "Module",
                     tabBarIcon: ({ color }) => <LayoutList name="module" color={color} />,
@@ -100,14 +125,6 @@ export default function TabLayout() {
                     tabBarIcon: ({ color }) => (
                         <BarChart2 name="statistic" color={color} />
                     ),
-                }}
-            />
-            <Tabs.Screen
-                name="profile"
-                options={{
-                    title: "Profil",
-                    href: "/profile",
-                    tabBarIcon: ({ color }) => <ProfilePicture imageName={profilePictureName} miniature={true} color={color} onPress={() => router.push("/profile") }/>,
                 }}
             />
         </Tabs>

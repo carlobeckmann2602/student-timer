@@ -92,8 +92,7 @@ export default function ModulesLayout() {
       <Stack.Screen
         name="index"
         options={{
-          title: "Modulübersicht",
-          headerTitleAlign: "center",
+            headerShown: false,
         }}
       />
       <Stack.Screen
