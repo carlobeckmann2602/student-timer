@@ -24,6 +24,11 @@ export const onboardingData = [
     {
         title: 'Vergleich',
         description: 'Vergleiche die Arbeitszeit für deine Module.',
+        image: require('@/assets/images/onboarding/student_timer_statistik_vergleich_clipped.png'),
+    },
+    {
+        title: 'Start',
+        description: 'Einfach registrieren, lernen und Tracking starten.',
         image: require('@/assets/images/onboarding/tracking_vergleich.png'),
     },
 ];
