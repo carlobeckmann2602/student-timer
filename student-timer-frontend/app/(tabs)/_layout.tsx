@@ -127,6 +127,13 @@ export default function TabLayout() {
                     ),
                 }}
             />
+            <Tabs.Screen
+                name="profile"
+                options={{
+                    title: "Profil",
+                    tabBarButton: () => null
+                }}
+            />
         </Tabs>
     );
 }
