@@ -93,13 +93,17 @@ function RootLayoutNav() {
                         header: () => <></>,
                       }}
                     />
-                      <Stack.Screen
-                          name="profile"
-                          options={{
-                              title: "Profil",
-
-                          }}
-                      />
+                    <Stack.Screen
+                      name="profile"
+                      options={{
+                          headerTitle: "Profil",
+                          headerTitleStyle: {
+                              fontSize: SIZES.xLarge,
+                              fontWeight: "500",
+                          },
+                          headerTitleAlign: "center"
+                        }}
+                    />
                     <Stack.Screen
                       name="(auth)/login"
                       options={{
