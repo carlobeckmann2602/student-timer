@@ -15,6 +15,7 @@ export default function PasswordInput(props: {
   buttonAction: (value: string) => void;
   disabled?: boolean;
   cancelAction: (value: string) => void;
+  showErrorBorder?: boolean;
 }) {
   const {
     title,
@@ -42,6 +43,7 @@ export default function PasswordInput(props: {
               keyboardType="default"
               secureTextEntry={true}
               message={passwordError}
+              showErrorBorder={passwordError != ""}
               messageColor="red"
             />
             <InputField
@@ -52,6 +54,7 @@ export default function PasswordInput(props: {
               keyboardType="default"
               secureTextEntry={true}
               message={passwordError}
+              showErrorBorder={passwordError != ""}
               messageColor="red"
             />
           </View>

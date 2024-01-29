@@ -19,6 +19,7 @@ export default function UserDetailsInput(props: {
   buttonAction: (value: string) => void;
   disabled?: boolean;
   cancelAction: (value: string) => void;
+  showErrorBorder?: boolean;
 }) {
   const {
     title,
@@ -34,7 +35,8 @@ export default function UserDetailsInput(props: {
     buttonAction,
     disabled,
     cancelAction,
-  } = props;
+    showErrorBorder,
+} = props;
 
   return (
     <View style={styles.container}>
@@ -46,6 +48,7 @@ export default function UserDetailsInput(props: {
             value={userName}
             onChangeText={setUserName}
             message={nameError}
+            showErrorBorder={nameError != ""}
             messageColor="red"
           />
           <InputField
@@ -53,6 +56,7 @@ export default function UserDetailsInput(props: {
             onChangeText={setUserStudyCourse}
             value={userStudyCourse}
             message={studyCourseError}
+            showErrorBorder={studyCourseError != ""}
             messageColor="red"
           />
         </View>
@@ -63,6 +67,7 @@ export default function UserDetailsInput(props: {
             value={userEmail}
             keyboardType="email-address"
             message={emailError}
+            showErrorBorder={emailError != ""}
             messageColor="red"
           />
         </View>
