@@ -1,9 +1,8 @@
 import Alert from "@/components/Alert";
-import {BASE_STYLES, COLORTHEME, SIZES} from "@/constants/Theme";
+import { SIZES } from "@/constants/Theme";
 import { Stack, router, usePathname } from "expo-router";
 import { ChevronLeft } from "lucide-react-native";
 import { Pressable } from "react-native";
-import {View, Text} from "@/components/Themed";
 import {useAuth} from "@/context/AuthContext";
 import {useProfilePicture} from "@/components/profile/useProfilePicture";
 import {useEffect} from "react";
