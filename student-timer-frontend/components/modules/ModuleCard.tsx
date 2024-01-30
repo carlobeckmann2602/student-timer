@@ -35,7 +35,7 @@ export function ModuleCard(props: moduleCardProps) {
   const onDelete = () => {
     Alert.alert(
       "Modul wirklich löschen?",
-      `Möchtest du das Modul "${moduleData.name}" wirklich unwiederuflich löschen?\n Auch die zugehörigen Lerneinheiten und Trackings werden dabei gelöscht.`,
+      `Möchtest du das Modul "${moduleData.name}" wirklich unwiderruflich löschen?\n Auch die zugehörigen Lerneinheiten und Trackings werden dabei gelöscht.`,
       [
         {
           text: "Abbrechen",
