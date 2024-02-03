@@ -48,6 +48,37 @@ export const profileImages: ProfileImages = {
     "punk.jpg": require(`${profilePictureBasePath}punk.jpg`),
 };
 
+export const profileAvatarImages: ProfileImages = {
+    "maxine.jpg": require(`${profilePictureBasePath}maxine.jpg`),
+    "ken.jpg": require(`${profilePictureBasePath}ken.jpg`),
+    "genie.jpg": require(`${profilePictureBasePath}genie.jpg`),
+    "schwarzweiß2.jpg": require(`${profilePictureBasePath}schwarzweiß2.jpg`),
+    "newyork.jpg": require(`${profilePictureBasePath}newyork.jpg`),
+    "nico.jpg": require(`${profilePictureBasePath}nico.jpg`),
+    "bollywood.jpg": require(`${profilePictureBasePath}bollywood.jpg`),
+}
+
+export const profileFantasyImages: ProfileImages = {
+    "gelb2.jpg": require(`${profilePictureBasePath}gelb2.jpg`),
+    "agata.jpg": require(`${profilePictureBasePath}agata.jpg`),
+    "rot.jpg": require(`${profilePictureBasePath}rot.jpg`),
+    "gelb.jpg": require(`${profilePictureBasePath}gelb.jpg`),
+    "monster.jpg": require(`${profilePictureBasePath}monster.jpg`),
+    "drache.jpg": require(`${profilePictureBasePath}drache.jpg`),
+    "tiger.jpg": require(`${profilePictureBasePath}tiger.jpg`),
+    "apfel.jpg": require(`${profilePictureBasePath}apfel.jpg`),
+    "elephant.jpg": require(`${profilePictureBasePath}elephant.jpg`),
+}
+
+export const profilePatternImages: ProfileImages = {
+    "muster_lila.jpg": require(`${profilePictureBasePath}muster_lila.jpg`),
+    "muster_gelb.jpg": require(`${profilePictureBasePath}muster_gelb.jpg`),
+    "random1.jpg": require(`${profilePictureBasePath}random1.jpg`),
+    "aquarell.jpg": require(`${profilePictureBasePath}aquarell.jpg`),
+    "random2.jpg": require(`${profilePictureBasePath}random2.jpg`),
+    "muster_orange.jpg": require(`${profilePictureBasePath}muster_orange.jpg`),
+    "abstrakt.jpg": require(`${profilePictureBasePath}abstrakt.jpg`),
+}
 
 export const useProfilePicture = () => {
     const { authState } = useAuth();
