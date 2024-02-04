@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useAuth } from "@/context/AuthContext";
 
-export const defaultPictureName = 'gelb2.jpg';
+export const defaultPictureName = 'user-round.png';
 const profilePictureBasePath = '../../assets/images/profile/';
 export interface ProfileImages {
     [key: string]: any;
@@ -52,6 +52,7 @@ export const allProfileImages: ProfileImages = {
     "muster_blau.jpg": require(`${profilePictureBasePath}muster_blau.jpg`),
     "muster_nerd.jpg": require(`${profilePictureBasePath}muster_nerd.jpg`),
     "muster_gruen.jpg": require(`${profilePictureBasePath}muster_gruen.jpg`),
+    "user-round.png": require(`${profilePictureBasePath}user-round.png`),
 };
 
 export const profileHumanAvatarImages: ProfileImages = {
@@ -97,7 +98,7 @@ export const useProfilePicture = () => {
     const { authState } = useAuth();
 
     const getProfilePictureName = () => {
-        const userPicture = authState?.user.profilePicture || '' ;
+        const userPicture = authState?.user.profilePicture || '';
         return allProfileImages[userPicture] ? userPicture : defaultPictureName;
     };
 

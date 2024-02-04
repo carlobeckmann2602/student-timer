@@ -36,7 +36,13 @@ export default function ProfilePicture({
   return (
     <View style={[
         styles.profileImageContainer,
-        { width: imageWidth, height: imageWidth, borderRadius: imageWidth / 2 },
+        {
+          width: imageWidth,
+          height: imageWidth,
+          borderRadius: imageWidth / 2,
+          borderWidth: imageWidth / 24,
+          borderColor: color
+        },
     ]}>
       <Pressable
         onPress={onPress}
