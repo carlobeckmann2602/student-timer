@@ -1,24 +1,28 @@
 import React, { useEffect, useState } from "react";
 import Alert from "@/components/Alert";
-import { ScrollView, View } from "@/components/Themed";
-import { StyleSheet } from "react-native";
+import { View } from "@/components/Themed";
+import { StyleSheet} from "react-native";
+//@ts-ignore
+import SwitchSelector from "react-native-switch-selector";
 import { useRouter } from "expo-router";
 import { useAuth } from "@/context/AuthContext";
 import { useToast } from "react-native-toast-notifications";
 import { BASE_STYLES, COLORS } from "@/constants/Theme";
 import ProfilePicture from "@/components/profile/ProfilePicture";
-import { H3, H4 } from "@/components/StyledText";
+import { H3 } from "@/components/StyledText";
 import Button from "@/components/Button";
 import { COLORTHEME } from "@/constants/Theme";
 import {
-  profileImages,
+  profilePatternImages,
+  profileHumanAvatarImages,
+  profileFantasyAvatarImages,
   useProfilePicture,
 } from "@/components/profile/useProfilePicture";
 import ProfilePictureSlider from "@/components/profile/ProfilePictureSlider";
 
 export default function EditPicture() {
   const toast = useToast();
-  const { onChangePicture, authState } = useAuth();
+  const { onChangePicture} = useAuth();
   const router = useRouter();
 
   const [isChanged, setIsChanged] = useState(false);
@@ -28,7 +32,13 @@ export default function EditPicture() {
     setImagePath,
     getImagePath,
   } = useProfilePicture();
+  const switchCategoryOptions: Array<{ label: string; value: string }> = [
+    { label: 'Fantasie', value: 'fantasy' },
+    { label: 'Portraits', value: 'portraits' },
+    { label: 'Muster', value: 'abstract' },
+  ];
   const [, setError] = useState("");
+  const [selectedCategory, setSelectedCategory] = React.useState('fantasy');
 
   useEffect(() => {
     setImagePath(getImagePath(profilePictureName));
@@ -38,6 +48,10 @@ export default function EditPicture() {
     setProfilePictureName(imageName);
     setImagePath(imageName);
     setIsChanged(true);
+  };
+
+  const handleCategoryChange = (value: string) => {
+    setSelectedCategory(value);
   };
 
   const changePicture = async () => {
@@ -73,14 +87,31 @@ export default function EditPicture() {
     <View style={styles.container}>
       <ProfilePicture imageName={profilePictureName} />
       <H3 style={styles.title}>Profilbild ändern</H3>
-      <View style={{ marginVertical: 15 }}>
-        <H4>Bildauswahl</H4>
-        <View style={{ marginTop: 5 }}>
-          <ProfilePictureSlider
-            profileImages={profileImages}
-            onSelect={handleImageNameChange}
+      <View style={styles.pictureContainer}>
+          <SwitchSelector
+              options={switchCategoryOptions}
+              initial={switchCategoryOptions.findIndex((option) => option.value === selectedCategory)}
+              onPress={(value: string) => handleCategoryChange(value)}
+              backgroundColor={COLORS.white}
+              buttonColor={COLORS.primary}
+              selectedColor={COLORS.white}
+              textColor={COLORS.grey3}
+              hasPadding
+              valuePadding={2}
+              borderWidth={3}
+              borderColor={COLORS.grey1}
+              //fontSize={16}
           />
-        </View>
+          <ProfilePictureSlider
+              profileImages={
+                selectedCategory === 'portraits'
+                    ? profileHumanAvatarImages
+                    : selectedCategory === 'fantasy'
+                        ? profileFantasyAvatarImages
+                        : profilePatternImages
+              }
+              onSelect={handleImageNameChange}
+          />
       </View>
       <View style={styles.actionContainer}>
         <Button
@@ -110,6 +141,10 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     padding: BASE_STYLES.horizontalPadding,
     flex: 1,
+  },
+  pictureContainer: {
+    marginVertical: 20,
+    gap: 10
   },
   actionContainer: {
     flexDirection: "column",

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { StyleSheet } from "react-native";
 import Button from "@/components/Button";
-import { ScrollView, Text, View } from "@/components/Themed";
+import { Text, View } from "@/components/Themed";
 import { BASE_STYLES, COLORS, COLORTHEME } from "@/constants/Theme";
 import { router } from "expo-router";
 import { useAuth } from "@/context/AuthContext";

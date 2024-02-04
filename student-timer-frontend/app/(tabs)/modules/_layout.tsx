@@ -3,16 +3,44 @@ import { SIZES } from "@/constants/Theme";
 import { Stack, router, usePathname } from "expo-router";
 import { ChevronLeft } from "lucide-react-native";
 import { Pressable } from "react-native";
+import {useAuth} from "@/context/AuthContext";
+import {useProfilePicture} from "@/components/profile/useProfilePicture";
+import {useEffect} from "react";
+import ProfilePicture from "@/components/profile/ProfilePicture";
 
 export default function ModulesLayout() {
-  return (
+    const { authState } = useAuth();
+    const { profilePictureName, getProfilePictureName, setProfilePictureName } = useProfilePicture();
+    const pathname = usePathname();
+
+    useEffect(() => {
+        setProfilePictureName(getProfilePictureName());
+    }, [authState]);
+
+
+    return (
     <Stack
       screenOptions={{
         headerTitleStyle: {
           fontSize: SIZES.xLarge,
           fontWeight: "500",
         },
+        headerTitleAlign: "center",
         headerShadowVisible: false,
+        headerRight: () => {
+          switch (pathname) {
+              case "/modules":
+                  return (
+                      <ProfilePicture
+                          imageName={profilePictureName}
+                          miniature={true}
+                          onPress={() => router.push("/profile")}
+                      />
+                  );
+              default:
+                  return null;
+          }
+        },
         headerLeft: () => {
           const pathname = usePathname();
           switch (pathname) {
@@ -31,7 +59,7 @@ export default function ModulesLayout() {
                     });
                   }}
                 >
-                  <ChevronLeft />
+                  <ChevronLeft color="black" />
                 </Pressable>
               );
             case pathname.match(/\d+\/learningUnits\/new/)?.input:
@@ -49,7 +77,7 @@ export default function ModulesLayout() {
                     });
                   }}
                 >
-                  <ChevronLeft />
+                    <ChevronLeft color="black" />
                 </Pressable>
               );
             case "/modules/new":
@@ -65,7 +93,7 @@ export default function ModulesLayout() {
                     });
                   }}
                 >
-                  <ChevronLeft />
+                    <ChevronLeft color="black" />
                 </Pressable>
               );
             case "/modules/new/learningUnits":
@@ -80,7 +108,7 @@ export default function ModulesLayout() {
                     });
                   }}
                 >
-                  <ChevronLeft />
+                    <ChevronLeft color="black" />
                 </Pressable>
               );
             default:
@@ -92,8 +120,7 @@ export default function ModulesLayout() {
       <Stack.Screen
         name="index"
         options={{
-          title: "Modulübersicht",
-          headerTitleAlign: "center",
+            title: "Modulübersicht",
         }}
       />
       <Stack.Screen
@@ -108,14 +135,12 @@ export default function ModulesLayout() {
           name="[id]/edit"
           options={{
               title: "Modul bearbeiten",
-              headerTitleAlign: "center",
           }}
       />
       <Stack.Screen
           name="[id]/learningUnits/new"
           options={{
             title: "Lerneinheit hinzufügen",
-            headerTitleAlign: "center",
           }}
       />
       <Stack.Screen
@@ -130,21 +155,18 @@ export default function ModulesLayout() {
         name="new/index"
         options={{
           title: "Neues Modul anlegen",
-          headerTitleAlign: "center",
         }}
       />
       <Stack.Screen
           name="new/learningUnits"
           options={{
             title: "Lerneinheiten hinzufügen",
-            headerTitleAlign: "center",
           }}
       />
       <Stack.Screen
         name="[id]/learningUnits/[learningUnitId]/edit"
         options={{
           title: "Lerneinheit bearbeiten",
-          headerTitleAlign: "center",
         }}
       />
     </Stack>

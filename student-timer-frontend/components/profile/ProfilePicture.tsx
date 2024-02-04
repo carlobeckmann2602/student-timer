@@ -4,7 +4,7 @@ import { User2 } from "lucide-react-native";
 import { Edit2 } from "lucide-react-native";
 import { COLORTHEME } from "@/constants/Theme";
 import {
-  profileImages,
+  allProfileImages,
   defaultPictureName,
 } from "@/components/profile/useProfilePicture";
 
@@ -25,18 +25,24 @@ export default function ProfilePicture({
   color = COLORTHEME.light.primary,
 }: ProfilePictureProps) {
   const imagePath =
-    profileImages[imageName] || profileImages[defaultPictureName];
+    allProfileImages[imageName] || allProfileImages[defaultPictureName];
   const accessibilityLabel = onPress
     ? "Profilbild ändern"
     : "Aktuelles Profilbild";
   const accessibilityRole = onPress ? "button" : "image";
 
-  const imageWidth = miniature ? 24 : 120;
+  const imageWidth = miniature ? 30 : 120;
 
   return (
     <View style={[
         styles.profileImageContainer,
-        { width: imageWidth, height: imageWidth, borderRadius: imageWidth / 2 },
+        {
+          width: imageWidth,
+          height: imageWidth,
+          borderRadius: imageWidth / 2,
+          borderWidth: imageWidth / 24,
+          borderColor: color
+        },
     ]}>
       <Pressable
         onPress={onPress}

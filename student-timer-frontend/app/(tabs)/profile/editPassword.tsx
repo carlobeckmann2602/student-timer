@@ -12,6 +12,7 @@ import {
   validatePassword,
   comparePasswords,
 } from "@/components/auth/validationMethods";
+import {StyleSheet} from "react-native";
 
 export default function EditPassword() {
   const toast = useToast();
@@ -83,7 +84,7 @@ export default function EditPassword() {
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.container}>
       <View style={{ alignItems: "center" }}>
         <ProfilePicture imageName={profilePictureName} />
       </View>
@@ -103,3 +104,11 @@ export default function EditPassword() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    justifyContent: "flex-start",
+    padding: BASE_STYLES.horizontalPadding,
+    flex: 1,
+  },
+});

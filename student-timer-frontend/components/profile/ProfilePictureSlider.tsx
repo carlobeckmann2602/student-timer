@@ -27,7 +27,7 @@ export default function ProfilePictureSlider({
     <View
       style={{
         width: width - BASE_STYLES.horizontalPadding * 2,
-        backgroundColor: COLORTHEME.light.grey2,
+        backgroundColor: COLORTHEME.light.grey1,
         borderRadius: BASE_STYLES.borderRadius,
       }}
     >
