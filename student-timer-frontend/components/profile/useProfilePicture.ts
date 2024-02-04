@@ -69,13 +69,13 @@ export const profileHumanAvatarImages: ProfileImages = {
 }
 
 export const profileFantasyAvatarImages: ProfileImages = {
-    "rot.jpg": require(`${profilePictureBasePath}rot.jpg`),
-    "gelb.jpg": require(`${profilePictureBasePath}gelb.jpg`),
-    "monster.jpg": require(`${profilePictureBasePath}monster.jpg`),
-    "drache.jpg": require(`${profilePictureBasePath}drache.jpg`),
-    "tiger.jpg": require(`${profilePictureBasePath}tiger.jpg`),
     "gelb2.jpg": require(`${profilePictureBasePath}gelb2.jpg`),
     "agata.jpg": require(`${profilePictureBasePath}agata.jpg`),
+    "rot.jpg": require(`${profilePictureBasePath}rot.jpg`),
+    "drache.jpg": require(`${profilePictureBasePath}drache.jpg`),
+    "tiger.jpg": require(`${profilePictureBasePath}tiger.jpg`),
+    "gelb.jpg": require(`${profilePictureBasePath}gelb.jpg`),
+    "monster.jpg": require(`${profilePictureBasePath}monster.jpg`),
     "apfel.jpg": require(`${profilePictureBasePath}apfel.jpg`),
     "elephant.jpg": require(`${profilePictureBasePath}elephant.jpg`),
     "elf.jpg": require(`${profilePictureBasePath}elf.jpg`),

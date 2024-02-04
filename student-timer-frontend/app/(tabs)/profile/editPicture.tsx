@@ -33,12 +33,12 @@ export default function EditPicture() {
     getImagePath,
   } = useProfilePicture();
   const switchCategoryOptions: Array<{ label: string; value: string }> = [
-    { label: 'Gesichter', value: 'faces' },
     { label: 'Fantasie', value: 'fantasy' },
+    { label: 'Portraits', value: 'portraits' },
     { label: 'Muster', value: 'abstract' },
   ];
   const [, setError] = useState("");
-  const [selectedCategory, setSelectedCategory] = React.useState('faces');
+  const [selectedCategory, setSelectedCategory] = React.useState('fantasy');
 
   useEffect(() => {
     setImagePath(getImagePath(profilePictureName));
@@ -104,7 +104,7 @@ export default function EditPicture() {
           />
           <ProfilePictureSlider
               profileImages={
-                selectedCategory === 'faces'
+                selectedCategory === 'portraits'
                     ? profileHumanAvatarImages
                     : selectedCategory === 'fantasy'
                         ? profileFantasyAvatarImages
