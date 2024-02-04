@@ -7,7 +7,7 @@ export interface ProfileImages {
     [key: string]: any;
 }
 
-export const profileImages: ProfileImages = {
+export const allProfileImages: ProfileImages = {
     "rot.jpg": require(`${profilePictureBasePath}rot.jpg`),
     "agata.jpg": require(`${profilePictureBasePath}agata.jpg`),
     "punk_gechilled.jpg": require(`${profilePictureBasePath}punk_gechilled.jpg`),
@@ -46,6 +46,12 @@ export const profileImages: ProfileImages = {
     "bollywood.jpg": require(`${profilePictureBasePath}bollywood.jpg`),
     "neutral.jpg": require(`${profilePictureBasePath}neutral.jpg`),
     "punk.jpg": require(`${profilePictureBasePath}punk.jpg`),
+    "hoody.jpg": require(`${profilePictureBasePath}hoody.jpg`),
+    "kim.jpg": require(`${profilePictureBasePath}kim.jpg`),
+    "elf.jpg": require(`${profilePictureBasePath}elf.jpg`),
+    "muster_blau.jpg": require(`${profilePictureBasePath}muster_blau.jpg`),
+    "muster_nerd.jpg": require(`${profilePictureBasePath}muster_nerd.jpg`),
+    "muster_gruen.jpg": require(`${profilePictureBasePath}muster_gruen.jpg`),
 };
 
 export const profileHumanAvatarImages: ProfileImages = {
@@ -92,11 +98,11 @@ export const useProfilePicture = () => {
 
     const getProfilePictureName = () => {
         const userPicture = authState?.user.profilePicture || '' ;
-        return profileImages[userPicture] ? userPicture : defaultPictureName;
+        return allProfileImages[userPicture] ? userPicture : defaultPictureName;
     };
 
     const getImagePath = (profilePictureName: string) => {
-        return profileImages[profilePictureName] || profileImages[defaultPictureName];
+        return allProfileImages[profilePictureName] || allProfileImages[defaultPictureName];
     };
 
     const [profilePictureName, setProfilePictureName] = useState<string>(getProfilePictureName());
