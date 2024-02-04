@@ -4,7 +4,6 @@ import { View } from "@/components/Themed";
 import { StyleSheet} from "react-native";
 //@ts-ignore
 import SwitchSelector from "react-native-switch-selector";
-
 import { useRouter } from "expo-router";
 import { useAuth } from "@/context/AuthContext";
 import { useToast } from "react-native-toast-notifications";
@@ -15,8 +14,8 @@ import Button from "@/components/Button";
 import { COLORTHEME } from "@/constants/Theme";
 import {
   profilePatternImages,
-  profileAvatarImages,
-  profileFantasyImages,
+  profileHumanAvatarImages,
+  profileFantasyAvatarImages,
   useProfilePicture,
 } from "@/components/profile/useProfilePicture";
 import ProfilePictureSlider from "@/components/profile/ProfilePictureSlider";
@@ -34,12 +33,12 @@ export default function EditPicture() {
     getImagePath,
   } = useProfilePicture();
   const switchCategoryOptions: Array<{ label: string; value: string }> = [
-    { label: 'Avatare', value: 'avatars' },
+    { label: 'Gesichter', value: 'faces' },
     { label: 'Fantasie', value: 'fantasy' },
     { label: 'Muster', value: 'abstract' },
   ];
   const [, setError] = useState("");
-  const [selectedCategory, setSelectedCategory] = React.useState('avatars');
+  const [selectedCategory, setSelectedCategory] = React.useState('faces');
 
   useEffect(() => {
     setImagePath(getImagePath(profilePictureName));
@@ -105,10 +104,10 @@ export default function EditPicture() {
           />
           <ProfilePictureSlider
               profileImages={
-                selectedCategory === 'avatars'
-                    ? profileAvatarImages
+                selectedCategory === 'faces'
+                    ? profileHumanAvatarImages
                     : selectedCategory === 'fantasy'
-                        ? profileFantasyImages
+                        ? profileFantasyAvatarImages
                         : profilePatternImages
               }
               onSelect={handleImageNameChange}

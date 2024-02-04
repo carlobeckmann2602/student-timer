@@ -48,7 +48,7 @@ export const profileImages: ProfileImages = {
     "punk.jpg": require(`${profilePictureBasePath}punk.jpg`),
 };
 
-export const profileAvatarImages: ProfileImages = {
+export const profileHumanAvatarImages: ProfileImages = {
     "maxine.jpg": require(`${profilePictureBasePath}maxine.jpg`),
     "hoody.jpg": require(`${profilePictureBasePath}hoody.jpg`),
     "genie.jpg": require(`${profilePictureBasePath}genie.jpg`),
@@ -61,14 +61,14 @@ export const profileAvatarImages: ProfileImages = {
     "punk_gechilled.jpg": require(`${profilePictureBasePath}punk_gechilled.jpg`),
 }
 
-export const profileFantasyImages: ProfileImages = {
-    "gelb2.jpg": require(`${profilePictureBasePath}gelb2.jpg`),
-    "agata.jpg": require(`${profilePictureBasePath}agata.jpg`),
+export const profileFantasyAvatarImages: ProfileImages = {
     "rot.jpg": require(`${profilePictureBasePath}rot.jpg`),
     "gelb.jpg": require(`${profilePictureBasePath}gelb.jpg`),
     "monster.jpg": require(`${profilePictureBasePath}monster.jpg`),
     "drache.jpg": require(`${profilePictureBasePath}drache.jpg`),
     "tiger.jpg": require(`${profilePictureBasePath}tiger.jpg`),
+    "gelb2.jpg": require(`${profilePictureBasePath}gelb2.jpg`),
+    "agata.jpg": require(`${profilePictureBasePath}agata.jpg`),
     "apfel.jpg": require(`${profilePictureBasePath}apfel.jpg`),
     "elephant.jpg": require(`${profilePictureBasePath}elephant.jpg`),
     "elf.jpg": require(`${profilePictureBasePath}elf.jpg`),
