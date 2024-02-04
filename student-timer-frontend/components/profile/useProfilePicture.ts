@@ -51,11 +51,12 @@ export const profileImages: ProfileImages = {
 export const profileAvatarImages: ProfileImages = {
     "maxine.jpg": require(`${profilePictureBasePath}maxine.jpg`),
     "ken.jpg": require(`${profilePictureBasePath}ken.jpg`),
+    "bollywood.jpg": require(`${profilePictureBasePath}bollywood.jpg`),
     "genie.jpg": require(`${profilePictureBasePath}genie.jpg`),
     "schwarzweiß2.jpg": require(`${profilePictureBasePath}schwarzweiß2.jpg`),
-    "newyork.jpg": require(`${profilePictureBasePath}newyork.jpg`),
     "nico.jpg": require(`${profilePictureBasePath}nico.jpg`),
-    "bollywood.jpg": require(`${profilePictureBasePath}bollywood.jpg`),
+    "newyork.jpg": require(`${profilePictureBasePath}newyork.jpg`),
+    "punk_gechilled.jpg": require(`${profilePictureBasePath}punk_gechilled.jpg`),
 }
 
 export const profileFantasyImages: ProfileImages = {
