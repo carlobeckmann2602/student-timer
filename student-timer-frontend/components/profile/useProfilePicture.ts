@@ -50,11 +50,13 @@ export const profileImages: ProfileImages = {
 
 export const profileAvatarImages: ProfileImages = {
     "maxine.jpg": require(`${profilePictureBasePath}maxine.jpg`),
-    "ken.jpg": require(`${profilePictureBasePath}ken.jpg`),
-    "bollywood.jpg": require(`${profilePictureBasePath}bollywood.jpg`),
+    "hoody.jpg": require(`${profilePictureBasePath}hoody.jpg`),
     "genie.jpg": require(`${profilePictureBasePath}genie.jpg`),
+    "kim.jpg": require(`${profilePictureBasePath}kim.jpg`),
     "schwarzweiß2.jpg": require(`${profilePictureBasePath}schwarzweiß2.jpg`),
     "nico.jpg": require(`${profilePictureBasePath}nico.jpg`),
+    "bollywood.jpg": require(`${profilePictureBasePath}bollywood.jpg`),
+    "ken.jpg": require(`${profilePictureBasePath}ken.jpg`),
     "newyork.jpg": require(`${profilePictureBasePath}newyork.jpg`),
     "punk_gechilled.jpg": require(`${profilePictureBasePath}punk_gechilled.jpg`),
 }
@@ -69,6 +71,7 @@ export const profileFantasyImages: ProfileImages = {
     "tiger.jpg": require(`${profilePictureBasePath}tiger.jpg`),
     "apfel.jpg": require(`${profilePictureBasePath}apfel.jpg`),
     "elephant.jpg": require(`${profilePictureBasePath}elephant.jpg`),
+    "elf.jpg": require(`${profilePictureBasePath}elf.jpg`),
 }
 
 export const profilePatternImages: ProfileImages = {
@@ -76,9 +79,12 @@ export const profilePatternImages: ProfileImages = {
     "muster_gelb.jpg": require(`${profilePictureBasePath}muster_gelb.jpg`),
     "random1.jpg": require(`${profilePictureBasePath}random1.jpg`),
     "aquarell.jpg": require(`${profilePictureBasePath}aquarell.jpg`),
+    "muster_blau.jpg": require(`${profilePictureBasePath}muster_blau.jpg`),
     "random2.jpg": require(`${profilePictureBasePath}random2.jpg`),
+    "muster_nerd.jpg": require(`${profilePictureBasePath}muster_nerd.jpg`),
     "muster_orange.jpg": require(`${profilePictureBasePath}muster_orange.jpg`),
     "abstrakt.jpg": require(`${profilePictureBasePath}abstrakt.jpg`),
+    "muster_gruen.jpg": require(`${profilePictureBasePath}muster_gruen.jpg`),
 }
 
 export const useProfilePicture = () => {
