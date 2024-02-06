@@ -57,7 +57,7 @@ export default function NewModule() {
       router.push({
         pathname: "/modules/new/learningUnits",
         params: {
-          name: newModule.name,
+          name: newModule.name.trim(),
           colorCode: newModule.colorCode,
           creditPoints: newModule.creditPoints,
         },
@@ -66,7 +66,7 @@ export default function NewModule() {
       router.push({
         pathname: "/modules/new/learningUnits",
         params: {
-          name: newModule.name,
+          name: newModule.name.trim(),
           colorCode: newModule.colorCode,
           creditPoints: newModule.creditPoints,
           examDate: newModule.examDate?.toISOString().substring(0, 10),

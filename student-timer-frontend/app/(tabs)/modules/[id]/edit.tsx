@@ -74,14 +74,14 @@ export default function EditModule() {
       let moduleDTO;
       if (detailModule.examDate && !dateDiabled) {
         moduleDTO = {
-          name: detailModule.name,
+          name: detailModule.name.trim(),
           examDate: detailModule.examDate,
           colorCode: detailModule.colorCode,
           creditpoints: +detailModule.creditPoints,
         };
       } else {
         moduleDTO = {
-          name: detailModule.name,
+          name: detailModule.name.trim(),
           colorCode: detailModule.colorCode,
           creditpoints: +detailModule.creditPoints,
         };

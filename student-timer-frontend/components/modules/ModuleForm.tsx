@@ -73,7 +73,7 @@ export default function ModuleForm(props: ModuleFormProps) {
           label="Name des Moduls"
           onChangeText={(value) => {
             validateModuleName(value);
-            handleChange({ name: value.trim() });
+            handleChange({ name: value });
           }}
           value={inputData.name}
           message={moduleNameError}
