@@ -3,21 +3,8 @@ import { SIZES } from "@/constants/Theme";
 import { Stack, router, usePathname } from "expo-router";
 import { ChevronLeft } from "lucide-react-native";
 import { Pressable } from "react-native";
-import {useAuth} from "@/context/AuthContext";
-import {useProfilePicture} from "@/components/profile/useProfilePicture";
-import {useEffect} from "react";
-import ProfilePicture from "@/components/profile/ProfilePicture";
 
 export default function ModulesLayout() {
-    const { authState } = useAuth();
-    const { profilePictureName, getProfilePictureName, setProfilePictureName } = useProfilePicture();
-    const pathname = usePathname();
-
-    useEffect(() => {
-        setProfilePictureName(getProfilePictureName());
-    }, [authState]);
-
-
     return (
     <Stack
       screenOptions={{
