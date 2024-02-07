@@ -27,20 +27,6 @@ export default function ModulesLayout() {
         },
         headerTitleAlign: "center",
         headerShadowVisible: false,
-        headerRight: () => {
-          switch (pathname) {
-              case "/modules":
-                  return (
-                      <ProfilePicture
-                          imageName={profilePictureName}
-                          miniature={true}
-                          onPress={() => router.push("/profile")}
-                      />
-                  );
-              default:
-                  return null;
-          }
-        },
         headerLeft: () => {
           const pathname = usePathname();
           switch (pathname) {

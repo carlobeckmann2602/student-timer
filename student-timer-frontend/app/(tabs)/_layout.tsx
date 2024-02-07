@@ -48,28 +48,6 @@ export default function TabLayout() {
                             ? 15
                             : 5,
                 },
-                headerRight: () => {
-                    switch (pathname) {
-                        case "/":
-                        case "/modules":
-                        case "/statistics":
-                            return (
-                                <View
-                                    style={{
-                                        marginRight: BASE_STYLES.horizontalPadding,
-                                    }}
-                                >
-                                    <ProfilePicture
-                                        imageName={profilePictureName}
-                                        miniature={true}
-                                        onPress={() => router.push("/profile")}
-                                    />
-                                </View>
-                            );
-                        default:
-                            return null;
-                    }
-                },
                 headerLeft: () => {
                     switch (pathname) {
                         case "/profile/editData":
@@ -125,7 +103,8 @@ export default function TabLayout() {
                 name="profile"
                 options={{
                     title: "Profil",
-                    tabBarButton: () => null
+                    href: "/profile",
+                    tabBarIcon: ({ color }) => <ProfilePicture imageName={profilePictureName} miniature={true} color={color} onPress={() => router.push("/profile") }/>,
                 }}
             />
         </Tabs>
