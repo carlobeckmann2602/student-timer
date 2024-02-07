@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { useAuth } from "@/context/AuthContext";
 
-export const defaultPictureName = 'user-round.png';
+//export const defaultPictureName = 'user-round.png';
+export const defaultPictureName = '';
+
 const profilePictureBasePath = '../../assets/images/profile/';
 export interface ProfileImages {
     [key: string]: any;

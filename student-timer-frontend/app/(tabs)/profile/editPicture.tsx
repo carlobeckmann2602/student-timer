@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Alert from "@/components/Alert";
 import { View } from "@/components/Themed";
-import { StyleSheet} from "react-native";
+import { StyleSheet } from "react-native";
 //@ts-ignore
 import SwitchSelector from "react-native-switch-selector";
 import { useRouter } from "expo-router";
@@ -22,7 +22,7 @@ import ProfilePictureSlider from "@/components/profile/ProfilePictureSlider";
 
 export default function EditPicture() {
   const toast = useToast();
-  const { onChangePicture} = useAuth();
+  const { onChangePicture } = useAuth();
   const router = useRouter();
 
   const [isChanged, setIsChanged] = useState(false);
@@ -88,30 +88,29 @@ export default function EditPicture() {
       <ProfilePicture imageName={profilePictureName} />
       <H3 style={styles.title}>Profilbild ändern</H3>
       <View style={styles.pictureContainer}>
-          <SwitchSelector
-              options={switchCategoryOptions}
-              initial={switchCategoryOptions.findIndex((option) => option.value === selectedCategory)}
-              onPress={(value: string) => handleCategoryChange(value)}
-              backgroundColor={COLORS.white}
-              buttonColor={COLORS.primary}
-              selectedColor={COLORS.white}
-              textColor={COLORS.grey3}
-              hasPadding
-              valuePadding={2}
-              borderWidth={3}
-              borderColor={COLORS.grey1}
-              //fontSize={16}
-          />
-          <ProfilePictureSlider
-              profileImages={
-                selectedCategory === 'portraits'
-                    ? profileHumanAvatarImages
-                    : selectedCategory === 'fantasy'
-                        ? profileFantasyAvatarImages
-                        : profilePatternImages
-              }
-              onSelect={handleImageNameChange}
-          />
+        <SwitchSelector
+          options={switchCategoryOptions}
+          initial={switchCategoryOptions.findIndex((option) => option.value === selectedCategory)}
+          onPress={(value: string) => handleCategoryChange(value)}
+          backgroundColor={COLORS.grey1}
+          buttonColor={COLORS.primary}
+          buttonMargin={1}
+          selectedColor={COLORS.white}
+          textColor={COLORS.black}
+          hasPadding
+          valuePadding={4}
+          borderWidth={0}
+        />
+        <ProfilePictureSlider
+          profileImages={
+            selectedCategory === 'portraits'
+              ? profileHumanAvatarImages
+              : selectedCategory === 'fantasy'
+                ? profileFantasyAvatarImages
+                : profilePatternImages
+          }
+          onSelect={handleImageNameChange}
+        />
       </View>
       <View style={styles.actionContainer}>
         <Button
@@ -144,7 +143,7 @@ const styles = StyleSheet.create({
   },
   pictureContainer: {
     marginVertical: 20,
-    gap: 10
+    gap: 10,
   },
   actionContainer: {
     flexDirection: "column",
