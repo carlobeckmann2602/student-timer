@@ -23,7 +23,6 @@ export default function EditPassword() {
   const [userPassword, setUserPassword] = useState("");
   const [userCheckPassword, setUserCheckPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
-  const [, setError] = useState("");
   const { profilePictureName, getProfilePictureName } = useProfilePicture();
 
   useEffect(() => {
@@ -57,7 +56,6 @@ export default function EditPassword() {
       const id = toast.show("Speichern...", { type: "loading" });
       const result = await onChangePassword!(userPassword, userCheckPassword);
       if (result && result.error) {
-        setError(result.msg);
         toast.update(id, result.msg, { type: "danger" });
       } else {
         toast.update(id, "Passwort erfolgreich geändert", {

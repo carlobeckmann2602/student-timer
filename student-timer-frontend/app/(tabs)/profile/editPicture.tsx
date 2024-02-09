@@ -37,7 +37,6 @@ export default function EditPicture() {
     { label: "Portraits", value: "portraits" },
     { label: "Muster", value: "abstract" },
   ];
-  const [, setError] = useState("");
   const [selectedCategory, setSelectedCategory] = React.useState("fantasy");
 
   useEffect(() => {
@@ -58,7 +57,6 @@ export default function EditPicture() {
     let id = toast.show("Speichern...", { type: "loading" });
     const result = await onChangePicture!(profilePictureName);
     if (result && result.error) {
-      setError(result.msg);
       toast.update(id, result.msg, { type: "danger" });
     } else {
       toast.update(id, "Profilbild erfolgreich geändert", { type: "success" });

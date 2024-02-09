@@ -32,7 +32,6 @@ export default function EditData() {
   const [nameError, setNameError] = useState("");
   const [studyCourseError, setStudyCourseError] = useState("");
   const [emailError, setEmailError] = useState("");
-  const [, setError] = useState("");
 
   const { profilePictureName, getProfilePictureName } = useProfilePicture();
 
@@ -74,7 +73,6 @@ export default function EditData() {
       const id = toast.show("Speichern...", { type: "loading" });
       const result = await onUpdate!(userName, userStudyCourse, userEmail);
       if (result && result.error) {
-        setError(result.msg);
         toast.update(id, result.msg, { type: "danger" });
       } else {
         toast.update(id, "Profildaten erfolgreich gespeichert", {
@@ -92,7 +90,7 @@ export default function EditData() {
     if (authState?.user.id) {
       const result = await onRemove!(authState?.user.id);
       if (result && result.error) {
-        setError(result.msg);
+        toast.update(id, result.msg, { type: "danger" });
       } else {
         toast.update(id, "Ihr Konto wurde erfolgreich gelöscht", {
           type: "success",

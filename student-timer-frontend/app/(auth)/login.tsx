@@ -23,7 +23,6 @@ export default function Login() {
 
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
-  const [error, setError] = useState("");
 
   const { onLogin } = useAuth();
 
@@ -46,7 +45,6 @@ export default function Login() {
       let id = toast.show("Login...", { type: "loading" });
       const result = await onLogin!(email, password);
       if (result && result.error) {
-        setError(result.msg);
         toast.update(
           id,
           "Login fehlgeschlagen. Bitte korrigiere Passwort und/oder E-Mail-Adresse.",

@@ -32,7 +32,6 @@ export default function SignupScreen() {
   const [studyCourseError, setStudyCourseError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
-  const [error, setError] = useState("");
 
   const { onRegister } = useAuth();
 
@@ -76,7 +75,14 @@ export default function SignupScreen() {
         userCheckPassword
       );
       if (result && result.error) {
-        setError(result.msg);
+        if ((result.msg = "Email address already taken"))
+          toast.update(id, "E-Mail bereits vergeben", { type: "danger" });
+        else
+          toast.update(
+            id,
+            "Registrierung fehlgeschlagen. Bitte korrigiere deine Eingaben.",
+            { type: "danger" }
+          );
       } else {
         toast.update(id, "Registierung erfolgreich", { type: "success" });
         router.push("/(tabs)/modules");
@@ -155,8 +161,6 @@ export default function SignupScreen() {
               textColor={COLORTHEME.light.grey2}
               onPress={register}
             />
-
-            {error && <Text style={styles.errorMessage}>{error}</Text>}
             <Text>
               Du hast bereits ein Konto?{" "}
               <Link
