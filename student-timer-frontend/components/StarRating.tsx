@@ -29,10 +29,12 @@ export default function StarRating({
             >
               <StarIcon
                 name="star"
-                color=""
+                color={color || COLORTHEME.light.primary}
                 fill={color || COLORTHEME.light.primary}
-                opacity={index < starAmount ? 1 : 0.4}
                 size={52}
+                fillOpacity={index < starAmount ? 1 : 0.1}
+                strokeWidth={BASE_STYLES.iconWidth}
+                absoluteStrokeWidth
               />
             </Pressable>
           ))}
@@ -43,12 +45,13 @@ export default function StarRating({
       <View style={styles.stars}>
         {[...Array(5)].map((_, index) => (
           <StarIcon
-            key={index}
             name="star"
-            color=""
+            color={color || COLORTHEME.light.primary}
             fill={color || COLORTHEME.light.primary}
-            opacity={index < starAmount ? 1 : 0.4}
             size={52}
+            fillOpacity={index < starAmount ? 1 : 0.1}
+            strokeWidth={BASE_STYLES.iconWidth}
+            absoluteStrokeWidth
           />
         ))}
       </View>
