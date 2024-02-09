@@ -270,7 +270,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "space-between",
     backgroundColor: COLORS.white,
-    paddingVertical: BASE_STYLES.horizontalPadding,
+    paddingVertical: BASE_STYLES.verticalPadding,
   },
   inputs: {
     flexDirection: "row",
@@ -281,15 +281,14 @@ const styles = StyleSheet.create({
   },
   trackerButtons: {
     flexDirection: "row",
-    gap: 10,
-    marginTop: 10,
-    marginBottom: BASE_STYLES.horizontalPadding,
+    gap: BASE_STYLES.wrapperGap,
+    marginVertical: BASE_STYLES.verticalPadding,
     backgroundColor: "transparent",
   },
   button: {
     flexGrow: 1,
   },
   modulesMissing: {
-    gap: 10,
+    gap: BASE_STYLES.headingGap,
   },
 });

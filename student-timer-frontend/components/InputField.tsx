@@ -8,7 +8,7 @@ import {
   Platform,
 } from "react-native";
 import { Text, View } from "@/components/Themed";
-import { COLORTHEME } from "@/constants/Theme";
+import { BASE_STYLES, COLORTHEME } from "@/constants/Theme";
 
 export type InputFieldProps = {
   label?: string;
@@ -53,7 +53,7 @@ export default function InputField(props: InputFieldProps & TextInputProps) {
 
 const styles = StyleSheet.create({
   inputLabelGroup: {
-    gap: 5,
+    gap: BASE_STYLES.labelGap,
     flexGrow: 1,
     flexBasis: 50,
     flexDirection: "column",
@@ -67,9 +67,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: COLORTHEME.light.grey2,
-    borderRadius: 12,
-    height: 40,
-    paddingHorizontal: 10,
+    borderRadius: BASE_STYLES.borderRadius,
+    height: BASE_STYLES.inputFieldHeight,
+    paddingHorizontal: BASE_STYLES.inputFieldHorizontalPadding,
     borderWidth: 1,
   },
   inputContainer: {
@@ -87,12 +87,7 @@ const styles = StyleSheet.create({
   },
   unit: {
     color: COLORTHEME.light.grey3,
-    marginLeft: 10,
-  },
-  buttons: {
-    flexDirection: "column",
-    alignItems: "center",
-    gap: 15,
+    marginLeft: BASE_STYLES.inputFieldHorizontalPadding,
   },
   messageText: {
     fontSize: 12,

@@ -6,6 +6,7 @@ import { computeDateDifference } from "@/libs/moduleTypeHelper";
 import { convertMinutesToHours } from "@/libs/timeHelper";
 import { P, Subhead } from "../StyledText";
 import { Pencil, Trash2 } from "lucide-react-native";
+import { BASE_STYLES } from "@/constants/Theme";
 
 type learningUnitProps = {
   learningUnit: LearningUnitType;
@@ -20,12 +21,20 @@ export default function LearningUnitRow(props: learningUnitProps) {
   const computeModuleDetailUnitString = (unit: LearningUnitType) => {
     let weekAmount = computeDateDifference(unit.endDate, unit.startDate, true);
 
-    return `${convertMinutesToHours(unit.workloadPerWeek, false)} Std., ${weekAmount} Woche(n)`;
+    return `${convertMinutesToHours(
+      unit.workloadPerWeek,
+      false
+    )} Std., ${weekAmount} Woche(n)`;
   };
 
   return (
     <View key={learningUnit.id} style={styles.unitRow}>
-      <View style={[styles.moduleIndicatorM, { backgroundColor: learningUnit.colorCode }]} />
+      <View
+        style={[
+          styles.moduleIndicatorM,
+          { backgroundColor: learningUnit.colorCode },
+        ]}
+      />
       <View style={styles.unitRowTitle}>
         <Subhead>{learningUnit.name}</Subhead>
         <P style={{ textAlign: "left" }}>
@@ -34,7 +43,9 @@ export default function LearningUnitRow(props: learningUnitProps) {
             : computeModuleDetailUnitString(learningUnit)}
         </P>
       </View>
-      <Subhead>{convertMinutesToHours(learningUnit.totalLearningTime)} Std.</Subhead>
+      <Subhead>
+        {convertMinutesToHours(learningUnit.totalLearningTime)} Std.
+      </Subhead>
       <View style={styles.optionWrapper}>
         {onEdit && (
           <Pressable onPress={onEdit} style={{ padding: 6 }}>
@@ -61,7 +72,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "flex-start",
     flex: 1,
-    padding: 12,
+    padding: BASE_STYLES.wrapperGap,
   },
   unitRow: {
     width: "100%",

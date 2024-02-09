@@ -4,14 +4,14 @@ import { View } from "../../components/Themed";
 import HBarChart, { HBarChartProps } from "@/components/statistics/HBarChart";
 import { BASE_STYLES, COLORTHEME } from "@/constants/Theme";
 import VBarChart, { VBarChartProps } from "@/components/statistics/VBarChart";
-import { H2, H3, P } from "@/components/StyledText";
+import { H3, P } from "@/components/StyledText";
 import VLineChart, {
   VLineChartProps,
 } from "@/components/statistics/VLineChart";
 import StarChart, { StarChartProps } from "@/components/statistics/StarChart";
 import { useAxios } from "@/context/AxiosContext";
 import { useAuth } from "@/context/AuthContext";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { useFocusEffect } from "expo-router";
 
 export default function StatisticsScreen() {
@@ -46,9 +46,11 @@ export default function StatisticsScreen() {
     }, 300);
   }, []);
 
-  useFocusEffect(() => {
-    getStatistics();
-  });
+  useFocusEffect(
+    useCallback(() => {
+      getStatistics();
+    }, [])
+  );
 
   return (
     <View style={styles.container}>
@@ -110,7 +112,10 @@ export default function StatisticsScreen() {
           }
         }}
         keyExtractor={(item, index) => index.toString()}
-        contentContainerStyle={styles.flatListContainer}
+        contentContainerStyle={[
+          { flex: statistics && statistics?.length ? 0 : 1 },
+          styles.flatListContainer,
+        ]}
         ListEmptyComponent={
           <View style={styles.emptyListContainer}>
             <H3>Es sind noch keine Statistiken vorhanden.</H3>
@@ -137,17 +142,16 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    gap: 24,
-    paddingVertical: BASE_STYLES.horizontalPadding,
+    gap: BASE_STYLES.gap,
+    paddingVertical: BASE_STYLES.verticalPadding,
   },
   flatListContainer: {
-    gap: 24,
+    gap: BASE_STYLES.gap,
   },
   emptyListContainer: {
+    flexGrow: 1,
     justifyContent: "center",
     alignItems: "center",
-    paddingHorizontal: 16,
-    gap: 20,
-    paddingVertical: 200,
+    gap: BASE_STYLES.headingGap,
   },
 });

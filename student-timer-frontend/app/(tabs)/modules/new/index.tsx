@@ -26,7 +26,9 @@ export default function NewModule() {
 
   const [openChanges, setOpenChanges] = useState(false);
   const [dateDisabled, setDateDisabled] = useState(false);
-  const [saveDisabled, setSaveDisabled] = useState<Set<string>>(new Set(["name", "cp"]));
+  const [saveDisabled, setSaveDisabled] = useState<Set<string>>(
+    new Set(["name", "cp"])
+  );
 
   const handleUpdate = (module: ModuleType, disabledStatus?: boolean) => {
     if (module) setNewModule(module);
@@ -95,7 +97,8 @@ export default function NewModule() {
             openChanges
               ? Alert({
                   title: "Eingaben verwerfen?",
-                  message: "Wenn du fortfährst, gehen alle Eingaben verloren. Bist du dir sicher?",
+                  message:
+                    "Wenn du fortfährst, gehen alle Eingaben verloren. Bist du dir sicher?",
                   onPressConfirm: () => router.push("/modules"),
                 })
               : router.push("/modules")
@@ -119,11 +122,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "space-between",
     backgroundColor: COLORTHEME.light.background,
-    paddingVertical: BASE_STYLES.horizontalPadding,
+    paddingVertical: BASE_STYLES.verticalPadding,
   },
   buttonRowWrapper: {
     flexDirection: "row",
     width: "100%",
-    gap: 16,
+    gap: BASE_STYLES.wrapperGap,
   },
 });

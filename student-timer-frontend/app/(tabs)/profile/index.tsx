@@ -76,22 +76,22 @@ const styles = StyleSheet.create({
   container: {
     alignItems: "center",
     justifyContent: "space-between",
-    padding: BASE_STYLES.horizontalPadding,
+    paddingVertical: BASE_STYLES.verticalPadding,
     flex: 1,
   },
   actionContainer: {
     flexDirection: "column",
-    gap: 10,
+    gap: BASE_STYLES.wrapperGap,
   },
   buttonContainer: {
     flexDirection: "column",
-    width: 200,
-    gap: 25,
+    gap: BASE_STYLES.gap,
+    width: "100%",
   },
   tour: {
     alignItems: "center",
   },
   title: {
-    paddingVertical: 15,
+    paddingVertical: BASE_STYLES.verticalPadding,
   },
 });

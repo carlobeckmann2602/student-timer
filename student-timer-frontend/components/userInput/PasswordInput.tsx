@@ -59,22 +59,22 @@ export default function PasswordInput(props: {
             />
           </View>
         </View>
-        <Button
-          text="Passwort ändern"
-          backgroundColor={COLORTHEME.light.primary}
-          textColor={COLORTHEME.light.grey2}
-          style={{ width: 200 }}
-          onPress={buttonAction}
-          disabled={disabled}
-        />
-        <Button
-          text="Abbrechen"
-          backgroundColor={COLORS.white}
-          borderColor={COLORTHEME.light.primary}
-          textColor={COLORTHEME.light.grey3}
-          style={{ width: 200 }}
-          onPress={cancelAction}
-        />
+        <View style={styles.buttons}>
+          <Button
+            text="Passwort ändern"
+            backgroundColor={COLORTHEME.light.primary}
+            textColor={COLORTHEME.light.grey2}
+            onPress={buttonAction}
+            disabled={disabled}
+          />
+          <Button
+            text="Abbrechen"
+            backgroundColor={COLORS.white}
+            borderColor={COLORTHEME.light.primary}
+            textColor={COLORTHEME.light.grey3}
+            onPress={cancelAction}
+          />
+        </View>
       </View>
     </>
   );
@@ -84,8 +84,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: "center",
     justifyContent: "space-around",
-    marginVertical: 10,
-    gap: 10,
+    gap: BASE_STYLES.gap,
   },
   outerWrapper: {
     width: "100%",
@@ -93,41 +92,19 @@ const styles = StyleSheet.create({
     borderRadius: BASE_STYLES.borderRadius,
     flexDirection: "column",
     justifyContent: "space-between",
-    padding: 24,
-    gap: 5,
-    marginVertical: 5,
+    padding: BASE_STYLES.padding,
+    gap: BASE_STYLES.wrapperGap,
   },
   row: {
     flexGrow: 1,
     flexDirection: "row",
     backgroundColor: "transparent",
-    gap: 16,
-  },
-  inputLabelGroup: {
-    flex: 1,
-    gap: 5,
-    flexDirection: "column",
-    backgroundColor: "transparent",
-  },
-  inputLabelText: {
-    color: COLORTHEME.light.primary,
-  },
-  input: {
-    flexGrow: 1,
-    backgroundColor: COLORTHEME.light.grey2,
-    color: COLORTHEME.light.grey3,
-    borderRadius: BASE_STYLES.borderRadius,
-    height: 40,
+    gap: BASE_STYLES.wrapperGap,
   },
   buttons: {
     flexDirection: "column",
     alignItems: "center",
-    gap: 15,
-  },
-  errorMessage: {
-    color: "red",
-    fontSize: 14,
-    textAlign: "center",
+    gap: BASE_STYLES.wrapperGap,
     width: "100%",
   },
 });

@@ -81,7 +81,18 @@ const COLORTHEME = {
 
 const BASE_STYLES = {
   horizontalPadding: 16,
+  verticalPadding: 16,
+  padding: 16,
+  gap: 24,
+  headingGap: 12,
+  wrapperGap: 12,
+  labelGap: 5,
+  buttonHeight: 50,
+  buttonRadius: 50,
   borderRadius: 12,
+  iconWidth: 1.5,
+  inputFieldHeight: 40,
+  inputFieldHorizontalPadding: 10,
 };
 
 export { COLORTHEME, COLORS, SIZES, BASE_STYLES };

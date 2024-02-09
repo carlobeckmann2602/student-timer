@@ -1,11 +1,20 @@
 import { Pencil, Trash2 } from "lucide-react-native";
-import { View, StyleSheet, TouchableOpacity, Alert, Pressable } from "react-native";
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Alert,
+  Pressable,
+} from "react-native";
 import { ModuleChart } from "./ModuleChart";
 import { H4, P, Subhead } from "../StyledText";
 import { BASE_STYLES, COLORTHEME } from "@/constants/Theme";
 import { useRouter } from "expo-router";
 import { ModuleType } from "@/types/ModuleType";
-import { computeDeadline, computeRemainingSessionTime } from "@/libs/moduleTypeHelper";
+import {
+  computeDeadline,
+  computeRemainingSessionTime,
+} from "@/libs/moduleTypeHelper";
 import { convertMinutesToHours } from "@/libs/timeHelper";
 import { useToast } from "react-native-toast-notifications";
 import { useAuth } from "@/context/AuthContext";
@@ -56,7 +65,9 @@ export function ModuleCard(props: moduleCardProps) {
   const handleDelete = async () => {
     let id = toast.show("Löschen...", { type: "loading" });
     try {
-      await authAxios?.delete(`/students/${authState?.user.id}/modules/${moduleData.id}`);
+      await authAxios?.delete(
+        `/students/${authState?.user.id}/modules/${moduleData.id}`
+      );
       toast.update(id, "Modul erfolgreich gelöscht", { type: "success" });
       fetchModules && (await fetchModules());
     } catch (e) {
@@ -80,8 +91,16 @@ export function ModuleCard(props: moduleCardProps) {
       {/* Header Row */}
       <View style={styles.headerRow}>
         <View style={styles.headerRowInnerWrapper}>
-          <View style={[styles.moduleIndicatorM, { backgroundColor: moduleData.colorCode }]} />
-          <H4 style={{ textAlign: "left", flexWrap: "nowrap", flexShrink: 1 }} numberOfLines={2}>
+          <View
+            style={[
+              styles.moduleIndicatorM,
+              { backgroundColor: moduleData.colorCode },
+            ]}
+          />
+          <H4
+            style={{ textAlign: "left", flexWrap: "nowrap", flexShrink: 1 }}
+            numberOfLines={2}
+          >
             {moduleData.name}
           </H4>
           {/* </View> */}
@@ -108,7 +127,12 @@ export function ModuleCard(props: moduleCardProps) {
           {moduleData.learningUnits.map((unit) => {
             return (
               <View key={unit.id} style={styles.headerRowInnerWrapper}>
-                <View style={[styles.moduleIndicatorS, { backgroundColor: unit.colorCode }]} />
+                <View
+                  style={[
+                    styles.moduleIndicatorS,
+                    { backgroundColor: unit.colorCode },
+                  ]}
+                />
                 <P>{unit.name}</P>
               </View>
             );
@@ -146,7 +170,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "space-between",
     padding: "6%",
-    gap: 16,
+    gap: BASE_STYLES.wrapperGap,
   },
   separatorV: {
     height: "100%",
@@ -159,7 +183,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    gap: 16,
+    gap: BASE_STYLES.wrapperGap,
   },
   moduleIndicatorM: {
     width: 24,
@@ -201,6 +225,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     alignItems: "flex-start",
-    gap: 5,
+    gap: BASE_STYLES.labelGap,
   },
 });

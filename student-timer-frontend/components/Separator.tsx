@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 import { View, Text } from "@/components/Themed";
 
-import { COLORTHEME } from "@/constants/Theme";
+import { BASE_STYLES, COLORTHEME } from "@/constants/Theme";
 
 type Props = {
   text?: string;
@@ -44,10 +44,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     width: "80%",
-    gap: 20,
+    gap: BASE_STYLES.wrapperGap,
   },
   separator: {
-    marginVertical: 10,
+    marginVertical: BASE_STYLES.verticalPadding,
     height: 1,
   },
 });

@@ -10,7 +10,12 @@ import { ModuleType } from "@/types/ModuleType";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Plus } from "lucide-react-native";
 import { useState } from "react";
-import { FlatList, KeyboardAvoidingView, Platform, StyleSheet } from "react-native";
+import {
+  FlatList,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+} from "react-native";
 import { useToast } from "react-native-toast-notifications";
 
 export default function NewModuleLearningUnits() {
@@ -104,11 +109,18 @@ export default function NewModuleLearningUnits() {
         };
       }
 
-      response = await authAxios?.post(`/students/${authState?.user.id}/modules`, moduleDTO);
+      response = await authAxios?.post(
+        `/students/${authState?.user.id}/modules`,
+        moduleDTO
+      );
       const createdModule: ModuleType | undefined = response?.data;
       learningUnits.forEach(async (unit: LearningUnitType) => {
-        let totalWorkloadPerWeek = unit.workloadPerWeekHours ? unit.workloadPerWeekHours : 0;
-        totalWorkloadPerWeek += unit.workloadPerWeekMinutes ? unit.workloadPerWeekMinutes : 0;
+        let totalWorkloadPerWeek = unit.workloadPerWeekHours
+          ? unit.workloadPerWeekHours
+          : 0;
+        totalWorkloadPerWeek += unit.workloadPerWeekMinutes
+          ? unit.workloadPerWeekMinutes
+          : 0;
 
         await authAxios?.post(
           `/students/${authState?.user.id}/modules/${createdModule?.id}/learningUnits`,
@@ -142,9 +154,13 @@ export default function NewModuleLearningUnits() {
           <LearningUnitForm
             key={index}
             inputData={item}
-            onDelete={learningUnits.length > 1 ? onDeleteLearningUnit : undefined}
+            onDelete={
+              learningUnits.length > 1 ? onDeleteLearningUnit : undefined
+            }
             onChange={(inputData) => handleUpdate(inputData, index)}
-            onValidationError={(errorOccured) => handleValidationError(item.id, errorOccured)}
+            onValidationError={(errorOccured) =>
+              handleValidationError(item.id, errorOccured)
+            }
           />
         )}
         keyExtractor={(item: LearningUnitType) => item.id.toString()}
@@ -180,18 +196,18 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     justifyContent: "space-between",
-    gap: 12,
+    gap: BASE_STYLES.gap,
     backgroundColor: COLORTHEME.light.background,
-    paddingVertical: BASE_STYLES.horizontalPadding,
+    paddingVertical: BASE_STYLES.verticalPadding,
   },
   scrollViewContainer: {
     flexGrow: 1,
     flexDirection: "column",
     borderRadius: BASE_STYLES.borderRadius,
-    gap: 24,
+    gap: BASE_STYLES.gap,
   },
   scrollViewContainerStyle: {
     justifyContent: "space-around",
-    gap: 16,
+    gap: BASE_STYLES.gap,
   },
 });

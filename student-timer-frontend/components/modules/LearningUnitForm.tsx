@@ -1,5 +1,5 @@
 import { View, StyleSheet, Pressable } from "react-native";
-import { COLORS, COLORTHEME } from "@/constants/Theme";
+import { BASE_STYLES, COLORS, COLORTHEME } from "@/constants/Theme";
 import DateTimePicker from "../DateTimePicker";
 import { LearningUnitType } from "@/types/LearningUnitType";
 import { LabelS, P } from "../StyledText";
@@ -35,7 +35,8 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
 
     if (
       formattedValue <= 0 &&
-      (inputData.workloadPerWeekMinutes === undefined || inputData.workloadPerWeekMinutes <= 0)
+      (inputData.workloadPerWeekMinutes === undefined ||
+        inputData.workloadPerWeekMinutes <= 0)
     ) {
       handleChange({
         workloadPerWeekHours: 0,
@@ -63,11 +64,13 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
       return;
     }
 
-    let formattedValue = Math.round(Math.abs(+value)) >= 60 ? 59 : Math.round(Math.abs(+value));
+    let formattedValue =
+      Math.round(Math.abs(+value)) >= 60 ? 59 : Math.round(Math.abs(+value));
 
     if (
       formattedValue <= 0 &&
-      (inputData.workloadPerWeekHours === undefined || inputData.workloadPerWeekHours <= 0)
+      (inputData.workloadPerWeekHours === undefined ||
+        inputData.workloadPerWeekHours <= 0)
     ) {
       handleChange({
         workloadPerWeekMinutes: 0,
@@ -121,13 +124,17 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
           <DateTimePicker
             label="Enddatum"
             value={inputData.endDate}
-            onChangeDate={(value) => handleChange({ endDate: value } as LearningUnitType)}
+            onChangeDate={(value) =>
+              handleChange({ endDate: value } as LearningUnitType)
+            }
             minimumDate={inputData.startDate}
           />
         </View>
       </View>
       <View style={styles.workloadRowContainer}>
-        <P style={{ color: COLORTHEME.light.primary }}>{"Arbeitsaufwand pro Woche"}</P>
+        <P style={{ color: COLORTHEME.light.primary }}>
+          {"Arbeitsaufwand pro Woche"}
+        </P>
         <View style={styles.row}>
           <InputFieldNumeric
             onChangeText={(value) => updateWorkloadHours(+value)}
@@ -142,24 +149,41 @@ export function LearningUnitForm(props: LearningUnitFormProps) {
           <InputFieldNumeric
             onChangeText={(value) => updateWorkloadMinutes(+value)}
             value={
-              inputData.workloadPerWeekMinutes ? inputData.workloadPerWeekMinutes.toString() : "0"
+              inputData.workloadPerWeekMinutes
+                ? inputData.workloadPerWeekMinutes.toString()
+                : "0"
             }
             inputUnit="min."
             showErrorBorder={workloadError}
           />
         </View>
-        {workloadError && <P style={styles.errorMessage}>Bitte gebe den Arbeitsaufwand an</P>}
+        {workloadError && (
+          <P style={styles.errorMessage}>Bitte gebe den Arbeitsaufwand an</P>
+        )}
       </View>
       {onDelete && (
         <View
-          style={[styles.row, { justifyContent: "flex-end", paddingTop: 4, paddingBottom: -8 }]}
+          style={[
+            styles.row,
+            { justifyContent: "flex-end", paddingTop: 4, paddingBottom: -8 },
+          ]}
         >
           <View style={{ flex: 1 }} />
-          <Pressable style={styles.options} onPress={() => onDelete(inputData.id)}>
-            <LabelS style={[styles.errorMessage, { textDecorationLine: "underline" }]}>
+          <Pressable
+            style={styles.options}
+            onPress={() => onDelete(inputData.id)}
+          >
+            <LabelS
+              style={[styles.errorMessage, { textDecorationLine: "underline" }]}
+            >
               Lerneinheit entfernen
             </LabelS>
-            <Trash2 size={14} color={COLORTHEME.light.danger} />
+            <Trash2
+              size={14}
+              color={COLORTHEME.light.danger}
+              strokeWidth={BASE_STYLES.iconWidth}
+              absoluteStrokeWidth
+            />
           </Pressable>
         </View>
       )}
@@ -171,21 +195,21 @@ const styles = StyleSheet.create({
   outerWrapper: {
     width: "100%",
     backgroundColor: COLORTHEME.light.grey1,
-    borderRadius: 12,
+    borderRadius: BASE_STYLES.borderRadius,
     flexDirection: "column",
     justifyContent: "space-between",
-    padding: 24,
-    gap: 5,
+    padding: BASE_STYLES.padding,
+    gap: BASE_STYLES.wrapperGap,
   },
   row: {
     flexGrow: 1,
     flexDirection: "row",
     backgroundColor: "transparent",
-    gap: 16,
+    gap: BASE_STYLES.wrapperGap,
   },
   options: {
-    gap: 8,
-    padding: 8,
+    gap: BASE_STYLES.wrapperGap,
+    paddingVertical: BASE_STYLES.wrapperGap,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
@@ -198,7 +222,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
   },
   workloadRowContainer: {
-    gap: 5,
+    gap: BASE_STYLES.labelGap,
     flexDirection: "column",
     backgroundColor: "transparent",
   },

@@ -41,7 +41,8 @@ export default function LearningUnitSreen(props: LearningUnitScreenProps) {
   useEffect(() => {
     if (isEdit) {
       const detailModule =
-        modules?.find((module) => module.id.toString() === moduleId) || ({} as ModuleType);
+        modules?.find((module) => module.id.toString() === moduleId) ||
+        ({} as ModuleType);
 
       let learningUnitToEdit = detailModule.learningUnits.find(
         (unit) => unit.id.toString() === learningUnitId
@@ -62,11 +63,13 @@ export default function LearningUnitSreen(props: LearningUnitScreenProps) {
 
   const onSave = async () => {
     const detailModule =
-      modules?.find((module) => module.id.toString() === moduleId) || ({} as ModuleType);
+      modules?.find((module) => module.id.toString() === moduleId) ||
+      ({} as ModuleType);
     let updatedModule = { ...detailModule };
 
     const updatedUnitLearningTime =
-      unitData.workloadPerWeek * computeDateDifference(unitData.endDate, unitData.startDate, true);
+      unitData.workloadPerWeek *
+      computeDateDifference(unitData.endDate, unitData.startDate, true);
 
     if (isEdit) {
       updatedModule.learningUnits = updatedModule.learningUnits.map((unit) =>
@@ -87,7 +90,9 @@ export default function LearningUnitSreen(props: LearningUnitScreenProps) {
     setModules &&
       setModules((prevState) =>
         prevState?.map((currentModule) => {
-          return currentModule.id === updatedModule.id ? updatedModule : currentModule;
+          return currentModule.id === updatedModule.id
+            ? updatedModule
+            : currentModule;
         })
       );
     router.back();
@@ -104,7 +109,9 @@ export default function LearningUnitSreen(props: LearningUnitScreenProps) {
         onChange={(inputData) => {
           handleUpdate(inputData);
         }}
-        onValidationError={(errorOccured) => handleValidationError(errorOccured)}
+        onValidationError={(errorOccured) =>
+          handleValidationError(errorOccured)
+        }
       />
       <View style={styles.buttonRowWrapper}>
         <Button
@@ -116,7 +123,9 @@ export default function LearningUnitSreen(props: LearningUnitScreenProps) {
           onPress={() =>
             openChanges
               ? Alert({
-                  title: isEdit ? "Änderungen verwerfen?" : "Eingaben verwerfen?",
+                  title: isEdit
+                    ? "Änderungen verwerfen?"
+                    : "Eingaben verwerfen?",
                   message: isEdit
                     ? "Wenn du fortfährst, gehen alle Änderungen verloren. Bist du dir sicher?"
                     : "Wenn du fortfährst, gehen alle Eingaben verloren. Bist du dir sicher?",
@@ -143,14 +152,14 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     justifyContent: "space-between",
-    gap: 12,
+    gap: BASE_STYLES.gap,
     backgroundColor: COLORTHEME.light.background,
-    paddingVertical: BASE_STYLES.horizontalPadding,
+    paddingVertical: BASE_STYLES.verticalPadding,
   },
   buttonRowWrapper: {
     flexDirection: "row",
     width: "100%",
-    gap: 16,
-    marginBottom: BASE_STYLES.horizontalPadding,
+    gap: BASE_STYLES.wrapperGap,
+    marginBottom: BASE_STYLES.verticalPadding,
   },
 });

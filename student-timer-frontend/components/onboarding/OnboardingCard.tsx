@@ -1,9 +1,7 @@
 import React from "react";
 import { Text, View, Image, StyleSheet } from "react-native";
 import { OnboardingItem } from "@/constants/onboardingItems";
-import {COLORTHEME} from "@/constants/Theme";
-import {black} from "colorette";
-import {green} from "react-native-reanimated/lib/typescript/reanimated2/Colors";
+import { BASE_STYLES, COLORTHEME } from "@/constants/Theme";
 
 type OnboardingCardProps = {
   onboardingItem: OnboardingItem;
@@ -30,9 +28,11 @@ const styles = StyleSheet.create({
   onboardingItem: {
     flex: 1,
     justifyContent: "center",
+    gap: BASE_STYLES.gap,
   },
   textContainer: {
     alignItems: "center",
+    gap: BASE_STYLES.headingGap,
   },
   title: {
     fontSize: 26,
@@ -41,20 +41,18 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 24,
     textAlign: "center",
-    marginVertical: 10,
   },
   imageContainer: {
-    borderWidth: 5,
+    borderWidth: BASE_STYLES.iconWidth * 2,
     borderColor: COLORTHEME.light.primary,
-    borderRadius: 30,
+    borderRadius: BASE_STYLES.borderRadius * 2,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 10,
   },
-    image: {
+  image: {
     width: "100%",
     height: 250,
     resizeMode: "contain",
-    margin: 10,
+    margin: BASE_STYLES.padding,
   },
 });

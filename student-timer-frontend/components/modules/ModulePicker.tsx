@@ -4,7 +4,7 @@ import Picker, { Item } from "react-native-picker-select";
 import { useFocusEffect } from "expo-router";
 
 import { useModules } from "@/context/ModuleContext";
-import { COLORTHEME } from "@/constants/Theme";
+import { BASE_STYLES, COLORTHEME } from "@/constants/Theme";
 import { View, Text } from "@/components/Themed";
 import { ModuleType } from "@/types/ModuleType";
 
@@ -80,7 +80,7 @@ export default function ModulePicker(props: {
 
 const styles = StyleSheet.create({
   container: {
-    gap: 5,
+    gap: BASE_STYLES.labelGap,
   },
   inputLabelText: {
     color: COLORTHEME.light.primary,
@@ -89,10 +89,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: COLORTHEME.light.grey2,
-    borderRadius: 12,
-    height: 40,
-    paddingHorizontal: 10,
-    gap: 8,
+    borderRadius: BASE_STYLES.borderRadius,
+    height: BASE_STYLES.inputFieldHeight,
+    paddingHorizontal: BASE_STYLES.inputFieldHorizontalPadding,
+    gap: BASE_STYLES.wrapperGap,
   },
   colorCircle: {
     width: 16,

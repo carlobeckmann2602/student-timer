@@ -2,7 +2,7 @@ import React from "react";
 import { View } from "@/components/Themed";
 import { Pressable, StyleSheet } from "react-native";
 import { StarIcon } from "lucide-react-native";
-import { COLORTHEME } from "@/constants/Theme";
+import { BASE_STYLES, COLORTHEME } from "@/constants/Theme";
 
 type Props = {
   starAmount: number;
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     backgroundColor: "transparent",
-    gap: 10,
+    gap: BASE_STYLES.wrapperGap,
   },
   star: {
     cursor: "pointer",

@@ -11,7 +11,11 @@ import { BASE_STYLES, COLORS, COLORTHEME } from "@/constants/Theme";
 import { useAuth } from "@/context/AuthContext";
 import { useAxios } from "@/context/AxiosContext";
 import { useModules } from "@/context/ModuleContext";
-import { msToTimeObject, timeObjectToMinutes, formatTimeLearningSession } from "@/libs/timeHelper";
+import {
+  msToTimeObject,
+  timeObjectToMinutes,
+  formatTimeLearningSession,
+} from "@/libs/timeHelper";
 import StarRating from "@/components/StarRating";
 import InputFieldNumeric from "../InputFieldNumeric";
 
@@ -33,7 +37,9 @@ export default function LearningSession(props: { isEdit: boolean }) {
     (session) => session.id === Number(learningSessionId)
   );
   const [starAmount, setStarAmount] = useState(learningSession?.rating || 1);
-  const [description, setDescription] = useState(learningSession?.description || "");
+  const [description, setDescription] = useState(
+    learningSession?.description || ""
+  );
   const [focusDuration, setFocusDuration] = useState<{
     hours: number | string;
     mins: number | string;
@@ -43,7 +49,9 @@ export default function LearningSession(props: { isEdit: boolean }) {
     mins: number | string;
   }>(
     msToTimeObject(
-      ((learningSession?.totalDuration || 0) - (learningSession?.focusDuration || 0)) * (1000 * 60)
+      ((learningSession?.totalDuration || 0) -
+        (learningSession?.focusDuration || 0)) *
+        (1000 * 60)
     )
   );
   const [changesMade, setChangesMade] = useState(false);
@@ -91,7 +99,10 @@ export default function LearningSession(props: { isEdit: boolean }) {
         otherVal === "" ||
         Number(otherVal) > 0 ||
         isNaN(Number(otherVal));
-      valid = Math.sign(number) >= 0 && (isHours ? true : number < 60) && hoursMinsBothNotNull;
+      valid =
+        Math.sign(number) >= 0 &&
+        (isHours ? true : number < 60) &&
+        hoursMinsBothNotNull;
     }
 
     setValidInputs((prevState) => ({
@@ -139,7 +150,13 @@ export default function LearningSession(props: { isEdit: boolean }) {
                 style={styles.input}
                 value={focusDuration.hours.toString()}
                 onChangeText={(val) => {
-                  validateInput(val, focusDuration, setFocusDuration, "focusDuration", true);
+                  validateInput(
+                    val,
+                    focusDuration,
+                    setFocusDuration,
+                    "focusDuration",
+                    true
+                  );
                 }}
                 inputUnit="Std."
                 selectTextOnFocus
@@ -149,7 +166,13 @@ export default function LearningSession(props: { isEdit: boolean }) {
                 style={styles.input}
                 value={focusDuration.mins.toString()}
                 onChangeText={(val) => {
-                  validateInput(val, focusDuration, setFocusDuration, "focusDuration", false);
+                  validateInput(
+                    val,
+                    focusDuration,
+                    setFocusDuration,
+                    "focusDuration",
+                    false
+                  );
                 }}
                 inputUnit="min."
                 selectTextOnFocus
@@ -170,7 +193,13 @@ export default function LearningSession(props: { isEdit: boolean }) {
                 style={styles.input}
                 value={pauseDuration.hours.toString()}
                 onChangeText={(val) => {
-                  validateInput(val, pauseDuration, setPauseDuration, "pauseDuration", true);
+                  validateInput(
+                    val,
+                    pauseDuration,
+                    setPauseDuration,
+                    "pauseDuration",
+                    true
+                  );
                 }}
                 inputUnit="Std."
                 selectTextOnFocus
@@ -180,7 +209,13 @@ export default function LearningSession(props: { isEdit: boolean }) {
                 style={styles.input}
                 value={pauseDuration.mins.toString()}
                 onChangeText={(val) => {
-                  validateInput(val, pauseDuration, setPauseDuration, "pauseDuration", false);
+                  validateInput(
+                    val,
+                    pauseDuration,
+                    setPauseDuration,
+                    "pauseDuration",
+                    false
+                  );
                 }}
                 inputUnit="min."
                 selectTextOnFocus
@@ -198,7 +233,10 @@ export default function LearningSession(props: { isEdit: boolean }) {
         <Text style={styles.moduleLabel}>Modul</Text>
         <View style={styles.colorContainer}>
           <View
-            style={[styles.colorCircle, { backgroundColor: module?.colorCode || "transparent" }]}
+            style={[
+              styles.colorCircle,
+              { backgroundColor: module?.colorCode || "transparent" },
+            ]}
           />
           <Text>{module?.name}</Text>
         </View>
@@ -226,7 +264,8 @@ export default function LearningSession(props: { isEdit: boolean }) {
             onPress={() => {
               Alert({
                 title: "Tracking verwerfen?",
-                message: "Wenn du fortfährst, wird das Tracking gelöscht. Bist du dir sicher?",
+                message:
+                  "Wenn du fortfährst, wird das Tracking gelöscht. Bist du dir sicher?",
                 onPressConfirm: () =>
                   router.push({
                     pathname: "/(tabs)/(tracking)/",
@@ -313,7 +352,8 @@ export default function LearningSession(props: { isEdit: boolean }) {
                     title: "Änderungen verwerfen?",
                     message:
                       "Wenn du fortfährst, gehen alle Änderungen ungespeichert verloren. Bist du dir sicher?",
-                    onPressConfirm: () => router.push(`/(tabs)/modules/${module?.id}/`),
+                    onPressConfirm: () =>
+                      router.push(`/(tabs)/modules/${module?.id}/`),
                   })
                 : router.push(`/(tabs)/modules/${module?.id}/`);
             } else {
@@ -342,14 +382,14 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   timeStats: {
-    gap: 20,
+    gap: BASE_STYLES.gap,
   },
   timeLabelContainer: {
     alignItems: "center",
-    gap: 10,
+    gap: BASE_STYLES.headingGap,
   },
   moduleContainer: {
-    gap: 5,
+    gap: BASE_STYLES.labelGap,
   },
   moduleLabel: {
     color: COLORTHEME.light.primary,
@@ -358,10 +398,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: COLORTHEME.light.grey2,
-    borderRadius: 12,
-    height: 40,
-    paddingHorizontal: 10,
-    gap: 8,
+    borderRadius: BASE_STYLES.borderRadius,
+    height: BASE_STYLES.inputFieldHeight,
+    paddingHorizontal: BASE_STYLES.inputFieldHorizontalPadding,
+    gap: BASE_STYLES.wrapperGap,
   },
   colorCircle: {
     width: 16,
@@ -370,7 +410,7 @@ const styles = StyleSheet.create({
   },
   timeEdit: {
     flexDirection: "row",
-    gap: 10,
+    gap: BASE_STYLES.wrapperGap,
   },
   timeText: {
     fontSize: 20,
@@ -380,7 +420,7 @@ const styles = StyleSheet.create({
     flexBasis: "auto",
   },
   actions: {
-    gap: 10,
+    gap: BASE_STYLES.wrapperGap,
   },
   buttonBorder: {
     borderWidth: 3,
@@ -389,6 +429,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: "center",
     textDecorationLine: "underline",
-    marginBottom: 20,
+    marginBottom: BASE_STYLES.horizontalPadding,
   },
 });

@@ -5,7 +5,7 @@ import InputFieldNumeric from "../InputFieldNumeric";
 import StyledCheckbox from "../StyledCheckbox";
 import { P } from "../StyledText";
 import { View } from "../Themed";
-import { COLORS, COLORTHEME } from "@/constants/Theme";
+import { BASE_STYLES, COLORS, COLORTHEME } from "@/constants/Theme";
 import { ModuleType } from "@/types/ModuleType";
 import { useEffect, useState } from "react";
 
@@ -18,7 +18,8 @@ type ModuleFormProps = {
 };
 
 export default function ModuleForm(props: ModuleFormProps) {
-  const { inputData, dateDiabled, onChange, onValidationError, onSaveHandler } = props;
+  const { inputData, dateDiabled, onChange, onValidationError, onSaveHandler } =
+    props;
 
   const selectableColors: string[] = [
     COLORS.moduleColor1,
@@ -40,7 +41,11 @@ export default function ModuleForm(props: ModuleFormProps) {
 
   // This effect is only supposed to be triggered when the user clicks on the save button and no inputs were made before
   useEffect(() => {
-    if (onSaveHandler && inputData.name === "" && inputData.creditPoints === 0) {
+    if (
+      onSaveHandler &&
+      inputData.name === "" &&
+      inputData.creditPoints === 0
+    ) {
       validateModuleName(inputData.name);
       validateCreditPoints(inputData.creditPoints);
     }
@@ -83,7 +88,9 @@ export default function ModuleForm(props: ModuleFormProps) {
         />
       </View>
       <View style={styles.dateRowContainer}>
-        <P style={{ color: COLORTHEME.light.primary }}>{"Prüfungsdatum (optional)"}</P>
+        <P style={{ color: COLORTHEME.light.primary }}>
+          {"Prüfungsdatum (optional)"}
+        </P>
         <View style={styles.row}>
           <DateTimePicker
             onChangeDate={(value) => {
@@ -113,14 +120,20 @@ export default function ModuleForm(props: ModuleFormProps) {
                 creditPoints: formattedValue,
               });
             }}
-            value={inputData.creditPoints === 0 ? "" : inputData.creditPoints.toString()}
+            value={
+              inputData.creditPoints === 0
+                ? ""
+                : inputData.creditPoints.toString()
+            }
             inputUnit="CP"
             placeholder="Anzahl"
             showErrorBorder={creditPointError != ""}
           />
           <View style={{ width: "50%", backgroundColor: "transparent" }} />
         </View>
-        {creditPointError && <P style={styles.errorMessage}>{creditPointError}</P>}
+        {creditPointError && (
+          <P style={styles.errorMessage}>{creditPointError}</P>
+        )}
       </View>
       <View style={styles.row}>
         <View style={styles.colorWrapper}>
@@ -149,11 +162,15 @@ export default function ModuleForm(props: ModuleFormProps) {
                       styles.colorOptionIndicator,
                       {
                         borderColor:
-                          inputData.colorCode === color ? COLORTHEME.light.primary : "transparent",
+                          inputData.colorCode === color
+                            ? COLORTHEME.light.primary
+                            : "transparent",
                       },
                     ]}
                   />
-                  <View style={[styles.colorOption, { backgroundColor: color }]} />
+                  <View
+                    style={[styles.colorOption, { backgroundColor: color }]}
+                  />
                 </TouchableOpacity>
               );
             }}
@@ -171,44 +188,19 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     flexDirection: "column",
     justifyContent: "space-between",
-    padding: 24,
-    gap: 12,
-  },
-  scrollViewContainer: {
-    flexGrow: 1,
-    flexDirection: "column",
-    gap: 24,
-    backgroundColor: COLORTHEME.light.background,
-  },
-  scrollViewContainerStyle: {
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "space-between",
-    gap: 16,
-  },
-  section: {
-    width: "100%",
-    gap: 12,
-    backgroundColor: "transparent",
-  },
-  flatListContainer: {
-    gap: 12,
+    padding: BASE_STYLES.padding,
+    gap: BASE_STYLES.wrapperGap,
   },
   row: {
     flexDirection: "row",
     justifyContent: "flex-start",
     backgroundColor: "transparent",
-    gap: 16,
+    gap: BASE_STYLES.wrapperGap,
   },
   dateRowContainer: {
-    gap: 5,
+    gap: BASE_STYLES.labelGap,
     flexDirection: "column",
     backgroundColor: "transparent",
-  },
-  buttons: {
-    flexDirection: "column",
-    alignItems: "center",
-    gap: 16,
   },
   colorWrapper: {
     flexDirection: "column",
@@ -242,18 +234,6 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 1000,
-  },
-  discardLink: {
-    fontSize: 16,
-    textAlign: "center",
-    textDecorationLine: "underline",
-    marginBottom: 20,
-  },
-  unitWrapper: {
-    width: "100%",
-    flexDirection: "column",
-    justifyContent: "flex-start",
-    gap: 16,
   },
   errorMessage: {
     color: COLORTHEME.light.danger,

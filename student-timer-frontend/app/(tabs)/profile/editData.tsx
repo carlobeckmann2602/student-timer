@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, ScrollView } from "@/components/Themed";
+import { View } from "@/components/Themed";
 import Alert from "@/components/Alert";
 import { useRouter } from "expo-router";
 import { StyleSheet } from "react-native";
@@ -159,7 +159,8 @@ export default function EditData() {
 const styles = StyleSheet.create({
   container: {
     justifyContent: "flex-start",
-    padding: BASE_STYLES.horizontalPadding,
+    paddingVertical: BASE_STYLES.verticalPadding,
+    gap: BASE_STYLES.gap,
     flex: 1,
   },
 });

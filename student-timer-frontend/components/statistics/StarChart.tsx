@@ -33,7 +33,6 @@ export default function StarChart({ title, stars }: StarChartProps) {
 const styles = StyleSheet.create({
   starContainer: {
     backgroundColor: "transparent",
-    paddingHorizontal: 6,
   },
   label: { color: COLORTHEME.light.grey3 },
 });

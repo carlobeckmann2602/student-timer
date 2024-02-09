@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, ScrollView } from "@/components/Themed";
+import { View } from "@/components/Themed";
 import Alert from "@/components/Alert";
 import { useRouter } from "expo-router";
 import { BASE_STYLES } from "@/constants/Theme";
@@ -12,7 +12,7 @@ import {
   validatePassword,
   comparePasswords,
 } from "@/components/auth/validationMethods";
-import {StyleSheet} from "react-native";
+import { StyleSheet } from "react-native";
 
 export default function EditPassword() {
   const toast = useToast();
@@ -108,7 +108,8 @@ export default function EditPassword() {
 const styles = StyleSheet.create({
   container: {
     justifyContent: "flex-start",
-    padding: BASE_STYLES.horizontalPadding,
+    paddingVertical: BASE_STYLES.verticalPadding,
     flex: 1,
+    gap: BASE_STYLES.gap,
   },
 });

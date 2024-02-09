@@ -1,7 +1,7 @@
 import { Dimensions, StyleSheet } from "react-native";
 
 import { ScrollView, Text, View } from "@/components/Themed";
-import { COLORTHEME } from "@/constants/Theme";
+import { BASE_STYLES, COLORTHEME } from "@/constants/Theme";
 import { useState } from "react";
 import Button from "@/components/Button";
 import InputField from "@/components/InputField";
@@ -86,16 +86,15 @@ export default function SignupScreen() {
     }
   };
 
-  const [scrollEnable, setScrollEnable] = useState(false);
-  const { height } = Dimensions.get("window");
-
-  const onContentSizeChange = (contentWidth: number, contentHeight: number) => {
-    console.log("contentHeight:", contentHeight, "height:", height);
-    setScrollEnable(contentHeight > height);
-  };
-
   return (
-    <ScrollView style={{ flex: 1 }} alwaysBounceVertical={false}>
+    <ScrollView
+      style={{ flex: 1, paddingBottom: BASE_STYLES.verticalPadding }}
+      contentContainerStyle={{
+        flexGrow: 1,
+        backgroundColor: COLORTHEME.light.background,
+        paddingVertical: BASE_STYLES.verticalPadding,
+      }}
+    >
       <View style={styles.container}>
         <Title>Student Time Tracker</Title>
         <View style={styles.outerWrapper}>
@@ -151,7 +150,6 @@ export default function SignupScreen() {
               backgroundColor={COLORTHEME.light.primary}
               textColor={COLORTHEME.light.grey2}
               onPress={register}
-              style={{ width: 250 }}
             />
 
             {error && <Text style={styles.errorMessage}>{error}</Text>}
@@ -176,36 +174,36 @@ export default function SignupScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: "space-between",
+    flexGrow: 1,
+    justifyContent: "space-evenly",
     alignItems: "center",
-    gap: 15,
-    marginBottom: 25,
+    gap: BASE_STYLES.gap,
   },
   outerWrapper: {
     width: "100%",
     backgroundColor: COLORTHEME.light.grey1,
-    borderRadius: 12,
+    borderRadius: BASE_STYLES.borderRadius,
     flexDirection: "column",
     justifyContent: "space-between",
-    padding: 24,
-    gap: 5,
+    padding: BASE_STYLES.padding,
+    gap: BASE_STYLES.wrapperGap,
   },
   row: {
     flexGrow: 1,
     flexDirection: "row",
     backgroundColor: "transparent",
-    gap: 16,
+    gap: BASE_STYLES.wrapperGap,
   },
   buttons: {
     flexDirection: "column",
     alignItems: "center",
-    gap: 10,
+    gap: BASE_STYLES.wrapperGap,
+    width: "100%",
   },
   buttonText: {
     flexDirection: "column",
     alignItems: "center",
-    gap: 15,
+    gap: BASE_STYLES.wrapperGap,
   },
   errorMessage: {
     color: "red",

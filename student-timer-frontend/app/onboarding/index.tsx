@@ -9,8 +9,8 @@ import { onboardingData } from "@/constants/onboardingItems";
 import OnboardingContainer from "@/components/onboarding/OnboardingContainer";
 import OnboardingCard from "@/components/onboarding/OnboardingCard";
 import CardNavigation from "@/components/onboarding/CardNavigation";
-import {saveItem} from "@/libs/deviceStorage";
-import {useAuth} from "@/context/AuthContext";
+import { saveItem } from "@/libs/deviceStorage";
+import { useAuth } from "@/context/AuthContext";
 import Pressable from "@/components/Pressable";
 
 export default function OnboardingScreen() {
@@ -25,13 +25,14 @@ export default function OnboardingScreen() {
     return Platform.OS === "android" || Platform.OS === "ios";
   };
 
-  const navigateToApp = () =>{
+  const navigateToApp = () => {
     if (authState?.authenticated) {
       router.push("/(tabs)/(tracking)/");
     } else {
       saveItem("onboarding", JSON.stringify(true));
-      router.push("/(auth)/signup");    }
-  }
+      router.push("/(auth)/signup");
+    }
+  };
 
   const onPrevPress = () => {
     if (activeIndex > 0) {
@@ -61,7 +62,10 @@ export default function OnboardingScreen() {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView
+      contentContainerStyle={styles.container}
+      alwaysBounceVertical={false}
+    >
       {/* Onboarding-Cards web und smart */}
       {Platform.OS === "web" ? (
         <OnboardingContainer
@@ -108,19 +112,18 @@ export default function OnboardingScreen() {
       />
       {reachedLastItem ? (
         <Button
-          text={
-            authState?.authenticated
-                ? "zum Tracking"
-                : "zur Registrierung"
-          }
+          text={authState?.authenticated ? "zum Tracking" : "zur Registrierung"}
           backgroundColor={COLORTHEME.light.primary}
           textColor="#FFFFFF"
           onPress={navigateToApp}
-          style={{ width: 300, marginVertical: 20, height: 50 }}
         />
       ) : (
         <View style={styles.skip}>
-          <Pressable text={"Überspringen"} accessibilityRole={"link"} onPress={navigateToApp}/>
+          <Pressable
+            text={"Überspringen"}
+            accessibilityRole={"link"}
+            onPress={navigateToApp}
+          />
         </View>
       )}
     </ScrollView>
@@ -133,8 +136,12 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "center",
     backgroundColor: "white",
+    gap: BASE_STYLES.gap,
+    paddingBottom: BASE_STYLES.horizontalPadding,
   },
   skip: {
-    marginTop: 10, marginBottom: 30, height: 50
-  }
+    height: BASE_STYLES.buttonHeight,
+    alignItems: "center",
+    justifyContent: "center",
+  },
 });

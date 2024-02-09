@@ -34,15 +34,21 @@ export default function EditModule() {
   const toast = useToast();
   const { authState } = useAuth();
   const { authAxios } = useAxios();
-  const { modules, setModules, fetchModules, unitStatus, setUnitStatus } = useModules();
+  const { modules, setModules, fetchModules, unitStatus, setUnitStatus } =
+    useModules();
   const router = useRouter();
 
   const detailModule =
-    modules?.find((module) => module.id.toString() === moduleToEditId) || ({} as ModuleType);
+    modules?.find((module) => module.id.toString() === moduleToEditId) ||
+    ({} as ModuleType);
 
   const [openChanges, setOpenChanges] = useState(false);
-  const [dateDiabled, setDateDisabled] = useState(detailModule.examDate ? false : true);
-  const [saveDisabled, setSaveDisabled] = useState<Set<string>>(new Set<string>());
+  const [dateDiabled, setDateDisabled] = useState(
+    detailModule.examDate ? false : true
+  );
+  const [saveDisabled, setSaveDisabled] = useState<Set<string>>(
+    new Set<string>()
+  );
 
   const handleValidationError = (errorType: string, errorOccured: boolean) => {
     if (errorOccured) {
@@ -87,7 +93,10 @@ export default function EditModule() {
         };
       }
 
-      await authAxios?.put(`/students/${authState?.user.id}/modules/${moduleToEditId}`, moduleDTO);
+      await authAxios?.put(
+        `/students/${authState?.user.id}/modules/${moduleToEditId}`,
+        moduleDTO
+      );
 
       if (unitStatus)
         for (let [key, value] of Object.entries(unitStatus)) {
@@ -101,8 +110,12 @@ export default function EditModule() {
                   `/students/${authState?.user.id}/modules/${detailModule.id}/learningUnits`,
                   {
                     name: unitToCreate.name,
-                    startDate: unitToCreate.startDate.toISOString().substring(0, 10),
-                    endDate: unitToCreate.endDate.toISOString().substring(0, 10),
+                    startDate: unitToCreate.startDate
+                      .toISOString()
+                      .substring(0, 10),
+                    endDate: unitToCreate.endDate
+                      .toISOString()
+                      .substring(0, 10),
                     workloadPerWeek: unitToCreate.workloadPerWeek,
                   }
                 );
@@ -116,7 +129,9 @@ export default function EditModule() {
                   `/students/${authState?.user.id}/modules/${detailModule.id}/learningUnits/${unitToEdit.id}`,
                   {
                     name: unitToEdit.name,
-                    startDate: unitToEdit.startDate.toISOString().substring(0, 10),
+                    startDate: unitToEdit.startDate
+                      .toISOString()
+                      .substring(0, 10),
                     endDate: unitToEdit.endDate.toISOString().substring(0, 10),
                     workloadPerWeek: unitToEdit.workloadPerWeek,
                   }
@@ -148,7 +163,8 @@ export default function EditModule() {
     Alert({
       title: "Lerneinheit wirklich löschen?",
       message: `Alle zur Lerneinheit ${
-        detailModule.learningUnits.find((unit) => unit.id === learningUnitId)?.name
+        detailModule.learningUnits.find((unit) => unit.id === learningUnitId)
+          ?.name
       } gehörenden Angaben werden dabei gelöscht.`,
       onPressConfirm: () => {
         if (unitStatus && unitStatus[learningUnitId] === "create") {
@@ -166,7 +182,9 @@ export default function EditModule() {
         }
         const updatedModule = {
           ...detailModule,
-          learningUnits: detailModule.learningUnits.filter((unit) => unit.id !== learningUnitId),
+          learningUnits: detailModule.learningUnits.filter(
+            (unit) => unit.id !== learningUnitId
+          ),
         };
         handleUpdate(updatedModule);
       },
@@ -269,7 +287,9 @@ export default function EditModule() {
           textColor={COLORTHEME.light.primary}
           style={{ flex: 1 }}
           onPress={() => {
-            const changedUnits = Object.values(unitStatus!).find((status) => status != null)
+            const changedUnits = Object.values(unitStatus!).find(
+              (status) => status != null
+            )
               ? true
               : false;
             openChanges || changedUnits
@@ -300,14 +320,14 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     justifyContent: "space-between",
-    gap: 12,
+    gap: BASE_STYLES.wrapperGap,
     backgroundColor: COLORTHEME.light.background,
-    paddingVertical: BASE_STYLES.horizontalPadding,
+    paddingVertical: BASE_STYLES.verticalPadding,
   },
   scrollViewContainer: {
     flexGrow: 1,
     flexDirection: "column",
-    gap: 24,
+    gap: BASE_STYLES.gap,
     backgroundColor: COLORTHEME.light.background,
     borderRadius: BASE_STYLES.borderRadius,
   },
@@ -315,20 +335,19 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "space-around",
-    gap: 24,
+    gap: BASE_STYLES.gap,
   },
   unitWrapper: {
     width: "100%",
     flexDirection: "column",
     justifyContent: "flex-start",
-    gap: 8,
+    gap: BASE_STYLES.wrapperGap,
   },
   unitHeaderRow: {
     width: "100%",
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingRight: 4,
   },
   roundButton: {
     justifyContent: "center",
@@ -341,7 +360,7 @@ const styles = StyleSheet.create({
   buttonRowWrapper: {
     flexDirection: "row",
     width: "100%",
-    gap: 16,
+    gap: BASE_STYLES.wrapperGap,
     marginBottom: BASE_STYLES.horizontalPadding,
   },
 });

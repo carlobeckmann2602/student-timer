@@ -65,6 +65,7 @@ export default function GoogleButton() {
       borderColor="#747775"
       onPress={onLoginGoogle}
       iconLeft={<GoogleIcon size={20} />}
+      centerIcon
     />
   );
 }

@@ -65,6 +65,7 @@ export default function AppleButton() {
           textColor="#fff"
           onPress={onLoginApple}
           iconLeft={<AppleIcon size={30} />}
+          centerIcon
         />
       ) : null}
     </>

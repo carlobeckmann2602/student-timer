@@ -31,7 +31,9 @@ export default function ModulesDetailScreen() {
   const { authAxios } = useAxios();
   const { fetchModules, resetUnitStatus } = useModules();
 
-  const detailModule = modules?.find((module) => module.id.toString() === id) || ({} as ModuleType);
+  const detailModule =
+    modules?.find((module) => module.id.toString() === id) ||
+    ({} as ModuleType);
 
   const onDeleteModule = () => {
     Alert({
@@ -48,7 +50,9 @@ export default function ModulesDetailScreen() {
   const deleteModule = async () => {
     let id = toast.show("Löschen...", { type: "loading" });
     try {
-      await authAxios?.delete(`/students/${authState?.user.id}/modules/${detailModule.id}`);
+      await authAxios?.delete(
+        `/students/${authState?.user.id}/modules/${detailModule.id}`
+      );
       toast.update(id, "Modul erfolgreich gelöscht", { type: "success" });
 
       // Navigate back before fetching, as the modal is still open and would throw an error if displayed module doesn't exist anymore
@@ -105,7 +109,9 @@ export default function ModulesDetailScreen() {
         <ModuleChart
           inputData={detailModule.learningUnits}
           totalAmount={convertMinutesToHours(detailModule.totalModuleTime)}
-          totalAmountDone={convertMinutesToHours(detailModule.totalLearningTime)}
+          totalAmountDone={convertMinutesToHours(
+            detailModule.totalLearningTime
+          )}
           width={200}
           height={200}
         />
@@ -156,7 +162,9 @@ export default function ModulesDetailScreen() {
               darkColor={COLORTHEME.dark.text}
             />
             <Subhead>
-              {`Gesamt: ${convertMinutesToHours(detailModule.totalLearningTime)} Std.`}
+              {`Gesamt: ${convertMinutesToHours(
+                detailModule.totalLearningTime
+              )} Std.`}
             </Subhead>
           </View>
         </View>
@@ -181,7 +189,10 @@ export default function ModulesDetailScreen() {
                 <View key={item.id}>
                   <View style={styles.unitRow}>
                     <View
-                      style={[styles.moduleIndicatorM, { backgroundColor: detailModule.colorCode }]}
+                      style={[
+                        styles.moduleIndicatorM,
+                        { backgroundColor: detailModule.colorCode },
+                      ]}
                     />
                     <View style={styles.unitRowTitle}>
                       <Subhead>
@@ -195,7 +206,9 @@ export default function ModulesDetailScreen() {
                         {item.description}
                       </P>
                     </View>
-                    <Subhead>{convertMinutesToHours(item.totalDuration)} Std.</Subhead>
+                    <Subhead>
+                      {convertMinutesToHours(item.totalDuration)} Std.
+                    </Subhead>
                     <View
                       style={{
                         flexDirection: "row",
@@ -204,7 +217,11 @@ export default function ModulesDetailScreen() {
                       }}
                     >
                       <Subhead>{item.rating}</Subhead>
-                      <StarIcon color="" fill={COLORTHEME.light.text} size={20} />
+                      <StarIcon
+                        color=""
+                        fill={COLORTHEME.light.text}
+                        size={20}
+                      />
                     </View>
                     <View style={styles.optionWrapper}>
                       <Pressable
@@ -215,10 +232,25 @@ export default function ModulesDetailScreen() {
                           } as never);
                         }}
                       >
-                        <Pencil name="pencil" size={22} color="black" />
+                        <Pencil
+                          name="pencil"
+                          size={22}
+                          color="black"
+                          strokeWidth={BASE_STYLES.iconWidth}
+                          absoluteStrokeWidth
+                        />
                       </Pressable>
-                      <Pressable style={{ padding: 6 }} onPress={() => onDeleteTracking(item.id)}>
-                        <Trash2 size={22} name="trash2" color="red" />
+                      <Pressable
+                        style={{ padding: 6 }}
+                        onPress={() => onDeleteTracking(item.id)}
+                      >
+                        <Trash2
+                          size={22}
+                          name="trash2"
+                          color="red"
+                          strokeWidth={BASE_STYLES.iconWidth}
+                          absoluteStrokeWidth
+                        />
                       </Pressable>
                     </View>
                   </View>
@@ -236,16 +268,16 @@ const styles = StyleSheet.create({
   outerWrapper: {
     flex: 1,
     justifyContent: "flex-start",
-    paddingVertical: BASE_STYLES.horizontalPadding,
+    paddingVertical: BASE_STYLES.verticalPadding,
     backgroundColor: COLORTHEME.light.background,
-    paddingBottom: 20,
+    paddingBottom: BASE_STYLES.verticalPadding,
   },
   scrollViewContainerStyle: {
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "space-between",
-    padding: 24,
-    gap: 30,
+    padding: BASE_STYLES.padding,
+    gap: BASE_STYLES.gap,
   },
   chartWrapper: {
     width: "100%",
@@ -258,19 +290,19 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "space-between",
     alignItems: "center",
-    gap: 12,
+    gap: BASE_STYLES.wrapperGap,
   },
   unitWrapper: {
     width: "100%",
     flexDirection: "column",
     justifyContent: "flex-start",
-    gap: 12,
+    gap: BASE_STYLES.wrapperGap,
   },
   unitRowTitle: {
     flexDirection: "column",
     alignItems: "flex-start",
     flex: 1,
-    padding: 8,
+    padding: BASE_STYLES.wrapperGap,
   },
   unitRow: {
     width: "100%",
@@ -289,7 +321,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
   separator: {
-    marginVertical: 12,
+    marginVertical: BASE_STYLES.verticalPadding,
     height: 1,
     width: "20%",
   },

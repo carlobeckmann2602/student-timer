@@ -15,17 +15,25 @@ export default function ModulesScreen() {
   const { modules, fetchModules } = useModules();
   const [refreshing, setRefreshing] = React.useState(false);
 
+  const getModules = async () => {
+    fetchModules && (await fetchModules());
+  };
+
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     setTimeout(() => {
       (async () => {
-        fetchModules && (await fetchModules());
+        await getModules();
       })();
       setRefreshing(false);
     }, 300);
   }, []);
 
-  useFocusEffect(onRefresh);
+  useFocusEffect(
+    React.useCallback(() => {
+      getModules();
+    }, [])
+  );
 
   return (
     <View style={styles.container}>
@@ -34,7 +42,10 @@ export default function ModulesScreen() {
         style={styles.flatListContainer}
         renderItem={({ item }) => <ModuleCard moduleData={item} />}
         keyExtractor={(item: ModuleType) => item.id.toString()}
-        contentContainerStyle={styles.flatListContainerContent}
+        contentContainerStyle={[
+          { flex: modules && modules?.length > 0 ? 0 : 1 },
+          styles.flatListContainerContent,
+        ]}
         ListEmptyComponent={
           <View style={styles.emptyListContainer}>
             <H3>Es sind noch keine Module vorhanden.</H3>
@@ -66,27 +77,24 @@ export default function ModulesScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingVertical: BASE_STYLES.horizontalPadding,
+    paddingVertical: BASE_STYLES.verticalPadding,
   },
   flatListContainer: {
     borderRadius: BASE_STYLES.borderRadius,
-    borderBottomLeftRadius: 25,
-    borderBottomRightRadius: 25,
+    marginBottom: BASE_STYLES.buttonHeight + BASE_STYLES.verticalPadding,
   },
   flatListContainerContent: {
-    gap: 24,
-    paddingBottom: 50 + BASE_STYLES.horizontalPadding,
+    gap: BASE_STYLES.gap,
   },
   emptyListContainer: {
+    flexGrow: 1,
     justifyContent: "center",
     alignItems: "center",
-    paddingHorizontal: 16,
-    gap: 20,
-    paddingVertical: 200,
+    gap: BASE_STYLES.headingGap,
   },
   button: {
     position: "absolute",
-    bottom: BASE_STYLES.horizontalPadding,
+    bottom: BASE_STYLES.verticalPadding,
     width: "100%",
   },
 });

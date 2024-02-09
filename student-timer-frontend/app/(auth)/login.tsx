@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 import { useState } from "react";
 import { Link, useRouter } from "expo-router";
-import { COLORTHEME } from "@/constants/Theme";
+import { BASE_STYLES, COLORTHEME } from "@/constants/Theme";
 import { Title } from "@/components/StyledText";
 import { View, Text } from "@/components/Themed";
 import Button from "@/components/Button";
@@ -47,7 +47,11 @@ export default function Login() {
       const result = await onLogin!(email, password);
       if (result && result.error) {
         setError(result.msg);
-        toast.update(id, "Login fehlgeschlagen. Bitte korrigiere Passwort und/oder E-Mail-Adresse.", { type: "danger" });
+        toast.update(
+          id,
+          "Login fehlgeschlagen. Bitte korrigiere Passwort und/oder E-Mail-Adresse.",
+          { type: "danger" }
+        );
       } else {
         toast.update(id, "Login erfolgreich", { type: "success" });
         router.push("/(tabs)/(tracking)");
@@ -90,7 +94,6 @@ export default function Login() {
             backgroundColor={COLORTHEME.light.primary}
             textColor={COLORTHEME.light.grey2}
             onPress={login}
-            style={{ width: 250 }}
           />
           <Text>
             Du hast kein Konto?{" "}
@@ -118,17 +121,17 @@ const styles = StyleSheet.create({
   inputs: {
     flexDirection: "column",
     alignItems: "center",
-    gap: 25,
+    gap: BASE_STYLES.wrapperGap,
   },
   buttons: {
     flexDirection: "column",
     alignItems: "center",
-    gap: 15,
+    gap: BASE_STYLES.wrapperGap,
   },
   buttonText: {
     flexDirection: "column",
     alignItems: "center",
-    gap: 15,
+    gap: BASE_STYLES.wrapperGap,
   },
   errorMessage: {
     color: "red",

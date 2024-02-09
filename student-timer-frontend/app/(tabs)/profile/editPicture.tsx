@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Alert from "@/components/Alert";
-import { View } from "@/components/Themed";
+import { ScrollView, View } from "@/components/Themed";
 import { StyleSheet } from "react-native";
 //@ts-ignore
 import SwitchSelector from "react-native-switch-selector";
@@ -33,12 +33,12 @@ export default function EditPicture() {
     getImagePath,
   } = useProfilePicture();
   const switchCategoryOptions: Array<{ label: string; value: string }> = [
-    { label: 'Fantasie', value: 'fantasy' },
-    { label: 'Portraits', value: 'portraits' },
-    { label: 'Muster', value: 'abstract' },
+    { label: "Fantasie", value: "fantasy" },
+    { label: "Portraits", value: "portraits" },
+    { label: "Muster", value: "abstract" },
   ];
   const [, setError] = useState("");
-  const [selectedCategory, setSelectedCategory] = React.useState('fantasy');
+  const [selectedCategory, setSelectedCategory] = React.useState("fantasy");
 
   useEffect(() => {
     setImagePath(getImagePath(profilePictureName));
@@ -84,53 +84,61 @@ export default function EditPicture() {
   };
 
   return (
-    <View style={styles.container}>
-      <ProfilePicture imageName={profilePictureName} />
-      <H3 style={styles.title}>Profilbild ändern</H3>
-      <View style={styles.pictureContainer}>
-        <SwitchSelector
-          options={switchCategoryOptions}
-          initial={switchCategoryOptions.findIndex((option) => option.value === selectedCategory)}
-          onPress={(value: string) => handleCategoryChange(value)}
-          backgroundColor={COLORS.grey1}
-          buttonColor={COLORS.primary}
-          buttonMargin={1}
-          selectedColor={COLORS.white}
-          textColor={COLORS.black}
-          hasPadding
-          valuePadding={4}
-          borderWidth={0}
-        />
-        <ProfilePictureSlider
-          profileImages={
-            selectedCategory === 'portraits'
-              ? profileHumanAvatarImages
-              : selectedCategory === 'fantasy'
+    <ScrollView
+      style={{ flex: 1, paddingBottom: BASE_STYLES.verticalPadding }}
+      alwaysBounceVertical={false}
+      contentContainerStyle={{
+        flexGrow: 1,
+        backgroundColor: COLORTHEME.light.background,
+        paddingVertical: BASE_STYLES.verticalPadding,
+      }}
+    >
+      <View style={styles.container}>
+        <ProfilePicture imageName={profilePictureName} />
+        <H3>Profilbild ändern</H3>
+        <View style={styles.pictureContainer}>
+          <SwitchSelector
+            options={switchCategoryOptions}
+            initial={switchCategoryOptions.findIndex(
+              (option) => option.value === selectedCategory
+            )}
+            onPress={(value: string) => handleCategoryChange(value)}
+            backgroundColor={COLORS.grey1}
+            buttonColor={COLORS.primary}
+            buttonMargin={4}
+            selectedColor={COLORS.white}
+            textColor={COLORS.black}
+            borderWidth={0}
+          />
+          <ProfilePictureSlider
+            profileImages={
+              selectedCategory === "portraits"
+                ? profileHumanAvatarImages
+                : selectedCategory === "fantasy"
                 ? profileFantasyAvatarImages
                 : profilePatternImages
-          }
-          onSelect={handleImageNameChange}
-        />
+            }
+            onSelect={handleImageNameChange}
+          />
+        </View>
+        <View style={styles.actionContainer}>
+          <Button
+            text="Speichern"
+            backgroundColor={COLORTHEME.light.primary}
+            textColor={COLORTHEME.light.grey2}
+            onPress={changePicture}
+            disabled={!isChanged}
+          />
+          <Button
+            text="Abbrechen"
+            backgroundColor={COLORS.white}
+            borderColor={COLORTHEME.light.primary}
+            textColor={COLORTHEME.light.grey3}
+            onPress={onCancel}
+          />
+        </View>
       </View>
-      <View style={styles.actionContainer}>
-        <Button
-          text="Speichern"
-          backgroundColor={COLORTHEME.light.primary}
-          textColor={COLORTHEME.light.grey2}
-          onPress={changePicture}
-          style={{ width: 200 }}
-          disabled={!isChanged}
-        />
-        <Button
-          text="Abbrechen"
-          backgroundColor={COLORS.white}
-          borderColor={COLORTHEME.light.primary}
-          textColor={COLORTHEME.light.grey3}
-          style={{ width: 200 }}
-          onPress={onCancel}
-        />
-      </View>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -138,18 +146,15 @@ const styles = StyleSheet.create({
   container: {
     alignItems: "center",
     justifyContent: "flex-start",
-    padding: BASE_STYLES.horizontalPadding,
+    gap: BASE_STYLES.gap,
     flex: 1,
   },
   pictureContainer: {
-    marginVertical: 20,
-    gap: 10,
+    gap: BASE_STYLES.wrapperGap,
   },
   actionContainer: {
     flexDirection: "column",
-    gap: 10,
-  },
-  title: {
-    paddingVertical: 10,
+    gap: BASE_STYLES.wrapperGap,
+    width: "100%",
   },
 });
