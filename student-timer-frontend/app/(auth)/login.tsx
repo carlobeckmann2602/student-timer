@@ -42,8 +42,8 @@ export default function Login() {
   };
 
   const login = async () => {
-    let id = toast.show("Login...", { type: "loading" });
     if (validateInput()) {
+      let id = toast.show("Login...", { type: "loading" });
       const result = await onLogin!(email, password);
       if (result && result.error) {
         setError(result.msg);
@@ -56,6 +56,8 @@ export default function Login() {
         toast.update(id, "Login erfolgreich", { type: "success" });
         router.push("/(tabs)/(tracking)");
       }
+    } else {
+      toast.show("Validierung fehlgeschlagen", { type: "warning" });
     }
   };
 
@@ -70,6 +72,7 @@ export default function Login() {
             value={email}
             placeholder="E-Mail"
             keyboardType="email-address"
+            showErrorBorder={emailError != ""}
             message={emailError}
             messageColor="red"
           />
@@ -82,6 +85,7 @@ export default function Login() {
             label="Passwort"
             keyboardType="default"
             secureTextEntry={true}
+            showErrorBorder={passwordError != ""}
             message={passwordError}
             messageColor="red"
           />

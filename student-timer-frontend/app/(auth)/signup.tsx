@@ -103,6 +103,7 @@ export default function SignupScreen() {
               label="Name"
               value={userName}
               onChangeText={setUserName}
+              showErrorBorder={nameError != ""}
               message={nameError}
               messageColor="red"
             />
@@ -110,6 +111,7 @@ export default function SignupScreen() {
               label="Studienfach"
               onChangeText={setUserStudyCourse}
               value={userStudyCourse}
+              showErrorBorder={studyCourseError != ""}
               message={studyCourseError}
               messageColor="red"
             />
@@ -119,6 +121,7 @@ export default function SignupScreen() {
               label="E-Mail"
               onChangeText={setUserEmail}
               value={userEmail}
+              showErrorBorder={emailError != ""}
               keyboardType="email-address"
               message={emailError}
               messageColor="red"
@@ -131,6 +134,7 @@ export default function SignupScreen() {
               value={userPassword}
               keyboardType="default"
               secureTextEntry={true}
+              showErrorBorder={passwordError != ""}
               message={passwordError}
               messageColor="red"
             />
