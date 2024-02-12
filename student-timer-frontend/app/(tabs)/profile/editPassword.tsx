@@ -8,10 +8,7 @@ import PasswordInput from "@/components/userInput/PasswordInput";
 import { useToast } from "react-native-toast-notifications";
 import ProfilePicture from "@/components/profile/ProfilePicture";
 import { useProfilePicture } from "@/components/profile/useProfilePicture";
-import {
-  validatePassword,
-  comparePasswords,
-} from "@/components/auth/validationMethods";
+import { validatePassword, comparePasswords } from "@/components/auth/validationMethods";
 import { StyleSheet } from "react-native";
 
 export default function EditPassword() {
@@ -29,9 +26,7 @@ export default function EditPassword() {
     getProfilePictureName();
   }, [authState]);
 
-  const handleInputChange = (
-    setter: React.Dispatch<React.SetStateAction<string>>
-  ) => {
+  const handleInputChange = (setter: React.Dispatch<React.SetStateAction<string>>) => {
     return (value: string) => {
       setter(value);
       setIsChanged(true);
@@ -64,7 +59,7 @@ export default function EditPassword() {
         router.push("/profile/");
       }
     } else {
-      toast.show("Validierung fehlgeschlagen", { type: "warning" });
+      toast.show("Die Eingaben waren fehlerhaft", { type: "warning" });
     }
   };
 

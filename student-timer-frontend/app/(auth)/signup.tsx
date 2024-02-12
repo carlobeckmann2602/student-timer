@@ -78,17 +78,15 @@ export default function SignupScreen() {
         if ((result.msg = "Email address already taken"))
           toast.update(id, "E-Mail bereits vergeben", { type: "danger" });
         else
-          toast.update(
-            id,
-            "Registrierung fehlgeschlagen. Bitte korrigiere deine Eingaben.",
-            { type: "danger" }
-          );
+          toast.update(id, "Registrierung fehlgeschlagen. Bitte korrigiere deine Eingaben.", {
+            type: "danger",
+          });
       } else {
         toast.update(id, "Registierung erfolgreich", { type: "success" });
         router.push("/(tabs)/modules");
       }
     } else {
-      toast.show("Validierung fehlgeschlagen", { type: "warning" });
+      toast.show("Die Eingaben sind fehlerhaft", { type: "warning" });
     }
   };
 
@@ -163,11 +161,7 @@ export default function SignupScreen() {
             />
             <Text>
               Du hast bereits ein Konto?{" "}
-              <Link
-                href="/login"
-                style={{ textDecorationLine: "underline" }}
-                replace
-              >
+              <Link href="/login" style={{ textDecorationLine: "underline" }} replace>
                 Anmelden
               </Link>
             </Text>

@@ -24,9 +24,7 @@ export default function EditData() {
   const [isChanged, setIsChanged] = useState(false);
 
   const [userName, setUserName] = useState(authState?.user.name || "");
-  const [userStudyCourse, setUserStudyCourse] = useState(
-    authState?.user.studyCourse || ""
-  );
+  const [userStudyCourse, setUserStudyCourse] = useState(authState?.user.studyCourse || "");
   const [userEmail, setUserEmail] = useState(authState?.user.email || "");
 
   const [nameError, setNameError] = useState("");
@@ -39,9 +37,7 @@ export default function EditData() {
     getProfilePictureName();
   }, [authState]);
 
-  const handleInputChange = (
-    setter: React.Dispatch<React.SetStateAction<string>>
-  ) => {
+  const handleInputChange = (setter: React.Dispatch<React.SetStateAction<string>>) => {
     return (value: string) => {
       setter(value);
       setIsChanged(true);
@@ -81,7 +77,7 @@ export default function EditData() {
         router.push("/profile/");
       }
     } else {
-      toast.show("Validierung fehlgeschlagen", { type: "warning" });
+      toast.show("Die Eingaben sind fehlerhaft", { type: "warning" });
     }
   };
 
