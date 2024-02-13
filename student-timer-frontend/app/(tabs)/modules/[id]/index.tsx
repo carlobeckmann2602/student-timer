@@ -38,7 +38,7 @@ export default function ModulesDetailScreen() {
   const onDeleteModule = () => {
     Alert({
       title: "Modul wirklich löschen?",
-      message: `Möchtest du das Modul "${detailModule.name}" wirklich unwiederuflich löschen?\n Auch die zugehörigen Lerneinheiten und Trackings werden dabei gelöscht.`,
+      message: `Möchtest du das Modul "${detailModule.name}" wirklich unwiderruflich löschen?\n Auch die zugehörigen Lerneinheiten und Trackings werden dabei gelöscht.`,
       onPressConfirm: () => {
         deleteModule();
       },
@@ -68,7 +68,7 @@ export default function ModulesDetailScreen() {
   const onDeleteTracking = (trackingSessionId: number) => {
     Alert({
       title: "Tracking wirklich löschen?",
-      message: "Möchtest du das Tracking wirklich unwiederuflich löschen?",
+      message: "Möchtest du das Tracking wirklich unwiderruflich löschen?",
       onPressConfirm: () => {
         deleteLearningSession(trackingSessionId);
       },
