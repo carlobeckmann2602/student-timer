@@ -15,6 +15,7 @@ import {
   validateStudyCourse,
   validateEmail,
 } from "@/components/auth/validationMethods";
+import { toastShow, toastUpdate } from "@/components/Toast";
 
 export default function EditData() {
   const toast = useToast();
@@ -24,7 +25,9 @@ export default function EditData() {
   const [isChanged, setIsChanged] = useState(false);
 
   const [userName, setUserName] = useState(authState?.user.name || "");
-  const [userStudyCourse, setUserStudyCourse] = useState(authState?.user.studyCourse || "");
+  const [userStudyCourse, setUserStudyCourse] = useState(
+    authState?.user.studyCourse || ""
+  );
   const [userEmail, setUserEmail] = useState(authState?.user.email || "");
 
   const [nameError, setNameError] = useState("");
@@ -37,7 +40,9 @@ export default function EditData() {
     getProfilePictureName();
   }, [authState]);
 
-  const handleInputChange = (setter: React.Dispatch<React.SetStateAction<string>>) => {
+  const handleInputChange = (
+    setter: React.Dispatch<React.SetStateAction<string>>
+  ) => {
     return (value: string) => {
       setter(value);
       setIsChanged(true);
@@ -66,29 +71,29 @@ export default function EditData() {
 
   const update = async () => {
     if (validateInput()) {
-      const id = toast.show("Speichern...", { type: "loading" });
+      const id = toastShow(toast, "Speichern...", { type: "loading" });
       const result = await onUpdate!(userName, userStudyCourse, userEmail);
       if (result && result.error) {
-        toast.update(id, result.msg, { type: "danger" });
+        toastUpdate(toast, id, result.msg, { type: "danger" });
       } else {
-        toast.update(id, "Profildaten erfolgreich gespeichert", {
+        toastUpdate(toast, id, "Profildaten erfolgreich gespeichert", {
           type: "success",
         });
         router.push("/profile/");
       }
     } else {
-      toast.show("Die Eingaben sind fehlerhaft", { type: "warning" });
+      toastShow(toast, "Die Eingaben sind fehlerhaft", { type: "warning" });
     }
   };
 
   const removeUser = async () => {
-    let id = toast.show("Löschen...", { type: "loading" });
+    let id = toastShow(toast, "Löschen...", { type: "loading" });
     if (authState?.user.id) {
       const result = await onRemove!(authState?.user.id);
       if (result && result.error) {
-        toast.update(id, result.msg, { type: "danger" });
+        toastUpdate(toast, id, result.msg, { type: "danger" });
       } else {
-        toast.update(id, "Ihr Konto wurde erfolgreich gelöscht", {
+        toastUpdate(toast, id, "Ihr Konto wurde erfolgreich gelöscht", {
           type: "success",
         });
         router.push("/(auth)/signup");

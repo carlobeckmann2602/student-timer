@@ -10,7 +10,11 @@ import OtherLogins from "@/components/auth/OtherLogins";
 import InputField from "@/components/InputField";
 import { useAuth } from "@/context/AuthContext";
 import { useToast } from "react-native-toast-notifications";
-import { validateEmail, validatePassword } from "@/components/auth/validationMethods";
+import {
+  validateEmail,
+  validatePassword,
+} from "@/components/auth/validationMethods";
+import { toastShow, toastUpdate } from "@/components/Toast";
 
 export default function Login() {
   const toast = useToast();
@@ -39,20 +43,21 @@ export default function Login() {
 
   const login = async () => {
     if (validateInput()) {
-      let id = toast.show("Login...", { type: "loading" });
+      let id = toastShow(toast, "Login...", { type: "loading" });
       const result = await onLogin!(email, password);
       if (result && result.error) {
-        toast.update(
+        toastUpdate(
+          toast,
           id,
           "Login fehlgeschlagen. Bitte korrigiere Passwort und/oder E-Mail-Adresse.",
           { type: "danger" }
         );
       } else {
-        toast.update(id, "Login erfolgreich", { type: "success" });
+        toastUpdate(toast, id, "Login erfolgreich", { type: "success" });
         router.push("/(tabs)/(tracking)");
       }
     } else {
-      toast.show("Die Eingaben sind fehlerhaft", { type: "warning" });
+      toastShow(toast, "Die Eingaben sind fehlerhaft", { type: "warning" });
     }
   };
 
@@ -96,7 +101,11 @@ export default function Login() {
           />
           <Text>
             Du hast kein Konto?{" "}
-            <Link href="/signup" style={{ textDecorationLine: "underline" }} replace>
+            <Link
+              href="/signup"
+              style={{ textDecorationLine: "underline" }}
+              replace
+            >
               Account erstellen
             </Link>
           </Text>

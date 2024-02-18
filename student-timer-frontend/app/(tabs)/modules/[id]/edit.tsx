@@ -2,6 +2,7 @@ import Alert from "@/components/Alert";
 import Button from "@/components/Button";
 import { H2 } from "@/components/StyledText";
 import { View } from "@/components/Themed";
+import { toastShow } from "@/components/Toast";
 import LearningUnitRow from "@/components/modules/LearningUnitRow";
 import ModuleForm from "@/components/modules/ModuleForm";
 import { LearningUnitEnum } from "@/constants/LearningUnitEnum";
@@ -74,7 +75,7 @@ export default function EditModule() {
   };
 
   const onSave = async () => {
-    let toastId = toast.show("Änderungen speichern...");
+    let toastId = toastShow(toast, "Änderungen speichern...");
 
     try {
       let moduleDTO;

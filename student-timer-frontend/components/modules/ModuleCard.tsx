@@ -20,6 +20,7 @@ import { useToast } from "react-native-toast-notifications";
 import { useAuth } from "@/context/AuthContext";
 import { useAxios } from "@/context/AxiosContext";
 import { useModules } from "@/context/ModuleContext";
+import { toastShow, toastUpdate } from "../Toast";
 
 type moduleCardProps = {
   moduleData: ModuleType;
@@ -63,15 +64,15 @@ export function ModuleCard(props: moduleCardProps) {
   };
 
   const handleDelete = async () => {
-    let id = toast.show("Löschen...", { type: "loading" });
+    let id = toastShow(toast, "Löschen...", { type: "loading" });
     try {
       await authAxios?.delete(
         `/students/${authState?.user.id}/modules/${moduleData.id}`
       );
-      toast.update(id, "Modul erfolgreich gelöscht", { type: "success" });
+      toastUpdate(toast, id, "Modul erfolgreich gelöscht", { type: "success" });
       fetchModules && (await fetchModules());
     } catch (e) {
-      toast.update(id, `Fehler beim Löschen des Moduls: ${e}`, {
+      toastUpdate(toast, id, `Fehler beim Löschen des Moduls: ${e}`, {
         type: "danger",
       });
     } finally {

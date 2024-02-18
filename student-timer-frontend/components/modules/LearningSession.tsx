@@ -18,6 +18,7 @@ import {
 } from "@/libs/timeHelper";
 import StarRating from "@/components/StarRating";
 import InputFieldNumeric from "../InputFieldNumeric";
+import { toastShow, toastUpdate } from "../Toast";
 
 export default function LearningSession(props: { isEdit: boolean }) {
   const { isEdit } = props;
@@ -291,7 +292,7 @@ export default function LearningSession(props: { isEdit: boolean }) {
               : false
           }
           onPress={async () => {
-            let id = toast.show("Speichern...", { type: "loading" });
+            let id = toastShow(toast, "Speichern...", { type: "loading" });
             let body = {
               rating: starAmount,
               description: description,
@@ -321,9 +322,11 @@ export default function LearningSession(props: { isEdit: boolean }) {
                   }
                 );
               }
-              toast.update(id, "Erfolgreich gespeichert", { type: "success" });
+              toastUpdate(toast, id, "Erfolgreich gespeichert", {
+                type: "success",
+              });
             } catch (e) {
-              toast.update(id, `Fehler beim Speichern: ${e}`, {
+              toastUpdate(toast, id, `Fehler beim Speichern: ${e}`, {
                 type: "danger",
               });
             } finally {

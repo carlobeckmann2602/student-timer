@@ -18,6 +18,7 @@ import LearningUnitRow from "@/components/modules/LearningUnitRow";
 import Button from "@/components/Button";
 import { computeRemainingSessionTime } from "@/libs/moduleTypeHelper";
 import Alert from "@/components/Alert";
+import { toastShow, toastUpdate } from "@/components/Toast";
 
 export default function ModulesDetailScreen() {
   const { id } = useLocalSearchParams<{
@@ -48,18 +49,18 @@ export default function ModulesDetailScreen() {
   };
 
   const deleteModule = async () => {
-    let id = toast.show("Löschen...", { type: "loading" });
+    let id = toastShow(toast, "Löschen...", { type: "loading" });
     try {
       await authAxios?.delete(
         `/students/${authState?.user.id}/modules/${detailModule.id}`
       );
-      toast.update(id, "Modul erfolgreich gelöscht", { type: "success" });
+      toastUpdate(toast, id, "Modul erfolgreich gelöscht", { type: "success" });
 
       // Navigate back before fetching, as the modal is still open and would throw an error if displayed module doesn't exist anymore
       router.back();
       fetchModules && (await fetchModules());
     } catch (e) {
-      toast.update(id, `Fehler beim Löschen des Moduls: ${e}`, {
+      toastUpdate(toast, id, `Fehler beim Löschen des Moduls: ${e}`, {
         type: "danger",
       });
     }
@@ -78,7 +79,7 @@ export default function ModulesDetailScreen() {
   };
 
   const deleteLearningSession = async (trackingSessionId: number) => {
-    let id = toast.show("Löschen...", { type: "loading" });
+    let id = toastShow(toast, "Löschen...", { type: "loading" });
     try {
       await authAxios?.delete(
         `/students/${authState?.user.id}/modules/${detailModule.id}/learningSessions/${trackingSessionId}`

@@ -19,6 +19,7 @@ import {
   useProfilePicture,
 } from "@/components/profile/useProfilePicture";
 import ProfilePictureSlider from "@/components/profile/ProfilePictureSlider";
+import { toastShow, toastUpdate } from "@/components/Toast";
 
 export default function EditPicture() {
   const toast = useToast();
@@ -54,12 +55,14 @@ export default function EditPicture() {
   };
 
   const changePicture = async () => {
-    let id = toast.show("Speichern...", { type: "loading" });
+    let id = toastShow(toast, "Speichern...", { type: "loading" });
     const result = await onChangePicture!(profilePictureName);
     if (result && result.error) {
-      toast.update(id, result.msg, { type: "danger" });
+      toastUpdate(toast, id, result.msg, { type: "danger" });
     } else {
-      toast.update(id, "Profilbild erfolgreich geändert", { type: "success" });
+      toastUpdate(toast, id, "Profilbild erfolgreich geändert", {
+        type: "success",
+      });
       router.push("/profile/");
     }
   };

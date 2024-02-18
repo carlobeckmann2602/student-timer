@@ -18,6 +18,7 @@ import {
   validateStudyCourse,
   comparePasswords,
 } from "@/components/auth/validationMethods";
+import { toastShow, toastUpdate } from "@/components/Toast";
 
 export default function SignupScreen() {
   const toast = useToast();
@@ -65,7 +66,7 @@ export default function SignupScreen() {
 
   const register = async () => {
     if (validateInput()) {
-      let id = toast.show("Registierung...", { type: "loading" });
+      let id = toastShow(toast, "Registierung...", { type: "loading" });
       const result = await onRegister!(
         userName,
         userStudyCourse,
@@ -76,17 +77,22 @@ export default function SignupScreen() {
       );
       if (result && result.error) {
         if ((result.msg = "Email address already taken"))
-          toast.update(id, "E-Mail bereits vergeben", { type: "danger" });
+          toastUpdate(toast, id, "E-Mail bereits vergeben", { type: "danger" });
         else
-          toast.update(id, "Registrierung fehlgeschlagen. Bitte korrigiere deine Eingaben.", {
-            type: "danger",
-          });
+          toastUpdate(
+            toast,
+            id,
+            "Registrierung fehlgeschlagen. Bitte korrigiere deine Eingaben.",
+            {
+              type: "danger",
+            }
+          );
       } else {
-        toast.update(id, "Registierung erfolgreich", { type: "success" });
+        toastUpdate(toast, id, "Registierung erfolgreich", { type: "success" });
         router.push("/(tabs)/modules");
       }
     } else {
-      toast.show("Die Eingaben sind fehlerhaft", { type: "warning" });
+      toastShow(toast, "Die Eingaben sind fehlerhaft", { type: "warning" });
     }
   };
 
@@ -161,7 +167,11 @@ export default function SignupScreen() {
             />
             <Text>
               Du hast bereits ein Konto?{" "}
-              <Link href="/login" style={{ textDecorationLine: "underline" }} replace>
+              <Link
+                href="/login"
+                style={{ textDecorationLine: "underline" }}
+                replace
+              >
                 Anmelden
               </Link>
             </Text>

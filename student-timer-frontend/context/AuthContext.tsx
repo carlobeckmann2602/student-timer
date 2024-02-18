@@ -9,6 +9,7 @@ import { API_URL, TOKEN_KEY } from "@/constants/Api";
 import { useRouter } from "expo-router";
 import { AuthStateType, TokenType, UserType } from "@/types/AuthType";
 import { useToast } from "react-native-toast-notifications";
+import { toastShow } from "@/components/Toast";
 
 type AuthProps = {
   authState?: AuthStateType;
@@ -367,7 +368,7 @@ export const AuthProvider = ({ children }: any) => {
         email: null,
       },
     });
-    toast.show("Logout erfolgreich", { type: "success" });
+    toastShow(toast, "Logout erfolgreich", { type: "success" });
     router.replace("/(auth)/login");
   };
 

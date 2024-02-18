@@ -8,8 +8,12 @@ import PasswordInput from "@/components/userInput/PasswordInput";
 import { useToast } from "react-native-toast-notifications";
 import ProfilePicture from "@/components/profile/ProfilePicture";
 import { useProfilePicture } from "@/components/profile/useProfilePicture";
-import { validatePassword, comparePasswords } from "@/components/auth/validationMethods";
+import {
+  validatePassword,
+  comparePasswords,
+} from "@/components/auth/validationMethods";
 import { StyleSheet } from "react-native";
+import { toastShow, toastUpdate } from "@/components/Toast";
 
 export default function EditPassword() {
   const toast = useToast();
@@ -26,7 +30,9 @@ export default function EditPassword() {
     getProfilePictureName();
   }, [authState]);
 
-  const handleInputChange = (setter: React.Dispatch<React.SetStateAction<string>>) => {
+  const handleInputChange = (
+    setter: React.Dispatch<React.SetStateAction<string>>
+  ) => {
     return (value: string) => {
       setter(value);
       setIsChanged(true);
@@ -48,18 +54,18 @@ export default function EditPassword() {
 
   const changePassword = async () => {
     if (validateInput(userPassword, userCheckPassword)) {
-      const id = toast.show("Speichern...", { type: "loading" });
+      const id = toastShow(toast, "Speichern...", { type: "loading" });
       const result = await onChangePassword!(userPassword, userCheckPassword);
       if (result && result.error) {
-        toast.update(id, result.msg, { type: "danger" });
+        toastUpdate(toast, id, result.msg, { type: "danger" });
       } else {
-        toast.update(id, "Passwort erfolgreich geändert", {
+        toastUpdate(toast, id, "Passwort erfolgreich geändert", {
           type: "success",
         });
         router.push("/profile/");
       }
     } else {
-      toast.show("Die Eingaben waren fehlerhaft", { type: "warning" });
+      toastShow(toast, "Die Eingaben waren fehlerhaft", { type: "warning" });
     }
   };
 

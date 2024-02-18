@@ -1,4 +1,5 @@
 import Button from "@/components/Button";
+import { toastShow } from "@/components/Toast";
 import { LearningUnitForm } from "@/components/modules/LearningUnitForm";
 import { LearningUnitEnum } from "@/constants/LearningUnitEnum";
 import { BASE_STYLES, COLORS, COLORTHEME, SIZES } from "@/constants/Theme";
@@ -90,7 +91,7 @@ export default function NewModuleLearningUnits() {
   };
 
   const onCreateModule = async () => {
-    let id = toast.show("Erstellen...");
+    let id = toastShow(toast, "Erstellen...");
     let response;
     try {
       let moduleDTO;
