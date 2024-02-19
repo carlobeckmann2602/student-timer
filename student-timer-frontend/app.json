@@ -34,6 +34,10 @@
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
+    "notification": {
+      "icon": "./assets/images/adaptive-icon.png",
+      "iosdisplayinforeground": true
+    },
     "plugins": [
       "expo-router",
       "expo-apple-authentication",
