@@ -45,6 +45,7 @@ export default function StarRating({
       <View style={styles.stars}>
         {[...Array(5)].map((_, index) => (
           <StarIcon
+            key={index}
             name="star"
             color={color || COLORTHEME.light.primary}
             fill={color || COLORTHEME.light.primary}

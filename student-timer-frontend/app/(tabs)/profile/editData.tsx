@@ -74,7 +74,11 @@ export default function EditData() {
       const id = toastShow(toast, "Speichern...", { type: "loading" });
       const result = await onUpdate!(userName, userStudyCourse, userEmail);
       if (result && result.error) {
-        toastUpdate(toast, id, result.msg, { type: "danger" });
+        if ((result.msg = "Email address already taken"))
+          toast.update(id, "E-Mail bereits vergeben", { type: "danger" });
+        else {
+          toast.update(id, result.msg, { type: "danger" });
+        }
       } else {
         toastUpdate(toast, id, "Profildaten erfolgreich gespeichert", {
           type: "success",
