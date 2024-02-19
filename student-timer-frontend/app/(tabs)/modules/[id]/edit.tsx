@@ -2,7 +2,7 @@ import Alert from "@/components/Alert";
 import Button from "@/components/Button";
 import { H2 } from "@/components/StyledText";
 import { View } from "@/components/Themed";
-import { toastShow } from "@/components/Toast";
+import { toastShow, toastUpdate } from "@/components/Toast";
 import LearningUnitRow from "@/components/modules/LearningUnitRow";
 import ModuleForm from "@/components/modules/ModuleForm";
 import { LearningUnitEnum } from "@/constants/LearningUnitEnum";
@@ -148,13 +148,13 @@ export default function EditModule() {
           }
         }
 
-      toast.update(toastId, "Änderungen erfolgreich gespeichert.", {
+      fetchModules && (await fetchModules());
+      toastUpdate(toast, toastId, "Änderungen erfolgreich gespeichert.", {
         type: "success",
       });
-      fetchModules && (await fetchModules());
       router.push("/modules");
     } catch (e) {
-      toast.update(toastId, `Fehler beim Ändern des Moduls: ${e}`, {
+      toastUpdate(toast, toastId, `Fehler beim Ändern des Moduls: ${e}`, {
         type: "danger",
       });
     }

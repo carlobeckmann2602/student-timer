@@ -84,10 +84,12 @@ export default function ModulesDetailScreen() {
       await authAxios?.delete(
         `/students/${authState?.user.id}/modules/${detailModule.id}/learningSessions/${trackingSessionId}`
       );
-      toast.update(id, "Tracking erfolgreich gelöscht", { type: "success" });
       fetchModules && (await fetchModules());
+      toastUpdate(toast, id, "Tracking erfolgreich gelöscht", {
+        type: "success",
+      });
     } catch (e) {
-      toast.update(id, `Fehler beim Löschen des Trackings: ${e}`, {
+      toastUpdate(toast, id, `Fehler beim Löschen des Trackings: ${e}`, {
         type: "danger",
       });
     }

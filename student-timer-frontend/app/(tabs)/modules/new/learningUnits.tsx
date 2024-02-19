@@ -1,5 +1,5 @@
 import Button from "@/components/Button";
-import { toastShow } from "@/components/Toast";
+import { toastShow, toastUpdate } from "@/components/Toast";
 import { LearningUnitForm } from "@/components/modules/LearningUnitForm";
 import { LearningUnitEnum } from "@/constants/LearningUnitEnum";
 import { BASE_STYLES, COLORS, COLORTHEME, SIZES } from "@/constants/Theme";
@@ -134,11 +134,13 @@ export default function NewModuleLearningUnits() {
         );
       });
 
-      toast.update(id, "Modul erfolgreich angelegt.", { type: "success" });
       fetchModules && (await fetchModules());
+      toastUpdate(toast, id, "Modul erfolgreich angelegt.", {
+        type: "success",
+      });
       router.push("/(tabs)/modules");
     } catch (e) {
-      toast.update(id, `Fehler beim Erstellen des Moduls: ${e}`, {
+      toastUpdate(toast, id, `Fehler beim Erstellen des Moduls: ${e}`, {
         type: "danger",
       });
     }
