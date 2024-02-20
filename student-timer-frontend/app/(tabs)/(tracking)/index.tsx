@@ -53,7 +53,7 @@ export default function Tracking() {
   ) => {
     setInputState(val);
     let valid = false;
-    if (val !== "" && !val.includes(".")) {
+    if (val.match(/^\d+$/) !== null) {
       valid = Number(val) >= minValue;
     }
     setValidInputs((prevState) => ({
