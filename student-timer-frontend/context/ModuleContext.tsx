@@ -12,6 +12,10 @@ import { LearningUnitType } from "@/types/LearningUnitType";
 import { COLORS } from "@/constants/Theme";
 import { LearningSessionType } from "@/types/learningSessionType";
 import { LearningUnitEnum } from "@/constants/LearningUnitEnum";
+import { HBarChartProps } from "@/components/statistics/HBarChart";
+import { VBarChartProps } from "@/components/statistics/VBarChart";
+import { VLineChartProps } from "@/components/statistics/VLineChart";
+import { StarChartProps } from "@/components/statistics/StarChart";
 
 type ModuleProps = {
   modules?: ModuleType[];
@@ -26,6 +30,10 @@ type ModuleProps = {
     }>
   >;
   resetUnitStatus?: (module: ModuleType) => void;
+  statistics?: Array<
+    HBarChartProps | VBarChartProps | VLineChartProps | StarChartProps
+  >;
+  fetchStatistics?: () => Promise<any>;
 };
 
 export type ObjectKey = keyof typeof COLORS;
@@ -48,6 +56,7 @@ export const ModuleProvider = ({ children }: any) => {
   useEffect(() => {
     authStateRef.current = authState;
     fetchModules();
+    fetchStatistics();
   }, [authState?.authenticated]);
 
   const fetchModules = async () => {
@@ -75,6 +84,31 @@ export const ModuleProvider = ({ children }: any) => {
     setUnitStatus && setUnitStatus(collectedUnitPairs);
   };
 
+  const [statistics, setStatistics] =
+    useState<
+      Array<HBarChartProps | VBarChartProps | VLineChartProps | StarChartProps>
+    >();
+
+  const fetchStatistics = async () => {
+    if (!authStateRef.current?.user.id) return;
+    try {
+      const response = await authAxios?.get(
+        `/students/${authStateRef?.current.user.id}/statistics`
+      );
+      const statisticArray = Object.values(response?.data) as Array<
+        HBarChartProps | VBarChartProps | VLineChartProps | StarChartProps
+      >;
+      if (!statisticArray.every((item) => item === null)) {
+        setStatistics(statisticArray.filter((item) => item !== null));
+      } else {
+        setStatistics(undefined);
+      }
+      return statistics;
+    } catch (e) {
+      return e;
+    }
+  };
+
   const value = {
     modules,
     fetchModules,
@@ -82,6 +116,8 @@ export const ModuleProvider = ({ children }: any) => {
     unitStatus,
     setUnitStatus,
     resetUnitStatus,
+    statistics,
+    fetchStatistics,
   } as ModuleProps;
   return (
     <ModuleContext.Provider value={value}>{children}</ModuleContext.Provider>

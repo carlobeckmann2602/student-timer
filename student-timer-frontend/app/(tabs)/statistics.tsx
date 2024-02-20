@@ -13,25 +13,13 @@ import { useAxios } from "@/context/AxiosContext";
 import { useAuth } from "@/context/AuthContext";
 import { useCallback, useState } from "react";
 import { useFocusEffect } from "expo-router";
+import { useModules } from "@/context/ModuleContext";
 
 export default function StatisticsScreen() {
-  const { authAxios } = useAxios();
-  const { authState } = useAuth();
-  const [statistics, setStatistics] =
-    useState<
-      Array<HBarChartProps | VBarChartProps | VLineChartProps | StarChartProps>
-    >();
+  const { statistics, fetchStatistics } = useModules();
 
   const getStatistics = async () => {
-    const response = await authAxios?.get(
-      `/students/${authState?.user.id}/statistics`
-    );
-    const statisticArray = Object.values(response?.data) as Array<
-      HBarChartProps | VBarChartProps | VLineChartProps | StarChartProps
-    >;
-    if (!statisticArray.every((item) => item === null)) {
-      setStatistics(statisticArray.filter((item) => item !== null));
-    }
+    fetchStatistics && (await fetchStatistics());
   };
 
   const [refreshing, setRefreshing] = useState(false);
