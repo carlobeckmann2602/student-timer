@@ -42,12 +42,12 @@ export default function LearningSession(props: { isEdit: boolean }) {
     learningSession?.description || ""
   );
   const [focusDuration, setFocusDuration] = useState<{
-    hours: number | string;
-    mins: number | string;
+    hours: number;
+    mins: number;
   }>(msToTimeObject((learningSession?.focusDuration || 0) * (1000 * 60)));
   const [pauseDuration, setPauseDuration] = useState<{
-    hours: number | string;
-    mins: number | string;
+    hours: number;
+    mins: number;
   }>(
     msToTimeObject(
       ((learningSession?.totalDuration || 0) -
@@ -70,51 +70,51 @@ export default function LearningSession(props: { isEdit: boolean }) {
   const validateInput = (
     val: string,
     currentState: {
-      hours: number | string;
-      mins: number | string;
+      hours: number;
+      mins: number;
     },
     setState: React.Dispatch<
       React.SetStateAction<{
-        hours: number | string;
-        mins: number | string;
+        hours: number;
+        mins: number;
       }>
     >,
     key: keyof typeof validInputs,
     isHours: boolean
   ) => {
-    let timeKey: "hours" | "mins" = isHours ? "hours" : "mins";
-    let reverseTimeKey: "hours" | "mins" = isHours ? "mins" : "hours";
+    let timeKey: "hours" | "mins" = isHours ? "hours" : "mins",
+      reverseTimeKey: "hours" | "mins" = isHours ? "mins" : "hours",
+      otherVal = currentState[reverseTimeKey],
+      number: number,
+      otherNumber: number,
+      valid = false,
+      otherValValid = false,
+      hoursMinsBothNotNull = true;
+
     setState((prevState) => ({
       ...prevState,
       [timeKey]: val,
     }));
-    let otherVal = currentState[reverseTimeKey];
-    let valid = false;
-    let hoursMinsBothNotNull = true;
-    let number: number;
-    if (val !== "" && !val.includes(".")) {
-      number = Number(val);
-      hoursMinsBothNotNull =
-        number > 0 ||
-        isNaN(number) ||
-        otherVal === "" ||
-        Number(otherVal) > 0 ||
-        isNaN(Number(otherVal));
-      valid =
-        Math.sign(number) >= 0 &&
-        (isHours ? true : number < 60) &&
-        hoursMinsBothNotNull;
-    }
+
+    number = val.match(/^\d+$/) === null ? -1 : Number(val);
+    otherNumber =
+      String(otherVal).match(/^\d+$/) === null ? -1 : Number(otherVal);
+    hoursMinsBothNotNull = number !== 0 || otherNumber !== 0;
+    valid =
+      Math.sign(number) >= 0 &&
+      (isHours ? true : number < 60) &&
+      hoursMinsBothNotNull;
+    otherValValid =
+      Math.sign(otherNumber) >= 0 &&
+      (isHours ? otherNumber < 60 : true) &&
+      hoursMinsBothNotNull;
 
     setValidInputs((prevState) => ({
       ...prevState,
       [key]: {
         ...prevState[key],
         [timeKey]: valid,
-        [reverseTimeKey]:
-          valid || otherVal === "" || isNaN(Number(otherVal))
-            ? prevState[key][reverseTimeKey]
-            : hoursMinsBothNotNull,
+        [reverseTimeKey]: otherValValid,
       },
     }));
   };
