@@ -77,7 +77,10 @@ export const toastUpdate = (
   toastId: string,
   message: string | JSX.Element,
   toastOptions?: ToastOptions | undefined
-) => toast.update(toastId, message, getToastOptions(toastOptions));
+) =>
+  requestAnimationFrame(() => {
+    toast.update(toastId, message, getToastOptions(toastOptions));
+  });
 
 const getToastOptions = (toastOptions?: ToastOptions | undefined) =>
   toastOptions
