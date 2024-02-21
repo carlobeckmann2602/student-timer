@@ -35,7 +35,7 @@
       "favicon": "./assets/images/favicon.png"
     },
     "notification": {
-      "icon": "./assets/images/adaptive-icon.png",
+      "icon": "./assets/images/notification-icon.png",
       "iosdisplayinforeground": true
     },
     "plugins": [
