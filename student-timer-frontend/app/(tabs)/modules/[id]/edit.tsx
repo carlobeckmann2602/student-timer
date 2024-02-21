@@ -75,7 +75,9 @@ export default function EditModule() {
   };
 
   const onSave = async () => {
-    let toastId = toastShow(toast, "Änderungen speichern...");
+    let toastId = toastShow(toast, "Änderungen speichern...", {
+      type: "loading",
+    });
 
     try {
       let moduleDTO;

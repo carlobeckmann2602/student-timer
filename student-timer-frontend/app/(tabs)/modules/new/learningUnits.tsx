@@ -91,7 +91,7 @@ export default function NewModuleLearningUnits() {
   };
 
   const onCreateModule = async () => {
-    let id = toastShow(toast, "Erstellen...");
+    let id = toastShow(toast, "Erstellen...", { type: "loading" });
     let response;
     try {
       let moduleDTO;
