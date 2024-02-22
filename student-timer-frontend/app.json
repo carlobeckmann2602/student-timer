@@ -42,7 +42,7 @@
       "expo-router",
       "expo-apple-authentication",
       "@react-native-google-signin/google-signin",
-      ["expo-notifications", { "icon": "./assets/images/icon.png" }]
+      "expo-notifications"
     ],
     "experiments": {
       "typedRoutes": true
