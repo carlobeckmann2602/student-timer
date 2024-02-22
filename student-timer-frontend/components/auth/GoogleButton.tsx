@@ -30,7 +30,6 @@ export default function GoogleButton() {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
-      console.log(userInfo);
       const result = await onLogin!(
         userInfo.user.email,
         undefined,
