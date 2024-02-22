@@ -36,7 +36,7 @@
     },
     "notification": {
       "icon": "./assets/images/notification-icon.png",
-      "iosdisplayinforeground": true
+      "iosDisplayInForeground": true
     },
     "plugins": [
       "expo-router",
