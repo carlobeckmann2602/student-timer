@@ -1,6 +1,8 @@
 # Student Timer
 
-<img src="./student-timer-frontend/assets/images/adaptive-icon.png" alt="Logo" width="300" style="display: block; margin-left: auto; margin-right: auto; margin-top: -100px; margin-bottom: -80px;">
+<p align="center">
+  <img src="./student-timer-frontend/assets/images/adaptive-icon.png" alt="Logo" width="300">
+</p>
 A React Native application for Android and iOS to monitor and manage your own learning behaviour during your studies
 
 ## Setup
