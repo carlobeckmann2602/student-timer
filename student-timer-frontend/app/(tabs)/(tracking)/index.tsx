@@ -126,7 +126,7 @@ export default function Tracking() {
       pathname: "/success",
       params: {
         focusTime: roundSecToMinInMs(focusTime),
-        pauseTime: pauseTime === 0 ? 0 : roundSecToMinInMs(pauseTime),
+        pauseTime: pauseTime < 1000 * 30 ? 0 : roundSecToMinInMs(pauseTime),
         id: selectedModule.id,
       },
     });
