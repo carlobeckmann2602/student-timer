@@ -1,15 +1,20 @@
+import { useToast } from "react-native-toast-notifications";
+import { useEffect, useState } from "react";
+import { useRouter } from "expo-router";
+import * as AppleAuthentication from "expo-apple-authentication";
+
 import Button from "@/components/Button";
 import { AppleIcon } from "@/components/Icons";
-import * as AppleAuthentication from "expo-apple-authentication";
-import { useRouter } from "expo-router";
-import { useEffect, useState } from "react";
 import { LOGIN_PROVIDER, useAuth } from "@/context/AuthContext";
+import { toastShow, toastUpdate } from "../Toast";
 
 export default function AppleButton() {
+  const toast = useToast();
   const router = useRouter();
   const { onLogin } = useAuth();
 
   const onLoginApple = async () => {
+    let id = toastShow(toast, "Login...", { type: "loading" });
     try {
       const user = await AppleAuthentication.signInAsync({
         requestedScopes: [
@@ -18,9 +23,13 @@ export default function AppleButton() {
         ],
       });
       console.log(JSON.stringify(user, null, 2));
-      if (!user.email || !user.identityToken)
+      if (!user.email || !user.identityToken) {
         //uncomment the user.email validation for Expo Go
+        toastUpdate(toast, id, "Login fehlgeschlagen.", {
+          type: "danger",
+        });
         throw Error("Credentials are null");
+      }
       const userName = "".concat(
         user.fullName?.namePrefix ? user.fullName?.namePrefix + " " : "",
         user.fullName?.givenName ? user.fullName?.givenName + " " : "",
@@ -37,11 +46,18 @@ export default function AppleButton() {
         LOGIN_PROVIDER.APPLE
       );
       if (result && result.error) {
+        toastUpdate(toast, id, "Login fehlgeschlagen.", {
+          type: "danger",
+        });
         console.error(result.error);
       } else {
+        toastUpdate(toast, id, "Login erfolgreich", { type: "success" });
         router.push("/(tabs)/(tracking)");
       }
     } catch (error: any) {
+      toastUpdate(toast, id, "Login fehlgeschlagen.", {
+        type: "danger",
+      });
       console.error(error.message);
     }
   };
