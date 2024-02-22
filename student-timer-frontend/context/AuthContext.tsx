@@ -161,6 +161,10 @@ export const AuthProvider = ({ children }: any) => {
       let result = null;
       switch (provider) {
         case LOGIN_PROVIDER.GOOGLE:
+          console.log("Login:");
+          console.log("Email: ", email);
+          console.log("tokenId: ", idToken);
+          console.log("Provider: ", provider);
           result = await axios.post(`${API_URL}/auth/login/oauth2`, {
             email,
             tokenId: idToken,
@@ -186,6 +190,7 @@ export const AuthProvider = ({ children }: any) => {
           break;
       }
 
+      console.log("Login Backend Response: ", JSON.stringify(result, null, 2));
       const token = {
         accessToken: result.data.accessToken,
         refreshToken: result.data.refreshToken,
@@ -198,6 +203,10 @@ export const AuthProvider = ({ children }: any) => {
             Authorization: `Bearer ${token.accessToken}`,
           },
         }
+      );
+      console.log(
+        "User Information response: ",
+        JSON.stringify(resultUser, null, 2)
       );
 
       const user = resultUser.data as UserType;
@@ -214,6 +223,7 @@ export const AuthProvider = ({ children }: any) => {
 
       return result;
     } catch (e) {
+      console.log("error");
       return { error: true, msg: (e as any).response.data.message };
     }
   };
