@@ -79,11 +79,14 @@ export default function LearningSession(props: { isEdit: boolean }) {
         mins: number;
       }>
     >,
-    key: keyof typeof validInputs,
+    isFocusDuration: boolean,
     isHours: boolean
   ) => {
-    let timeKey: "hours" | "mins" = isHours ? "hours" : "mins",
-      reverseTimeKey: "hours" | "mins" = isHours ? "mins" : "hours",
+    let key: keyof typeof validInputs = isFocusDuration
+        ? "focusDuration"
+        : "pauseDuration",
+      timeKey: keyof typeof currentState = isHours ? "hours" : "mins",
+      reverseTimeKey: keyof typeof currentState = isHours ? "mins" : "hours",
       otherVal = currentState[reverseTimeKey],
       number: number,
       otherNumber: number,
@@ -99,7 +102,8 @@ export default function LearningSession(props: { isEdit: boolean }) {
     number = val.match(/^\d+$/) === null ? -1 : Number(val);
     otherNumber =
       String(otherVal).match(/^\d+$/) === null ? -1 : Number(otherVal);
-    hoursMinsBothNotNull = number !== 0 || otherNumber !== 0;
+    hoursMinsBothNotNull =
+      !isFocusDuration || number !== 0 || otherNumber !== 0;
     valid =
       Math.sign(number) >= 0 &&
       (isHours ? true : number < 60) &&
@@ -117,6 +121,7 @@ export default function LearningSession(props: { isEdit: boolean }) {
         [reverseTimeKey]: otherValValid,
       },
     }));
+    setChangesMade(true);
   };
 
   return (
@@ -155,7 +160,7 @@ export default function LearningSession(props: { isEdit: boolean }) {
                     val,
                     focusDuration,
                     setFocusDuration,
-                    "focusDuration",
+                    true,
                     true
                   );
                 }}
@@ -171,7 +176,7 @@ export default function LearningSession(props: { isEdit: boolean }) {
                     val,
                     focusDuration,
                     setFocusDuration,
-                    "focusDuration",
+                    true,
                     false
                   );
                 }}
@@ -198,7 +203,7 @@ export default function LearningSession(props: { isEdit: boolean }) {
                     val,
                     pauseDuration,
                     setPauseDuration,
-                    "pauseDuration",
+                    false,
                     true
                   );
                 }}
@@ -214,7 +219,7 @@ export default function LearningSession(props: { isEdit: boolean }) {
                     val,
                     pauseDuration,
                     setPauseDuration,
-                    "pauseDuration",
+                    false,
                     false
                   );
                 }}
