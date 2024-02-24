@@ -18,8 +18,7 @@ type ModuleFormProps = {
 };
 
 export default function ModuleForm(props: ModuleFormProps) {
-  const { inputData, dateDiabled, onChange, onValidationError, onSaveHandler } =
-    props;
+  const { inputData, dateDiabled, onChange, onValidationError, onSaveHandler } = props;
 
   const selectableColors: string[] = [
     COLORS.moduleColor1,
@@ -41,11 +40,7 @@ export default function ModuleForm(props: ModuleFormProps) {
 
   // This effect is only supposed to be triggered when the user clicks on the save button and no inputs were made before
   useEffect(() => {
-    if (
-      onSaveHandler &&
-      inputData.name === "" &&
-      inputData.creditPoints === 0
-    ) {
+    if (onSaveHandler) {
       validateModuleName(inputData.name);
       validateCreditPoints(inputData.creditPoints);
     }
@@ -88,9 +83,7 @@ export default function ModuleForm(props: ModuleFormProps) {
         />
       </View>
       <View style={styles.dateRowContainer}>
-        <P style={{ color: COLORTHEME.light.primary }}>
-          {"Prüfungsdatum (optional)"}
-        </P>
+        <P style={{ color: COLORTHEME.light.primary }}>{"Prüfungsdatum (optional)"}</P>
         <View style={styles.row}>
           <DateTimePicker
             onChangeDate={(value) => {
@@ -120,20 +113,14 @@ export default function ModuleForm(props: ModuleFormProps) {
                 creditPoints: formattedValue,
               });
             }}
-            value={
-              inputData.creditPoints === 0
-                ? ""
-                : inputData.creditPoints.toString()
-            }
+            value={inputData.creditPoints === 0 ? "" : inputData.creditPoints.toString()}
             inputUnit="CP"
             placeholder="Anzahl"
             showErrorBorder={creditPointError != ""}
           />
           <View style={{ width: "50%", backgroundColor: "transparent" }} />
         </View>
-        {creditPointError && (
-          <P style={styles.errorMessage}>{creditPointError}</P>
-        )}
+        {creditPointError && <P style={styles.errorMessage}>{creditPointError}</P>}
       </View>
       <View style={styles.row}>
         <View style={styles.colorWrapper}>
@@ -162,15 +149,11 @@ export default function ModuleForm(props: ModuleFormProps) {
                       styles.colorOptionIndicator,
                       {
                         borderColor:
-                          inputData.colorCode === color
-                            ? COLORTHEME.light.primary
-                            : "transparent",
+                          inputData.colorCode === color ? COLORTHEME.light.primary : "transparent",
                       },
                     ]}
                   />
-                  <View
-                    style={[styles.colorOption, { backgroundColor: color }]}
-                  />
+                  <View style={[styles.colorOption, { backgroundColor: color }]} />
                 </TouchableOpacity>
               );
             }}

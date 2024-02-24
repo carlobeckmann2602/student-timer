@@ -25,10 +25,9 @@ export default function NewModule() {
   } as ModuleType);
 
   const [openChanges, setOpenChanges] = useState(false);
+  const [onSaveHandler, setOnSaveHandler] = useState(false);
   const [dateDisabled, setDateDisabled] = useState(false);
-  const [saveDisabled, setSaveDisabled] = useState<Set<string>>(
-    new Set(["name", "cp"])
-  );
+  const [saveDisabled, setSaveDisabled] = useState<Set<string>>(new Set(["name", "cp"]));
 
   const handleUpdate = (module: ModuleType, disabledStatus?: boolean) => {
     if (module) setNewModule(module);
@@ -49,8 +48,9 @@ export default function NewModule() {
   };
 
   const onContinue = () => {
-    // Toggle openChanges to trigger validation in input fields
-    if (!openChanges) {
+    // Toggle onSaveHandler to trigger validation in input fields
+    if (!openChanges || saveDisabled.size != 0) {
+      setOnSaveHandler(true);
       setOpenChanges(true);
       return;
     }
@@ -84,7 +84,7 @@ export default function NewModule() {
         onChange={handleUpdate}
         dateDiabled={dateDisabled}
         onValidationError={handleValidationError}
-        onSaveHandler={openChanges}
+        onSaveHandler={onSaveHandler}
       />
       <View style={styles.buttonRowWrapper}>
         <Button
@@ -97,8 +97,7 @@ export default function NewModule() {
             openChanges
               ? Alert({
                   title: "Eingaben verwerfen?",
-                  message:
-                    "Wenn du fortfährst, gehen alle Eingaben verloren. Bist du dir sicher?",
+                  message: "Wenn du fortfährst, gehen alle Eingaben verloren. Bist du dir sicher?",
                   onPressConfirm: () => router.push("/modules"),
                 })
               : router.push("/modules")
@@ -110,7 +109,7 @@ export default function NewModule() {
           textColor={COLORTHEME.light.grey2}
           style={{ flex: 1 }}
           onPress={onContinue}
-          disabled={saveDisabled.size != 0 && openChanges}
+          disabled={saveDisabled.size != 0 && onSaveHandler}
         />
       </View>
     </View>
