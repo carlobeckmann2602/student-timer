@@ -50,8 +50,7 @@ export default function ModulesScreen() {
           <View style={styles.emptyListContainer}>
             <H3>Es sind noch keine Module vorhanden.</H3>
             <P style={{ textAlign: "center" }}>
-              Erstelle dein erstes Modul oder swipe nach oben, um deine Module
-              zu laden.
+              Erstelle dein erstes Modul oder swipe nach unten, um deine Module zu laden.
             </P>
           </View>
         }

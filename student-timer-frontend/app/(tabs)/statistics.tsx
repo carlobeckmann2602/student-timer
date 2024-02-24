@@ -5,9 +5,7 @@ import HBarChart, { HBarChartProps } from "@/components/statistics/HBarChart";
 import { BASE_STYLES, COLORTHEME } from "@/constants/Theme";
 import VBarChart, { VBarChartProps } from "@/components/statistics/VBarChart";
 import { H3, P } from "@/components/StyledText";
-import VLineChart, {
-  VLineChartProps,
-} from "@/components/statistics/VLineChart";
+import VLineChart, { VLineChartProps } from "@/components/statistics/VLineChart";
 import StarChart, { StarChartProps } from "@/components/statistics/StarChart";
 import { useAxios } from "@/context/AxiosContext";
 import { useAuth } from "@/context/AuthContext";
@@ -87,13 +85,7 @@ export default function StatisticsScreen() {
 
             case "stars":
               item = item as StarChartProps;
-              return (
-                <StarChart
-                  type={item.type}
-                  title={item.title}
-                  stars={item.stars}
-                />
-              );
+              return <StarChart type={item.type} title={item.title} stars={item.stars} />;
 
             default:
               return null;
@@ -108,8 +100,7 @@ export default function StatisticsScreen() {
           <View style={styles.emptyListContainer}>
             <H3>Es sind noch keine Statistiken vorhanden.</H3>
             <P style={{ textAlign: "center" }}>
-              Tracke deine erstes Lerneinheit um Statistiken über deine
-              Lerneinheiten zu erhalten.
+              Tracke deine erste Lerneinheit, um Statistiken über dein Lernverhalten zu erhalten.
             </P>
           </View>
         }
