@@ -6,9 +6,7 @@
 import { StyleSheet, ViewStyle, Platform, Pressable } from "react-native";
 import { Text, View } from "@/components/Themed";
 import { BASE_STYLES, COLORTHEME } from "@/constants/Theme";
-import RNDateTimePicker, {
-  DateTimePickerAndroid,
-} from "@react-native-community/datetimepicker";
+import RNDateTimePicker, { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import InputField from "./InputField";
 
 type DateTimerPickerProps = {
@@ -115,9 +113,7 @@ export default function DateTimePicker(props: DateTimerPickerProps) {
                 />
               </View>
               {props.message && (
-                <Text
-                  style={[{ color: props.messageColor }, styles.messageText]}
-                >
+                <Text style={[{ color: props.messageColor }, styles.messageText]}>
                   {props.message}
                 </Text>
               )}
@@ -157,7 +153,7 @@ const styles = StyleSheet.create({
     color: COLORTHEME.light.primary,
   },
   RNDateTimerPickerStyle: {
-    marginHorizontal: -12,
+    marginHorizontal: -20,
   },
   messageText: {
     fontSize: 12,

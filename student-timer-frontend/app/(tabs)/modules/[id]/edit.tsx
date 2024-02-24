@@ -35,21 +35,15 @@ export default function EditModule() {
   const toast = useToast();
   const { authState } = useAuth();
   const { authAxios } = useAxios();
-  const { modules, setModules, fetchModules, unitStatus, setUnitStatus } =
-    useModules();
+  const { modules, setModules, fetchModules, unitStatus, setUnitStatus } = useModules();
   const router = useRouter();
 
   const detailModule =
-    modules?.find((module) => module.id.toString() === moduleToEditId) ||
-    ({} as ModuleType);
+    modules?.find((module) => module.id.toString() === moduleToEditId) || ({} as ModuleType);
 
   const [openChanges, setOpenChanges] = useState(false);
-  const [dateDiabled, setDateDisabled] = useState(
-    detailModule.examDate ? false : true
-  );
-  const [saveDisabled, setSaveDisabled] = useState<Set<string>>(
-    new Set<string>()
-  );
+  const [dateDiabled, setDateDisabled] = useState(detailModule.examDate ? false : true);
+  const [saveDisabled, setSaveDisabled] = useState<Set<string>>(new Set<string>());
 
   const handleValidationError = (errorType: string, errorOccured: boolean) => {
     if (errorOccured) {
@@ -81,7 +75,10 @@ export default function EditModule() {
 
     try {
       let moduleDTO;
-      if (detailModule.examDate && !dateDiabled) {
+      if (!dateDiabled) {
+        if (!detailModule.examDate) {
+          detailModule.examDate = new Date();
+        }
         moduleDTO = {
           name: detailModule.name.trim(),
           examDate: detailModule.examDate,
@@ -96,10 +93,7 @@ export default function EditModule() {
         };
       }
 
-      await authAxios?.put(
-        `/students/${authState?.user.id}/modules/${moduleToEditId}`,
-        moduleDTO
-      );
+      await authAxios?.put(`/students/${authState?.user.id}/modules/${moduleToEditId}`, moduleDTO);
 
       if (unitStatus)
         for (let [key, value] of Object.entries(unitStatus)) {
@@ -113,12 +107,8 @@ export default function EditModule() {
                   `/students/${authState?.user.id}/modules/${detailModule.id}/learningUnits`,
                   {
                     name: unitToCreate.name,
-                    startDate: unitToCreate.startDate
-                      .toISOString()
-                      .substring(0, 10),
-                    endDate: unitToCreate.endDate
-                      .toISOString()
-                      .substring(0, 10),
+                    startDate: unitToCreate.startDate.toISOString().substring(0, 10),
+                    endDate: unitToCreate.endDate.toISOString().substring(0, 10),
                     workloadPerWeek: unitToCreate.workloadPerWeek,
                   }
                 );
@@ -132,9 +122,7 @@ export default function EditModule() {
                   `/students/${authState?.user.id}/modules/${detailModule.id}/learningUnits/${unitToEdit.id}`,
                   {
                     name: unitToEdit.name,
-                    startDate: unitToEdit.startDate
-                      .toISOString()
-                      .substring(0, 10),
+                    startDate: unitToEdit.startDate.toISOString().substring(0, 10),
                     endDate: unitToEdit.endDate.toISOString().substring(0, 10),
                     workloadPerWeek: unitToEdit.workloadPerWeek,
                   }
@@ -166,8 +154,7 @@ export default function EditModule() {
     Alert({
       title: "Lerneinheit wirklich löschen?",
       message: `Alle zur Lerneinheit ${
-        detailModule.learningUnits.find((unit) => unit.id === learningUnitId)
-          ?.name
+        detailModule.learningUnits.find((unit) => unit.id === learningUnitId)?.name
       } gehörenden Angaben werden dabei gelöscht.`,
       onPressConfirm: () => {
         if (unitStatus && unitStatus[learningUnitId] === "create") {
@@ -185,9 +172,7 @@ export default function EditModule() {
         }
         const updatedModule = {
           ...detailModule,
-          learningUnits: detailModule.learningUnits.filter(
-            (unit) => unit.id !== learningUnitId
-          ),
+          learningUnits: detailModule.learningUnits.filter((unit) => unit.id !== learningUnitId),
         };
         handleUpdate(updatedModule);
       },
@@ -290,9 +275,7 @@ export default function EditModule() {
           textColor={COLORTHEME.light.primary}
           style={{ flex: 1 }}
           onPress={() => {
-            const changedUnits = Object.values(unitStatus!).find(
-              (status) => status != null
-            )
+            const changedUnits = Object.values(unitStatus!).find((status) => status != null)
               ? true
               : false;
             openChanges || changedUnits
