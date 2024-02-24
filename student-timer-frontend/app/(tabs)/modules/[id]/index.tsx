@@ -32,9 +32,7 @@ export default function ModulesDetailScreen() {
   const { authAxios } = useAxios();
   const { fetchModules, resetUnitStatus } = useModules();
 
-  const detailModule =
-    modules?.find((module) => module.id.toString() === id) ||
-    ({} as ModuleType);
+  const detailModule = modules?.find((module) => module.id.toString() === id) || ({} as ModuleType);
 
   const onDeleteModule = () => {
     Alert({
@@ -51,9 +49,7 @@ export default function ModulesDetailScreen() {
   const deleteModule = async () => {
     let id = toastShow(toast, "Löschen...", { type: "loading" });
     try {
-      await authAxios?.delete(
-        `/students/${authState?.user.id}/modules/${detailModule.id}`
-      );
+      await authAxios?.delete(`/students/${authState?.user.id}/modules/${detailModule.id}`);
       toastUpdate(toast, id, "Modul erfolgreich gelöscht", { type: "success" });
 
       // Navigate back before fetching, as the modal is still open and would throw an error if displayed module doesn't exist anymore
@@ -112,9 +108,7 @@ export default function ModulesDetailScreen() {
         <ModuleChart
           inputData={detailModule.learningUnits}
           totalAmount={convertMinutesToHours(detailModule.totalModuleTime)}
-          totalAmountDone={convertMinutesToHours(
-            detailModule.totalLearningTime
-          )}
+          totalAmountDone={convertMinutesToHours(detailModule.totalLearningTime)}
           width={200}
           height={200}
         />
@@ -165,9 +159,7 @@ export default function ModulesDetailScreen() {
               darkColor={COLORTHEME.dark.text}
             />
             <Subhead>
-              {`Gesamt: ${convertMinutesToHours(
-                detailModule.totalLearningTime
-              )} Std.`}
+              {`Gesamt: ${convertMinutesToHours(detailModule.totalLearningTime)} Std.`}
             </Subhead>
           </View>
         </View>
@@ -192,10 +184,7 @@ export default function ModulesDetailScreen() {
                 <View key={item.id}>
                   <View style={styles.unitRow}>
                     <View
-                      style={[
-                        styles.moduleIndicatorM,
-                        { backgroundColor: detailModule.colorCode },
-                      ]}
+                      style={[styles.moduleIndicatorM, { backgroundColor: detailModule.colorCode }]}
                     />
                     <View style={styles.unitRowTitle}>
                       <Subhead>
@@ -209,9 +198,7 @@ export default function ModulesDetailScreen() {
                         {item.description}
                       </P>
                     </View>
-                    <Subhead>
-                      {convertMinutesToHours(item.totalDuration)} Std.
-                    </Subhead>
+                    <Subhead>{convertMinutesToHours(item.totalDuration)} Std.</Subhead>
                     <View
                       style={{
                         flexDirection: "row",
@@ -220,11 +207,7 @@ export default function ModulesDetailScreen() {
                       }}
                     >
                       <Subhead>{item.rating}</Subhead>
-                      <StarIcon
-                        color=""
-                        fill={COLORTHEME.light.text}
-                        size={20}
-                      />
+                      <StarIcon color="" fill={COLORTHEME.light.text} size={20} />
                     </View>
                     <View style={styles.optionWrapper}>
                       <Pressable
@@ -243,10 +226,7 @@ export default function ModulesDetailScreen() {
                           absoluteStrokeWidth
                         />
                       </Pressable>
-                      <Pressable
-                        style={{ padding: 6 }}
-                        onPress={() => onDeleteTracking(item.id)}
-                      >
+                      <Pressable style={{ padding: 6 }} onPress={() => onDeleteTracking(item.id)}>
                         <Trash2
                           size={22}
                           name="trash2"
@@ -322,6 +302,7 @@ const styles = StyleSheet.create({
   resultRow: {
     flexDirection: "column",
     alignItems: "flex-end",
+    paddingRight: BASE_STYLES.wrapperGap,
   },
   separator: {
     marginVertical: BASE_STYLES.verticalPadding,
