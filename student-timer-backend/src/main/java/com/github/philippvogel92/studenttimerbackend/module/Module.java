@@ -34,6 +34,7 @@ public class Module {
 
     @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "module", fetch = FetchType.LAZY)
     @JsonManagedReference
+    @OrderBy("createdAt desc")
     private List<LearningSession> learningSessions;
 
     /**
