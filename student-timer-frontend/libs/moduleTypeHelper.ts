@@ -1,10 +1,6 @@
 import { convertMinutesToHours } from "./timeHelper";
 
-export const computeDateDifference = (
-  date1: Date,
-  date2: Date,
-  countAsWeeks: boolean = false
-) => {
+export const computeDateDifference = (date1: Date, date2: Date, countAsWeeks: boolean = false) => {
   let dateDifference: number = date1.getTime() - date2.getTime();
   if (countAsWeeks) {
     let amountOfWeeks = Math.ceil(dateDifference / (1000 * 3600 * 24) / 7);
@@ -38,10 +34,15 @@ export const computeDeadline = (exam_date?: Date) => {
 
 export const computeRemainingSessionTime = (
   totalModuleTime: number,
-  totalLearningTime: number
+  totalLearningTime: number,
+  rountToInteger: boolean = true
 ) => {
-  const learningDifference = Math.round(
-    convertMinutesToHours(totalModuleTime - totalLearningTime)
-  );
+  let learningDifference;
+
+  if (rountToInteger) {
+    learningDifference = Math.round(convertMinutesToHours(totalModuleTime - totalLearningTime));
+  } else {
+    learningDifference = +convertMinutesToHours(totalModuleTime - totalLearningTime).toFixed(2);
+  }
   return learningDifference > 0 ? learningDifference : 0;
 };

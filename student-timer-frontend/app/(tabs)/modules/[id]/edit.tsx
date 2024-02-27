@@ -232,7 +232,8 @@ export default function EditModule() {
                     learningUnit={unit}
                     selfLearningTime={computeRemainingSessionTime(
                       detailModule.totalModuleTime,
-                      detailModule.totalLearningTime
+                      detailModule.totalLearningTime,
+                      true
                     )}
                     onDelete={() =>
                       detailModule.learningUnits.length > 2

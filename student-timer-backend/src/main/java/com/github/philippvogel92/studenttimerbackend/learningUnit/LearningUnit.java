@@ -4,10 +4,9 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.github.philippvogel92.studenttimerbackend.module.Module;
 import jakarta.persistence.*;
 
-import java.math.BigDecimal;
-import java.math.MathContext;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
+import java.time.ZoneId;
+import java.util.Date;
 
 @Entity
 @Table
@@ -91,8 +90,16 @@ public class LearningUnit {
     }
 
     public Double getTotalLearningTime() {
-        long learningWeeks = Math.max(1, ChronoUnit.WEEKS.between(this.startDate, this.endDate));
+        Date convertedStartDate = Date.from(startDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Date convertedEndDate = Date.from(endDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+        long timeDifference = Math.abs(convertedEndDate.getTime() - convertedStartDate.getTime());
+        double dayDifference = Math.ceil(timeDifference / (1000*60*60*24));
+        double weekDifference = Math.ceil(dayDifference / 7);
+
+        double learningWeeks = Math.max(1, weekDifference);
         double learningTime = learningWeeks * this.workloadPerWeek;
-        return (Double) new BigDecimal(learningTime).round(new MathContext(2)).doubleValue();
+
+        return Math.round(learningTime * 100.0) / 100.0;
     }
 }
