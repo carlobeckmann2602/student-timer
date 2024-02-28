@@ -30,7 +30,8 @@ const registerForPushNotificationsAsync = async () => {
       name: "default",
       importance: Notifications.AndroidImportance.MAX,
       vibrationPattern: [0, 250, 250, 250],
-      lightColor: "#FFAABBCC",
+      lightColor: "#FFFFFF",
+      lockscreenVisibility: Notifications.AndroidNotificationVisibility.PUBLIC,
     });
   }
 
