@@ -63,7 +63,7 @@ export default function Login() {
 
   return (
     <View style={styles.container}>
-      <Title>Student Time Tracker</Title>
+      <Title>Student Timer</Title>
       <View style={styles.inputs}>
         <View style={styles.row}>
           <InputField

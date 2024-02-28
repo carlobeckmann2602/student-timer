@@ -106,7 +106,7 @@ export default function SignupScreen() {
       }}
     >
       <View style={styles.container}>
-        <Title>Student Time Tracker</Title>
+        <Title>Student Timer</Title>
         <View style={styles.outerWrapper}>
           <View style={styles.row}>
             <InputField
