@@ -54,15 +54,11 @@ export default function EditData() {
     setNameError(nameError);
     const nameValid = nameError === "";
 
-    const studyCourseError = validateStudyCourse(userStudyCourse);
-    setStudyCourseError(studyCourseError);
-    const studyCourseValid = studyCourseError === "";
-
     const emailError = validateEmail(userEmail);
     setEmailError(emailError);
     const emailValid = emailError === "";
 
-    return nameValid && studyCourseValid && emailValid;
+    return nameValid && emailValid;
   };
 
   const cancel = () => {

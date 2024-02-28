@@ -43,10 +43,6 @@ export default function SignupScreen() {
     setNameError(nameError);
     const nameValid = nameError === "";
 
-    const studyCourseError = validateStudyCourse(userStudyCourse);
-    setStudyCourseError(studyCourseError);
-    const studyCourseValid = studyCourseError === "";
-
     const emailError = validateEmail(userEmail);
     setEmailError(emailError);
     const emailValid = emailError === "";
@@ -61,7 +57,7 @@ export default function SignupScreen() {
       passwordValid = true;
     }
 
-    return nameValid && studyCourseValid && emailValid && passwordValid;
+    return nameValid && emailValid && passwordValid;
   };
 
   const register = async () => {
